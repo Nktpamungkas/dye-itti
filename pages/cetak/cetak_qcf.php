@@ -465,14 +465,17 @@ WHERE  JobOrders.documentno='$ssr[documentno]' and processcontrolJO.pcid='$r[pci
 	border-right:0px #000000 solid;">&nbsp;</td>
 		</tr>
 	</table>
+	
 	<?php
-	echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat']));
+		echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat']));
 	//} 
 	?>
 	<script>
 		alert('cetak');
 		window.print();
 	</script>
+		<img alt="testing" src="barcode.php?text=<?= $rowsmp1['nokk']; ?>" />
+
 </body>
 
 </html>
