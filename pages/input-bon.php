@@ -630,6 +630,7 @@ if ($_POST['save'] == "save") {
 	}
 	$sqlData = mysqli_query($con, "INSERT INTO tbl_gantikain SET 
 		  nokk='$_POST[nokk]',
+		  nodemand='$_POST[demand]',
 		  langganan='$_POST[pelanggan]',
 		  no_order='$_POST[no_order]',
 		  no_hanger='$_POST[no_hanger]',
