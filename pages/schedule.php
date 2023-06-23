@@ -43,6 +43,7 @@
 										langganan,
 										no_order,
 										no_item,
+										no_hanger,
 										no_resep,
 										nokk,
 										jenis_kain,
@@ -77,8 +78,9 @@
 																			echo "disabled";
 																		} ?>"><i class="fa fa-plus-circle"></i> Tambah</a>
 					<!--	
-  <a href="?p=Form-Schedule-Manual" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Manual</a>
-  <a href="pages/cetak/cetak_schedule.php" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a>	-->
+						<a href="?p=Form-Schedule-Manual" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Manual</a>
+						<a href="pages/cetak/cetak_schedule.php" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a>	
+					-->
 					<a href="#" data-toggle="modal" data-target="#PrintHalaman" class="btn btn-danger pull-right"><i class="fa fa-print"></i> Cetak</a>
 				</div>
 				<div class="box-body">
@@ -157,7 +159,7 @@
 									<td align="center"><?php echo $rowd['nodemand']; ?></td>
 									<td><?php echo $rowd['langganan'] . "/" . $rowd['buyer']; ?></td>
 									<td align="center"><?php echo $rowd['no_order']; ?></td>
-									<td align="center"><?php echo $rowd['no_item']; ?></td>
+									<td align="center"><?php echo $rowd['no_hanger']; ?></td>
 									<td><?php echo $rowd['jenis_kain']; ?></td>
 									<td align="center"><?php echo $rowd['warna']; ?></td>
 									<td align="center"><?php echo $rowd['no_warna']; ?></td>

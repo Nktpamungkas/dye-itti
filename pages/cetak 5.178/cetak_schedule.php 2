@@ -133,6 +133,7 @@ border:hidden;
       <td width="12%" rowspan="2" scope="col"><div align="center">Jenis Kain</div></td>
       <td width="9%" rowspan="2" scope="col"><div align="center">Warna</div></td>
       <td width="9%" rowspan="2" scope="col"><div align="center">No. Warna</div></td>
+      <!-- <td width="4%" rowspan="2" scope="col"><div align="center">Lot</div></td> -->
       <td width="4%" rowspan="2" scope="col"><div align="center">No Demand</div></td>
       <td width="7%" rowspan="2" scope="col"><div align="center">Tanggal Delivery</div></td>
       <td colspan="2" scope="col"><div align="center">Quantity</div></td>
@@ -151,9 +152,9 @@ border:hidden;
 		$qCek=mysqli_query($con,"SELECT
    	id,
 	GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
+  nodemand,
 	if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
 	no_mesin,
-  nodemand,
 	no_urut,
 	buyer,
 	langganan,
