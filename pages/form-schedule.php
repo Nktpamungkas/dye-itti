@@ -31,7 +31,7 @@
 		} else if (document.forms['form1']['kapasitas'].value == "50") {
 			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1454'>1454</option><option value='1455'>1455</option><option value='1456'>1456</option><option value='1457'>1457</option><option value='1459'>1459</option><option value='2624'>2624</option><option value='2635'>2635</option><option value='2660'>2660</option><option value='2661'>2661</option><option value='2662'>2662</option><option value='2663'>2663</option><option value='2664'>2664</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "30") {
-			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='2626'>2626</option>";
+			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1475'>1475</option><option value='2626'>2626</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "20") {
 			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='2042'>2042</option><option value='2043'>2043</option><option value='2044'>2044</option><option value='2045'>2045</option><option value='2639'>2639</option><option value='2640'>2640</option><option value='2641'>2641</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "10") {
