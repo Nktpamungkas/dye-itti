@@ -417,8 +417,13 @@
 	$cek1 = mysqli_num_rows($sqlCek1);
 
 	if($rcek){
-		
+		if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
+			echo "edit";
+		}
 	}else{
+		if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
+			echo "baru";
+		}
 		// NOW
 			$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
 											TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
@@ -551,7 +556,7 @@
 			ORDER BY
 				PRODUCTIONRESERVATION.GROUPLINE DESC LIMIT 1");
 			$dt_bonresep2	= db2_fetch_assoc($sql_bonresep2);
-			// NOW
+		// NOW
 	}
 ?>
 <?php

@@ -9,9 +9,9 @@ $conn     = sqlsrv_connect( $host, $connInfo);
 $con=mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
 $cond=mysqli_connect("10.0.0.10","dit","4dm1n","db_qc");
 if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
-    exit();
-    }
+printf("Connect failed: %s\n", mysqli_connect_error());
+exit();
+}
 
 $hostname="10.0.0.21";
 $database = "NOWPRD";
