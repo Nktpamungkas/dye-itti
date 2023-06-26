@@ -688,7 +688,7 @@
 					<div class="col-sm-4">
 						<div class="input-group date">
 							<div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-							<input name="tgl_delivery" type="text" class="form-control pull-right" id="datepicker2" placeholder="0000-00-00" value="<?= $dt_ITXVIEWKK['DELIVERYDATE']; ?>" required />
+							<input name="tgl_delivery" type="text" class="form-control pull-right" id="datepicker2" placeholder="0000-00-00" value="<?= $rcek['tgl_delivery']; ?><?= $dt_ITXVIEWKK['DELIVERYDATE']; ?>" required />
 						</div>
 					</div>
 				</div>
@@ -981,19 +981,19 @@
 				<div class="form-group">
 					<label for="no_resep" class="col-sm-3 control-label">No Bon Resep 1</label>
 					<div class="col-sm-3">
-						<input name="no_resep" type="text" class="form-control" id="no_resep" value="<?= $dt_bonresep1['BONRESEP1']; ?>" placeholder="No Bon Resep 1">
+						<input name="no_resep" type="text" class="form-control" id="no_resep" value="<?= $rcek['no_resep']; ?><?= $dt_bonresep1['BONRESEP1']; ?>" placeholder="No Bon Resep 1">
 					</div>
 					<div class="col-sm-3">
-						<input name="suffix" type="text" class="form-control" id="suffix" value="<?= $dt_bonresep1['SUFFIXCODE']; ?>" placeholder="Suffix 1">
+						<input name="suffix" type="text" class="form-control" id="suffix" value="<?= $rcek['suffix']; ?><?= $dt_bonresep1['SUFFIXCODE']; ?>" placeholder="Suffix 1">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="no_resep2" class="col-sm-3 control-label">No Bon Resep 2</label>
 					<div class="col-sm-3">
-						<input name="no_resep2" type="text" class="form-control" id="no_resep2" value="<?= $dt_bonresep2['BONRESEP2']; ?>" placeholder="No Bon Resep 2">
+						<input name="no_resep2" type="text" class="form-control" id="no_resep2" value="<?= $rcek['no_resep2']; ?><?= $dt_bonresep2['BONRESEP2']; ?>" placeholder="No Bon Resep 2">
 					</div>
 					<div class="col-sm-3">
-						<input name="suffix2" type="text" class="form-control" id="suffix2" value="<?= $dt_bonresep2['SUFFIXCODE']; ?>" placeholder="Suffix 2">
+						<input name="suffix2" type="text" class="form-control" id="suffix2" value="<?= $rcek['suffix2']; ?><?= $dt_bonresep2['SUFFIXCODE']; ?>" placeholder="Suffix 2">
 					</div>
 				</div>
 				<div class="form-group">
