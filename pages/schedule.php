@@ -53,6 +53,7 @@
 										sum(bruto) as bruto,
 										proses,
 										ket_status,
+										ket_kain,
 										tgl_delivery,
 										suffix,
 										suffix2,
@@ -145,11 +146,11 @@
 						</thead>
 						<tbody>
 							<?php
-							$col = 0;
-							while ($rowd = mysqli_fetch_array($data)) {
-								$bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
-								$qCek = mysqli_query($con, "SELECT id as idb FROM tbl_montemp WHERE id_schedule='$rowd[id]' LIMIT 1");
-								$rCEk = mysqli_fetch_array($qCek);
+								$col = 0;
+								while ($rowd = mysqli_fetch_array($data)) {
+									$bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
+									$qCek = mysqli_query($con, "SELECT id as idb FROM tbl_montemp WHERE id_schedule='$rowd[id]' LIMIT 1");
+									$rCEk = mysqli_fetch_array($qCek);
 							?>
 								<tr bgcolor="<?php echo $bgcolor; ?>">
 									<td align="center"><a href="#" id='<?php echo $rowd['no_mesin']; ?>' class="edit_status_mesin <?php if ($_SESSION['lvl_id10'] == "3") {
@@ -173,7 +174,14 @@
 										<?php echo $rowd['proses']; ?><br>
 										<?php if($rowd['high_temp'] == 1){ echo "<blink style='color: red;'><b>High Temperature</b></blink>"; } ?>
 									</td>
-									<td><?php echo $rowd['ket_status']; ?><br><i><?php echo $rowd['nokk']; ?></i><br><i><a href="#" id='<?php echo $rowd['id']; ?>' class="resep"><?php echo $rowd['no_resep']; ?></a></i><br><a href="#" id='<?php echo $rowd['id']; ?>' class="detail_kartu"><span class="label label-danger"><?php echo $rowd['ket_kartu']; ?></span></a></td>
+									<td>
+										<?php echo $rowd['ket_status']; ?>  - <?php echo $rowd['ket_kain']; ?><br>
+										<i><?php echo $rowd['nokk']; ?></i><br>
+										<i><a href="#" id='<?php echo $rowd['id']; ?>' class="resep"><?php echo $rowd['no_resep']; ?></a></i><br>
+										<a href="#" id='<?php echo $rowd['id']; ?>' class="detail_kartu">
+											<span class="label label-danger"><?php echo $rowd['ket_kartu']; ?></span>
+										</a>
+									</td>
 									<td align="center">
 										<div class="btn-group">
 											<a href="#" id='<?php echo $rowd['id']; ?>' class="btn btn-xs btn-info schedule_edit <?php if ($_SESSION['lvl_id10'] == "3") {
