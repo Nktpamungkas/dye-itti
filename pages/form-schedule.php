@@ -438,7 +438,8 @@
 											TRIM(DSUBCODE05) AS NO_WARNA,
 											TRIM(DSUBCODE02) || '-' || TRIM(DSUBCODE03)  AS NO_HANGER,
 											TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
-											DELIVERYDATE
+											DELIVERYDATE,
+											LOT
 										FROM 
 											ITXVIEWKK 
 										WHERE 
@@ -774,20 +775,12 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div class="form-group">
+				<div class="form-group">
 					<label for="lot" class="col-sm-3 control-label">Lot</label>
 					<div class="col-sm-2">
-						<input name="lot" type="text" class="form-control" id="lot" value="<?php if ($cek > 0) {
-																								echo $rcek['lot'];
-																							} else {
-																								if ($nomorLot != "") {
-																									echo $lotno;
-																								} else if ($nokk != "") {
-																									echo $cekM['lot'];
-																								}
-																							} ?>" placeholder="Lot">
+						<input name="lot" type="text" class="form-control" id="lot" value="<?= $dt_ITXVIEWKK['LOT']; ?>" placeholder="Lot">
 					</div>
-				</div> -->
+				</div> 
 				<div class="form-group">
 					<label for="jml_bruto" class="col-sm-3 control-label">Roll &amp; Qty</label>
 					<div class="col-sm-2">
