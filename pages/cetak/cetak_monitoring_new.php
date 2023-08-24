@@ -315,6 +315,8 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
   if ($rowmt['kapasitas'] > 0) {
     $loading = round($rowmt2['bruto'] / $rowmt['kapasitas'], 4) * 100;
   }
+  $q_lot		= db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowmt[nodemand]'");
+	$d_lot		= db2_fetch_assoc($q_lot);
   ?>
   <table width="100%" border="1" class="table-list1">
     <tr>
@@ -443,7 +445,7 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
       <td width="12%" style="border-right:0px #000000 solid;">
         <pre>LOT</pre>
       </td>
-      <td colspan="4" style="border-left:0px #000000 solid;">: <?php echo $rowmt['lot']; ?></td>
+      <td colspan="4" style="border-left:0px #000000 solid;">: <?php echo $rowmt['lot']; ?> | LOT di ERP :<?= $d_lot['LOT']; ?></td>
       <td width="6%" valign="top" style="border-right:0px #000000 solid;">Cycle Time</td>
       <td width="5%" valign="top" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" valign="top" align="center" style="border-left:0px #000000 solid;"><?php echo $rowmt2['cycle_time']; ?></td>

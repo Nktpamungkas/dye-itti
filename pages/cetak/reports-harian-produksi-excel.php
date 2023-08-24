@@ -1,35 +1,34 @@
 <?php
-header("Content-type: application/octet-stream");
-header("Content-Disposition: attachment; filename=report-produksi-" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
-header("Pragma: no-cache");
-header("Expires: 0");
-//disini script laporan anda
+  header("Content-type: application/octet-stream");
+  header("Content-Disposition: attachment; filename=report-produksi-" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
+  header("Pragma: no-cache");
+  header("Expires: 0");
+  //disini script laporan anda
 ?>
 <?php
-ini_set("error_reporting", 1);
-include "../../koneksi.php";
-include "../../koneksiLAB.php";
-include "../../tgl_indo.php";
-//--
-$idkk = $_REQUEST['idkk'];
-$act = $_GET['g'];
-//-
-$qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
-$rTgl = mysqli_fetch_array($qTgl);
-$Awal = $_GET['awal'];
-$Akhir = $_GET['akhir'];
-if ($Awal == $Akhir) {
-  $TglPAl = substr($Awal, 0, 10);
-  $TglPAr = substr($Akhir, 0, 10);
-} else {
-  $TglPAl = $Awal;
-  $TglPAr = $Akhir;
-}
-$shft = $_GET['shft'];
+  ini_set("error_reporting", 1);
+  include "../../koneksi.php";
+  include "../../koneksiLAB.php";
+  include "../../tgl_indo.php";
+  //--
+  $idkk = $_REQUEST['idkk'];
+  $act = $_GET['g'];
+  //-
+  $qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
+  $rTgl = mysqli_fetch_array($qTgl);
+  $Awal = $_GET['awal'];
+  $Akhir = $_GET['akhir'];
+  if ($Awal == $Akhir) {
+    $TglPAl = substr($Awal, 0, 10);
+    $TglPAr = substr($Akhir, 0, 10);
+  } else {
+    $TglPAl = $Awal;
+    $TglPAr = $Akhir;
+  }
+  $shft = $_GET['shft'];
 ?>
 
 <body>
-
   <strong>Periode: <?php echo $TglPAl; ?> s/d <?php echo $TglPAr; ?></strong><br>
   <strong>Shift: <?php echo $shft; ?></strong><br />
   <table width="100%" border="1">
@@ -109,6 +108,7 @@ $shft = $_GET['shft'];
       <th rowspan="2" bgcolor="#99FF99">Lebar Aktual DYE</th>
       <th rowspan="2" bgcolor="#99FF99">Gramasi Aktual DYE</th>
       <th rowspan="2" bgcolor="#99FF99">Operator</th>
+      <th rowspan="2" bgcolor="#99FF99">LOT di NOW</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -408,6 +408,13 @@ $shft = $_GET['shft'];
         <td><?= $rowd['lebar_a']; ?></td>
         <td><?= $rowd['gramasi_a']; ?></td>
         <td><?= $rowd['operator']; ?></td>
+        <td>'
+          <?php
+            $q_lot		= db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowd[nodemand]'");
+            $d_lot		= db2_fetch_assoc($q_lot);
+            echo $d_lot['LOT'];
+          ?>
+        </td>
       </tr>
     <?php
       $totrol += $rol;

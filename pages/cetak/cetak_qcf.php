@@ -296,6 +296,8 @@ WHERE  JobOrders.documentno='$ssr[documentno]' and processcontrolJO.pcid='$r[pci
 	// $sqlDB2="SELECT TRIM(PRODUCTIONDEMAND.SUBCODE03) AS SUBCODE03, TRIM(PRODUCTIONDEMAND.SUBCODE05) AS SUBCODE05 FROM PRODUCTIONDEMAND PRODUCTIONDEMAND WHERE PRODUCTIONDEMAND.CODE='$rowsmp1[demanderp]'";
 	$stmt = db2_exec($conn2, "SELECT TRIM(PRODUCTIONDEMAND.SUBCODE03) AS SUBCODE03, TRIM(PRODUCTIONDEMAND.SUBCODE05) AS SUBCODE05 FROM PRODUCTIONDEMAND PRODUCTIONDEMAND WHERE PRODUCTIONDEMAND.CODE='$demandno'");
 	$rowdb2 = db2_fetch_assoc($stmt);
+	$q_lot		= db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowsmp1[nodemand]'");
+	$d_lot		= db2_fetch_assoc($q_lot);
 	?>
 
 	<table width="100%" border="1" class="table-list1">
@@ -344,7 +346,7 @@ WHERE  JobOrders.documentno='$ssr[documentno]' and processcontrolJO.pcid='$r[pci
 									} ?></pre>
 			</td>
 			<td>
-				<pre>Lot		: <?php echo $rowsmp['lot']; ?></pre>
+				<pre>Lot		: <?php echo $rowsmp['lot']; ?> | LOT di ERP :<?= $d_lot['LOT']; ?></pre>
 			</td>
 			<td>Fin : <?php echo $rowsmp1['grm_fin']; ?></td>
 			<td colspan="2">

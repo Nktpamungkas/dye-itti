@@ -1,14 +1,14 @@
 <?php
-  //$lReg_username=$_SESSION['labReg_username'];
-  //session_start();
-  ini_set("error_reporting", 1);
-  include "../../koneksi.php";
-  //--
-  $idkk = $_REQUEST['idkk'];
-  $act = $_GET['g'];
-  $sqlbg = mysqli_query($con, "select * from tbl_schedule where id='$_GET[ids]'");
-  $rowbg = mysqli_fetch_array($sqlbg);
-  //-
+//$lReg_username=$_SESSION['labReg_username'];
+//session_start();
+ini_set("error_reporting", 1);
+include "../../koneksi.php";
+//--
+$idkk = $_REQUEST['idkk'];
+$act = $_GET['g'];
+$sqlbg = mysqli_query($con, "select * from tbl_schedule where id='$_GET[ids]'");
+$rowbg = mysqli_fetch_array($sqlbg);
+//-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -138,7 +138,7 @@
 </head>
 
 <body>
-<?php
+  <?php
   if ($_GET['no'] != '') {
     $ket .= " AND ID_NO='$_GET[no]' ";
   } else {
@@ -301,7 +301,10 @@
   // $sqlDB2="SELECT TRIM(PRODUCTIONDEMAND.SUBCODE03) AS SUBCODE03, TRIM(PRODUCTIONDEMAND.SUBCODE05) AS SUBCODE05 FROM PRODUCTIONDEMAND PRODUCTIONDEMAND WHERE PRODUCTIONDEMAND.CODE='$rowsmp1[demanderp]'";
   $stmt = db2_exec($conn2, "SELECT TRIM(PRODUCTIONDEMAND.SUBCODE03) AS SUBCODE03, TRIM(PRODUCTIONDEMAND.SUBCODE05) AS SUBCODE05 FROM PRODUCTIONDEMAND PRODUCTIONDEMAND WHERE PRODUCTIONDEMAND.CODE='$demandno'");
   $rowdb2 = db2_fetch_assoc($stmt);
-?>
+
+  $q_lot		= db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowsmp1[nodemand]'");
+	$d_lot		= db2_fetch_assoc($q_lot);
+  ?>
   <table width="100%" border="1" class="table-list1">
     <tr>
       <td width="15%" rowspan="3" align="center"><img src="logo.jpg" width="50" height="50" /></td>
@@ -347,17 +350,17 @@
         <pre>Pelanggan	: <?php if ($ssr1['partnername'] != "") {
                             echo strtoupper($ssr1['partnername'] . "/" . $ssr2['partnername']);
                           } else {
-                            echo $rowsmp['langganan']. "/". $rowsmp['buyer'];
+                            echo $rowsmp['langganan'] . "/" . $rowsmp['buyer'];
                           } ?></pre>
       </td>
       <td>
-        <pre>LOT		: <?php echo $rowsmp['lot']; ?></pre>
+        <pre>LOT		: <?php echo $rowsmp['lot']; ?>  | LOT di ERP :<?= $d_lot['LOT']; ?></pre>
       </td>
       <td>Fin : <?php echo $rowsmp1['lebar_fin'] . "x" . $rowsmp1['grm_fin']; ?></td>
       <td colspan="3">
         <pre>No. Program		: <?php echo $rowsmp1['no_program']; ?><?php
-                                                                  $potb = sqlsrv_query($conn, "select PONumber from sodetailsadditional where sodid='$ssr[SODID]'") or die("gagal");
-                                                                  $rpotb = sqlsrv_fetch_array($potb); ?></pre>
+                                                                    $potb = sqlsrv_query($conn, "select PONumber from sodetailsadditional where sodid='$ssr[SODID]'") or die("gagal");
+                                                                    $rpotb = sqlsrv_fetch_array($potb); ?></pre>
       </td>
     </tr>
     <tr>
@@ -396,9 +399,9 @@
                           echo round($rowsmp1['gramasi_a'] / $rowsmp1['grm_fin'], 2);
                         } ?> %</td>
       <td colspan="3">
-        <?php 
-          $db_benang  = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id = '$_GET[idm]'");
-          $rowsmp3    = mysqli_fetch_assoc($db_benang);
+        <?php
+        $db_benang  = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id = '$_GET[idm]'");
+        $rowsmp3    = mysqli_fetch_assoc($db_benang);
         ?>
         <pre>Benang			: <font size="-7"><?php echo strtoupper(substr(htmlentities($rowsmp3['benang'], ENT_QUOTES), 0, 30)); ?></font></pre>
       </td>
@@ -410,8 +413,8 @@
                           } else {
                             echo $rowsmp['no_warna'];
                           } ?> <?php if ($rowsmp1['demanderp'] != '') {
-                                                                                                                              echo " ( " . $rowdb2['SUBCODE03'] . "/" . $rowdb2['SUBCODE05'] . " ) ";
-                                                                                                                            } ?></pre>
+                                  echo " ( " . $rowdb2['SUBCODE03'] . "/" . $rowdb2['SUBCODE05'] . " ) ";
+                                } ?></pre>
       </td>
       <td colspan="1">
         <pre>Suffix   : <?= $rowbg['suffix']; ?></pre>
