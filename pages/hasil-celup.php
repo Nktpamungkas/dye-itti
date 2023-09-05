@@ -14,36 +14,54 @@ include "koneksi.php";
 
 <body>
 	<?php
-	$data = mysqli_query($con, "SELECT
-									a.*,
-									b.buyer,
-									b.no_order,
-									b.no_mesin,
-									b.warna,
-									b.proses,
-									b.target,
-									c.id as ids,
-									b.id as idm,
-									a.rcode as rcode_hasilcelup
-								FROM
-									tbl_hasilcelup a
-									LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-									LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
-								WHERE
-									DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) = DATE_FORMAT( now( ), '%Y-%m-%d' ) 
-								ORDER BY
-									a.id ASC");
-	$no = 1;
-	$n = 1;
-	$c = 0;
+		$tgl1	= $_POST['tgl1'];
+		$tgl2	= $_POST['tgl2'];
+
+		if($tgl1 && $tgl2){
+			$_sortTgl = "DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$tgl1' AND '$tgl2'";
+		}else{
+			$_sortTgl = "DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) = DATE_FORMAT( now( ), '%Y-%m-%d' ) ";
+		}
+		$data = mysqli_query($con, "SELECT
+										a.*,
+										b.buyer,
+										b.no_order,
+										b.no_mesin,
+										b.warna,
+										b.proses,
+										b.target,
+										a.id AS idh,
+										c.id as ids,
+										b.id as idm,
+										a.rcode as rcode_hasilcelup
+									FROM
+										tbl_hasilcelup a
+										LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
+										LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
+									WHERE
+										$_sortTgl
+									ORDER BY
+										a.id ASC");
+		$no = 1;
+		$n = 1;
+		$c = 0;
 	?>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<a href="?p=Form-Celup" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
-					<a href="?p=Form-Stop-Mesin" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Stop Mesin</a>
+					<div class="col-sm-2">
+						<a href="?p=Form-Celup" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
+						<a href="?p=Form-Stop-Mesin" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Stop Mesin</a>
+					</div>
 					<!--<a href="pages/cetak/reports-cetak.php" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a> -->
+					<div class="col-sm-4">
+						<form action="" method="POST">
+							<input type="date" name="tgl1" class="input-sm" value="<?= $tgl1; ?>"> S/D
+							<input type="date" name="tgl2" class="input-sm" value="<?= $tgl2; ?>">
+							<button type="submit" class="btn btn-primary btn-sm" name="sort" ><i class="fa fa-search"></i> Sort</button>
+						</form>
+					</div>
 				</div>
 				<div class="box-body">
 					<table id="example1" class="table table-bordered table-hover table-striped" width="100%">
@@ -86,7 +104,17 @@ include "koneksi.php";
 								</th>
 								<th width="85">
 									<div align="center">
-										<font size="-1">Lama Prose</font>s
+										<font size="-1">Lama Prose</font>
+									</div>
+								</th>
+								<th width="85">
+									<div align="center">
+										<font size="-1">Resep</font>
+									</div>
+								</th>
+								<th width="85">
+									<div align="center">
+										<font size="-1">Kesetabilan Resep</font>
 									</div>
 								</th>
 								<th width="237">
@@ -106,23 +134,23 @@ include "koneksi.php";
 						</thead>
 						<tbody>
 							<?php
-							function cekDesimal($angka)
-							{
-								$bulat = round($angka);
-								if ($bulat > $angka) {
-									$jam = $bulat - 1;
-									$waktu = $jam . ":30";
-								} else {
-									$jam = $bulat;
-									$waktu = $jam . ":00";
+								function cekDesimal($angka)
+								{
+									$bulat = round($angka);
+									if ($bulat > $angka) {
+										$jam = $bulat - 1;
+										$waktu = $jam . ":30";
+									} else {
+										$jam = $bulat;
+										$waktu = $jam . ":00";
+									}
+									return $waktu;
 								}
-								return $waktu;
-							}
-							$col = 0;
-							while ($rowd = mysqli_fetch_array($data)) {
-								$bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
-								$qCek = mysqli_query($con, "SELECT id as idb FROM tbl_potongcelup WHERE nokk='$rowd[nokk]' ORDER BY id DESC LIMIT 1");
-								$rCEk = mysqli_fetch_array($qCek);
+								$col = 0;
+								while ($rowd = mysqli_fetch_array($data)) {
+									$bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
+									$qCek = mysqli_query($con, "SELECT id as idb FROM tbl_potongcelup WHERE nokk='$rowd[nokk]' ORDER BY id DESC LIMIT 1");
+									$rCEk = mysqli_fetch_array($qCek);
 							?>
 								<tr bgcolor="<?php echo $bgcolor; ?>">
 									<td align="center">
@@ -151,9 +179,16 @@ include "koneksi.php";
 									<td align="center">
 										<font size="-1"><?php echo $rowd['lama_proses']; ?></font>
 									</td>
+									<td align="center">
+										<font size="-1"><?php echo $rowd['resep']; ?></font>
+									</td>
+									<td align="center">
+										<font size="-1"><?php echo $rowd['k_resep']; ?></font>
+									</td>
 									<td align="center"><i class="btn btn-xs btn-info">
 											<font size="-2"><?php echo $rowd['acc_keluar']; ?></font>
-										</i></td>
+										</i>
+									</td>
 									<td><i class="label bg-abu">
 											<font size="-2"><?php echo $rowd['nokk']; ?></font>
 										</i><br>
@@ -173,9 +208,19 @@ include "koneksi.php";
 										<?php echo $rowd['rcode_hasilcelup']; ?>
 									</td>
 									<td align="center">
-										<div class="btn-group"><a href="pages/cetak/cetak_celup.php?id=<?php echo $rCEk['idb'] ?>" class="btn btn-xs btn-warning" target="_blank"><i class="fa fa-print"></i> </a><a href="#" id='<?php echo $rCEk['idb']; ?>' class="btn btn-xs btn-info potong_edit"><i class="fa fa-edit"></i> </a><a href="#" onclick="confirm_del('?p=clp_hapus&id=<?php echo $rowd['id'] ?>');" class="btn btn-xs btn-danger <?php if ($_SESSION['lvl_id10'] == "3" or $rCEk['idb'] != "") {
-																																																																																																														echo "disabled";
-																																																																																																													} ?>"><i class="fa fa-trash"></i> </a></div>
+										<div class="btn-group">
+											<a href="pages/cetak/cetak_celup.php?id=<?php echo $rCEk['idb'] ?>" class="btn btn-xs btn-warning" target="_blank">
+												<i class="fa fa-print"></i> </a>
+											<a href="#" id='<?php echo $rCEk['idb']; ?>' class="btn btn-xs btn-info potong_edit">
+												<i class="fa fa-edit"></i> 
+											</a>
+											<a href="#" onclick="confirm_del('?p=clp_hapus&id=<?php echo $rowd['id'] ?>');" class="btn btn-xs btn-danger <?php if ($_SESSION['lvl_id10'] == "3" or $rCEk['idb'] != "") { } ?>">
+												<i class="fa fa-trash"></i> 
+											</a>
+											<br>
+											<a href="?p=Form-Celup&id=<?php echo $rowd['idh'] ?>" class="btn btn-xs btn-primary" target="_blank">
+												<i class="fa fa-edit"></i> Analisa Resep </a>
+										</div>
 									</td>
 								</tr>
 							<?php

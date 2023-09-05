@@ -1,7 +1,7 @@
 <?PHP
-ini_set("error_reporting", 1);
-session_start();
-include "koneksi.php";
+  ini_set("error_reporting", 1);
+  session_start();
+  include "koneksi.php";
 
 ?>
 
@@ -22,6 +22,7 @@ include "koneksi.php";
     $Fs    = isset($_POST['fasilitas']) ? $_POST['fasilitas'] : '';
     $jamA  = isset($_POST['jam_awal']) ? $_POST['jam_awal'] : '';
     $jamAr  = isset($_POST['jam_akhir']) ? $_POST['jam_akhir'] : '';
+    $Rcode  = isset($_POST['rcode']) ? $_POST['rcode'] : '';
     if (strlen($jamA) == 5) {
       $start_date = $Awal . ' ' . $jamA;
     } else {
@@ -98,6 +99,10 @@ include "koneksi.php";
                                 } ?>>C</option>
             </select>
           </div>
+        
+          <div class="col-sm-2">
+            <input type="text" class="form-control" name="rcode" value="<?= $Rcode; ?>" placeholder="Rcode">
+          </div>
         </div>
 
       </div>
@@ -116,7 +121,7 @@ include "koneksi.php";
         <div class="box-header with-border">
           <h3 class="box-title">Data Produksi Celup</h3><br><br>
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
-            <div class="btn-group pull-right">
+            <div class="btn-group pull-right">              
               <a href="pages/cetak/reports-harian-produksi.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi"><i class="fa fa-print"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-opt-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Waktu Tunggu Excel"><i class="fa fa-file-excel-o"></i> </a>
@@ -125,11 +130,11 @@ include "koneksi.php";
               <a href="pages/cetak/schedule-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn bg-maroon " target="_blank" data-toggle="tooltip" data-html="true" title="Schedule Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
             </div>
           <?php } ?>
-
+          <div class="btn-group pull-right">              
+            <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&rcode=<?= $Rcode; ?>" class="btn btn-info" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Keterangan Analisa Resep Rcode"><i class="fa fa-file-excel-o"></i> </a>
+          </div>
         </div>
         <div class="box-body">
-
-
           <table id="example1" class="table table-bordered table-hover" width="100%">
             <thead class="btn-danger">
               <tr>
@@ -167,55 +172,98 @@ include "koneksi.php";
                 <th width="215">
                   <div align="center">Keterangan</div>
                 </th>
+                <th width="215">
+                  <div align="center">Rcode</div>
+                </th>
+                <th width="237">
+									<font size="-1">Status Resep</font>
+								</th>
+								<th width="237">
+									<font size="-1">Analisa Resep</font>
+								</th>
               </tr>
             </thead>
             <tbody>
               <?php
-              $c = 0;
-              $no = 0;
-              if ($GShift == "ALL") {
-                $shft = " ";
-              } else {
-                $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$GShift' AND ";
-              }
-              /*if($Awal!=""){$Where="( DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' OR b.`status`='sedang jalan') OR
-              ((b.ket_status='MC Stop' OR b.ket_status='Cuci Mesin' OR b.ket_status='MC Rusak') AND b.`status`='antri mesin') ";}else{$Where=" c.tgl_update='$Awal' ";}*/
-                          /*if($Awal!=$Akhir){ $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";}else{
-                $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Awal' ";
-              }*/
-              $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";
-              if ($Awal != "" and $Akhir != "") {
-                $Where1 = " ";
-              } else {
-                $Where1 = " WHERE a.id='' ";
-              }
-              $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
-                                        LEFT JOIN
-                                        (SELECT
-                                          b.nokk,
-                                        b.buyer,
-                                        b.no_order,
-                                        b.jenis_kain,
-                                        b.lot,
-                                        b.no_mesin,
-                                        b.warna,
-                                        b.proses,
-                                        b.target,
-                                        if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
-                                        c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
-                                        b.`status` as sts,
-                                        a.`status` as stscelup,
-                                        a.proses as proses_aktual,
-                                        a.id as idclp
-                                      FROM
-                                        tbl_schedule b
-                                        LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
-                                        LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
-                                      WHERE
-                                          $shft
-                                          $Where
-                                          ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) $Where1 ORDER BY a.no_mesin");
-              while ($rowd = mysqli_fetch_array($sql)) {
+                $c = 0;
+                $no = 0;
+                if($Rcode){
+                  $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
+                                              RIGHT JOIN
+                                              (SELECT
+                                                a.rcode,
+                                                b.nokk,
+                                                b.buyer,
+                                                b.no_order,
+                                                b.jenis_kain,
+                                                b.lot,
+                                                b.no_mesin,
+                                                b.warna,
+                                                b.proses,
+                                                b.target,
+                                                if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
+                                                c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
+                                                b.`status` as sts,
+                                                a.`status` as stscelup,
+                                                a.proses as proses_aktual,
+                                                a.id as idclp,
+                                                a.analisa_resep,
+                                                a.status_resep
+                                              FROM
+                                                tbl_schedule b
+                                                LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                                LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+                                              WHERE
+                                                  a.rcode = '$Rcode'
+                                                  ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin)
+                                              ORDER BY a.no_mesin");
+                }else{
+                  if ($GShift == "ALL") {
+                    $shft = " ";
+                  } else {
+                    $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$GShift' AND ";
+                  }
+                  /*if($Awal!=""){$Where="( DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' OR b.`status`='sedang jalan') OR
+                  ((b.ket_status='MC Stop' OR b.ket_status='Cuci Mesin' OR b.ket_status='MC Rusak') AND b.`status`='antri mesin') ";}else{$Where=" c.tgl_update='$Awal' ";}*/
+                              /*if($Awal!=$Akhir){ $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";}else{
+                    $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Awal' ";
+                  }*/
+                  $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";
+                  if ($Awal != "" and $Akhir != "") {
+                    $Where1 = " ";
+                  } else {
+                    $Where1 = " WHERE a.id='' ";
+                  }
+                  $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
+                                          LEFT JOIN
+                                          (SELECT
+                                            b.nokk,
+                                          b.buyer,
+                                          b.no_order,
+                                          b.jenis_kain,
+                                          b.lot,
+                                          b.no_mesin,
+                                          b.warna,
+                                          b.proses,
+                                          b.target,
+                                          if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
+                                          c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
+                                          b.`status` as sts,
+                                          a.`status` as stscelup,
+                                          a.proses as proses_aktual,
+                                          a.id as idclp,
+                                          a.analisa_resep,
+                                          a.status_resep
+                                        FROM
+                                          tbl_schedule b
+                                          LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                          LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+                                        WHERE
+                                            $shft
+                                            $Where
+                                            ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) $Where1 ORDER BY a.no_mesin");
+                }
+                while ($rowd = mysqli_fetch_array($sql)) {
                 if ($GShift == "ALL") {
                   $shftSM = " ";
                 } else {
@@ -274,13 +322,14 @@ include "koneksi.php";
                                       echo "bg-red";
                                     } ?>"> <?php echo $rowd['stscelup']; ?> </i><br /><?php echo $rowd['ket']; ?>
                   </td>
+                  <td><?= $rowd['rcode'] ?></td>
+                  <td><?= $rowd['status_resep'] ?></td>
+									<td><?= $rowd['analisa_resep'] ?></td>
                 </tr>
               <?php } ?>
             </tbody>
-
           </table>
           </form>
-
         </div>
       </div>
     </div>
