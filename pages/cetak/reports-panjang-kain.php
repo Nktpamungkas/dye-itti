@@ -1,12 +1,13 @@
 <?php
   header("Content-type: application/octet-stream");
   header("Content-Disposition: attachment; filename=PLANING REPORT UNTUK PANJANG KAIN PROSES DYEING " . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
-  header("Pragma: no-cache");
-  header("Expires: 0");
+  header('Cache-Control: max-age=0');
 ?>
 <table width="100%" border="1">
     <thead>
         <tr>
+            <th>No</th>
+            <th>Tgl</th>
             <th>Tgl</th>
             <th>Fabric Type</th>
             <th>Article Code</th>
@@ -114,7 +115,7 @@
             $c = 0;
 
             while ($rowd = mysqli_fetch_array($sql)) {
-	            ini_set("error_reporting", 0);
+	            ini_set("error_reporting", 1);
                 $q_itxviewkk        = db2_exec($conn2, "SELECT 
                                                             LISTAGG(TRIM(SUBCODE01), '') AS SUBCODE01,
                                                             LISTAGG(TRIM(SUBCODE02), '') AS SUBCODE02,
@@ -135,7 +136,8 @@
                 $row_itxviewkk      = db2_fetch_assoc($q_itxviewkk);
         ?>
             <tr>
-                <td><?= $rowd['tgl_buat'] ?></td>
+                <td><?= $no++; ?></td>
+                <td><?= substr($rowd['tgl_buat'], 0,10); ?></td>
                 <td><?= $row_itxviewkk['SUBCODE01']; ?></td>
                 <td><?= $row_itxviewkk['SUBCODE02']; ?></td>
                 <td><?= $row_itxviewkk['SUBCODE03']; ?></td>
@@ -143,13 +145,13 @@
                 <td><?= $rowd['no_mesin'] ?></td>
                 <td><?= $rowd['kapasitas'] ?></td>
                 <td><?= $rowd['Lubang'] ?></td>
-                <td><?= $rowd['kapasitas'] / $rowd['Lubang']; ?></td>
+                <td><?php if($rowd['Lubang'] != 0) { echo number_format($rowd['kapasitas'] / $rowd['Lubang'], 2); } ?></td>
                 <td><?= $rowd['lebar_a']; ?></td>
                 <td><?= $rowd['gramasi_a']; ?></td>
                 <td><?= $rowd['rol']; ?></td>
                 <td><?= $rowd['bruto']; ?></td>
                 <td><?= number_format($rowd['bruto'] / $rowd['rol'], 2); ?></td>
-                <td><?= number_format($rowd['rol'] / $rowd['Lubang'], 2); ?></td>
+                <td><?php if($rowd['Lubang'] != 0){ echo number_format($rowd['rol'] / $rowd['Lubang'], 2); } ?></td>
                 <td><?= $rowd['l_r'].'/'.$rowd['l_r_2']; ?></td>
                 <td><?= $rowd['cycle_time']; ?></td>
                 <td><?= $rowd['rpm']; ?></td>
@@ -181,18 +183,32 @@
                 <td>`<?= $rowd['nodemand']; ?></td>
                 <td></td><!-- KETERANGAN -->
                 <td>`<?= $rowd['lot']; ?></td>
-<<<<<<< HEAD
-                <td></td><!-- Problem -->
-=======
                 <td>
                     <?php
                         $q_NCP      = mysqli_query($cond, "SELECT * FROM `tbl_ncp_qcf_new` WHERE prod_order = '$rowd[nokk]'");
                         $row_NCP    = mysqli_fetch_assoc($q_NCP);
-                        echo $row_NCP['masalah'].' - '.$row_NCP['masalah_dominan'];
+                        echo isset($row_NCP['masalah']) ? $row_NCP['masalah'] : '';
+                        echo isset($row_NCP['masalah_dominan']) ? $row_NCP['masalah_dominan'] : '';
+                        // if($row_NCP['prod_order']){
+                        //     echo $row_NCP['masalah'].' - '.$row_NCP['masalah_dominan'];
+                        // }else{
+                        //     echo '-';
+                        // }
                     ?>
                 </td><!-- Problem -->
->>>>>>> 3a671200bedd8568b3cd44e9a605cc52cd76f5c5
-                <td></td><!-- Final Inspection -->
+                <td>
+                    <?php
+                        $q_commentline      = db2_exec($conn2, "SELECT * FROM PRODUCTIONDEMANDSTEPCOMMENT WHERE PRODEMANDSTEPPRODEMANDCODE = '$rowd[nokk]'");
+                        $row_commentline    = db2_fetch_assoc($q_commentline);
+                        echo isset($row_commentline['COMMENTTEXT']) ? $row_commentline['COMMENTTEXT'] : '';
+
+                        // if($row_commentline['PRODEMANDSTEPPRODEMANDCODE']){
+                        //     echo $row_commentline['COMMENTTEXT'];
+                        // }else{
+                        //     echo '-';
+                        // }
+                    ?>
+                </td><!-- Final Inspection -->
                 <td></td><!-- Result -->
             </tr>
         <?php } ?>
