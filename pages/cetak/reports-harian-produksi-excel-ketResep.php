@@ -1,4 +1,5 @@
 <?php
+  ini_set("error_reporting", 0);
   header("Content-type: application/octet-stream");
   header("Content-Disposition: attachment; filename=report-produksi-" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
   header("Pragma: no-cache");
@@ -123,6 +124,7 @@
       <th bgcolor="#99FF99">S/D</th>
     </tr>
     <?php
+        ini_set("error_reporting", 0);
         $Awal = $_GET['awal'];
         $Akhir = $_GET['akhir'];
         $Tgl = substr($Awal, 0, 10);
@@ -138,10 +140,10 @@
         }
         if($_GET['rcode']){
           $left_right = 'RIGHT';
-          $where_new = "a.rcode = '$_GET[rcode]'";
+          $where_new = "a.rcode LIKE '%$_GET[rcode]%'";
         }else{
           $left_right = 'LEFT';
-          $where_new = $shft.$Where;
+          $where_new = $shft.' '.$Where;
         }
         $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
                                             $left_right JOIN

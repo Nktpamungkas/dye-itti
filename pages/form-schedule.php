@@ -409,21 +409,21 @@
 		$rowLot = sqlsrv_fetch_array($qryLot1);
 		$lotno = $rowLot['TotalLot'] . "-" . $nomorLot;
 	}
-	$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
-	$cek = mysqli_num_rows($sqlCek);
-	$rcek = mysqli_fetch_array($sqlCek);
+	// $sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' AND nodemand LIKE '%%' ORDER BY id DESC LIMIT 1");
+	// $cek = mysqli_num_rows($sqlCek);
+	// $rcek = mysqli_fetch_array($sqlCek);
 	
 	$sqlCek1 = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' AND (status='antri mesin' or status='sedang jalan') ORDER BY id DESC LIMIT 1");
 	$cek1 = mysqli_num_rows($sqlCek1);
 
-	if($rcek){
-		if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
-			echo "edit";
-		}
-	}else{
-		if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
-			echo "baru";
-		}
+	// if($rcek){
+		// if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
+		// 	echo "edit";
+		// }
+	// }else{
+		// if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
+		// 	echo "baru";
+		// }
 		// NOW
 			$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
 											TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
@@ -559,7 +559,7 @@
 				PRODUCTIONRESERVATION.GROUPLINE DESC LIMIT 1");
 			$dt_bonresep2	= db2_fetch_assoc($sql_bonresep2);
 		// NOW
-	}
+	// }
 ?>
 <?php
 	$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';

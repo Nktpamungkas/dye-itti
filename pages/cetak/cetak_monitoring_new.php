@@ -377,7 +377,7 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
       <td style="border-right:0px #000000 solid;">
         <pre>No. Order</pre>
       </td>
-      <td colspan="5" style="border-left:0px #000000 solid;">: <?php if ($ssr['documentno'] != "") {
+      <td colspan="4" style="border-left:0px #000000 solid;">: <?php if ($ssr['documentno'] != "") {
                                                                   echo strtoupper($ssr['documentno']);
                                                                 } else {
                                                                   echo $rowmt['no_order'];
