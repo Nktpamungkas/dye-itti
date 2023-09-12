@@ -123,16 +123,18 @@
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
             <div class="btn-group pull-right">              
               <a href="pages/cetak/reports-harian-produksi.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi"><i class="fa fa-print"></i> </a>
+              <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-info " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel 2"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-opt-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Waktu Tunggu Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/rincian-cetak.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-warning " target="_blank" data-toggle="tooltip" data-html="true" title="Rincian Produksi"><i class="fa fa-print"></i> </a>
               <a href="pages/cetak/rincian-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-info " target="_blank" data-toggle="tooltip" data-html="true" title="Rincian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/schedule-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn bg-maroon " target="_blank" data-toggle="tooltip" data-html="true" title="Schedule Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
             </div>
+          <?php }elseif($Rcode != ""){ ?>
+            <div class="btn-group pull-right">              
+              <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&rcode=<?= $Rcode; ?>" class="btn btn-info" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Keterangan Analisa Resep Rcode"><i class="fa fa-file-excel-o"></i> </a>
+            </div>
           <?php } ?>
-          <div class="btn-group pull-right">              
-            <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&rcode=<?= $Rcode; ?>" class="btn btn-info" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Keterangan Analisa Resep Rcode"><i class="fa fa-file-excel-o"></i> </a>
-          </div>
         </div>
         <div class="box-body">
           <table id="example1" class="table table-bordered table-hover" width="100%">
@@ -145,6 +147,9 @@
                 <th width="224">
                   <div align="center">Buyer</div>
                 </th>
+                <th width="215">
+                  <div align="center">Tgl Celup</div>
+                </th>
                 <th width="314">
                   <div align="center">Order</div>
                 </th>
@@ -156,6 +161,9 @@
                 </th>
                 <th width="404">
                   <div align="center">Warna</div>
+                </th>
+                <th width="404">
+                  <div align="center">QTY</div>
                 </th>
                 <th width="215">
                   <div align="center">Proses</div>
@@ -171,6 +179,9 @@
                 </th>
                 <th width="215">
                   <div align="center">Keterangan</div>
+                </th>
+                <th width="215">
+                  <div align="center">Item</div>
                 </th>
                 <th width="215">
                   <div align="center">Rcode</div>
@@ -192,6 +203,7 @@
                                               RIGHT JOIN
                                               (SELECT
                                                 a.rcode,
+                                                c.tgl_update,
                                                 b.nokk,
                                                 b.buyer,
                                                 b.no_order,
@@ -208,15 +220,17 @@
                                                 a.proses as proses_aktual,
                                                 a.id as idclp,
                                                 a.analisa_resep,
-                                                a.status_resep
+                                                a.status_resep,
+                                                b.no_hanger,
+                                                b.qty_order
                                               FROM
                                                 tbl_schedule b
                                                 LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
                                                 LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
                                               WHERE
-                                                  a.rcode = '$Rcode'
+                                                  a.rcode LIKE '%$Rcode%'
                                                   ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin)
-                                              ORDER BY a.no_mesin");
+                                              ORDER BY tgl_update DESC");
                 }else{
                   if ($GShift == "ALL") {
                     $shft = " ";
@@ -237,31 +251,35 @@
                   $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
                                           LEFT JOIN
                                           (SELECT
+                                            a.rcode,
                                             b.nokk,
-                                          b.buyer,
-                                          b.no_order,
-                                          b.jenis_kain,
-                                          b.lot,
-                                          b.no_mesin,
-                                          b.warna,
-                                          b.proses,
-                                          b.target,
-                                          if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
-                                          c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
-                                          b.`status` as sts,
-                                          a.`status` as stscelup,
-                                          a.proses as proses_aktual,
-                                          a.id as idclp,
-                                          a.analisa_resep,
-                                          a.status_resep
-                                        FROM
-                                          tbl_schedule b
-                                          LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
-                                          LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
-                                        WHERE
-                                            $shft
-                                            $Where
-                                            ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) $Where1 ORDER BY a.no_mesin");
+                                            c.tgl_update,
+                                            b.buyer,
+                                            b.no_order,
+                                            b.jenis_kain,
+                                            b.lot,
+                                            b.no_mesin,
+                                            b.warna,
+                                            b.proses,
+                                            b.target,
+                                            if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
+                                            c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
+                                            b.`status` as sts,
+                                            a.`status` as stscelup,
+                                            a.proses as proses_aktual,
+                                            a.id as idclp,
+                                            a.analisa_resep,
+                                            a.status_resep,
+                                            b.no_hanger,
+                                            b.qty_order
+                                          FROM
+                                            tbl_schedule b
+                                            LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                            LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+                                          WHERE
+                                              $shft
+                                              $Where
+                                              ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) $Where1 ORDER BY tgl_update DESC");
                 }
                 while ($rowd = mysqli_fetch_array($sql)) {
                 if ($GShift == "ALL") {
@@ -289,10 +307,12 @@
                                         echo $rowd['shft'];
                                       } ?></td>
                   <td align="center"><?php echo $rowd['buyer']; ?></td>
+                  <td><?= $rowd['tgl_update'] ?></td>
                   <td align="center"><?php echo $rowd['no_order']; ?></td>
                   <td><?php echo $rowd['jenis_kain']; ?></td>
                   <td align="center"><?php echo $rowd['lot']; ?></td>
                   <td><?php echo $rowd['warna']; ?></td>
+                  <td><?php echo $rowd['qty_order']; ?></td>
                   <td align="left"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
                                       echo $rowSM['proses'];
                                     } else {
@@ -322,6 +342,7 @@
                                       echo "bg-red";
                                     } ?>"> <?php echo $rowd['stscelup']; ?> </i><br /><?php echo $rowd['ket']; ?>
                   </td>
+                  <td><?= $rowd['no_hanger'] ?></td>
                   <td><?= $rowd['rcode'] ?></td>
                   <td><?= $rowd['status_resep'] ?></td>
 									<td><?= $rowd['analisa_resep'] ?></td>
