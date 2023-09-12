@@ -87,8 +87,13 @@ include "koneksi.php";
         <div class="box-header with-border">
           <h3 class="box-title">Data Hasil Celup</h3><br><br>
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $_POST['awal'] . " to " . $_POST['akhir']; ?></b>
+<<<<<<< HEAD
+            <a href="pages/cetak/reports-panjang-kain.php?&awal=<?php echo $_POST['awal'] ?>&akhir=<?php echo $_POST['akhir']; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary pull-right" target="_blank"><i class="fa fa-print"></i> Cetak Panjang Kain DYE</a>
+            <a href="pages/cetak/reports-hasil-celup.php?&awal=<?php echo $Awal; ?>&akhir=<?php echo $Akhir; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a>
+=======
             <a href="pages/cetak/reports-panjang-kain.php?&awal=<?php echo $Awal; ?>&akhir=<?php echo $Awal; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary pull-right" target="_blank"><i class="fa fa-print"></i> Cetak Panjang Kain</a>
             <a href="pages/cetak/reports-hasil-celup.php?&awal=<?php echo $Awal; ?>&akhir=<?php echo $Awal; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a>
+>>>>>>> 3a671200bedd8568b3cd44e9a605cc52cd76f5c5
           <?php } ?>
 
         </div>
@@ -135,22 +140,22 @@ include "koneksi.php";
                 $shft = " a.g_shift='$GShift' AND ";
               }
               $sql = mysqli_query($con, "SELECT
-	a.*,
-	b.buyer,
-	b.no_order,
-	b.no_mesin,
-	b.warna,
-	b.proses 
-FROM
-	tbl_hasilcelup a
-	LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-	LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
-WHERE
-	$shft 
-	DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
-	AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)') 
-ORDER BY
-	b.no_mesin ASC");
+                                          a.*,
+                                          b.buyer,
+                                          b.no_order,
+                                          b.no_mesin,
+                                          b.warna,
+                                          b.proses 
+                                        FROM
+                                          tbl_hasilcelup a
+                                          LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
+                                          LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
+                                        WHERE
+                                          $shft 
+                                          DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
+                                          AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)') 
+                                        ORDER BY
+                                          b.no_mesin ASC");
               while ($rowd = mysqli_fetch_array($sql)) {
                 $no++;
                 $bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';

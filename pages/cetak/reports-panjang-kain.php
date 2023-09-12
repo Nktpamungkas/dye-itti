@@ -181,6 +181,9 @@
                 <td>`<?= $rowd['nodemand']; ?></td>
                 <td></td><!-- KETERANGAN -->
                 <td>`<?= $rowd['lot']; ?></td>
+<<<<<<< HEAD
+                <td></td><!-- Problem -->
+=======
                 <td>
                     <?php
                         $q_NCP      = mysqli_query($cond, "SELECT * FROM `tbl_ncp_qcf_new` WHERE prod_order = '$rowd[nokk]'");
@@ -188,6 +191,7 @@
                         echo $row_NCP['masalah'].' - '.$row_NCP['masalah_dominan'];
                     ?>
                 </td><!-- Problem -->
+>>>>>>> 3a671200bedd8568b3cd44e9a605cc52cd76f5c5
                 <td></td><!-- Final Inspection -->
                 <td></td><!-- Result -->
             </tr>
