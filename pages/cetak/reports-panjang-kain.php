@@ -150,7 +150,7 @@
                 <td><?= $rowd['gramasi_a']; ?></td>
                 <td><?= $rowd['rol']; ?></td>
                 <td><?= $rowd['bruto']; ?></td>
-                <td><?= number_format($rowd['bruto'] / $rowd['rol'], 2); ?></td>
+                <td><?php if($rowd['rol']){ echo number_format($rowd['bruto'] / $rowd['rol'], 2); } ?></td>
                 <td><?php if($rowd['Lubang'] != 0){ echo number_format($rowd['rol'] / $rowd['Lubang'], 2); } ?></td>
                 <td><?= $rowd['l_r'].'/'.$rowd['l_r_2']; ?></td>
                 <td><?= $rowd['cycle_time']; ?></td>
@@ -175,7 +175,7 @@
                     <?php endif; ?>
                 </td>
                 <td>
-                    <?= number_format($rowd['bruto'] / $rowd['kapasitas'], 2) * 100; ?>%
+                    <?php if($rowd['kapasitas'] != 0){echo number_format($rowd['bruto'] / $rowd['kapasitas'], 2) * 100; } ?>%
                 </td>
                 <td></td><!-- DATE -->
                 <td></td><!-- BY -->
