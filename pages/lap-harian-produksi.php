@@ -123,7 +123,8 @@
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
             <div class="btn-group pull-right">              
               <a href="pages/cetak/reports-harian-produksi.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi"><i class="fa fa-print"></i> </a>
-              <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-info " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel 2"><i class="fa fa-file-excel-o"></i> </a>
+              <a href="pages/cetak/reports-harian-produksi-excel-whiteness.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Whiteness Yellowness Tint"><i class="fa fa-file-excel-o"></i> </a>
+              <a href="pages/cetak/reports-harian-produksi-excel-ketResep.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-info" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel 2"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-opt-excel.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Waktu Tunggu Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/rincian-cetak.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-warning " target="_blank" data-toggle="tooltip" data-html="true" title="Rincian Produksi"><i class="fa fa-print"></i> </a>
@@ -230,7 +231,9 @@
                                               WHERE
                                                   a.rcode LIKE '%$Rcode%'
                                                   ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin)
-                                              ORDER BY tgl_update DESC");
+                                            WHERE 
+                                              NOT x.nokk IS NULL
+                                            ORDER BY tgl_update DESC");
                 }else{
                   if ($GShift == "ALL") {
                     $shft = " ";

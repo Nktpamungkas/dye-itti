@@ -1336,6 +1336,9 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 																		SUBSTR(p.SUFFIXCODE, 1, 2) = 'SC' OR
 																		SUBSTR(p.SUFFIXCODE, 1, 2) = 'TC')
 																		AND p.PRODUCTIONORDERCODE = '$row_hasilcelup[nokk]'
+																		AND NOT w.WHITENESS IS NULL
+																		AND NOT y.YELLOWNESS IS NULL 
+																		AND NOT t.TINT IS NULL
 																	ORDER BY
 																		p.GROUPLINE ASC");
 								$col = 0;
