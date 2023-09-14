@@ -533,31 +533,31 @@
 												WHERE s.PRODUCTIONORDERCODE = '$nokk'");
 			$dt_mesinknt	= db2_fetch_assoc($sql_mesinknt);
 
-			$sql_bonresep1	= db2_exec($conn2, "SELECT
-				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
-				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
-				TRIM(SUFFIXCODE) AS SUFFIXCODE
-			FROM
-				PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
-			WHERE
-				PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' AND PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk' 
-				AND NOT SUFFIXCODE = '001'
-			ORDER BY
-				PRODUCTIONRESERVATION.GROUPLINE ASC LIMIT 1");
-			$dt_bonresep1	= db2_fetch_assoc($sql_bonresep1);
+			// $sql_bonresep1	= db2_exec($conn2, "SELECT
+			// 										TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+			// 										TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
+			// 										TRIM(SUFFIXCODE) AS SUFFIXCODE
+			// 									FROM
+			// 										PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+			// 									WHERE
+			// 										PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' AND PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk' 
+			// 										AND NOT SUFFIXCODE = '001'
+			// 									ORDER BY
+			// 										PRODUCTIONRESERVATION.GROUPLINE ASC LIMIT 1");
+			// $dt_bonresep1	= db2_fetch_assoc($sql_bonresep1);
 
-			$sql_bonresep2	= db2_exec($conn2, "SELECT
-				TRIM( PRODUCTIONRESERVATION.PRODUCTIONORDERCODE ) AS PRODUCTIONORDERCODE,
-				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP2,
-				TRIM(SUFFIXCODE) AS SUFFIXCODE
-			FROM
-				PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
-			WHERE
-				PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' AND PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk' 
-				AND NOT SUFFIXCODE = '001'
-			ORDER BY
-				PRODUCTIONRESERVATION.GROUPLINE DESC LIMIT 1");
-			$dt_bonresep2	= db2_fetch_assoc($sql_bonresep2);
+			// $sql_bonresep2	= db2_exec($conn2, "SELECT
+			// 										TRIM( PRODUCTIONRESERVATION.PRODUCTIONORDERCODE ) AS PRODUCTIONORDERCODE,
+			// 										TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP2,
+			// 										TRIM(SUFFIXCODE) AS SUFFIXCODE
+			// 									FROM
+			// 										PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+			// 									WHERE
+			// 										PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' AND PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk' 
+			// 										AND NOT SUFFIXCODE = '001'
+			// 									ORDER BY
+			// 										PRODUCTIONRESERVATION.GROUPLINE DESC LIMIT 1");
+			// $dt_bonresep2	= db2_fetch_assoc($sql_bonresep2);
 		// NOW
 	// }
 ?>
@@ -568,6 +568,29 @@
 	$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
 	$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 ?>
+<script type="text/javascript">
+	function bonresep1(){
+		var no_resep		= document.getElementById("no_resep").value;
+		var prod_order		= no_resep.substring(0, 8);
+		var group_number	= no_resep.substring(9);
+		// alert("no_resep");
+
+		$.get("api_schedule.php?prod_order="+prod_order+"&group_number="+group_number,function(data){
+			document.getElementById("suffix").value = data.SUFFIX_CODE;
+		});
+	}
+
+	function bonresep2(){
+		var no_resep2		= document.getElementById("no_resep2").value;
+		var prod_order2		= no_resep2.substring(0, 8);
+		var group_number2	= no_resep2.substring(9);
+		// alert("no_resep");
+
+		$.get("api_schedule.php?prod_order="+prod_order2+"&group_number="+group_number2,function(data2){
+			document.getElementById("suffix2").value = data2.SUFFIX_CODE;
+		});
+	}
+</script>
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" name="form1">
 	<div class="box box-info">
 		<div class="box-header with-border">
@@ -834,7 +857,6 @@
 			</div>
 			<!-- col -->
 			<div class="col-md-6">
-
 				<div class="form-group">
 					<label for="kapasitas" class="col-sm-3 control-label">Kapasitas Mesin</label>
 					<div class="col-sm-3">
@@ -975,19 +997,58 @@
 				<div class="form-group">
 					<label for="no_resep" class="col-sm-3 control-label">No Bon Resep 1</label>
 					<div class="col-sm-3">
-						<input name="no_resep" type="text" class="form-control" id="no_resep" value="<?= $rcek['no_resep']; ?><?= $dt_bonresep1['BONRESEP1']; ?>" placeholder="No Bon Resep 1">
+						<!-- <input name="no_resep" type="text" class="form-control" id="no_resep" value="<?= $rcek['no_resep']; ?><?= $dt_bonresep1['BONRESEP1']; ?>" placeholder="No Bon Resep 1"> -->
+						<select name="no_resep" class="form-control select2" id="no_resep" onchange="bonresep1()">
+							<option>Pilih Bon Resep</option>
+							<?php
+								$q_bonresep				= db2_exec($conn2, "SELECT
+																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
+																				TRIM(SUFFIXCODE) AS SUFFIXCODE
+																			FROM
+																				PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+																			WHERE
+																				(PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' OR PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFF')
+																				AND	PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk'
+																			ORDER BY
+																				PRODUCTIONRESERVATION.GROUPLINE ASC");
+								while ($row_bonresep 	= db2_fetch_assoc($q_bonresep)) {
+							?>
+								<option value="<?= $row_bonresep['BONRESEP1'] ?>"><?= $row_bonresep['BONRESEP1'] ?></option>
+							<?php } ?>
+						</select>
 					</div>
 					<div class="col-sm-3">
-						<input name="suffix" type="text" class="form-control" id="suffix" value="<?= $rcek['suffix']; ?><?= $dt_bonresep1['SUFFIXCODE']; ?>" placeholder="Suffix 1">
+						<!-- <input name="suffix" type="text" class="form-control" id="suffix" value="<?= $rcek['suffix']; ?><?= $dt_bonresep1['SUFFIXCODE']; ?>" placeholder="Suffix 1"> -->
+						<input name="suffix" type="text" class="form-control" id="suffix" value="" placeholder="Suffix 1">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="no_resep2" class="col-sm-3 control-label">No Bon Resep 2</label>
 					<div class="col-sm-3">
-						<input name="no_resep2" type="text" class="form-control" id="no_resep2" value="<?= $rcek['no_resep2']; ?><?= $dt_bonresep2['BONRESEP2']; ?>" placeholder="No Bon Resep 2">
+						<!-- <input name="no_resep2" type="text" class="form-control" id="no_resep2" value="<?= $rcek['no_resep2']; ?><?= $dt_bonresep2['BONRESEP2']; ?>" placeholder="No Bon Resep 2"> -->
+						<select name="no_resep2" class="form-control select2" id="no_resep2" onchange="bonresep2()">
+							<option>Pilih Bon Resep</option>
+							<?php
+								$q_bonresep2				= db2_exec($conn2, "SELECT
+																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
+																				TRIM(SUFFIXCODE) AS SUFFIXCODE
+																			FROM
+																				PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+																			WHERE
+																				(PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFD' OR PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'RFF')
+																				AND	PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk'
+																			ORDER BY
+																				PRODUCTIONRESERVATION.GROUPLINE ASC");
+								while ($row_bonresep2 	= db2_fetch_assoc($q_bonresep2)) {
+							?>
+								<option value="<?= $row_bonresep2['BONRESEP1'] ?>"><?= $row_bonresep2['BONRESEP1'] ?></option>
+							<?php } ?>
+						</select>
 					</div>
 					<div class="col-sm-3">
-						<input name="suffix2" type="text" class="form-control" id="suffix2" value="<?= $rcek['suffix2']; ?><?= $dt_bonresep2['SUFFIXCODE']; ?>" placeholder="Suffix 2">
+						<input name="suffix2" type="text" class="form-control" id="suffix2" value="" placeholder="Suffix 2">
 					</div>
 				</div>
 				<div class="form-group">
