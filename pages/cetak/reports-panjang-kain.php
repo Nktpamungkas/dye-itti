@@ -8,7 +8,6 @@
         <tr>
             <th>No</th>
             <th>Tgl</th>
-            <th>Tgl</th>
             <th>Fabric Type</th>
             <th>Article Code</th>
             <th>Article Number</th>
