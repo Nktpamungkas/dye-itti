@@ -240,16 +240,12 @@
                   } else {
                     $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$GShift' AND ";
                   }
-                  /*if($Awal!=""){$Where="( DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' OR b.`status`='sedang jalan') OR
-                  ((b.ket_status='MC Stop' OR b.ket_status='Cuci Mesin' OR b.ket_status='MC Rusak') AND b.`status`='antri mesin') ";}else{$Where=" c.tgl_update='$Awal' ";}*/
-                              /*if($Awal!=$Akhir){ $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";}else{
-                    $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Awal' ";
-                  }*/
+              
                   $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";
                   if ($Awal != "" and $Akhir != "") {
-                    $Where1 = " ";
+                    $Where1 = "WHERE NOT x.nokk IS NULL";
                   } else {
-                    $Where1 = " WHERE a.id='' ";
+                    $Where1 = " WHERE a.id='' AND NOT x.nokk IS NULL";
                   }
                   $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
                                           LEFT JOIN
@@ -282,7 +278,9 @@
                                           WHERE
                                               $shft
                                               $Where
-                                              ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) $Where1 ORDER BY tgl_update DESC");
+                                              ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) 
+                                          $Where1 
+                                          ORDER BY tgl_update DESC");
                 }
                 while ($rowd = mysqli_fetch_array($sql)) {
                 if ($GShift == "ALL") {

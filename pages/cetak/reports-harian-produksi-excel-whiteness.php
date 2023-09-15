@@ -255,11 +255,11 @@
         <td><?= $no++; ?></td>
         <td>`<?= $row_whiteness['PRODUCTIONORDERCODE']; ?></td>
         <td>`<?= $row_hasilcelup['nodemand']; ?></td>
-        <td>`<?= $row_hasilcelup['no_hanger']; ?></td>
-        <td>`<?= $row_hasilcelup['jenis_kain']; ?></td>
-        <td>`<?= $row_hasilcelup['warna']; ?></td>
-        <td>`<?= $row_hasilcelup['tgl_in']; ?></td>
-        <td>`<?= $row_hasilcelup['no_mesin']; ?></td>
+        <td><?= $row_hasilcelup['no_hanger']; ?></td>
+        <td><?= $row_hasilcelup['jenis_kain']; ?></td>
+        <td><?= $row_hasilcelup['warna']; ?></td>
+        <td><?= $row_hasilcelup['tgl_in'].' '.$row_hasilcelup['jam_in']; ?></td>
+        <td><?= $row_hasilcelup['no_mesin']; ?></td>
         <td><?= $row_whiteness['PRODRESERVATIONLINKGROUPCODE'] ?></td>
         <td><?= number_format($row_whiteness['WHITENESS'], 2); ?></td>
         <td><?= number_format($row_whiteness['YELLOWNESS'], 2); ?></td>
