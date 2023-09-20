@@ -102,34 +102,34 @@ border:hidden;
 	$Akhir=$_GET['akhir'];	
 	if($_GET['shft']=="ALL"){$shft=" ";}else{$shft=" a.g_shift='$_GET[shft]' AND ";}
 		$sql=mysqli_query($con,"SELECT
-	a.*,
-	b.buyer,
-	b.langganan,
-	b.no_order,
-	b.jenis_kain,
-	b.no_mesin,
-	b.warna,
-	b.lot,
-	c.rol,
-	c.bruto,
-	b.ket_status,
-	c.tgl_buat as tgl_in,
-	a.tgl_buat as tgl_out,
-	a.kd_stop,
-	a.mulai_stop,
-	a.selesai_stop,
-	a.ket,
-	b.proses 
-FROM
-	tbl_hasilcelup a
-	LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-	LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
-WHERE
-	$shft 
-	DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
-	AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
-ORDER BY
-	b.no_mesin ASC");
+                            a.*,
+                            b.buyer,
+                            b.langganan,
+                            b.no_order,
+                            b.jenis_kain,
+                            b.no_mesin,
+                            b.warna,
+                            b.lot,
+                            c.rol,
+                            c.bruto,
+                            b.ket_status,
+                            c.tgl_buat as tgl_in,
+                            a.tgl_buat as tgl_out,
+                            a.kd_stop,
+                            a.mulai_stop,
+                            a.selesai_stop,
+                            a.ket,
+                            b.proses 
+                          FROM
+                            tbl_hasilcelup a
+                            LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
+                            LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
+                          WHERE
+                            $shft 
+                            DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
+                            AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
+                          ORDER BY
+                            b.no_mesin ASC");
   
    $no=1;
    
