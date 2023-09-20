@@ -1,5 +1,5 @@
 <?php
-  ini_set("error_reporting", 0);
+  // ini_set("error_reporting", 0);
   header("Content-type: application/octet-stream");
   header("Content-Disposition: attachment; filename=report-produksi-With-Whitness" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
   header("Pragma: no-cache");
@@ -7,13 +7,13 @@
   //disini script laporan anda
 ?>
 <?php
-  ini_set("error_reporting", 1);
+  // ini_set("error_reporting", 1);
   include "../../koneksi.php";
   include "../../koneksiLAB.php";
   include "../../tgl_indo.php";
   //--
-  $idkk = $_REQUEST['idkk'];
-  $act = $_GET['g'];
+  // $idkk = $_REQUEST['idkk'];
+  // $act = $_GET['g'];
   //-
   $qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
   $rTgl = mysqli_fetch_array($qTgl);
@@ -50,7 +50,7 @@
       <th bgcolor="#99FF99">SUFFIX</th>
       <th bgcolor="#99FF99">DESCRIPTION</th>
     <?php
-        ini_set("error_reporting", 0);
+        // ini_set("error_reporting", 0);
         $Awal = $_GET['awal'];
         $Akhir = $_GET['akhir'];
         $Tgl = substr($Awal, 0, 10);
@@ -64,13 +64,13 @@
         } else {
           $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
         }
-        if($_GET['rcode']){
-          $left_right = 'RIGHT';
-          $where_new = "a.rcode LIKE '%$_GET[rcode]%'";
-        }else{
+        // if($_GET['rcode']){
+          // $left_right = 'RIGHT';
+          // $where_new = "a.rcode LIKE '%$_GET[rcode]%'";
+        // }else{
           $left_right = 'LEFT';
           $where_new = $shft.' '.$Where;
-        }
+        // }
         $sql = mysqli_query($con, "SELECT 
                                         x.*
                                     FROM tbl_mesin a
@@ -142,9 +142,9 @@
                                                 SUBSTR(p.SUFFIXCODE, 1, 2) = 'SC' OR
                                                 SUBSTR(p.SUFFIXCODE, 1, 2) = 'TC')
                                                 AND p.PRODUCTIONORDERCODE IN ($value_prod_order)
-                                                AND NOT w.WHITENESS IS NULL
-                                                AND NOT y.YELLOWNESS IS NULL 
-                                                AND NOT t.TINT IS NULL
+                                                -- AND NOT w.WHITENESS IS NULL
+                                                -- AND NOT y.YELLOWNESS IS NULL 
+                                                -- AND NOT t.TINT IS NULL
                                               ORDER BY
                                                 p.PRODUCTIONORDERCODE, p.GROUPLINE ASC");
         $no = 1;
