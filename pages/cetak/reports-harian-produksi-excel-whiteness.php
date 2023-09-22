@@ -39,6 +39,8 @@
       <th bgcolor="#99FF99">PRODUCTION DEMAND</th>
       <th bgcolor="#99FF99">NO ITEM</th>
       <th bgcolor="#99FF99">JENIS KAIN</th>
+      <th bgcolor="#99FF99">GRAMASI</th>
+      <th bgcolor="#99FF99">QTY</th>
       <th bgcolor="#99FF99">WARNA</th>
       <th bgcolor="#99FF99">TGL IN</th>
       <th bgcolor="#99FF99">NO MESIN</th>
@@ -100,6 +102,8 @@
                                                 w.WHITENESS,
                                                 y.YELLOWNESS,
                                                 t.TINT,
+                                                p.SUBCODE01,
+                                                p.SUFFIXCODE,
                                                 TRIM(p.SUBCODE01) || '-' ||TRIM(p.SUFFIXCODE) AS SUFFIX,
                                                 p.PICKUPQUANTITY AS LR,
                                                 r.SEARCHDESCRIPTION AS DESKRIPSI
@@ -257,6 +261,8 @@
         <td>`<?= $row_hasilcelup['nodemand']; ?></td>
         <td><?= $row_hasilcelup['no_hanger']; ?></td>
         <td><?= $row_hasilcelup['jenis_kain']; ?></td>
+        <td><?= $row_hasilcelup['gramasi'] ?></td>
+        <td><?= $row_hasilcelup['bruto'] ?></td>
         <td><?= $row_hasilcelup['warna']; ?></td>
         <td><?= $row_hasilcelup['tgl_in'].' '.$row_hasilcelup['jam_in']; ?></td>
         <td><?= $row_hasilcelup['no_mesin']; ?></td>
@@ -267,6 +273,31 @@
         <td><?= number_format($row_whiteness['LR'], 2); ?></td>
         <td><?= $row_whiteness['SUFFIX']; ?></td>
         <td><?= $row_whiteness['DESKRIPSI']; ?></td>
+        <?php
+          $q_recipecmp  = db2_exec($conn2, "SELECT
+                                              TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) AS DYC,
+                                              CASE
+                                                WHEN p.LONGDESCRIPTION IS NULL THEN r.COMMENTLINE 
+                                                ELSE p.LONGDESCRIPTION
+                                              END AS LONGDESCRIPTION,
+                                              r.CONSUMPTION
+                                            FROM
+                                              RECIPECOMPONENT r
+                                            LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = r.ITEMTYPEAFICODE 
+                                                      AND p.SUBCODE01 = r.SUBCODE01
+                                                      AND p.SUBCODE02 = r.SUBCODE02
+                                                      AND p.SUBCODE03 = r.SUBCODE03
+                                            WHERE
+                                              r.RECIPESUBCODE01 = '$row_whiteness[SUBCODE01]'
+                                              AND r.RECIPESUFFIXCODE = '$row_whiteness[SUFFIXCODE]'
+                                            ORDER BY 
+                                              r.SEQUENCE DESC");
+        ?>
+        <?php while ($row_recipecmp = db2_fetch_assoc($q_recipecmp)) { ?>
+          <td><?= $row_recipecmp['DYC']; ?></td>
+          <td><?= $row_recipecmp['LONGDESCRIPTION']; ?></td>
+          <td><?= $row_recipecmp['CONSUMPTION']; ?></td>
+        <?php } ?>
       </tr>
       <?php } ?>
   </table>
