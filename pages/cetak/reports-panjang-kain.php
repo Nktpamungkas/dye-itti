@@ -49,6 +49,12 @@
             include "../../koneksi.php";
             $Awal = $_GET['awal'];
             $Akhir = $_GET['akhir'];
+            if ($Awal != $Akhir) {
+                $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
+            } else {
+                $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
+            }
+
             if ($_GET['shft'] == "ALL") {
                 $shft = " ";
             } else {
@@ -97,15 +103,15 @@
                                             c.tekanan,
                                             c.nozzle,
                                             c.plaiter,
-                                            b.lot
+                                            b.lot,
+                                            c.tgl_update
                                         FROM
                                             tbl_hasilcelup a
                                             LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
                                             LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
                                         WHERE
                                             $shft 
-                                            DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
-                                            AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
+                                            $Where
                                         ORDER BY
                                             b.no_mesin ASC");
 
