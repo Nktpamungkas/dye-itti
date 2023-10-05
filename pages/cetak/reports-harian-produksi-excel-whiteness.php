@@ -37,6 +37,7 @@
       <th bgcolor="#99FF99">NO.</th>
       <th bgcolor="#99FF99">PRODUCTION ORDER</th>
       <th bgcolor="#99FF99">PRODUCTION DEMAND</th>
+      <th bgcolor="#99FF99">ORIGINAL PD CODE</th>
       <th bgcolor="#99FF99">NO ITEM</th>
       <th bgcolor="#99FF99">JENIS KAIN</th>
       <th bgcolor="#99FF99">GRAMASI</th>
@@ -44,6 +45,7 @@
       <th bgcolor="#99FF99">WARNA</th>
       <th bgcolor="#99FF99">TGL IN</th>
       <th bgcolor="#99FF99">NO MESIN</th>
+      <th bgcolor="#99FF99">GROUP LINE</th>
       <th bgcolor="#99FF99">PRD. RSV. LINK GROUP CODE</th>
       <th bgcolor="#99FF99">WHITENESS</th>
       <th bgcolor="#99FF99">YELLOWNESS</th>
@@ -146,6 +148,7 @@
                                                 SUBSTR(p.SUFFIXCODE, 1, 2) = 'SC' OR
                                                 SUBSTR(p.SUFFIXCODE, 1, 2) = 'TC')
                                                 AND p.PRODUCTIONORDERCODE IN ($value_prod_order)
+                                                AND NOT p.PRODRESERVATIONLINKGROUPCODE IS NULL
                                                 -- AND NOT w.WHITENESS IS NULL
                                                 -- AND NOT y.YELLOWNESS IS NULL 
                                                 -- AND NOT t.TINT IS NULL
@@ -254,11 +257,24 @@
                                                               NOT x.nokk IS NULL
                                                             ORDER BY a.no_mesin");
           $row_hasilcelup = mysqli_fetch_assoc($q_rincian_hasilcelup);
+          
+          // mencari original pd code
+          ini_set("error_reporting", 0);
+          $q_orig_pd_code     = db2_exec($conn2, "SELECT 
+                                                      *, a.VALUESTRING AS ORIGINALPDCODE
+                                                  FROM 
+                                                      PRODUCTIONDEMAND p 
+                                                  LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
+                                                  WHERE p.CODE = '$row_hasilcelup[nodemand]'");
+          $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
+          // mencari original pd code
+
     ?>
       <tr valign="top">
         <td><?= $no++; ?></td>
         <td>`<?= $row_whiteness['PRODUCTIONORDERCODE']; ?></td>
         <td>`<?= $row_hasilcelup['nodemand']; ?></td>
+        <td>`<?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
         <td><?= $row_hasilcelup['no_hanger']; ?></td>
         <td><?= $row_hasilcelup['jenis_kain']; ?></td>
         <td><?= $row_hasilcelup['gramasi'] ?></td>
@@ -266,6 +282,7 @@
         <td><?= $row_hasilcelup['warna']; ?></td>
         <td><?= $row_hasilcelup['tgl_in'].' '.$row_hasilcelup['jam_in']; ?></td>
         <td><?= $row_hasilcelup['no_mesin']; ?></td>
+        <td><?= $row_whiteness['GROUPLINE'] ?></td>
         <td><?= $row_whiteness['PRODRESERVATIONLINKGROUPCODE'] ?></td>
         <td><?= number_format($row_whiteness['WHITENESS'], 2); ?></td>
         <td><?= number_format($row_whiteness['YELLOWNESS'], 2); ?></td>
@@ -294,9 +311,9 @@
                                               r.SEQUENCE DESC");
         ?>
         <?php while ($row_recipecmp = db2_fetch_assoc($q_recipecmp)) { ?>
-          <td><?= $row_recipecmp['DYC']; ?></td>
-          <td><?= $row_recipecmp['LONGDESCRIPTION']; ?></td>
-          <td><?= $row_recipecmp['CONSUMPTION']; ?></td>
+          <!-- <td><?= $row_recipecmp['DYC']; ?></td> -->
+          <td><?= $row_recipecmp['LONGDESCRIPTION'].' ('.number_format($row_recipecmp['CONSUMPTION'], 2).')'; ?></td>
+          <!-- <td><?= $row_recipecmp['CONSUMPTION']; ?></td> -->
         <?php } ?>
       </tr>
       <?php } ?>
