@@ -1239,6 +1239,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 								<option value="Oke" <?php if($row_hasilcelup['status_resep'] == 'Oke'){ echo "SELECTED"; } ?>>Oke</option>
 								<option value="Tidak Oke" <?php if($row_hasilcelup['status_resep'] == 'Tidak Oke'){ echo "SELECTED"; } ?>>TIdak Oke </option>
 								<option value="Test Celup" <?php if($row_hasilcelup['status_resep'] == 'Test Celup'){ echo "SELECTED"; } ?>>Test Celup</option>
+								<option value="Belum Analisa" <?php if($row_hasilcelup['status_resep'] == 'Belum Analisa'){ echo "SELECTED"; } ?>>Belum Analisa</option>
 							</select>
 						</div>
 					</div>
@@ -1476,8 +1477,8 @@ if ($_POST['save'] == "save") {
 							resep='" . $_POST['resep'] . "',
 							kategori_warna='" . $_POST['kategori_warna'] . "',
 							tgl_buat=now(),
-							tgl_update=now()
-        ") or die(mysqli_error($con));
+							tgl_update=now(),
+							status_resep='Belum Analisa'") or die(mysqli_error($con));
 
 	if ($sqlData) {
 		/* awal form potong */
