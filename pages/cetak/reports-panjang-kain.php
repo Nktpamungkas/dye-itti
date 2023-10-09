@@ -106,9 +106,9 @@
                                             b.lot,
                                             c.tgl_update
                                         FROM
-                                            tbl_hasilcelup a
-                                            LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-                                            LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
+                                            tbl_schedule b
+                                        LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                        LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
                                         WHERE
                                             $shft 
                                             $Where
@@ -139,6 +139,7 @@
                                                                 SUBCODE02,
                                                                 SUBCODE03)");
                 $row_itxviewkk      = db2_fetch_assoc($q_itxviewkk);
+                // ini_set("error_reporting", 0);
         ?>
             <tr>
                 <td><?= $no++; ?></td>
@@ -155,8 +156,8 @@
                 <td><?= $rowd['gramasi_a']; ?></td>
                 <td><?= $rowd['rol']; ?></td>
                 <td><?= $rowd['bruto']; ?></td>
-                <td><?php if($rowd['rol']){ echo number_format($rowd['bruto'] / $rowd['rol'], 2); } ?></td>
-                <td><?php if($rowd['Lubang'] != 0){ echo number_format($rowd['rol'] / $rowd['Lubang'], 2); } ?></td>
+                <td><?php if($rowd['rol'] != 0 && is_numeric($rowd['rol'])){ echo number_format($rowd['bruto'] / $rowd['rol'], 2); } ?></td>
+                <td><?php if($rowd['Lubang'] != 0 && $rowd['rol'] != 0){ echo number_format($rowd['rol'] / $rowd['Lubang'], 2); } ?></td>
                 <td><?= $rowd['l_r'].'/'.$rowd['l_r_2']; ?></td>
                 <td><?= $rowd['cycle_time']; ?></td>
                 <td><?= $rowd['rpm']; ?></td>
@@ -166,14 +167,14 @@
                 <td><?= $rowd['plaiter']; ?></td>
                 <td><?= number_format(($rowd['lebar_a'] * $rowd['gramasi_a']) / 39.3701, 2) ; ?></td>
                 <td>
-                    <?php if($rowd['lebar_a'] != 0 && $rowd['gramasi_a'] != 0) : ?>
+                    <?php if($rowd['rol'] != 0 && $rowd['lebar_a'] != 0 && $rowd['gramasi_a'] != 0 && $rowd['Lubang'] != 0) : ?>
                         <?= number_format(($rowd['bruto'] / $rowd['rol']) * ($rowd['rol'] / $rowd['Lubang']) / (($rowd['lebar_a'] * $rowd['gramasi_a']) / 39.3701) * 1000, 2); ?>
                     <?php else : ?>
                         -
                     <?php endif; ?>
                 </td>
                 <td>
-                    <?php if($rowd['lebar_a'] != 0 && $rowd['gramasi_a'] != 0 && $rowd['cycle_time']) : ?>
+                    <?php if($rowd['rol'] != 0 && $rowd['lebar_a'] != 0 && $rowd['gramasi_a'] != 0 && !empty($rowd['cycle_time']) && $rowd['Lubang'] != 0) : ?>
                         <?= number_format(($rowd['bruto'] / $rowd['rol']) * ($rowd['rol'] / $rowd['Lubang']) / (($rowd['lebar_a'] * $rowd['gramasi_a']) / 39.3701) * 1000 / ($rowd['cycle_time'] / 60), 2); ?>
                     <?php else : ?>
                         -
@@ -190,7 +191,7 @@
                 <td>`<?= $rowd['lot']; ?></td>
                 <td>
                     <?php
-                        $q_NCP      = mysqli_query($cond, "SELECT * FROM `tbl_ncp_qcf_new` WHERE prod_order = '$rowd[nokk]'");
+                        $q_NCP      = mysqli_query($cond, "SELECT * FROM `tbl_ncp_qcf_now` WHERE prod_order = '$rowd[nokk]'");
                         $row_NCP    = mysqli_fetch_assoc($q_NCP);
                         echo isset($row_NCP['masalah']) ? $row_NCP['masalah'] : '';
                         echo isset($row_NCP['masalah_dominan']) ? $row_NCP['masalah_dominan'] : '';
