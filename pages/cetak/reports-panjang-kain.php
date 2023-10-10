@@ -42,6 +42,8 @@
             <th>Problem</th>
             <th>Final Inspection</th>
             <th>Result</th>
+            <th>Lebar asal Greige</th>
+            <th>Gramasi asal Greige</th>
         </tr>
     </thead>
     <tbody>
@@ -124,12 +126,14 @@
                 $q_itxviewkk        = db2_exec($conn2, "SELECT 
                                                             LISTAGG(TRIM(SUBCODE01), '') AS SUBCODE01,
                                                             LISTAGG(TRIM(SUBCODE02), '') AS SUBCODE02,
-                                                            LISTAGG(TRIM(SUBCODE03), '') AS SUBCODE03
+                                                            LISTAGG(TRIM(SUBCODE03), '') AS SUBCODE03,
+                                                            LISTAGG(TRIM(SUBCODE04), '') AS SUBCODE04
                                                         FROM 
                                                             (SELECT
                                                                 TRIM(SUBCODE01) AS SUBCODE01,
                                                                 TRIM(SUBCODE02) AS SUBCODE02,
-                                                                TRIM(SUBCODE03) AS SUBCODE03
+                                                                TRIM(SUBCODE03) AS SUBCODE03,
+                                                                TRIM(SUBCODE04) AS SUBCODE04
                                                             FROM
                                                                 ITXVIEWKK
                                                             WHERE
@@ -137,9 +141,24 @@
                                                             GROUP BY 
                                                                 SUBCODE01,
                                                                 SUBCODE02,
-                                                                SUBCODE03)");
+                                                                SUBCODE03,
+                                                                SUBCODE04)");
                 $row_itxviewkk      = db2_fetch_assoc($q_itxviewkk);
-                // ini_set("error_reporting", 0);
+
+                $q_lg_standart  = db2_exec($conn2, "SELECT 
+                                                        a.VALUEDECIMAL AS LEBAR,
+                                                        a2.VALUEDECIMAL AS GRAMASI
+                                                    FROM 
+                                                        PRODUCT p 
+                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'Width'
+                                                    LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'GSM'
+                                                    WHERE 
+                                                        SUBCODE01 = '$row_itxviewkk[SUBCODE01]' 
+                                                        AND SUBCODE02 = '$row_itxviewkk[SUBCODE02]' 
+                                                        AND SUBCODE03 = '$row_itxviewkk[SUBCODE03]'
+                                                        AND SUBCODE04 = '$row_itxviewkk[SUBCODE04]' 
+                                                        AND ITEMTYPECODE = 'KGF'");
+                $d_lg_standart  = db2_fetch_assoc($q_lg_standart);
         ?>
             <tr>
                 <td><?= $no++; ?></td>
@@ -216,6 +235,8 @@
                     ?>
                 </td><!-- Final Inspection -->
                 <td></td><!-- Result -->
+                <td><?= number_format($d_lg_standart['LEBAR'], 0); ?></td><!-- lebar asal Greige -->
+                <td><?= number_format($d_lg_standart['GRAMASI'], 0); ?></td><!-- gramasi asal Greige -->
             </tr>
         <?php } ?>
     </tbody>
