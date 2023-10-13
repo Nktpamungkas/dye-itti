@@ -186,6 +186,7 @@
 										LIMIT 1");
 	$cek = mysqli_num_rows($sqlCek);
 	$rcek = mysqli_fetch_array($sqlCek);
+
 	$sqlCek1 = mysqli_query($con, "SELECT
 										c.*,a.id as ids,b.id as idm 
 									FROM
@@ -609,19 +610,31 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					<div class="col-sm-3">
 						<!-- <input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= trim(rcode($nokk, $rRcode['no_resep'])); ?>"> -->
 						<?php
-    						$_noprod    = substr($rRcode['no_resep'].$row_hasilcelup['no_resep'], 0,8);
-    						$_groupline	= substr($rRcode['no_resep'].$row_hasilcelup['no_resep'], 9);
+							$cari_dari_greige	 = mysqli_query($con, "SELECT * FROM `tbl_schedule` WHERE nokk = '$_GET[nokk]' AND ket_status = 'Greige'");
+							$row_schedule_greige = mysqli_fetch_assoc($cari_dari_greige);
+
+							if($row_schedule_greige['suffix'] == 001){
+								$_noprod    = substr($row_schedule_greige['no_resep2'], 0,8);
+								$_groupline	= substr($row_schedule_greige['no_resep2'], 9);
+							}else{
+								$_noprod    = substr($row_schedule_greige['no_resep'], 0,8);
+								$_groupline	= substr($row_schedule_greige['no_resep'], 9);
+							}
+
 							$db2_rcode			= db2_exec($conn2, "SELECT 
-																	a.VALUESTRING AS RCODE
-																FROM
-																	PRODUCTIONRESERVATION p
-																LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
-																LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.FIELDNAME = 'RCode'
-																WHERE 
-																	p.PRODUCTIONORDERCODE = '$_noprod' AND GROUPLINE = '$_groupline'");
+																		a.VALUESTRING AS RCODE
+																	FROM
+																		PRODUCTIONRESERVATION p
+																	LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
+																	LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.FIELDNAME = 'RCode'
+																	WHERE 
+																		p.PRODUCTIONORDERCODE = '$_noprod' AND GROUPLINE = '$_groupline'");
 							$dt_rcode    		= db2_fetch_assoc($db2_rcode);
+
+							$data_rcode = $dt_rcode['RCODE'];
 						?>
-						<input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= $dt_rcode['RCODE']; ?>" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+						<input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= $data_rcode; ?>" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+						
 					</div>
 				</div>
 				<div class="form-group">
@@ -824,7 +837,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 																											echo $row_hasilcelup['no_resep2'];
 																										}else{
 																											echo $rcek['no_resep2'];
-																										} ?>" placeholder="No Bon Resep 2"  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+																										} ?>" placeholder="No Bon Resep 2" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 					</div>
 					<div class="col-sm-3">
 						<input name="suffix2" type="text" class="form-control" id="suffix2" value="<?php if (!empty($_GET['id'])) {

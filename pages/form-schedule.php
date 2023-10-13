@@ -999,7 +999,7 @@
 					<div class="col-sm-3">
 						<!-- <input name="no_resep" type="text" class="form-control" id="no_resep" value="<?= $rcek['no_resep']; ?><?= $dt_bonresep1['BONRESEP1']; ?>" placeholder="No Bon Resep 1"> -->
 						<select name="no_resep" class="form-control select2" id="no_resep" onchange="bonresep1()">
-							<option>Pilih Bon Resep</option>
+							<option disabled selected>Pilih Bon Resep</option>
 							<?php
 								$q_bonresep				= db2_exec($conn2, "SELECT
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
@@ -1028,7 +1028,7 @@
 					<div class="col-sm-3">
 						<!-- <input name="no_resep2" type="text" class="form-control" id="no_resep2" value="<?= $rcek['no_resep2']; ?><?= $dt_bonresep2['BONRESEP2']; ?>" placeholder="No Bon Resep 2"> -->
 						<select name="no_resep2" class="form-control select2" id="no_resep2" onchange="bonresep2()">
-							<option>Pilih Bon Resep</option>
+							<option disabled selected>Pilih Bon Resep</option>
 							<?php
 								$q_bonresep2				= db2_exec($conn2, "SELECT
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
@@ -1195,8 +1195,6 @@
 
 				</div>
 			</div>
-
-
 			<input type="hidden" value="<?php if ($cek > 0) {
 											echo $rcek['no_ko'];
 										} else {
