@@ -39,6 +39,7 @@
       <th bgcolor="#99FF99">PRODUCTION DEMAND</th>
       <th bgcolor="#99FF99">ORIGINAL PD CODE</th>
       <th bgcolor="#99FF99">NO ITEM</th>
+      <th bgcolor="#99FF99">LIGHT/DARK</th>
       <th bgcolor="#99FF99">JENIS KAIN</th>
       <th bgcolor="#99FF99">GRAMASI</th>
       <th bgcolor="#99FF99">QTY</th>
@@ -276,6 +277,13 @@
         <td>`<?= $row_hasilcelup['nodemand']; ?></td>
         <td>`<?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
         <td><?= $row_hasilcelup['no_hanger']; ?></td>
+        <td>
+          <?php
+            $q_variant    = db2_exec($conn2, "SELECT TRIM(SUBCODE04) AS SUBCODE04 FROM PRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]' AND (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')");
+            $row_variant  = db2_fetch_assoc($q_variant);
+            echo $row_variant['SUBCODE04'];
+          ?>
+        </td>
         <td><?= $row_hasilcelup['jenis_kain']; ?></td>
         <td><?= $row_hasilcelup['gramasi'] ?></td>
         <td><?= $row_hasilcelup['bruto'] ?></td>
