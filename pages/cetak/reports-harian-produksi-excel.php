@@ -109,6 +109,7 @@
       <th rowspan="2" bgcolor="#99FF99">Gramasi Aktual DYE</th>
       <th rowspan="2" bgcolor="#99FF99">Operator</th>
       <th rowspan="2" bgcolor="#99FF99">LOT di NOW</th>
+      <th rowspan="2" bgcolor="#99FF99">Tambah Dyestuff</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -220,9 +221,10 @@
                                       c.grm_fin,
                                       c.lebar_a,
                                       c.gramasi_a,
-                                      c.operator
+                                      c.operator,
+                                      a.tambah_dyestuff
                                     FROM
-                                      tbl_schedule b
+                                    tbl_schedule b
                                       LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
                                       LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id	
                                     WHERE
@@ -303,9 +305,7 @@
               echo $rowSM['keterangan'] . "" . $rowSM['no_stop'];
             } else {
               echo $rowd['ket'] . "" . $rowd['status'];
-            } ?><?php if ($rowd['kk_kestabilan'] == "1" and $rowd['kk_normal'] == "0") {
-                                                                                                                                                                                              echo "<br>Test Kestabilan";
-                                                                                                                                                                                            } ?></td>
+            } ?><?php if ($rowd['kk_kestabilan'] == "1" and $rowd['kk_normal'] == "0") { echo "<br>Test Kestabilan";  } ?></td>
         <td><?php echo $rowd['k_resep']; ?></td>
         <td><?php if ($rowd['ket_status'] == "") {
               echo "";
@@ -415,6 +415,7 @@
             echo $d_lot['LOT'];
           ?>
         </td>
+        <td><?= $rowd['tambah_dyestuff']; ?></td>
       </tr>
     <?php
       $totrol += $rol;

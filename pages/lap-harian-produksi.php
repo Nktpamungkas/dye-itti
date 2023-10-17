@@ -271,7 +271,8 @@
                                             a.analisa_resep,
                                             a.status_resep,
                                             b.no_hanger,
-                                            b.qty_order
+                                            b.qty_order,
+                                            a.tambah_dyestuff
                                           FROM
                                             tbl_schedule b
                                             LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id

@@ -223,7 +223,7 @@
                 </td><!-- Problem -->
                 <td>
                     <?php
-                        $q_commentline      = db2_exec($conn2, "SELECT * FROM PRODUCTIONDEMANDSTEPCOMMENT WHERE PRODEMANDSTEPPRODEMANDCODE = '$rowd[nokk]'");
+                        $q_commentline      = db2_exec($conn2, "SELECT LISTAGG(COMMENTTEXT, ' ') AS COMMENTTEXT FROM PRODUCTIONDEMANDSTEPCOMMENT WHERE PRODEMANDSTEPPRODEMANDCODE = '$rowd[nodemand]'");
                         $row_commentline    = db2_fetch_assoc($q_commentline);
                         echo isset($row_commentline['COMMENTTEXT']) ? $row_commentline['COMMENTTEXT'] : '';
 
