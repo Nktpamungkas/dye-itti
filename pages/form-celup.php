@@ -1214,6 +1214,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					<div class="col-sm-3">
 						<select name="tambah_dyestuff" class="form-control" required>
 							<option value="" disabled selected>Pilih</option>
+							<option value="0x" <?php if($row_hasilcelup['tambah_dyestuff'] == '0x') { echo "SELECTED"; } ?>>1x</option>
 							<option value="1x" <?php if($row_hasilcelup['tambah_dyestuff'] == '1x') { echo "SELECTED"; } ?>>1x</option>
 							<option value="2x" <?php if($row_hasilcelup['tambah_dyestuff'] == '2x') { echo "SELECTED"; } ?>>2x</option>
 							<option value="3x" <?php if($row_hasilcelup['tambah_dyestuff'] == '3x') { echo "SELECTED"; } ?>>3x</option>
