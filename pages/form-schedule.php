@@ -1175,6 +1175,7 @@
 							    <option value='Test Obat' >Test Obat</option>
 							  	<option value='Test Proses' >Test Proses</option>-->
 							<option value='Tolak Basah'>Tolak Basah</option>
+							<option value='Proses AKW'>Proses AKW</option>
 						</select>
 					</div>
 					<div class="col-sm-4">
