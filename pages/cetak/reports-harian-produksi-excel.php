@@ -110,6 +110,8 @@
       <th rowspan="2" bgcolor="#99FF99">Operator</th>
       <th rowspan="2" bgcolor="#99FF99">LOT di NOW</th>
       <th rowspan="2" bgcolor="#99FF99">Tambah Dyestuff</th>
+      <th rowspan="2" bgcolor="#99FF99">Arah Warna</th>
+      <th rowspan="2" bgcolor="#99FF99">Status Warna</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -122,20 +124,20 @@
       <th bgcolor="#99FF99">S/D</th>
     </tr>
     <?php
-              $Awal = $_GET['awal'];
-              $Akhir = $_GET['akhir'];
-              $Tgl = substr($Awal, 0, 10);
-              if ($Awal != $Akhir) {
-                $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
-              } else {
-                $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
-              }
-              if ($_GET['shft'] == "ALL") {
-                $shft = " ";
-              } else {
-                $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
-              }
-              $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
+      $Awal = $_GET['awal'];
+      $Akhir = $_GET['akhir'];
+      $Tgl = substr($Awal, 0, 10);
+      if ($Awal != $Akhir) {
+        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
+      } else {
+        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
+      }
+      if ($_GET['shft'] == "ALL") {
+        $shft = " ";
+      } else {
+        $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
+      }
+      $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
                                       LEFT JOIN
                                       (SELECT
                                       a.kd_stop,
@@ -222,44 +224,46 @@
                                       c.lebar_a,
                                       c.gramasi_a,
                                       c.operator,
-                                      a.tambah_dyestuff
+                                      a.tambah_dyestuff,
+                                      a.arah_warna,
+                                      a.status_warna
                                     FROM
-                                    tbl_schedule b
-                                      LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
-                                      LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id	
+                                      tbl_schedule b
+                                        LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                        LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id	
                                     WHERE
                                       $shft 
                                       $Where
                                       )x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) ORDER BY a.no_mesin");
 
-    $no = 1;
+      $no = 1;
 
-    $c = 0;
-    $totrol = 0;
-    $totberat = 0;
+      $c = 0;
+      $totrol = 0;
+      $totberat = 0;
 
-    while ($rowd = mysqli_fetch_array($sql)) {
-      if ($_GET['shft'] == "ALL") {
-        $shftSM = " ";
-      } else {
-        $shftSM = " g_shift='$_GET[shft]' AND ";
-      }
-      $sqlSM = mysqli_query($con, "SELECT *, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as menitSM,
-      DATE_FORMAT(mulai,'%Y-%m-%d') as tgl_masuk,
-      DATE_FORMAT(selesai,'%Y-%m-%d') as tgl_selesai,
-      TIME_FORMAT(mulai,'%H:%i') as jam_masuk,
-      TIME_FORMAT(selesai,'%H:%i') as jam_selesai,
-      kapasitas as kapSM,
-      g_shift as shiftSM
-      FROM tbl_stopmesin
-      WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]'");
-      $rowSM = mysqli_fetch_array($sqlSM);
-      if (strlen($rowd['rol']) > 5) {
-        $jk = strlen($rowd['rol']) - 5;
-        $rl = substr($rowd['rol'], 0, $jk);
-      } else {
-        $rl = $rowd['rol'];
-      }
+      while ($rowd = mysqli_fetch_array($sql)) {
+        if ($_GET['shft'] == "ALL") {
+          $shftSM = " ";
+        } else {
+          $shftSM = " g_shift='$_GET[shft]' AND ";
+        }
+        $sqlSM = mysqli_query($con, "SELECT *, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as menitSM,
+        DATE_FORMAT(mulai,'%Y-%m-%d') as tgl_masuk,
+        DATE_FORMAT(selesai,'%Y-%m-%d') as tgl_selesai,
+        TIME_FORMAT(mulai,'%H:%i') as jam_masuk,
+        TIME_FORMAT(selesai,'%H:%i') as jam_selesai,
+        kapasitas as kapSM,
+        g_shift as shiftSM
+        FROM tbl_stopmesin
+        WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]'");
+        $rowSM = mysqli_fetch_array($sqlSM);
+        if (strlen($rowd['rol']) > 5) {
+          $jk = strlen($rowd['rol']) - 5;
+          $rl = substr($rowd['rol'], 0, $jk);
+        } else {
+          $rl = $rowd['rol'];
+        }
     ?>
       <tr valign="top">
         <td><?php echo $no; ?></td>
@@ -416,6 +420,8 @@
           ?>
         </td>
         <td><?= $rowd['tambah_dyestuff']; ?></td>
+        <td><?= $rowd['arah_warna']; ?></td>
+        <td><?= $rowd['status_warna']; ?></td>
       </tr>
     <?php
       $totrol += $rol;

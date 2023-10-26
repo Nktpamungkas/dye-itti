@@ -863,7 +863,18 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 													} ?>>Setting</option>
 						</select>
 					</div>
-
+					<label for="resep" class="col-sm-2 control-label">Arah Warna</label>
+					<div class="col-sm-3">
+						<select name="arah_warna" class="form-control" id="arah_warna" >
+							<option value="">Pilih</option>
+							<?php
+								$q_arah_warna = mysqli_query($con, "SELECT * FROM tbl_arah_warna ORDER BY id ASC");
+								while ($row_arah_warna = mysqli_fetch_array($q_arah_warna)) {
+							?>
+								<option value="<?php echo $row_arah_warna['arah_warna']; ?>" <?php if($row_arah_warna['arah_warna'] == $row_hasilcelup['arah_warna']) { echo "SELECTED"; } ?>><?php echo $row_arah_warna['arah_warna']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="kategori_warna" class="col-sm-3 control-label">Kategori Warna</label>
@@ -882,6 +893,18 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<option value="White" <?php if ($rcek['kategori_warna'] == 'White' OR $row_hasilcelup['kategori_warna'] == 'White') {
 														echo "SELECTED";
 													} ?>>White</option>
+						</select>
+					</div>
+					<label for="status_warna" class="col-sm-2 control-label">Status Warna</label>
+					<div class="col-sm-3">
+						<select name="status_warna" class="form-control" id="status_warna" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+							<option value="">Pilih</option>
+							<option value="Warna Baru" <?php if ($row_hasilcelup['resep'] == 'Warna Baru') {
+														echo "SELECTED";
+													} ?>>Warna Baru</option>
+							<option value="Warna Lama" <?php if ($row_hasilcelup['resep'] == 'Warna Lama') {
+														echo "SELECTED";
+													} ?>>Warna Lama</option>
 						</select>
 					</div>
 
@@ -1505,7 +1528,9 @@ if ($_POST['save'] == "save") {
 							tgl_buat=now(),
 							tgl_update=now(),
 							status_resep='Belum Analisa',
-							tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "'") or die(mysqli_error($con));
+							tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "',
+							arah_warna='" . $_POST['arah_warna'] . "',
+							status_warna='" . $_POST['status_warna'] . "'") or die(mysqli_error($con));
 
 	if ($sqlData) {
 		/* awal form potong */
