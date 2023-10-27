@@ -1272,6 +1272,18 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<option value="Greige" <?php if($row_hasilcelup['jns_gerobak'] == 'Greige'){ echo "SELECTED"; } ?>>Greige</option>
 						</select>
 					</div>
+					<label for="gerobak" class="col-sm-1 control-label">Leader</label>
+					<div class="col-sm-3">
+						<select name="leader" class="form-control" id="leader" >
+							<option value="">Pilih</option>
+							<?php
+								$q_leader = mysqli_query($con, "SELECT * FROM tbl_leader ORDER BY id ASC");
+								while ($row_leader = mysqli_fetch_array($q_leader)) {
+							?>
+								<option value="<?php echo $row_leader['leader']; ?>" <?php if($row_leader['leader'] == $row_hasilcelup['leader']) { echo "SELECTED"; } ?>><?php echo $row_leader['leader']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
 
 				</div>
 				<div class="form-group">
@@ -1530,7 +1542,8 @@ if ($_POST['save'] == "save") {
 							status_resep='Belum Analisa',
 							tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "',
 							arah_warna='" . $_POST['arah_warna'] . "',
-							status_warna='" . $_POST['status_warna'] . "'") or die(mysqli_error($con));
+							status_warna='" . $_POST['status_warna'] . "',
+							leader='" . $_POST['leader'] . "'") or die(mysqli_error($con));
 
 	if ($sqlData) {
 		/* awal form potong */
