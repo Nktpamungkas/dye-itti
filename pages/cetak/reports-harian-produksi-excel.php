@@ -226,7 +226,8 @@
                                       c.operator,
                                       a.tambah_dyestuff,
                                       a.arah_warna,
-                                      a.status_warna
+                                      a.status_warna,
+                                      a.leader
                                     FROM
                                       tbl_schedule b
                                         LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -422,6 +423,7 @@
         <td><?= $rowd['tambah_dyestuff']; ?></td>
         <td><?= $rowd['arah_warna']; ?></td>
         <td><?= $rowd['status_warna']; ?></td>
+        <td><?= $rowd['leader']; ?></td>
       </tr>
     <?php
       $totrol += $rol;
