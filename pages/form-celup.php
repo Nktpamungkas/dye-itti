@@ -650,6 +650,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<option value="6" <?php if($row_hasilcelup['sts_celup'] == "Scouring Turun") { echo "Selected"; } ?>>Scouring Turun</option>
 							<option value="7" <?php if($row_hasilcelup['sts_celup'] == "Continuous - Bleaching") { echo "Selected"; } ?>>Continuous - Bleaching</option>
 							<option value="8" <?php if($row_hasilcelup['sts_celup'] == "Relaxing - Priset") { echo "Selected"; } ?>>Relaxing - Priset</option>
+							<option value="9" <?php if($row_hasilcelup['sts_celup'] == "Tunggu Review") { echo "Selected"; } ?>>Tunggu Review</option>
 						</select>
 					</div>
 					<div class="col-sm-3">
