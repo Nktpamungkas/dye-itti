@@ -755,7 +755,7 @@
 				</div>
 				<div class="form-group">
 					<label for="operator" class="col-sm-3 control-label">Operator </label>
-					<div class="col-sm-5">
+					<div class="col-sm-3">
 						<select name="operator" class="form-control" required>
 							<option value="">Pilih</option>
 							<?php
@@ -766,11 +766,19 @@
 							<?php } ?>
 						</select>
 					</div>
+					<label class="col-sm-2 control-label">Kategori Resep </label>
+					<div class="col-sm-3">
+						<select name="kategori_resep" class="form-control" >
+							<option value="">Pilih</option>
+							<option value="Setting Resep">Setting Resep</option>
+							<option value="Resep Matching">Resep Matching</option>
+						</select>
+					</div>
 
 				</div>
 				<div class="form-group">
 					<label for="colorist" class="col-sm-3 control-label">Colorist </label>
-					<div class="col-sm-5">
+					<div class="col-sm-3">
 						<select name="colorist" class="form-control" required>
 							<option value="">Pilih</option>
 							<?php
@@ -781,11 +789,22 @@
 							<?php } ?>
 						</select>
 					</div>
-
+					<label for="colorist" class="col-sm-2 control-label">Kasih Resep </label>
+					<div class="col-sm-3">
+						<select name="kasih_resep" class="form-control" >
+							<option value="">Pilih</option>
+							<?php
+								$q_kasihresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
+								while ($row_kasihresep = mysqli_fetch_array($q_kasihresep)) {
+							?>
+								<option value="<?= $row_kasihresep['nama_colorist']; ?>"><?= $row_kasihresep['nama_colorist']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="leader" class="col-sm-3 control-label">Leader </label>
-					<div class="col-sm-5">
+					<div class="col-sm-3">
 						<select name="leader" class="form-control" required>
 							<option value="">Pilih</option>
 							<?php
@@ -796,7 +815,18 @@
 							<?php } ?>
 						</select>
 					</div>
-
+					<label for="colorist" class="col-sm-2 control-label">ACC Resep </label>
+					<div class="col-sm-3">
+						<select name="acc_resep" class="form-control" >
+							<option value="">Pilih</option>
+							<?php
+								$q_accresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
+								while ($row_accresep = mysqli_fetch_array($q_accresep)) {
+							?>
+								<option value="<?= $row_accresep['nama_colorist']; ?>"><?= $row_accresep['nama_colorist']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="a_dingin" class="col-sm-3 control-label">No. Program</label>
@@ -1214,6 +1244,9 @@ if ($_POST['save'] == "save") {
 		lebar_fin='" . $_POST['lebar_fin'] . "',
 		grm_fin='" . $_POST['grm_fin'] . "',
 		masukkain='" . $_POST['masukkain'] . "',
+		kategori_resep = '$_POST[kategori_resep]',
+		kasih_resep = '$_POST[kasih_resep]',
+		acc_resep = '$_POST[acc_resep]',
 		tgl_update=now()");
 
 	if ($sqlData) {
