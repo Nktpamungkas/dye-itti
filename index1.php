@@ -399,6 +399,9 @@ desired effect
               </span>
             </a>
             <ul class="treeview-menu">
+              <li class="<?php if ($_GET['p'] == "Buka-Resep" or $_GET['p'] == "Form-Buka-Resep") {
+                            echo "active";
+                          } ?>"><a href="?p=Buka-Resep"><i class="fa fa-calendar text-primary"></i> <span>Buka Resep</span></a></li>
               <li class="<?php if ($_GET['p'] == "Schedule" or $_GET['p'] == "Form-Schedule" or $_GET['p'] == "Form-Schedule-Manual") {
                             echo "active";
                           } ?>"><a href="?p=Schedule"><i class="fa fa-calendar text-warning"></i> <span>Schedule</span></a></li>
@@ -435,6 +438,9 @@ desired effect
               </span>
             </a>
             <ul class="treeview-menu">
+              <li class="<?php if ($_GET['p'] == "lap-buka-resep") {
+                            echo "active";
+                          } ?>"><a href="?p=lap-buka-resep"><i class="fa fa-columns text-red"></i> <span>Lap Buka Resep</span></a></li>
               <li class="<?php if ($_GET['p'] == "lap-schedule") {
                             echo "active";
                           } ?>"><a href="?p=lap-schedule"><i class="fa fa-columns text-green"></i> <span>Lap Schedule</span></a></li>

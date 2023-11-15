@@ -436,7 +436,7 @@
 											TRIM(SUBCODE09) AS SUBCODE09, TRIM(SUBCODE10) AS SUBCODE10, 
 											TRIM(ITEMTYPEAFICODE) AS ITEMTYPEAFICODE,
 											TRIM(SUBCODE05) AS NO_WARNA,
-											TRIM(DSUBCODE02) || '-' || TRIM(DSUBCODE03)  AS NO_HANGER,
+											TRIM(SUBCODE02) || '-' || TRIM(SUBCODE03)  AS NO_HANGER,
 											TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
 											DELIVERYDATE,
 											LOT
@@ -502,18 +502,13 @@
 			$dt_warna		= db2_fetch_assoc($sql_warna);
 
 			$sql_qtyorder   = db2_exec($conn2, "SELECT DISTINCT
-												INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
-												USERSECONDARYQUANTITY AS QTY_ORDER_YARD,
-												CASE
-												WHEN TRIM(USERSECONDARYUOMCODE) = 'yd' THEN 'Yard'
-												WHEN TRIM(USERSECONDARYUOMCODE) = 'm' THEN 'Meter'
-												ELSE 'PCS'
-												END AS SATUAN_QTY
-												FROM 
-												ITXVIEW_RESERVATION 
-												WHERE 
-												PRODUCTIONORDERCODE = '$dt_ITXVIEWKK[PRODUCTIONORDERCODE]' AND ITEMTYPEAFICODE = 'RFD'");
-			$dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
+                                                INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
+                                                INITIALUSERSECONDARYQUANTITY AS QTY_ORDER_YARD
+                                            FROM 
+                                                VIEWPRODUCTIONDEMANDSTEP 
+                                            WHERE 
+                                                PRODUCTIONORDERCODE = '$nokk'");
+        	$dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
 			$sql_roll		= db2_exec($conn2, "SELECT count(*) AS ROLL, s2.PRODUCTIONORDERCODE
 												FROM STOCKTRANSACTION s2 
@@ -1058,6 +1053,7 @@
 							<option value="">Pilih</option>
 							<option value="Baru">Baru</option>
 							<option value="Lama">Lama</option>
+							<option value="Setting">Setting</option>
 						</select>
 					</div>
 
