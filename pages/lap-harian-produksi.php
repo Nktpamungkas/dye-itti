@@ -285,18 +285,18 @@
                                           ORDER BY tgl_update DESC");
                 }
                 while ($rowd = mysqli_fetch_array($sql)) {
-                if ($GShift == "ALL") {
-                  $shftSM = " ";
-                } else {
-                  $shftSM = " g_shift='$GShift' AND ";
-                }
-                $sqlSM = mysqli_query($con, "SELECT *, g_shift as shiftSM, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as lamaSM FROM tbl_stopmesin
-                                              WHERE $shftSM tgl_update BETWEEN '$start_date' AND '$stop_date' AND (no_mesin='$rowd[mc]' or no_mesin='$rowd[mc_lama]') ORDER BY id DESC LIMIT 1");
-                $rowSM = mysqli_fetch_array($sqlSM);
-                $no++;
-                $bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
-                $qCek = mysqli_query($con, "SELECT id as idb FROM tbl_potongcelup WHERE nokk='$rowd[nokk]' LIMIT 1");
-                $rCEk = mysqli_fetch_array($qCek);
+                  if ($GShift == "ALL") {
+                    $shftSM = " ";
+                  } else {
+                    $shftSM = " g_shift='$GShift' AND ";
+                  }
+                  $sqlSM = mysqli_query($con, "SELECT *, g_shift as shiftSM, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as lamaSM FROM tbl_stopmesin
+                                                WHERE $shftSM tgl_update BETWEEN '$start_date' AND '$stop_date' AND (no_mesin='$rowd[mc]' or no_mesin='$rowd[mc_lama]') ORDER BY id DESC LIMIT 1");
+                  $rowSM = mysqli_fetch_array($sqlSM);
+                  $no++;
+                  $bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
+                  $qCek = mysqli_query($con, "SELECT id as idb FROM tbl_potongcelup WHERE nokk='$rowd[nokk]' LIMIT 1");
+                  $rCEk = mysqli_fetch_array($qCek);
               ?>
                 <tr bgcolor="<?php echo $bgcolor; ?>" class="table table-bordered table-hover table-striped">
                   <td align="center"><?php echo $rowd['mc']; ?><br>
