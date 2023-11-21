@@ -12,6 +12,57 @@
 
 <body>
 	<div class="row">
+        <!-- <div class="col-xs-12">
+			<div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> Filter Data Buka Resep</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <form method="post" enctype="multipart/form-data" name="form1" class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <div class="input-group date">
+                                    <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
+                                    <input name="awal" type="text" class="form-control pull-right" id="datepicker" placeholder="Tanggal Awal" value="" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group date">
+                                    <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
+                                    <input name="akhir" type="text" class="form-control pull-right" id="datepicker1" placeholder="Tanggal Akhir" value="" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="gshift" class="form-control pull-right">
+                                    <option disabled selected value="-">Pilih Group Shift</option>
+                                    <option value="ALL">ALL</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="cek_resep" class="form-control pull-right">
+                                    <option disabled selected value="-">Status Cek Resep</option>
+                                    <option value="ALL">ALL</option>
+                                    <option value="Resep Ok">Resep Ok</option>
+                                    <option value="Resep Tidak Ok">Resep Tidak Ok</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-block btn-social btn-linkedin btn-sm" name="submit" style="width: 60%">Search <i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+			</div>
+		</div> -->
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
@@ -24,11 +75,11 @@
 								<th width="26"><div align="center">No.</div></th>
 								<th width="26"><div align="center">No. Kartu Kerja</div></th>
 								<th width="26"><div align="center">No. Demand</div></th>
-                                <th width="121"><div align="center">No. Order</div></th>
-								<th width="165"><div align="center">Pelanggan</div></th>
-								<th width="121"><div align="center">No. Item</div></th>
-								<th width="125"><div align="center">Jenis Kain</div></th>
-								<th width="88"><div align="center">Warna</div></th>
+                                <!-- <th width="121"><div align="center">No. Order</div></th> -->
+								<!-- <th width="165"><div align="center">Pelanggan</div></th> -->
+								<!-- <th width="121"><div align="center">No. Item</div></th> -->
+								<!-- <th width="125"><div align="center">Jenis Kain</div></th> -->
+								<!-- <th width="88"><div align="center">Warna</div></th> -->
 								<th width="85"><div align="center">Bon Resep 1 <br> Suffix</div></th>
 								<th width="85"><div align="center">Bon Resep 2 <br> Suffix 2</div></th>
 								<th width="71"><div align="center">Cek Resep</div></th>
@@ -38,41 +89,27 @@
 						</thead>
 						<tbody>
                             <?php
-                                $q_bukaresep    = mysqli_query($con, "SELECT * FROM tbl_bukaresep");
+                                $q_bukaresep    = mysqli_query($con, "SELECT * FROM tbl_bukaresep WHERE cek_resep is null");
                                 $no = 1;
                             ?>
                             <?php while ($row_bukaresep = mysqli_fetch_array($q_bukaresep)) { ?>
                                 <?php
-                                    $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$row_bukaresep[nokk]'");
-                                    $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$row_bukaresep[nokk]'");
+                                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
 
-                                    $sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
-                                                                                WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' AND CODE = '$dt_ITXVIEWKK[PROJECTCODE]'");
-                                    $dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
-
-                                    $sql_warna		= db2_exec($conn2, "SELECT DISTINCT TRIM(WARNA) AS WARNA FROM ITXVIEWCOLOR 
-                                                                    WHERE ITEMTYPECODE = '$dt_ITXVIEWKK[ITEMTYPEAFICODE]' 
-                                                                        AND SUBCODE01 = '$dt_ITXVIEWKK[SUBCODE01]' 
-                                                                        AND SUBCODE02 = '$dt_ITXVIEWKK[SUBCODE02]'
-                                                                        AND SUBCODE03 = '$dt_ITXVIEWKK[SUBCODE03]' 
-                                                                        AND SUBCODE04 = '$dt_ITXVIEWKK[SUBCODE04]'
-                                                                        AND SUBCODE05 = '$dt_ITXVIEWKK[SUBCODE05]' 
-                                                                        AND SUBCODE06 = '$dt_ITXVIEWKK[SUBCODE06]'
-                                                                        AND SUBCODE07 = '$dt_ITXVIEWKK[SUBCODE07]' 
-                                                                        AND SUBCODE08 = '$dt_ITXVIEWKK[SUBCODE08]'
-                                                                        AND SUBCODE09 = '$dt_ITXVIEWKK[SUBCODE09]' 
-                                                                        AND SUBCODE10 = '$dt_ITXVIEWKK[SUBCODE10]'");
-                                    $dt_warna		= db2_fetch_assoc($sql_warna);
+                                    // $sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
+                                    //                                             WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' AND CODE = '$dt_ITXVIEWKK[PROJECTCODE]'");
+                                    // $dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
                                 ?>
                                 <tr bgcolor="antiquewhite">
                                     <td align="center"><?= $no++; ?></td>
                                     <td align="center"><?= $row_bukaresep['nokk'] ?></td>
                                     <td align="center"><?= $row_bukaresep['nodemand'] ?></td>
-                                    <td align="center"><?= TRIM($dt_ITXVIEWKK['PROJECTCODE']) ?></td>
-                                    <td align="center"><?= TRIM($dt_pelanggan_buyer['PELANGGAN']) ?></td>
-                                    <td align="center"><?= TRIM($dt_ITXVIEWKK['SUBCODE02']).'-'.TRIM($dt_ITXVIEWKK['SUBCODE03']) ?></td>
-                                    <td align="center"><?= $dt_ITXVIEWKK['ITEMDESCRIPTION'] ?></td>
-                                    <td align="center"><?= $dt_warna['WARNA'] ?></td>
+                                    <!-- <td align="center"><?= TRIM($dt_ITXVIEWKK['PROJECTCODE']) ?></td> -->
+                                    <!-- <td align="center"><?= TRIM($dt_pelanggan_buyer['PELANGGAN']) ?></td> -->
+                                    <!-- <td align="center"><?= TRIM($dt_ITXVIEWKK['SUBCODE02']).'-'.TRIM($dt_ITXVIEWKK['SUBCODE03']) ?></td> -->
+                                    <!-- <td align="center"><?= $dt_ITXVIEWKK['ITEMDESCRIPTION'] ?></td> -->
+                                    <!-- <td align="center"><?= $dt_ITXVIEWKK['WARNA'] ?></td> -->
                                     <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1'] ?></td>
                                     <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2'] ?></td>
                                     <td align="center"><?= $row_bukaresep['cek_resep']; ?></td>
@@ -154,7 +191,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </body>
 </html>
