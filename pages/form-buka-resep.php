@@ -79,12 +79,15 @@
         $dt_warna		= db2_fetch_assoc($sql_warna);
 
         $sql_qtyorder   = db2_exec($conn2, "SELECT DISTINCT
+												GROUPSTEPNUMBER,
                                                 INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
                                                 INITIALUSERSECONDARYQUANTITY AS QTY_ORDER_YARD
                                             FROM 
                                                 VIEWPRODUCTIONDEMANDSTEP 
                                             WHERE 
-                                                PRODUCTIONORDERCODE = '$nokk'");
+                                                PRODUCTIONORDERCODE = '$nokk'
+											ORDER BY
+												GROUPSTEPNUMBER ASC LIMIT 1");
         $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
         $sql_roll		= db2_exec($conn2, "SELECT count(*) AS ROLL, s2.PRODUCTIONORDERCODE
