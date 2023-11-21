@@ -142,8 +142,8 @@
                                                             <div class="col-sm-8">
                                                                 <select class="form-control" name="cek_resep">
                                                                     <option disabled selected value="">Dipilih</option>
-                                                                    <option value="Resep Ok">Resep Ok</option>
-                                                                    <option value="Resep Tidak Ok">Resep Tidak Ok</option>
+                                                                    <option value="Bon Resep Sesuai">Bon Resep Sesuai</option>
+                                                                    <option value="Bon Resep Tidak Sesuai">Bon Resep Tidak Sesuai</option>
                                                                 </select>
                                                             </div>
                                                         </div>
