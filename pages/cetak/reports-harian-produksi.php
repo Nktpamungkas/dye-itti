@@ -1,5 +1,6 @@
 <?php 
 //$lReg_username=$_SESSION['labReg_username'];
+
 ini_set("error_reporting", 1);
 include "../../koneksi.php";
 include "../../koneksiLAB.php";
@@ -16,30 +17,30 @@ $rTgl=mysqli_fetch_array($qTgl);
 <title>:: Cetak Reports Produksi Dyeing</title>
 <link href="styles_cetak.css" rel="stylesheet" type="text/css">
 <style>
-  input{
-  text-align:center;
-  border:hidden;
+input{
+text-align:center;
+border:hidden;
+}
+@media print {
+  ::-webkit-input-placeholder { /* WebKit browsers */
+      color: transparent;
   }
-  @media print {
-    ::-webkit-input-placeholder { /* WebKit browsers */
-        color: transparent;
-    }
-    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-        color: transparent;
-    }
-    ::-moz-placeholder { /* Mozilla Firefox 19+ */
-        color: transparent;
-    }
-    :-ms-input-placeholder { /* Internet Explorer 10+ */
-        color: transparent;
-    }
-    .pagebreak { page-break-before:always; }
-    .header {display:block}
-    table thead 
-    {
-      display: table-header-group;
-    }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: transparent;
   }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: transparent;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+      color: transparent;
+  }
+  .pagebreak { page-break-before:always; }
+  .header {display:block}
+  table thead 
+   {
+    display: table-header-group;
+   }
+}
 </style>
 </head>
 <body>
@@ -67,8 +68,12 @@ $rTgl=mysqli_fetch_array($qTgl);
                 <thead>
         </table></td>
       </tr>
+			<?php $Awal=$_GET['awal'];
+$Akhir=$_GET['akhir'];
+if($Awal==$Akhir){$TglPAl=substr($Awal,0,10);$TglPAr=substr($Akhir,0,10);}else{ $TglPAl=$Awal;$TglPAr=$Akhir; }
+			?>
 <tr valign="top">
-        <td colspan="18"><strong>Periode: <?php echo $_GET['awal']; ?> s/d <?php echo $_GET['akhir']; ?></strong><br />
+        <td colspan="18"><strong>Periode: <?php echo $TglPAl; ?> s/d <?php echo $TglPAr; ?></strong><br />
         <strong>Shift: <?php echo $_GET['shft']; ?></strong></td>
       </tr>
     <tr>
@@ -99,67 +104,81 @@ $rTgl=mysqli_fetch_array($qTgl);
     <tbody>
 	<?php
 	$Awal=$_GET['awal'];
-	$Akhir=$_GET['akhir'];	
-	if($_GET['shft']=="ALL"){$shft=" ";}else{$shft=" a.g_shift='$_GET[shft]' AND ";}
-		$sql=mysqli_query($con,"SELECT
-                            a.*,
-                            b.buyer,
-                            b.langganan,
-                            b.no_order,
-                            b.jenis_kain,
-                            b.no_mesin,
-                            b.warna,
-                            b.lot,
-                            c.rol,
-                            c.bruto,
-                            b.ket_status,
-                            c.tgl_buat as tgl_in,
-                            a.tgl_buat as tgl_out,
-                            a.kd_stop,
-                            a.mulai_stop,
-                            a.selesai_stop,
-                            a.ket,
-                            b.proses 
-                          FROM
-                            tbl_hasilcelup a
-                            LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-                            LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
-                          WHERE
-                            $shft 
-                            DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
-                            AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
-                          ORDER BY
-                            b.no_mesin ASC");
-  
+	$Akhir=$_GET['akhir'];
+	$Tgl=substr($Awal,0,10);	
+	if($Awal!=$Akhir){ $Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";}else{
+		$Where=" DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
+	}	
+	if($_GET['shft']=="ALL"){$shft=" ";}else{$shft=" if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";}
+		$sql=mysqli_query($con,"SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
+  LEFT JOIN
+  (SELECT
+  b.nokk,
+	b.buyer,
+	b.langganan,
+	b.no_order,
+	b.jenis_kain,
+	b.no_mesin,
+	b.warna,
+	b.lot,
+	c.rol,
+	c.bruto,
+  a.point,
+	b.ket_status,
+	b.resep,
+	c.tgl_buat as tgl_in,
+	a.tgl_buat as tgl_out,
+	a.kd_stop,
+	a.mulai_stop,
+	a.selesai_stop,
+	a.ket,
+	a.status,
+	a.k_resep,
+	if(a.proses='' or ISNULL(a.proses),b.proses,a.proses) as proses,
+	if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft
+FROM
+	tbl_schedule b
+	LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+	LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+WHERE
+	$shft 
+	$Where 
+)x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) ORDER BY a.no_mesin");
    $no=1;
    
    $c=0;
+   $totrol=0;
+   $totberat=0;
    
     while($rowd=mysqli_fetch_array($sql)){
+      if($_GET['shft']=="ALL"){$shftSM=" ";}else{$shftSM=" g_shift='$_GET[shft]' AND ";}
+      $sqlSM=mysqli_query($con,"SELECT * FROM tbl_stopmesin
+      WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]' ORDER BY id DESC LIMIT 1");
+      $rowSM=mysqli_fetch_array($sqlSM);
 		   ?>
       <tr valign="top">
-      <td><div align="center"><?php echo $rowd['no_mesin'];?></div></td>
+      <td><div align="center"> <?php echo $rowd['mc'];?></div></td>
       <td><?php echo $rowd['langganan']."/".$rowd['buyer'];?></td>
       <td><?php echo $rowd['no_order']; ?></td>
       <td><?php echo $rowd['jenis_kain'];?></td>
       <td><?php echo $rowd['warna']; ?></td>
       <td><div align="center"><?php echo $rowd['lot']; ?></div></td>
-      <td><div align="center"><?php echo $rowd['rol']; ?></div></td>
-      <td><div align="right"><?php echo $rowd['bruto']; ?></div></td>
-      <td><?php echo $rowd['proses']; ?></td>
-      <td><?php echo $rowd['ket']; ?></td>
+      <td><div align="center"><?php if($rowd['tgl_out']!=""){$rol=$rowd['rol'];}else{ $rol=0; } echo $rol; ?></div></td>
+      <td><div align="right"><?php if($rowd['tgl_out']!=""){$brt=$rowd['bruto'];}else{ $brt=0; } echo $brt; ?></div></td>
+      <td><?php if($rowd['nokk']=="" AND substr($rowd['proses'],0,10)!="Cuci Mesin"){ echo $rowSM['proses'];}else{echo $rowd['proses'];} ?></td>
+      <td><?php if($rowd['nokk']=="" AND substr($rowd['proses'],0,10)!="Cuci Mesin"){ echo $rowSM['keterangan']."<br>".$rowSM['no_stop'];} else{echo $rowd['ket']."<br>".$rowd['status'];} ?></td>
       <td><?php echo $rowd['k_resep'];?></td>
-      <td><div align="center"><?php if($rowd['resep']=="Baru"){echo"R.B";}else{echo"R.L";}?></div></td>
-      <td><div align="right"><?php if($rowd['tgl_in']!=""){echo  date('H:i', strtotime($rowd['tgl_in']));}?></div></td>
-      <td><div align="right"><?php if($rowd['tgl_out']!=""){echo  date('H:i', strtotime($rowd['tgl_out']));}?></div></td>
+      <td><div align="center"><?php if($rowd['ket_status']==""){echo "";}else if($rowd['ket_status']!="MC Stop"){if($rowd['resep']=="Baru"){echo"R.B";}else{echo"R.L";}} ?></div></td>
+      <td><div align="right"><?php if($rowd['tgl_in']!=""){echo  date('H:i', strtotime($rowd['tgl_in']));}?> </div></td>
+      <td><div align="right"><?php if($rowd['tgl_out']!=""){echo  date('H:i', strtotime($rowd['tgl_out']));}?> </div></td>
       <td><div align="center"><?php echo $rowd['point'];?></div></td>
-      <td><div align="right"><?php if($rowd['mulai_stop']!=""){echo  date('H:i', strtotime($rowd['mulai_stop']));}?></div></td>
-      <td><div align="right"><?php if($rowd['selesai_stop']!=""){echo  date('H:i', strtotime($rowd['selesai_stop']));}?></div></td>
-      <td><div align="center"><?php echo $rowd['kd_stop'];?></div></td>
+      <td><div align="right"><?php if($rowd['nokk']=="" AND substr($rowd['proses'],0,10)!="Cuci Mesin" AND $rowSM['proses']=="Stop"){echo date('H:i', strtotime($rowSM['mulai']));}else{echo "";}?></div></td>
+      <td><div align="right"><?php if($rowd['nokk']=="" AND substr($rowd['proses'],0,10)!="Cuci Mesin" AND $rowSM['proses']=="Stop"){echo date('H:i', strtotime($rowSM['selesai']));}else{echo "";}?></div></td>
+      <td><div align="center"><?php if($rowd['nokk']=="" AND substr($rowd['proses'],0,10)!="Cuci Mesin"){ echo $rowSM['kd_stopmc'];}else{echo $rowd['kd_stop'];}?> <?php ?></div></td>
     </tr>
-     <?php 
-	 $totrol +=$rowd['rol'];
-	 $totberat +=$rowd['bruto'];
+     <?php
+	 $totrol +=$rol;
+	 $totberat +=$brt;
 	 $no++;} ?>
      </tbody>
     <tr>

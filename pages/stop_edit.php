@@ -9,7 +9,6 @@
                                   LEFT JOIN tbl_montemp b ON a.id=b.id_schedule
                                   WHERE b.id='$modal_id' AND b.status='sedang jalan'  ORDER BY a.no_urut ASC");
     $dLama = mysqli_fetch_array($qLama);
-    
 ?>
   <div class="modal-dialog">
     <div class="modal-content">
@@ -35,7 +34,8 @@
             <div class="col-sm-4">
               <div class="input-group date">
                 <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                <input name="tgl_stop" type="text" class="form-control pull-right" id="datepicker3" placeholder="0000-00-00" value="<?php echo $r['tglS']; ?>" />
+                <!-- <input name="tgl_stop" type="text" class="form-control pull-right" id="datepicker3" max="2023-11-21" placeholder="0000-00-00" value="<?php echo $r['tglS']; ?>" /> -->
+                <input name="tgl_stop" type="date" class="form-control pull-right" max="<?= Date('Y-m-d'); ?>" placeholder="0000-00-00" value="<?php echo $r['tglS']; ?>" />
               </div>
             </div>
 
@@ -53,7 +53,8 @@
             <div class="col-sm-4">
               <div class="input-group date">
                 <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                <input name="tgl_mulai" type="text" class="form-control pull-right" id="datepicker" placeholder="0000-00-00" value="<?php echo $r['tglM']; ?>" />
+                <!-- <input name="tgl_mulai" type="text" class="form-control pull-right" id="datepicker"  placeholder="0000-00-00" value="<?php echo $r['tglM']; ?>" /> -->
+                <input name="tgl_mulai" type="date" class="form-control pull-right" max="<?= Date('Y-m-d'); ?>" placeholder="0000-00-00" value="<?php echo $r['tglM']; ?>" />
               </div>
             </div>
           </div>
