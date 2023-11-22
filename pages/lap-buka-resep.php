@@ -104,6 +104,14 @@
                             <div class="box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Data Laporan Buka Resep</h3><br><br>
+                                    <div class="pull-right">
+                                        <a href="pages/cetak/reports-buka-resep-print.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
+                                            <i class="fa fa-print"></i> print
+                                        </a>
+                                        <a href="pages/cetak/reports-buka-resep-excel.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-success" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
+                                            <i class="fa fa-file-excel-o"></i> Cetak
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="box-body">
                                     <table id="example1" class="table table-bordered table-hover table-striped" width="100%">
