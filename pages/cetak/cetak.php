@@ -289,7 +289,7 @@ $rowbg = mysqli_fetch_array($sqlbg);
   } else {
     $mintarget = 0;
   }
-  $sqlsmp1 = mysqli_query($con, "select * from tbl_montemp where id='$_GET[idm]'");
+  $sqlsmp1 = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id='$_GET[idm]'");
   $rowsmp1 = mysqli_fetch_array($sqlsmp1);
 
   if ($rowsmp['kapasitas'] > 0) {
@@ -302,8 +302,8 @@ $rowbg = mysqli_fetch_array($sqlbg);
   $stmt = db2_exec($conn2, "SELECT TRIM(PRODUCTIONDEMAND.SUBCODE03) AS SUBCODE03, TRIM(PRODUCTIONDEMAND.SUBCODE05) AS SUBCODE05 FROM PRODUCTIONDEMAND PRODUCTIONDEMAND WHERE PRODUCTIONDEMAND.CODE='$demandno'");
   $rowdb2 = db2_fetch_assoc($stmt);
 
-  $q_lot		= db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowsmp1[nodemand]'");
-	$d_lot		= db2_fetch_assoc($q_lot);
+  $q_lot    = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowsmp1[nodemand]'");
+  $d_lot    = db2_fetch_assoc($q_lot);
   ?>
   <table width="100%" border="1" class="table-list1">
     <tr>
@@ -863,45 +863,30 @@ $rowbg = mysqli_fetch_array($sqlbg);
       <td>&nbsp;</td>
     </tr>
   </table>
-  <table border="0" width="50%">
+  <table border="0" width="100%">
     <tr>
-      <td width="10%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4">Jam Masuk Kain</font>
-      </td>
-      <td width="2%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4">:</font>
-      </td>
-      <td width="20%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4"><?php echo $rowsmp1['tgl_buat']; ?></font>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4">Jam Target Keluar</font>
-      </td>
-      <td width="2%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4">:</font>
-      </td>
-      <td width="20%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4"><?php echo date('Y-m-d H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowsmp1['tgl_buat']))); ?></font>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
+      <td width="15%" valign="top">
+        <font size="-4">Jam Masuk Kain</font><br>
+        <font size="-4">Jam Target Keluar</font><br>
         <font size="-4">Std Target Celup</font>
       </td>
-      <td width="2%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
+      <td width="2%" valign="top">
+        <font size="-4">:</font><br>
+        <font size="-4">:</font><br>
         <font size="-4">:</font>
       </td>
-      <td width="20%" align="left" style="border-left:0px #000000 solid;border-right:0px #000000 solid;border-bottom:0px #000000 solid;border-top:0px #000000 solid;">
-        <font size="-4"><?php echo $rowsmp['target']; ?> jam</font>
+      <td width="20%" valign="top">
+        <font size="-4"><?php echo $rowsmp1['tgl_buat']; ?></font><br>
+        <font size="-4"><?php echo date('Y-m-d H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowsmp1['tgl_buat']))); ?></font><br>
+        <font size="-4"><?php echo $rowsmp['target']; ?> jam</font><br>
+        <?php  echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat'])); ?>
+      </td>
+      <td rowspan="5">
+        <img src="barcode.php?text=<?= $rowsmp1['id']; ?>&print=true&size=60" width="130">
+        <!-- <img width="100" height="60" src='https://barcode.tec-it.com/barcode.ashx?data=<?= $rowsmp1['id']; ?>&code=Code128&translate-esc=on'/> -->
       </td>
     </tr>
   </table>
-  <?php
-  echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat']));
-  //} 
-  ?>
   <script>
     alert('cetak');
     window.print();
