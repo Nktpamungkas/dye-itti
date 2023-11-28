@@ -88,7 +88,7 @@
             </tr>
             <tr></tr> -->
             <tr valign="top">
-                <td colspan="18">
+                <td colspan="20">
                     <table width="100%" border="0" class="table-list1">
                         <thead>
                             <tr>
@@ -106,15 +106,17 @@
             </tr>
             <tr>
                 <td style="width:5%"><div align="center">No.</div></td>
-                <td style="width:12%"><div align="center">No. Kartu Kerja</div></td>
-                <td style="width:12%"><div align="center">No. Demand</div></td>
+                <td style="width:6%"><div align="center">No. Kartu Kerja</div></td>
+                <td style="width:6%"><div align="center">No. Demand</div></td>
                 <td style="width:15%"><div align="center">Pelanggan</div></td>
-                <td style="width:15%">No. Order</td>
-                <td>No. Item</td>
-                <td align="center">Jenis Kain</td>
+                <td style="width:10%">No. Order</td>
+                <td style="width:7%">No. Item</td>
+                <td style="width:15%" align="center">Jenis Kain</td>
                 <td>Warna</td>
                 <td align="center">Bon Resep 1 <br> Suffix</td>
                 <td align="center">Bon Resep 2 <br> Suffix</td>
+                <td>Operator</td>
+                <td>Diperiksa Oleh</td>
                 <td>Cek Resep</td>
                 <td>Keterangan</td>
             </tr>
@@ -149,6 +151,8 @@
                     <td><?= $dt_ITXVIEWKK['WARNA']; ?></td>
                     <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1']; ?></td>
                     <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2']; ?></td>
+                    <td><?= $row_bukaresep['personil']; ?></td>
+                    <td><?= $row_bukaresep['diperiksa_oleh']; ?></td>
                     <td><?= $row_bukaresep['cek_resep']; ?></td>
                     <td><?= $row_bukaresep['ket']; ?></td>
                 </tr>
@@ -156,36 +160,42 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2"></td>
-                <td colspan="4" align="center">Dibuat Oleh</td>
-                <td colspan="2" align="center">Diperiksa Oleh</td>
+            </tr>
+        </tfoot>
+    </table>
+    <table border="0" style="width:100%" class="table-list1">
+        <tbody>
+            <tr>
+                <td colspan="4"></td>
+                <td colspan="3" align="center">Dibuat Oleh</td>
+                <td colspan="3" align="center">Diperiksa Oleh</td>
                 <td colspan="4" align="center">Diketahui Oleh</td>
             </tr>
             <tr>
-                <td colspan="2">Nama</td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="2" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-            </tr>
-            <tr>
-                <td colspan="2">Jabatan</td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="2" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
+                <td colspan="4">Nama</td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
                 <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
             </tr>
             <tr>
-                <td colspan="2">Tanggal</td>
+                <td colspan="4">Jabatan</td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
+                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
+            </tr>
+            <tr>
+                <td colspan="4">Tanggal</td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
+                <td colspan="3" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
                 <td colspan="4" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
-                <td colspan="2" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
             </tr>
             <tr>
-                <td colspan="2" valign="top">Tanda Tangan</td>
-                <td colspan="4"><br><br><br></td>
-                <td colspan="2"><br><br><br></td>
+                <td colspan="4" valign="top">Tanda Tangan</td>
+                <td colspan="3"><br><br><br></td>
+                <td colspan="3"><br><br><br></td>
                 <td colspan="4"><br><br><br></td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
 </body>
 </html>
