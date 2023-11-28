@@ -112,13 +112,13 @@
                 </td>
             </tr>
             <tr>
-                <td style="width:5%"><div align="center">No.</div></td>
-                <td style="width:6%"><div align="center">No. Kartu Kerja</div></td>
-                <td style="width:6%"><div align="center">No. Demand</div></td>
-                <td style="width:15%"><div align="center">Pelanggan</div></td>
-                <td style="width:10%">No. Order</td>
-                <td style="width:7%">No. Item</td>
-                <td style="width:15%" align="center">Jenis Kain</td>
+                <td style="width:3%"><div align="center">No.</div></td>
+                <td style="width:4%"><div align="center">No. Kartu Kerja</div></td>
+                <td style="width:4%"><div align="center">No. Demand</div></td>
+                <td style="width:10%"><div align="center">Pelanggan</div></td>
+                <td style="width:5%">No. Order</td>
+                <td style="width:5%">No. Item</td>
+                <td style="width:25%" align="center">Jenis Kain</td>
                 <td>Warna</td>
                 <td align="center">Bon Resep 1 <br> Suffix</td>
                 <td align="center">Bon Resep 2 <br> Suffix</td>

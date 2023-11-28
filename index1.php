@@ -415,6 +415,9 @@ desired effect
               <li class="<?php if ($_GET['p'] == "Hasil-Celup" or $_GET['p'] == "Form-Celup") {
                             echo "active";
                           } ?>"><a href="?p=Hasil-Celup"><i class="fa fa-square text-info"></i> <span>Hasil-Celup</span></a></li>
+              <li class="<?php if ($_GET['p'] == "Matching-Dyeing" or $_GET['p'] == "Form-Matching-Dyeing") {
+                            echo "active";
+                          } ?>"><a href="?p=Matching-Dyeing"><i class="fa fa-folder-o text-info"></i> <span>Matching Dyeing</span></a></li>
               <!--<li class="<?php if ($_GET['p'] == "Potong-Celup" or $_GET['p'] == "Form-Potong") {
                                 echo "active";
                               } ?>"><a href="?p=Potong-Celup"><i class="fa fa-cut text-warning"></i> <span>Potong-Celup</span></a></li> -->
@@ -453,6 +456,9 @@ desired effect
               <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
                             echo "active";
                           } ?>"><a href="?p=lap-harian-produksi"><i class="fa fa-columns text-red"></i> <span>Lap Harian Produksi</span></a></li>
+              <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
+                            echo "active";
+                          } ?>"><a href="?p=lap-harian-matching"><i class="fa fa-columns text-yellow"></i> <span>Lap Harian Matching</span></a></li>
               <li class="<?php if ($_GET['p'] == "lap-potong-celup") {
                             echo "active";
                           } ?>"><a href="?p=lap-potong-celup"><i class="fa fa-columns text-lime"></i> <span>Lap Potong Celup</span></a></li>
