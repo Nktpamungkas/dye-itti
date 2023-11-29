@@ -163,6 +163,7 @@
                                                             <div class="col-sm-8">
                                                                 <select class="form-control" name="diperiksa_oleh">
                                                                     <option selected disabled value="-">Dipilih</option>
+                                                                    <option value="TAS">TAS</option>
                                                                     <?php
                                                                         $q_staff = mysqli_query($con, "SELECT * FROM tbl_staff WHERE NOT jabatan = 'Operator' AND NOT jabatan = 'Staff' AND NOT jabatan = 'Leader' AND NOT jabatan = 'Colorist' AND NOT jabatan = 'Asst. SPV'");
                                                                     ?>
