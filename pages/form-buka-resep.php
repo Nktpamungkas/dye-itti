@@ -379,7 +379,7 @@
 			</div>
 		</div>
 		<div class="box-footer">
-			<button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Schedule'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
+			<button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Buka-Resep'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
             <button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button>
 		</div>
 	</div>

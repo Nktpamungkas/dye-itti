@@ -82,7 +82,7 @@
 								<!-- <th width="88"><div align="center">Warna</div></th> -->
 								<th width="85"><div align="center">Bon Resep 1 <br> Suffix</div></th>
 								<th width="85"><div align="center">Bon Resep 2 <br> Suffix 2</div></th>
-								<th width="71"><div align="center">Cek Resep</div></th>
+								<th width="71"><div align="center">Operator Buka Resep</div></th>
 								<th width="90"><div align="center">Ket Resep</div></th>
 								<th width="98"><div align="center">Action</div></th>
 							</tr>
@@ -112,7 +112,7 @@
                                     <!-- <td align="center"><?= $dt_ITXVIEWKK['WARNA'] ?></td> -->
                                     <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1'] ?></td>
                                     <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2'] ?></td>
-                                    <td align="center"><?= $row_bukaresep['cek_resep']; ?></td>
+                                    <td align="center"><?= $row_bukaresep['personil']; ?></td>
                                     <td align="center"><?= $row_bukaresep['ket_resep']; ?></td>
                                     <td>
 										<div class="btn-group">
