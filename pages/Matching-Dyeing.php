@@ -61,9 +61,9 @@
                                                 <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Matching Dyeing"></i> Matching Dyeing
                                             </button>
                                             <br>
-                                            <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#cekresep<?= $row_matching_dye['id'] ?>">
-                                                <i class="fa fa-print" data-toggle="tooltip" data-placement="top" title="Print Form Matching"></i> Print Form Matching
-                                            </button>
+                                            <a href="pages/cetak/reports-form-matching-print.php?&id=<?= $row_matching_dye['id']; ?>" class="btn btn-warning btn-xs" target="_blank" data-toggle="tooltip" data-html="true" title="Print Form Matching">
+                                                <i class="fa fa-print"></i> Print Form Matching
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
