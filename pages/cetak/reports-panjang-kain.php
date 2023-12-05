@@ -14,6 +14,7 @@
             <th>Jenis Kain</th>
             <th>Machine</th>
             <th>Kapasitas</th>
+            <th>Keterangan Proses</th>
             <th>Lubang</th>
             <th>Kapasitas Per Lubang</th>
             <th>Pre-Dye width (in)</th>
@@ -106,7 +107,8 @@
                                             c.nozzle,
                                             c.plaiter,
                                             b.lot,
-                                            c.tgl_update
+                                            c.tgl_update,
+                                            a.proses
                                         FROM
                                             tbl_schedule b
                                         LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -169,6 +171,7 @@
                 <td><?= $rowd['jenis_kain'] ?></td>
                 <td><?= $rowd['no_mesin'] ?></td>
                 <td><?= $rowd['kapasitas'] ?></td>
+                <td><?= $rowd['proses'] ?></td>
                 <td><?= $rowd['Lubang'] ?></td>
                 <td><?php if($rowd['Lubang'] != 0) { echo number_format($rowd['kapasitas'] / $rowd['Lubang'], 2); } ?></td>
                 <td><?= $rowd['lebar_a']; ?></td>
