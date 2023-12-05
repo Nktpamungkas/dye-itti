@@ -160,7 +160,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="langganan" class="col-sm-3 control-label">Production Demand</label>
+					<label for="demand" class="col-sm-3 control-label">Production Demand</label>
 					<div class="col-sm-8">
 						<input name="demand" type="text" class="form-control" value="<?= $dt_demand['DEMAND']; ?>" placeholder="Production Demand">
 					</div>
@@ -390,6 +390,12 @@
         $q_simpan   = mysqli_query($con, "INSERT INTO tbl_bukaresep 
                                                 SET nokk = '$_POST[nokk]',
                                                     nodemand = '$_POST[demand]',
+													no_order = '$_POST[no_order]',
+													langganan = '$_POST[langganan]',
+													jenis_kain = '$_POST[jns_kain]',
+													no_warna = '$_POST[no_warna]',
+													warna = '$_POST[warna]',
+													buyer = '$_POST[buyer]',
                                                     shift = '$_POST[shift]',
                                                     gshift = '$_POST[g_shift]',
                                                     noresep1 = '$_POST[no_resep]',
