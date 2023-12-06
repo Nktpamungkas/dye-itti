@@ -75,11 +75,11 @@
 								<th width="26"><div align="center">No.</div></th>
 								<th width="26"><div align="center">No. Kartu Kerja</div></th>
 								<th width="26"><div align="center">No. Demand</div></th>
-                                <!-- <th width="121"><div align="center">No. Order</div></th> -->
-								<!-- <th width="165"><div align="center">Pelanggan</div></th> -->
-								<!-- <th width="121"><div align="center">No. Item</div></th> -->
-								<!-- <th width="125"><div align="center">Jenis Kain</div></th> -->
-								<!-- <th width="88"><div align="center">Warna</div></th> -->
+								<th width="165"><div align="center">Pelanggan</div></th>
+								<th width="165"><div align="center">Buyer</div></th>
+                                <th width="121"><div align="center">No. Order</div></th>
+								<th width="125"><div align="center">Jenis Kain</div></th>
+								<th width="88"><div align="center">Warna</div></th>
 								<th width="85"><div align="center">Bon Resep 1 <br> Suffix</div></th>
 								<th width="85"><div align="center">Bon Resep 2 <br> Suffix 2</div></th>
 								<th width="71"><div align="center">Operator Buka Resep</div></th>
@@ -93,23 +93,15 @@
                                 $no = 1;
                             ?>
                             <?php while ($row_bukaresep = mysqli_fetch_array($q_bukaresep)) { ?>
-                                <?php
-                                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$row_bukaresep[nokk]'");
-                                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-
-                                    // $sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
-                                    //                                             WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' AND CODE = '$dt_ITXVIEWKK[PROJECTCODE]'");
-                                    // $dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
-                                ?>
                                 <tr bgcolor="antiquewhite">
                                     <td align="center"><?= $no++; ?></td>
                                     <td align="center"><?= $row_bukaresep['nokk'] ?></td>
                                     <td align="center"><?= $row_bukaresep['nodemand'] ?></td>
-                                    <!-- <td align="center"><?= TRIM($dt_ITXVIEWKK['PROJECTCODE']) ?></td> -->
-                                    <!-- <td align="center"><?= TRIM($dt_pelanggan_buyer['PELANGGAN']) ?></td> -->
-                                    <!-- <td align="center"><?= TRIM($dt_ITXVIEWKK['SUBCODE02']).'-'.TRIM($dt_ITXVIEWKK['SUBCODE03']) ?></td> -->
-                                    <!-- <td align="center"><?= $dt_ITXVIEWKK['ITEMDESCRIPTION'] ?></td> -->
-                                    <!-- <td align="center"><?= $dt_ITXVIEWKK['WARNA'] ?></td> -->
+                                    <td align="center"><?= $row_bukaresep['langganan'] ?></td>
+                                    <td align="center"><?= $row_bukaresep['buyer']; ?></td>
+                                    <td align="center"><?= $row_bukaresep['no_order'] ?></td>
+                                    <td align="center"><?= $row_bukaresep['jenis_kain'] ?></td>
+                                    <td align="center"><?= $row_bukaresep['warna'] ?></td>
                                     <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1'] ?></td>
                                     <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2'] ?></td>
                                     <td align="center"><?= $row_bukaresep['personil']; ?></td>
