@@ -879,10 +879,10 @@ $rowbg = mysqli_fetch_array($sqlbg);
         <font size="-4"><?php echo $rowsmp1['tgl_buat']; ?></font><br>
         <font size="-4"><?php echo date('Y-m-d H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowsmp1['tgl_buat']))); ?></font><br>
         <font size="-4"><?php echo $rowsmp['target']; ?> jam</font><br>
-        <?php  echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat'])); ?>
+        <?php echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat'])); ?>
       </td>
       <td rowspan="5">
-        <img src="barcode.php?text=<?= $rowsmp1['id']; ?>&print=true&size=60" width="130">
+        <img src="barcode.php?text=<?= $rowsmp1['id']; ?>&print=true&size=30" width="130">
         <!-- <img width="100" height="60" src='https://barcode.tec-it.com/barcode.ashx?data=<?= $rowsmp1['id']; ?>&code=Code128&translate-esc=on'/> -->
       </td>
     </tr>
