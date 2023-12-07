@@ -25,6 +25,7 @@ include "koneksi.php";
 		$data = mysqli_query($con, "SELECT
 										a.*,
 										b.buyer,
+										b.nodemand,
 										b.no_order,
 										b.no_mesin,
 										b.warna,
@@ -80,6 +81,11 @@ include "koneksi.php";
 								<th width="115">
 									<div align="center">
 										<font size="-1">Buyer</font>
+									</div>
+								</th>
+								<th width="115">
+									<div align="center">
+										<font size="-1">No Demand</font>
 									</div>
 								</th>
 								<th width="112">
@@ -161,6 +167,9 @@ include "koneksi.php";
 										</a></td>
 									<td align="center">
 										<font size="-2"><?php echo $rowd['buyer']; ?></font>
+									</td>
+									<td align="center">
+										<font size="-2"><?php echo $rowd['nodemand']; ?></font>
 									</td>
 									<td align="center">
 										<font size="-1"><?php echo $rowd['no_order']; ?></font>
