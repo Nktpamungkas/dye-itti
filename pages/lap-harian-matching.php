@@ -105,10 +105,10 @@
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Data Laporan Buka Resep</h3><br><br>
                                     <div class="pull-right">
-                                        <a href="pages/cetak/reports-buka-resep-print.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
+                                        <!-- <a href="pages/cetak/reports-buka-resep-print.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
                                             <i class="fa fa-print"></i> print
-                                        </a>
-                                        <a href="pages/cetak/reports-buka-resep-excel.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-success" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
+                                        </a> -->
+                                        <a href="pages/cetak/reports-matching-dyeing-excel.php?&awal=<?= $Awal; ?>&akhir=<?= $Akhir; ?>&jam_awal=<?= $jamA; ?>&jam_akhir=<?= $jamAr; ?>&gshift=<?= $GShift; ?>" class="btn btn-success" target="_blank" data-toggle="tooltip" data-html="true" title="Form Laporan Harian Buka Bon Resep">
                                             <i class="fa fa-file-excel-o"></i> Cetak
                                         </a>
                                     </div>
@@ -118,69 +118,38 @@
                                         <thead class="bg-blue">
                                             <tr>
                                                 <th width="26"><div align="center">No.</div></th>
-                                                <th width="26"><div align="center">TGL</div></th>
-                                                <th width="26"><div align="center">Buka Resep</div></th>
-                                                <th width="26"><div align="center">Ok</div></th>
-                                                <th width="26"><div align="center">Tidak Ok</div></th>
-                                                <th width="26"><div align="center">Belum Diperiksa</div></th>
+                                                <th width="26"><div align="center">No. Kartu Kerja</div></th>
+                                                <th width="26"><div align="center">No. Demand</div></th>
+                                                <th width="26"><div align="center">Pelanggan</div></th>
+                                                <th width="26"><div align="center">Buyer</div></th>
+                                                <th width="26"><div align="center">No. Order</div></th>
+                                                <th width="26"><div align="center">Jenis Kain</div></th>
+                                                <th width="26"><div align="center">Warna</div></th>
+                                                <th width="26"><div align="center">Jam Terima</div></th>
+                                                <th width="26"><div align="center">Operator Penerima</div></th>
+                                                <th width="26"><div align="center">Jam Proses</div></th>
+                                                <th width="26"><div align="center">Operator Matcher</div></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-
-                                                $q_bukaresep    = mysqli_query($con, "SELECT
-                                                                                        DATE(createdatetime) AS TGL,
-                                                                                        COUNT(nokk) AS buka_resep
-                                                                                    FROM
-                                                                                        tbl_bukaresep 
-                                                                                    WHERE 
-                                                                                        $where_jam $where_gshift
-                                                                                    GROUP BY 
-                                                                                        DATE(createdatetime)");
+                                                $q_matching_dye    = mysqli_query($con, "SELECT * FROM tbl_matching_dyeing WHERE $where_jam $where_gshift ORDER BY id DESC");
                                                 $no = 1;
                                             ?>
-                                            <?php while ($row_bukaresep = mysqli_fetch_array($q_bukaresep)) { ?>
-                                                <?php
-                                                    $q_bukaresep_ok     = mysqli_query($con, "SELECT
-                                                                                                DATE(createdatetime) AS TGL,
-                                                                                                COUNT(nokk) AS ok
-                                                                                            FROM
-                                                                                                tbl_bukaresep 
-                                                                                            WHERE 
-                                                                                                cek_resep = 'Resep Ok' AND $where_jam $where_gshift
-                                                                                            GROUP BY 
-                                                                                                DATE(createdatetime)");
-                                                    $row_bukaresep_ok   = mysqli_fetch_assoc($q_bukaresep_ok);
-                                                    
-                                                    $q_bukaresep_tidakok     = mysqli_query($con, "SELECT
-                                                                                                DATE(createdatetime) AS TGL,
-                                                                                                COUNT(nokk) AS tidak_ok
-                                                                                            FROM
-                                                                                                tbl_bukaresep 
-                                                                                            WHERE 
-                                                                                                cek_resep = 'Resep Tidak Ok' AND $where_jam $where_gshift
-                                                                                            GROUP BY 
-                                                                                                DATE(createdatetime)");
-                                                    $row_bukaresep_tidakok   = mysqli_fetch_assoc($q_bukaresep_tidakok);
-                                                    
-                                                    $q_bukaresep_blmdiperiksa     = mysqli_query($con, "SELECT
-                                                                                                            DATE(createdatetime) AS TGL,
-                                                                                                            COUNT(nokk) AS belum_diperiksa
-                                                                                                        FROM
-                                                                                                            tbl_bukaresep
-                                                                                                        WHERE 
-                                                                                                            cek_resep is null AND $where_jam $where_gshift
-                                                                                                        GROUP BY 
-                                                                                                            DATE(createdatetime)");
-                                                    $row_bukaresep_blmdiperiksa   = mysqli_fetch_assoc($q_bukaresep_blmdiperiksa);
-                                                ?>
+                                            <?php while ($row_matching_dye = mysqli_fetch_array($q_matching_dye)) { ?>
                                                 <tr bgcolor="antiquewhite">
                                                     <td align="center"><?= $no++; ?></td>
-                                                    <td align="center"><?= $row_bukaresep['TGL']; ?></td>
-                                                    <td align="center"><?= $row_bukaresep['buka_resep']; ?></td>
-                                                    <td align="center"><?= $row_bukaresep_ok['ok']; ?></td>
-                                                    <td align="center"><?= $row_bukaresep_tidakok['tidak_ok']; ?></td>
-                                                    <td align="center"><?= $row_bukaresep_blmdiperiksa['belum_diperiksa']; ?></td>
+                                                    <td align="center"><?= $row_matching_dye['nokk'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['nodemand'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['langganan'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['buyer'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['no_order'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['jenis_kain'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['warna'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['jam_terima'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['operator_penerima'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['createdatetime_proses'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['operator_matcher'] ?></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
