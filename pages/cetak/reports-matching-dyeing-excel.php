@@ -51,6 +51,11 @@
             <th>Operator Penerima</th>
             <th>Jam Proses</th>
             <th>Operator Matcher</th>
+            <th>Pemberi Resep</th>
+            <th>Acc Resep</th>
+            <th>Oke Ke</th>
+            <th>Operator Matcher</th>
+            <th>Note</th>
         </tr>
     </thead>
     <tbody>
@@ -72,6 +77,11 @@
                 <td><?= $row_matching_dye['operator_penerima'] ?></td>
                 <td><?= $row_matching_dye['createdatetime_proses'] ?></td>
                 <td><?= $row_matching_dye['operator_matcher'] ?></td>
+                <td><?= $row_matching_dye['pemberi_resep'] ?></td>
+                <td><?= $row_matching_dye['acc_resep'] ?></td>
+                <td><?= $row_matching_dye['ok_ke'] ?></td>
+                <td><?= $row_matching_dye['operator_matcher'] ?></td>
+                <td><?= $row_matching_dye['note'] ?></td>
             </tr>
         <?php } ?>
     </tbody>

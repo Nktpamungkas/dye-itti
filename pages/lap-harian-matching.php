@@ -129,6 +129,11 @@
                                                 <th width="26"><div align="center">Operator Penerima</div></th>
                                                 <th width="26"><div align="center">Jam Proses</div></th>
                                                 <th width="26"><div align="center">Operator Matcher</div></th>
+                                                <th width="26"><div align="center">Pemberi Resep</div></th>
+                                                <th width="26"><div align="center">Acc Resep</div></th>
+                                                <th width="26"><div align="center">Oke Ke</div></th>
+                                                <th width="26"><div align="center">Operator Matcher</div></th>
+                                                <th width="26"><div align="center">Note</div></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,6 +155,11 @@
                                                     <td align="center"><?= $row_matching_dye['operator_penerima'] ?></td>
                                                     <td align="center"><?= $row_matching_dye['createdatetime_proses'] ?></td>
                                                     <td align="center"><?= $row_matching_dye['operator_matcher'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['pemberi_resep'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['acc_resep'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['ok_ke'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['operator_matcher'] ?></td>
+                                                    <td align="center"><?= $row_matching_dye['note'] ?></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>

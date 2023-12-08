@@ -79,11 +79,20 @@
                 <td colspan="7" width="30%">......</td>
             </tr>
             <tr>
+                <td colspan="3" width="14%">No Order</td>
+                <td colspan="1" width="1%">:</td>
+                <td colspan="12" width="30%"><?= $row_matching_dyeing['no_order']; ?></td>
+
+                <td colspan="4" width="14%">Roll</td>
+                <td colspan="1" width="1%">:</td>
+                <td colspan="7" width="30%">......</td>
+            </tr>
+            <tr>
                 <td colspan="3">Langganan</td>
                 <td colspan="1">:</td>
                 <td colspan="12"><?= $row_matching_dyeing['langganan']; ?></td>
 
-                <td colspan="4">Roll</td>
+                <td colspan="4">Quantity (Kg)</td>
                 <td colspan="1">:</td>
                 <td colspan="7">......</td>
             </tr>
@@ -92,7 +101,7 @@
                 <td colspan="1">:</td>
                 <td colspan="12"><?= $row_matching_dyeing['jenis_kain']; ?></td>
 
-                <td colspan="4">Quantity (Kg)</td>
+                <td colspan="4">Loading (%)</td>
                 <td colspan="1">:</td>
                 <td colspan="7">......</td>
             </tr>
@@ -101,7 +110,7 @@
                 <td colspan="1">:</td>
                 <td colspan="12"><?= $row_matching_dyeing['warna']; ?></td>
 
-                <td colspan="4">Loading (%)</td>
+                <td colspan="4">Proses Matching</td>
                 <td colspan="1">:</td>
                 <td colspan="7">......</td>
             </tr>
@@ -110,15 +119,6 @@
                 <td colspan="1">:</td>
                 <td colspan="12"><?= $row_matching_dyeing['no_warna']; ?></td>
 
-                <td colspan="4">Proses Matching</td>
-                <td colspan="1">:</td>
-                <td colspan="7">......</td>
-            </tr>
-            <tr>
-                <td colspan="3">No Bon Resep 1</td>
-                <td colspan="1">:</td>
-                <td colspan="12">....</td>
-
                 <td colspan="4">Suhu X Waktu (Poly)</td>
                 <td colspan="1">:</td>
                 <td colspan="3">......</td>
@@ -126,7 +126,7 @@
                 <td colspan="3">......</td>
             </tr>
             <tr>
-                <td colspan="3">No Bon Resep 2</td>
+                <td colspan="3">No Bon Resep 1</td>
                 <td colspan="1">:</td>
                 <td colspan="12">....</td>
 
@@ -135,9 +135,9 @@
                 <td colspan="7">......</td>
             </tr>
             <tr>
-                <td colspan="3">Std Cocok Warna</td>
+                <td colspan="3">No Bon Resep 2</td>
                 <td colspan="1">:</td>
-                <td colspan="12">1.</td>
+                <td colspan="12">....</td>
 
                 <td colspan="4">Suhu X Waktu (Cotton)</td>
                 <td colspan="1">:</td>
@@ -146,11 +146,20 @@
                 <td colspan="3">......</td>
             </tr>
             <tr>
+                <td colspan="3">Std Cocok Warna</td>
+                <td colspan="1">:</td>
+                <td colspan="12">1.</td>
+
+                <td colspan="4">L:R Cotton</td>
+                <td colspan="1">:</td>
+                <td colspan="7">......</td>
+            </tr>
+            <tr>
                 <td colspan="3">&nbsp;</td>
                 <td colspan="1">:</td>
                 <td colspan="12">2.</td>
 
-                <td colspan="4">L:R Cotton</td>
+                <td colspan="4">Berat Kain (gr)</td>
                 <td colspan="1">:</td>
                 <td colspan="7">......</td>
             </tr>
@@ -159,7 +168,7 @@
                 <td colspan="1">:</td>
                 <td colspan="12">1.</td>
 
-                <td colspan="4">Berat Kain (gr)</td>
+                <td colspan="4">Acc Matching</td>
                 <td colspan="1">:</td>
                 <td colspan="7">......</td>
             </tr>
@@ -168,9 +177,9 @@
                 <td colspan="1">:</td>
                 <td colspan="12">2.</td>
 
-                <td colspan="4">Acc Matching</td>
-                <td colspan="1">:</td>
-                <td colspan="7">......</td>
+                <td colspan="4"></td>
+                <td colspan="1"></td>
+                <td colspan="7"></td>
             </tr>           
         </thead>
     </table>
