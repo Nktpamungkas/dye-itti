@@ -1059,7 +1059,6 @@
 							<option value="Setting">Setting</option>
 						</select>
 					</div>
-
 				</div>
 				<div class="form-group">
 					<label for="kategori_warna" class="col-sm-3 control-label">Kategori Warna</label>
@@ -1175,6 +1174,8 @@
 							  	<option value='Test Proses' >Test Proses</option>-->
 							<option value='Tolak Basah'>Tolak Basah</option>
 							<option value='Proses AKW'>Proses AKW</option>
+							<option value='Ganti Kain Internal'>Ganti Kain Internal</option>
+							<option value='Ganti Kain External'>Ganti Kain External</option>
 						</select>
 					</div>
 					<div class="col-sm-4">
@@ -1211,7 +1212,6 @@
 			<?php } ?>
 
 		</div>
-		<!-- /.box-footer -->
 	</div>
 </form>
 

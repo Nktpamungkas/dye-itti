@@ -154,8 +154,7 @@
 	session_start();
 	include "koneksi.php";
 	$nokk = $_GET['nokk'];
-	function rcode($nokk, $resep)
-	{
+	function rcode($nokk, $resep){
 		$host = "10.0.4.7\SQLEXPRESS";
 		$username = "sa";
 		$password = "123";
@@ -316,11 +315,11 @@
 	// UPDATE NILO
 ?>
 <?php
-$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
-$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
-$Item		= isset($_POST['item']) ? $_POST['item'] : '';
-$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
-$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
+	$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
+	$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
+	$Item		= isset($_POST['item']) ? $_POST['item'] : '';
+	$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
+	$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 ?>
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" name="form1">
 	<div class="box box-info">
@@ -553,15 +552,17 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 						</div>
 					</div>
 				</div>
-				<?php if ($cek > 0 and $_GET['kap'] != "") {
-					$loading = round($rcek['bruto'] / $_GET['kap'], 4) * 100;
-				} else {
-					if ($r['Weight'] != "" and $_GET['kap'] != "") {
-						$loading = round($r['Weight'] / $_GET['kap'], 4) * 100;
-					} else if ($nokk != "" and $_GET['kap'] != "") {
-						$loading = round($cekM['bruto'] / $_GET['kap'], 4) * 100;
-					}
-				} ?>
+				<?php 
+					if ($cek > 0 and $_GET['kap'] != "") {
+						$loading = round($rcek['bruto'] / $_GET['kap'], 4) * 100;
+					} else {
+						if ($r['Weight'] != "" and $_GET['kap'] != "") {
+							$loading = round($r['Weight'] / $_GET['kap'], 4) * 100;
+						} else if ($nokk != "" and $_GET['kap'] != "") {
+							$loading = round($cekM['bruto'] / $_GET['kap'], 4) * 100;
+						}
+					} 
+				?>
 				<div class="form-group">
 					<label for="kapasitas" class="col-sm-3 control-label">Kapasitas Mesin</label>
 					<div class="col-sm-3">
@@ -579,15 +580,17 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					</div>
 
 				</div>
-				<?php if ($cek > 0 and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-					$loading = round($rcek['bruto'] / $rcek['kapasitas'], 4) * 100;
-				} else {
-					if ($r['Weight'] != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-						$loading = round($r['Weight'] / $rcek['kapasitas'], 4) * 100;
-					} else if ($nokk != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-						$loading = round($cekM['bruto'] / $rcek['kapasitas'], 4) * 100;
-					}
-				} ?>
+				<?php 
+					if ($cek > 0 and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+						$loading = round($rcek['bruto'] / $rcek['kapasitas'], 4) * 100;
+					} else {
+						if ($r['Weight'] != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+							$loading = round($r['Weight'] / $rcek['kapasitas'], 4) * 100;
+						} else if ($nokk != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+							$loading = round($cekM['bruto'] / $rcek['kapasitas'], 4) * 100;
+						}
+					} 
+				?>
 				<div class="form-group">
 					<label for="no_mc" class="col-sm-3 control-label">No MC</label>
 					<div class="col-sm-2">
@@ -603,7 +606,6 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<?php } ?>
 						</select>
 					</div>
-
 				</div>
 				<div class="form-group">
 					<label for="rcode1" class="col-sm-3 control-label">Rcode</label>
@@ -762,7 +764,6 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<option value="OK" <?php if($row_hasilcelup['kd_stop_celup'] == "OK") { echo "Selected"; } ?>>OK</option>
 						</select>
 					</div>
-
 				</div>
 				<div class="form-group">
 					<label for="mulaism" class="col-sm-3 control-label">Mulai Stop Mesin</label>
@@ -1288,6 +1289,12 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 
 				</div>
 				<div class="form-group">
+					<label for="ket" class="col-sm-3 control-label">Keterangan Schedule</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" value="<?= $rcek['ket_status']; ?>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="ket" class="col-sm-3 control-label">Keterangan</label>
 					<div class="col-sm-8">
 						<textarea name="ket" class="form-control" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>><?php echo $ketsts; ?><?= $row_hasilcelup['ket']; ?></textarea>
@@ -1475,9 +1482,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 				</div>
 			</form>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
 <?php
 if ($_POST['save'] == "save") {

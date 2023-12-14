@@ -112,6 +112,7 @@
       <th rowspan="2" bgcolor="#99FF99">Tambah Dyestuff</th>
       <th rowspan="2" bgcolor="#99FF99">Arah Warna</th>
       <th rowspan="2" bgcolor="#99FF99">Status Warna</th>
+      <th rowspan="2" bgcolor="#99FF99">Keterangan Kartu Kerja</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -190,7 +191,7 @@
                                       a.operator_keluar,
                                       a.k_resep,
                                       a.status,
-                                        a.proses_point,
+                                      a.proses_point,
                                       a.analisa,
                                       b.nokk,
                                       b.no_warna,
@@ -226,8 +227,7 @@
                                       c.operator,
                                       a.tambah_dyestuff,
                                       a.arah_warna,
-                                      a.status_warna,
-                                      a.leader
+                                      a.status_warna
                                     FROM
                                       tbl_schedule b
                                         LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -424,6 +424,7 @@
         <td><?= $rowd['arah_warna']; ?></td>
         <td><?= $rowd['status_warna']; ?></td>
         <td><?= $rowd['leader']; ?></td>
+        <td><?= $rowd['ket_status']; ?></td>
       </tr>
     <?php
       $totrol += $rol;
