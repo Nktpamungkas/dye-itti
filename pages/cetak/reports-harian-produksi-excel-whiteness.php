@@ -39,6 +39,8 @@
       <th bgcolor="#99FF99">PRODUCTION DEMAND</th>
       <th bgcolor="#99FF99">ORIGINAL PD CODE</th>
       <th bgcolor="#99FF99">NO ITEM</th>
+      <th bgcolor="#99FF99">COLOR GROUP</th>
+      <th bgcolor="#99FF99">FABRIC TYPE</th>
       <th bgcolor="#99FF99">LIGHT/DARK</th>
       <th bgcolor="#99FF99">JENIS KAIN</th>
       <th bgcolor="#99FF99">GRAMASI</th>
@@ -54,6 +56,7 @@
       <th bgcolor="#99FF99">LR</th>
       <th bgcolor="#99FF99">SUFFIX</th>
       <th bgcolor="#99FF99">DESCRIPTION</th>
+      <th bgcolor="#99FF99">KONDISI PROSES</th>
     <?php
         // ini_set("error_reporting", 0);
         $Awal = $_GET['awal'];
@@ -109,7 +112,8 @@
                                                 p.SUFFIXCODE,
                                                 TRIM(p.SUBCODE01) || '-' ||TRIM(p.SUFFIXCODE) AS SUFFIX,
                                                 p.PICKUPQUANTITY AS LR,
-                                                r.SEARCHDESCRIPTION AS DESKRIPSI
+                                                r.SEARCHDESCRIPTION AS DESKRIPSI,
+                                                r.SHORTDESCRIPTION AS KONDISI_PROSES
                                               FROM 
                                                 PRODUCTIONRESERVATION p 
                                               LEFT JOIN 
@@ -229,7 +233,7 @@
                                                               a.air_akhir,
                                                               c.nokk_legacy,
                                                               c.loterp,
-                                                              c.nodemand,
+                                                              b.nodemand,
                                                               a.tambah_obat,
                                                               a.tambah_obat1,
                                                               a.tambah_obat2,
@@ -261,22 +265,29 @@
           
           // mencari original pd code
           ini_set("error_reporting", 0);
-          $q_orig_pd_code     = db2_exec($conn2, "SELECT 
-                                                      *, a.VALUESTRING AS ORIGINALPDCODE
-                                                  FROM 
-                                                      PRODUCTIONDEMAND p 
-                                                  LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
-                                                  WHERE p.CODE = '$row_hasilcelup[nodemand]'");
-          $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
+          // $q_orig_pd_code     = db2_exec($conn2, "SELECT 
+          //                                             *, a.VALUESTRING AS ORIGINALPDCODE
+          //                                         FROM 
+          //                                             PRODUCTIONDEMAND p 
+          //                                         LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
+          //                                         WHERE p.CODE = '$row_hasilcelup[nodemand]'");
+          // $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
           // mencari original pd code
+
+          // NOW
+          $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]'");
+          $dt_ITXVIEWKK	  = db2_fetch_assoc($sql_ITXVIEWKK);
+          // NOW
 
     ?>
       <tr valign="top">
         <td><?= $no++; ?></td>
         <td>`<?= $row_whiteness['PRODUCTIONORDERCODE']; ?></td>
         <td>`<?= $row_hasilcelup['nodemand']; ?></td>
-        <td>`<?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
+        <td>`<?= $dt_ITXVIEWKK['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
         <td><?= $row_hasilcelup['no_hanger']; ?></td>
+        <td><?= $dt_ITXVIEWKK['COLORGROUP']; ?></td> <!-- COLOR GROUP -->
+        <td><?= $dt_ITXVIEWKK['SUBCODE01']; ?></td> <!-- FABRIC TYPE -->
         <td>
           <?php
             $q_variant    = db2_exec($conn2, "SELECT TRIM(SUBCODE04) AS SUBCODE04 FROM PRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]' AND (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')");
@@ -298,6 +309,7 @@
         <td><?= number_format($row_whiteness['LR'], 2); ?></td>
         <td><?= $row_whiteness['SUFFIX']; ?></td>
         <td><?= $row_whiteness['DESKRIPSI']; ?></td>
+        <td><?= $row_whiteness['KONDISI_PROSES']; ?></td> <!-- KONDISI PROSES -->
         <?php
           $q_recipecmp  = db2_exec($conn2, "SELECT
                                               TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) AS DYC,
