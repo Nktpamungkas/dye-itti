@@ -153,7 +153,7 @@
                   <div align="center">Tgl Celup</div>
                 </th>
                 <th width="314">
-                  <div align="center">Order</div>
+                  <div align="center">Order<br>No Demand</div>
                 </th>
                 <th width="404">
                   <div align="center">Jenis Kain</div>
@@ -207,7 +207,9 @@
                                                 a.rcode,
                                                 c.tgl_update,
                                                 b.nokk,
+                                                b.nodemand,
                                                 b.buyer,
+                                                b.langganan,
                                                 b.no_order,
                                                 b.jenis_kain,
                                                 b.lot,
@@ -253,8 +255,10 @@
                                           (SELECT
                                             a.rcode,
                                             b.nokk,
+                                            b.nodemand,
                                             c.tgl_update,
                                             b.buyer,
+                                            b.langganan,
                                             b.no_order,
                                             b.jenis_kain,
                                             b.lot,
@@ -309,9 +313,9 @@
                                       } else {
                                         echo $rowd['shft'];
                                       } ?></td>
-                  <td align="center"><?php echo $rowd['buyer']; ?></td>
+                  <td align="center"><?php echo $rowd['buyer']; ?><br><?= $rowd['langganan']; ?></td>
                   <td><?= $rowd['tgl_update'] ?></td>
-                  <td align="center"><?php echo $rowd['no_order']; ?></td>
+                  <td align="center"><?php echo $rowd['no_order']; ?><br><?= $rowd['nodemand'] ?></td>
                   <td><?php echo $rowd['jenis_kain']; ?></td>
                   <td align="center"><?php echo $rowd['lot']; ?></td>
                   <td><?php echo $rowd['warna']; ?></td>
