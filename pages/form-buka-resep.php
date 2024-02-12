@@ -363,8 +363,8 @@
 					</div>
 					<label class="col-sm-1 control-label" style="text-align: left;">Jumlah Gerobak</label>
 					<div class="col-sm-2">
-						<select name="jml_gerobak" class="form-control">
-							<option value="">Pilih</option>
+						<select name="jml_gerobak" class="form-control" required>
+							<option value="" disabled selected>Pilih</option>
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
@@ -397,8 +397,8 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">Proses</label>
 					<div class="col-sm-3">
-						<select name="proses" class="form-control">
-							<option value="">Pilih</option>
+						<select name="proses" class="form-control" required>
+							<option value="" disabled selected>Pilih</option>
 							<option value="celup_greige">Celup Greige</option>
 							<option value="celup_perbaikan">Celup Perbaikan</option>
 							<option value="scouring_preset">Scouring-Preset</option>
