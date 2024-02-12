@@ -361,6 +361,24 @@
 					<div class="col-sm-3">
 						<input name="kategori_warna" type="text" class="form-control" readonly value="<?= $row_prod_reservation['SUBCODE04']; ?>" placeholder="Kategori Warna">
 					</div>
+					<label class="col-sm-1 control-label" style="text-align: left;">Jumlah Gerobak</label>
+					<div class="col-sm-2">
+						<select name="jml_gerobak" class="form-control">
+							<option value="">Pilih</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+						</select>
+					</div>
 
 				</div>
 				<div class="form-group">
@@ -376,6 +394,20 @@
 						<textarea name="ket" class="form-control"></textarea>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Proses</label>
+					<div class="col-sm-3">
+						<select name="proses" class="form-control">
+							<option value="">Pilih</option>
+							<option value="celup_greige">Celup Greige</option>
+							<option value="celup_perbaikan">Celup Perbaikan</option>
+							<option value="scouring_preset">Scouring-Preset</option>
+							<option value="cb">CB</option>
+							<option value="rlx">RLX</option>
+						</select>
+					</div>
+
+				</div>
 			</div>
 		</div>
 		<div class="box-footer">
@@ -388,23 +420,25 @@
 <?php
 	if ($_POST['save'] == "save") {
         $q_simpan   = mysqli_query($con, "INSERT INTO tbl_bukaresep 
-                                                SET nokk = '$_POST[nokk]',
-                                                    nodemand = '$_POST[demand]',
-													no_order = '$_POST[no_order]',
-													langganan = '$_POST[langganan]',
-													jenis_kain = '$_POST[jns_kain]',
-													no_warna = '$_POST[no_warna]',
-													warna = '$_POST[warna]',
-													buyer = '$_POST[buyer]',
-                                                    shift = '$_POST[shift]',
-                                                    gshift = '$_POST[g_shift]',
-                                                    noresep1 = '$_POST[no_resep]',
-                                                    suffix1 = '$_POST[suffix]',
-                                                    noresep2 = '$_POST[no_resep2]',
-                                                    suffix2 = '$_POST[suffix2]',
-                                                    resep = '$_POST[resep]',
-                                                    ket = '$_POST[ket]',
-                                                    personil = '$_POST[personil]',
+                                                SET nokk 		= '$_POST[nokk]',
+                                                    nodemand 	= '$_POST[demand]',
+													no_order 	= '$_POST[no_order]',
+													langganan 	= '$_POST[langganan]',
+													jenis_kain 	= '$_POST[jns_kain]',
+													no_warna 	= '$_POST[no_warna]',
+													warna 		= '$_POST[warna]',
+													buyer 		= '$_POST[buyer]',
+                                                    shift 		= '$_POST[shift]',
+                                                    gshift 		= '$_POST[g_shift]',
+                                                    noresep1 	= '$_POST[no_resep]',
+                                                    suffix1 	= '$_POST[suffix]',
+                                                    noresep2 	= '$_POST[no_resep2]',
+                                                    suffix2 	= '$_POST[suffix2]',
+                                                    resep 		= '$_POST[resep]',
+                                                    ket 		= '$_POST[ket]',
+                                                    personil 	= '$_POST[personil]',
+                                                    jml_gerobak = '$_POST[jml_gerobak]',
+                                                    proses 		= '$_POST[proses]',
                                                     createdatetime = now()");
         if($q_simpan){
             echo "<script>swal({

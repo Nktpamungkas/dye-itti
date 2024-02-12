@@ -113,12 +113,17 @@
                 <td style="width:5%">No. Item</td>
                 <td style="width:25%" align="center">Jenis Kain</td>
                 <td>Warna</td>
-                <td align="center">Bon Resep 1 <br> Suffix</td>
-                <td align="center">Bon Resep 2 <br> Suffix</td>
+                <td align="center">Bon Resep 1</td>
+                <td align="center">Suffix 1</td>
+                <td align="center">Bon Resep 2</td>
+                <td align="center">Suffix 2</td>
                 <td>Operator</td>
                 <td>Diperiksa Oleh</td>
                 <td>Cek Resep</td>
                 <td>Keterangan</td>
+                <td>Jumlah Gerobak</td>
+                <td>Proses</td>
+                <td>Creationdatetime</td>
             </tr>
         </thead>
         <tbody>
@@ -149,12 +154,17 @@
                     <td><?= TRIM($dt_ITXVIEWKK['SUBCODE02']).' '.TRIM($dt_ITXVIEWKK['SUBCODE03']); ?></td>
                     <td><?= $dt_ITXVIEWKK['ITEMDESCRIPTION']; ?></td>
                     <td><?= $dt_ITXVIEWKK['WARNA']; ?></td>
-                    <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1']; ?></td>
-                    <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2']; ?></td>
+                    <td align="center"><?= $row_bukaresep['noresep1']; ?></td>
+                    <td align="center"><?= $row_bukaresep['suffix1']; ?></td>
+                    <td align="center"><?= $row_bukaresep['noresep2']; ?></td>
+                    <td align="center"><?= $row_bukaresep['suffix2']; ?></td>
                     <td><?= $row_bukaresep['personil']; ?></td>
                     <td><?= $row_bukaresep['diperiksa_oleh']; ?></td>
                     <td><?= $row_bukaresep['cek_resep']; ?></td>
                     <td><?= $row_bukaresep['ket']; ?></td>
+                    <td><?= $row_bukaresep['jml_gerobak']; ?></td>
+                    <td><?= $row_bukaresep['proses']; ?></td>
+                    <td><?= $row_bukaresep['createdatetime']; ?></td>
                 </tr>
             <?php } ?>
         </tbody>

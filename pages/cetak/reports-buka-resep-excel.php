@@ -36,53 +36,8 @@
     }
 ?>
 <html>
-
-<head>
-  <title>:: Cetak Reports Buka Resep</title>
-  <link href="styles_cetak.css" rel="stylesheet" type="text/css">
-  <style>
-    input {
-      text-align: center;
-      border: hidden;
-    }
-
-    @media print {
-      ::-webkit-input-placeholder {
-        /* WebKit browsers */
-        color: transparent;
-      }
-
-      :-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        color: transparent;
-      }
-
-      ::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: transparent;
-      }
-
-      :-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: transparent;
-      }
-
-      .pagebreak {
-        page-break-before: always;
-      }
-
-      .header {
-        display: block
-      }
-
-      table thead {
-        display: table-header-group;
-      }
-    }
-  </style>
-</head>
 <body>
-    <table border="0" style="width:100%" class="table-list1">
+    <table>
         <thead>
             <!-- <tr>
                 <th rowspan="4" colspan="2"><img src="Indo.jpg" alt="" width="70" height="60"></th>
@@ -94,7 +49,7 @@
                 <th align="center" colspan="11" rowspan="2"> FW - 14 - DYE - 26 / 00</th>
             </tr>
             <tr></tr> -->
-            <tr valign="top">
+            <!-- <tr valign="top">
                 <td colspan="20">
                     <table width="100%" border="0" class="table-list1">
                         <thead>
@@ -110,7 +65,7 @@
                         <thead>
                     </table>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
                 <td style="width:3%"><div align="center">No.</div></td>
                 <td style="width:4%"><div align="center">No. Kartu Kerja</div></td>
@@ -120,12 +75,17 @@
                 <td style="width:5%">No. Item</td>
                 <td style="width:25%" align="center">Jenis Kain</td>
                 <td>Warna</td>
-                <td align="center">Bon Resep 1 <br> Suffix</td>
-                <td align="center">Bon Resep 2 <br> Suffix</td>
+                <td align="center">Bon Resep 1</td>
+                <td align="center">Suffix 1</td>
+                <td align="center">Bon Resep 2</td>
+                <td align="center">Suffix 2</td>
                 <td>Operator</td>
                 <td>Diperiksa Oleh</td>
                 <td>Cek Resep</td>
                 <td>Keterangan</td>
+                <td>Jumlah Gerobak</td>
+                <td>Proses</td>
+                <td>Creationdatetime</td>
             </tr>
         </thead>
         <tbody>
@@ -156,12 +116,17 @@
                     <td><?= TRIM($dt_ITXVIEWKK['SUBCODE02']).' '.TRIM($dt_ITXVIEWKK['SUBCODE03']); ?></td>
                     <td><?= $dt_ITXVIEWKK['ITEMDESCRIPTION']; ?></td>
                     <td><?= $dt_ITXVIEWKK['WARNA']; ?></td>
-                    <td align="center"><?= $row_bukaresep['noresep1'].'<br>'.$row_bukaresep['suffix1']; ?></td>
-                    <td align="center"><?= $row_bukaresep['noresep2'].'<br>'.$row_bukaresep['suffix2']; ?></td>
+                    <td align="center"><?= $row_bukaresep['noresep1']; ?></td>
+                    <td align="center"><?= $row_bukaresep['suffix1']; ?></td>
+                    <td align="center"><?= $row_bukaresep['noresep2']; ?></td>
+                    <td align="center"><?= $row_bukaresep['suffix2']; ?></td>
                     <td><?= $row_bukaresep['personil']; ?></td>
                     <td><?= $row_bukaresep['diperiksa_oleh']; ?></td>
                     <td><?= $row_bukaresep['cek_resep']; ?></td>
                     <td><?= $row_bukaresep['ket']; ?></td>
+                    <td><?= $row_bukaresep['jml_gerobak']; ?></td>
+                    <td><?= $row_bukaresep['proses']; ?></td>
+                    <td><?= $row_bukaresep['createdatetime']; ?></td>
                 </tr>
             <?php } ?>
         </tbody>
@@ -169,40 +134,6 @@
             <tr>
             </tr>
         </tfoot>
-    </table>
-    <table border="0" style="width:100%" class="table-list1">
-        <tbody>
-            <tr>
-                <td colspan="4"></td>
-                <td colspan="3" align="center">Dibuat Oleh</td>
-                <td colspan="3" align="center">Diperiksa Oleh</td>
-                <td colspan="4" align="center">Diketahui Oleh</td>
-            </tr>
-            <tr>
-                <td colspan="4">Nama</td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-            </tr>
-            <tr>
-                <td colspan="4">Jabatan</td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="Ketik disini" size="33" maxlength="30"></td>
-            </tr>
-            <tr>
-                <td colspan="4">Tanggal</td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
-                <td colspan="3" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
-                <td colspan="4" align="center"><input name=nama type=text placeholder="dd-mm-yyyy" size="33" maxlength="30"></td>
-            </tr>
-            <tr>
-                <td colspan="4" valign="top">Tanda Tangan</td>
-                <td colspan="3"><br><br><br></td>
-                <td colspan="3"><br><br><br></td>
-                <td colspan="4"><br><br><br></td>
-            </tr>
-        </tbody>
     </table>
 </body>
 </html>
