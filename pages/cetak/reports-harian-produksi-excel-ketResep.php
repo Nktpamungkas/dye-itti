@@ -397,10 +397,13 @@
         <td><?php echo $rowd['blower']; ?></td>
         <td><?php echo $rowd['air_awal']; ?></td>
         <td><?php echo $rowd['air_akhir']; ?></td>
-        <td><?php if ($rowd['air_akhir'] != "") {
+        <td>
+          <?php 
+            if ($rowd['air_akhir']) {
               echo $rowd['air_akhir'] - $rowd['air_awal'];
-            } else {
-            } ?></td>
+            } 
+          ?>
+        </td>
         <td><?php echo $rowd['target']; ?></td>
         <td><?php echo $rowd['gerobak']; ?></td>
         <td><?php echo $rowd['jns_gerobak']; ?></td>
