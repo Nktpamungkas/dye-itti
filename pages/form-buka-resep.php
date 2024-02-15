@@ -365,6 +365,7 @@
 					<div class="col-sm-2">
 						<select name="jml_gerobak" class="form-control" required>
 							<option value="" disabled selected>Pilih</option>
+							<option value="0">0</option>
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
