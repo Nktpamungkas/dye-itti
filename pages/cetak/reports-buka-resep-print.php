@@ -121,6 +121,7 @@
                 <td>Diperiksa Oleh</td>
                 <td>Cek Resep</td>
                 <td>Keterangan</td>
+                <td>Qty Order</td>
                 <td>Jumlah Gerobak</td>
                 <td>Proses</td>
                 <td>Creationdatetime</td>
@@ -144,6 +145,18 @@
                     $sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
                                                                 WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' AND CODE = '$dt_ITXVIEWKK[PROJECTCODE]'");
                     $dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
+
+                    $sql_qtyorder   = db2_exec($conn2, "SELECT DISTINCT
+                                                            GROUPSTEPNUMBER,
+                                                            INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
+                                                            INITIALUSERSECONDARYQUANTITY AS QTY_ORDER_YARD
+                                                        FROM 
+                                                            VIEWPRODUCTIONDEMANDSTEP 
+                                                        WHERE 
+                                                            PRODUCTIONORDERCODE = '$row_bukaresep[nokk]'
+                                                        ORDER BY
+                                                            GROUPSTEPNUMBER ASC LIMIT 1");
+                    $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
                 ?>
                 <tr>
                     <td><?= $no++; ?></td>
@@ -162,6 +175,7 @@
                     <td><?= $row_bukaresep['diperiksa_oleh']; ?></td>
                     <td><?= $row_bukaresep['cek_resep']; ?></td>
                     <td><?= $row_bukaresep['ket']; ?></td>
+                    <td><?= number_format($dt_qtyorder['QTY_ORDER'], 2); ?></td>
                     <td><?= $row_bukaresep['jml_gerobak']; ?></td>
                     <td><?= $row_bukaresep['proses']; ?></td>
                     <td><?= $row_bukaresep['createdatetime']; ?></td>
