@@ -468,6 +468,9 @@ desired effect
               <li class="<?php if ($_GET['p'] == "lap-total-point") {
                             echo "active";
                           } ?>"><a href="?p=lap-total-point"><i class="fa fa-columns text-aqua"></i> <span>Lap Total Point</span></a></li>
+              <li class="<?php if ($_GET['p'] == "lap-overtime") {
+                            echo "active";
+                          } ?>"><a href="?p=lap-overtime"><i class="fa fa-columns text-aqua"></i> <span>Lap Over Time</span></a></li>
             </ul>
           </li>
           <?php if ($_SESSION['lvl_id10'] != "4") {  ?>
