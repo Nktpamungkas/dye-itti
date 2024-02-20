@@ -154,9 +154,6 @@
                                                 SUBSTR(p.SUFFIXCODE, 1, 2) = 'TC')
                                                 AND p.PRODUCTIONORDERCODE IN ($value_prod_order)
                                                 AND NOT p.PRODRESERVATIONLINKGROUPCODE IS NULL
-                                                -- AND NOT w.WHITENESS IS NULL
-                                                -- AND NOT y.YELLOWNESS IS NULL 
-                                                -- AND NOT t.TINT IS NULL
                                               ORDER BY
                                                 p.PRODUCTIONORDERCODE, p.GROUPLINE ASC");
         $no = 1;
