@@ -913,7 +913,7 @@
 				</div>
 				<div class="form-group">
 					<label for="point_proses" class="col-sm-3 control-label">Point Proses</label>
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<select name="point_proses" class="form-control" id="point_proses" required <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
 							<?php
@@ -923,6 +923,10 @@
 								<option value="<?php echo $rK['proses'] . " #" . $rK['point']; ?>" <?php if($row_hasilcelup['point'] == $rK['point'] && $row_hasilcelup['proses_point'] == $rK['proses']) {echo "SELECTED";} ?>><?php echo $rK['proses']; ?></option>
 							<?php } ?>
 						</select>
+					</div>
+					<label for="point_proses" class="col-sm-1 control-label">Point</label>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="point2" required>
 					</div>
 				</div>
 				<div class="form-group" hidden="">
@@ -1549,7 +1553,8 @@ if ($_POST['save'] == "save") {
 							tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "',
 							arah_warna='" . $_POST['arah_warna'] . "',
 							status_warna='" . $_POST['status_warna'] . "',
-							leader='" . $_POST['leader'] . "'") or die(mysqli_error($con));
+							leader='" . $_POST['leader'] . "',
+							point2='" . $_POST['point2'] . "'") or die(mysqli_error($con));
 
 	if ($sqlData) {
 		/* awal form potong */

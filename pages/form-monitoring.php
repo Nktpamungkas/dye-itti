@@ -75,6 +75,7 @@
 	}
 ?>
 <?php
+	log()
 	$sqlc = "select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where ID_NO='" . $rcek['no_resep'] . "' order by createtime Desc";
 	//--lot
 	$qryc = sqlsrv_query($conn1, $sqlc, array(), array("Scrollable" => "static"));
@@ -305,11 +306,13 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="no_po" class="col-sm-3 control-label">No KK</label>
-					<div class="col-sm-4">
+					<div class="col-sm-3">\
 						<input name="nokk" type="text" class="form-control" id="nokk" onchange="window.location='?p=Form-Monitoring&nokk='+this.value" value="<?php echo $_GET['nokk']; ?>" placeholder="No KK" required>
-					</div>
-					<div class="col-sm-4">
 						<input name="id" type="hidden" class="form-control" id="id" value="<?php echo $rcek['id']; ?>" placeholder="ID">
+					</div>
+					<label for="jammasukkain" class="col-sm-2 control-label">Jam Masuk Kain</label>
+					<div class="col-sm-3">
+						<input name="jammasukkain" type="datetime-local" class="form-control" id="jammasukkain">
 					</div>
 				</div>
 				<div class="form-group">
@@ -1247,6 +1250,7 @@ if ($_POST['save'] == "save") {
 		kategori_resep = '$_POST[kategori_resep]',
 		kasih_resep = '$_POST[kasih_resep]',
 		acc_resep = '$_POST[acc_resep]',
+		jammasukkain = '$_POST[jammasukkain]',
 		tgl_update=now()");
 
 	if ($sqlData) {
