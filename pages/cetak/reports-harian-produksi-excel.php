@@ -139,7 +139,7 @@ $shft = $_GET['shft'];
       $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
     }
     $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
-                                      LEFT JOIN
+                                      RIGHT JOIN
                                       (SELECT
                                       a.kd_stop,
                                       a.mulai_stop,
@@ -227,7 +227,8 @@ $shft = $_GET['shft'];
                                       c.operator,
                                       a.tambah_dyestuff,
                                       a.arah_warna,
-                                      a.status_warna
+                                      a.status_warna,
+                                      a.point2
                                     FROM
                                       tbl_schedule b
                                         LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -333,7 +334,7 @@ $shft = $_GET['shft'];
         <td><?php if ($rowd['lama_proses'] != "") {
               echo $rowd['jam'] . ":" . $rowd['menit'];
             } ?></td>
-        <td><?php echo $rowd['point']; ?></td>
+        <td><?php echo $rowd['point2']; ?></td>
         <td><?php if ($rowd['langganan'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
               echo $rowSM['tgl_masuk'];
             } else {
