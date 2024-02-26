@@ -290,9 +290,14 @@
                                                 FROM 
                                                   PRODUCTIONRESERVATION p 
                                                 LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
+                                                LEFT JOIN VIEWPRODUCTIONDEMANDSTEP v ON v.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND v.GROUPSTEPNUMBER = p.GROUPSTEPNUMBER
                                                 WHERE	
                                                   p.PRODUCTIONORDERCODE = '$rowd[nokk]'  
-                                                  AND p.STEPNUMBER  IN ($row_rsv_link_group[STEPNUMBER])
+                                                  AND 
+                                                  CASE 
+                                                    WHEN v.STEPTYPE = 3 THEN p.GROUPSTEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
+                                                    ELSE p.STEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
+                                                  END 
                                                   AND p.ITEMNATURE = 9
                                                   AND SUBSTR(p.SUBCODE01, 1,2) = 'SC' 
                                                 GROUP BY
@@ -332,7 +337,7 @@
         <td>'<?= $rowd['nokk']; ?></td>
         <td>'<?= $rowd['nodemand']; ?></td>
         <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td>
-        <td><?= $rowd['no_item']; ?></td>
+        <td><?= $rowd['no_hanger']; ?></td>
         <td><?= $dt_ITXVIEWKK['COLORGROUP']; ?></td>
         <td><?= $dt_ITXVIEWKK['SUBCODE01']; ?></td>
         <td>
