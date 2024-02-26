@@ -52,9 +52,9 @@
         <th bgcolor="#99FF99">YELLOWNESS</th>
         <th bgcolor="#99FF99">LR</th>
         <th bgcolor="#99FF99">SUFFIX</th>
-        <th bgcolor="#99FF99">DESCRIPTION</th>
-        <th bgcolor="#99FF99">KONDISI PROSES</th>
-        <th bgcolor="#99FF99">RECIPE COMPONENT</th>
+        <th bgcolor="#99FF99">LONG DESCRIPTION</th>
+        <th bgcolor="#99FF99">SHORT DESCRIPTION</th>
+        <th bgcolor="#99FF99">SEARCH DESCRIPTION</th>
       </tr>
     </thead>
     <tbody>
@@ -176,31 +176,81 @@
           $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$rowd[nokk]' LIMIT 1");
           $dt_ITXVIEWKK	  = db2_fetch_assoc($sql_ITXVIEWKK);
 
-          $q_rsv_link_group   = db2_exec($conn2, "SELECT
-                                                    q2.LINE,
-                                                    q.PRODUCTIONORDERCODE,
-                                                    LISTAGG('''' || a.valueint || '''', ',') AS STEPNUMBER,
-                                                    LISTAGG(TRIM(q.OPERATIONCODE), ', ') AS OPERATIONCODE
+          $q_uploadspectro    = mysqli_query($con_nowprd, "SELECT * FROM `upload_spectro` WHERE SUBSTR(batch_name, 1,8) = '$rowd[nokk]'");
+          $data_uploadspectro = mysqli_fetch_assoc($q_uploadspectro);
+
+          if(!empty($data_uploadspectro)){
+            $q_rsv_link_group   = db2_exec($conn2, "SELECT
+                                                      q2.LINE,
+                                                      q.PRODUCTIONORDERCODE,
+                                                      LISTAGG('''' || a.valueint || '''', ',') AS STEPNUMBER,
+                                                      LISTAGG(TRIM(q.OPERATIONCODE), ', ') AS OPERATIONCODE
+                                                    FROM
+                                                      QUALITYDOCUMENT q
+                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
+                                                    LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE
+                                                                  AND (TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
+                                                                    OR TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
+                                                                    OR TRIM(q2.CHARACTERISTICCODE) = 'TINT')
+                                                                  AND NOT q2.VALUEQUANTITY = 0
+                                                    WHERE
+                                                      q.PRODUCTIONORDERCODE = '$rowd[nokk]'
+                                                      AND q2.LINE = 11
+                                                    GROUP BY
+                                                      q2.LINE,
+                                                      q.PRODUCTIONORDERCODE");
+            $row_rsv_link_group = db2_fetch_assoc($q_rsv_link_group);
+
+            $q_whiteness    = db2_exec($conn2, "SELECT
+                                                      q2.LINE,
+                                                      q.PRODUCTIONORDERCODE,
+                                                      LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS WHITENESS,
+                                                      q2.CHARACTERISTICCODE	
                                                   FROM
-                                                    QUALITYDOCUMENT q
+                                                      QUALITYDOCUMENT q  
                                                   LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
-                                                  LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE
+                                                  LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE 
                                                                 AND (TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
                                                                   OR TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
                                                                   OR TRIM(q2.CHARACTERISTICCODE) = 'TINT')
-                                                                AND NOT q2.VALUEQUANTITY = 0
+                                                                AND NOT q2.VALUEQUANTITY = 0						
                                                   WHERE
-                                                    q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                                    AND q2.LINE = 11
+                                                      q.PRODUCTIONORDERCODE = '$rowd[nokk]'
+                                                      AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
+                                                      AND TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
                                                   GROUP BY
-                                                    q2.LINE,
-                                                    q.PRODUCTIONORDERCODE");
-          $row_rsv_link_group = db2_fetch_assoc($q_rsv_link_group);
-
-          $q_whiteness    = db2_exec($conn2, "SELECT
+                                                      q2.LINE,
+                                                      q.PRODUCTIONORDERCODE,
+                                                      q2.CHARACTERISTICCODE");
+            $row_whiteness  = db2_fetch_assoc($q_whiteness);
+            
+            $q_tint    = db2_exec($conn2, "SELECT
+                                              q2.LINE,
+                                              q.PRODUCTIONORDERCODE,
+                                              LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS TINT,
+                                              q2.CHARACTERISTICCODE	
+                                          FROM
+                                              QUALITYDOCUMENT q  
+                                          LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
+                                          LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE 
+                                                        AND (TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
+                                                          OR TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
+                                                          OR TRIM(q2.CHARACTERISTICCODE) = 'TINT')
+                                                        AND NOT q2.VALUEQUANTITY = 0						
+                                          WHERE
+                                              q.PRODUCTIONORDERCODE = '$rowd[nokk]'
+                                              AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
+                                              AND TRIM(q2.CHARACTERISTICCODE) = 'TINT'
+                                          GROUP BY
+                                              q2.LINE,
+                                              q.PRODUCTIONORDERCODE,
+                                              q2.CHARACTERISTICCODE");
+            $row_tint  = db2_fetch_assoc($q_tint);
+            
+            $q_yellowness    = db2_exec($conn2, "SELECT
                                                     q2.LINE,
                                                     q.PRODUCTIONORDERCODE,
-                                                    LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS WHITENESS,
+                                                    LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS YELLOWNESS,
                                                     q2.CHARACTERISTICCODE	
                                                 FROM
                                                     QUALITYDOCUMENT q  
@@ -213,74 +263,69 @@
                                                 WHERE
                                                     q.PRODUCTIONORDERCODE = '$rowd[nokk]'
                                                     AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
-                                                    AND TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
+                                                    AND TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
                                                 GROUP BY
                                                     q2.LINE,
                                                     q.PRODUCTIONORDERCODE,
                                                     q2.CHARACTERISTICCODE");
-          $row_whiteness  = db2_fetch_assoc($q_whiteness);
-          
-          $q_tint    = db2_exec($conn2, "SELECT
-                                            q2.LINE,
-                                            q.PRODUCTIONORDERCODE,
-                                            LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS TINT,
-                                            q2.CHARACTERISTICCODE	
-                                        FROM
-                                            QUALITYDOCUMENT q  
-                                        LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
-                                        LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE 
-                                                      AND (TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
-                                                        OR TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
-                                                        OR TRIM(q2.CHARACTERISTICCODE) = 'TINT')
-                                                      AND NOT q2.VALUEQUANTITY = 0						
-                                        WHERE
-                                            q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                            AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
-                                            AND TRIM(q2.CHARACTERISTICCODE) = 'TINT'
-                                        GROUP BY
-                                            q2.LINE,
-                                            q.PRODUCTIONORDERCODE,
-                                            q2.CHARACTERISTICCODE");
-          $row_tint  = db2_fetch_assoc($q_tint);
-          
-          $q_yellowness    = db2_exec($conn2, "SELECT
-                                            q2.LINE,
-                                            q.PRODUCTIONORDERCODE,
-                                            LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS YELLOWNESS,
-                                            q2.CHARACTERISTICCODE	
-                                        FROM
-                                            QUALITYDOCUMENT q  
-                                        LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
-                                        LEFT JOIN QUALITYDOCLINE q2 ON q2.QUALITYDOCUMENTHEADERLINE = q.HEADERLINE 
-                                                      AND (TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
-                                                        OR TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
-                                                        OR TRIM(q2.CHARACTERISTICCODE) = 'TINT')
-                                                      AND NOT q2.VALUEQUANTITY = 0						
-                                        WHERE
-                                            q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                            AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
-                                            AND TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
-                                        GROUP BY
-                                            q2.LINE,
-                                            q.PRODUCTIONORDERCODE,
-                                            q2.CHARACTERISTICCODE");
-          $row_yellowness  = db2_fetch_assoc($q_yellowness);
+            $row_yellowness  = db2_fetch_assoc($q_yellowness);
 
-          if($row_rsv_link_group['STEPNUMBER']){
-            $q_lr   = db2_exec($conn2, "SELECT 
-                                        DISTINCT 
-                                        PICKUPQUANTITY AS LR
-                                      FROM 
-                                        PRODUCTIONRESERVATION
-                                      WHERE	
-                                        PRODUCTIONORDERCODE = '$rowd[nokk]' 
-                                        AND STEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
-                                        AND ITEMNATURE = 9
-                                      GROUP BY
-                                        PICKUPQUANTITY");
-            $row_lr = db2_fetch_assoc($q_lr);
+            if($row_rsv_link_group['STEPNUMBER']){
+                $q_lr   = db2_exec($conn2, "SELECT 
+                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || DECIMAL(LR, 5,2), ', ') AS LR,
+                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SUBCODE01) || '-' || TRIM(SUFFIXCODE), ', ') AS SUFFIX,
+                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(LONGDESCRIPTION), ', ') AS LONGDESCRIPTION,
+                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SHORTDESCRIPTION), ', ') AS SHORTDESCRIPTION,
+                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SEARCHDESCRIPTION), ', ') AS SEARCHDESCRIPTION
+                                              FROM (
+                                                SELECT 
+                                                  DISTINCT 
+                                                  p.PRODRESERVATIONLINKGROUPCODE,
+                                                  p.PICKUPQUANTITY AS LR,
+                                                  p.SUBCODE01,
+                                                  p.SUFFIXCODE,
+                                                  r.LONGDESCRIPTION,
+                                                  r.SHORTDESCRIPTION,
+                                                  r.SEARCHDESCRIPTION
+                                                FROM 
+                                                  PRODUCTIONRESERVATION p 
+                                                LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
+                                                WHERE	
+                                                  p.PRODUCTIONORDERCODE = '$rowd[nokk]'  
+                                                  AND p.STEPNUMBER  IN ($row_rsv_link_group[STEPNUMBER])
+                                                  AND p.ITEMNATURE = 9
+                                                  AND SUBSTR(p.SUBCODE01, 1,2) = 'SC' 
+                                                GROUP BY
+                                                  p.PRODRESERVATIONLINKGROUPCODE,
+                                                  p.PICKUPQUANTITY,
+                                                  p.SUBCODE01,
+                                                  p.SUFFIXCODE,
+                                                  r.LONGDESCRIPTION,
+                                                  r.SHORTDESCRIPTION,
+                                                  r.SEARCHDESCRIPTION)");
+              $row_lr = db2_fetch_assoc($q_lr);
+            }
+
+            $prd_rsv_link_group = $row_rsv_link_group['OPERATIONCODE'];
+            $whiteness          = $row_whiteness['WHITENESS'];
+            $tint               = $row_tint['TINT'];
+            $yellowness         = $row_yellowness['YELLOWNESS'];
+            $LR                 = $row_lr['LR'];
+            $SUFFIX             = $row_lr['SUFFIX'];
+            $LONGDESCRIPTION    = $row_lr['LONGDESCRIPTION'];
+            $SHORTDESCRIPTION   = $row_lr['SHORTDESCRIPTION'];
+            $SEARCHDESCRIPTION  = $row_lr['SEARCHDESCRIPTION'];
+          }else{
+            $prd_rsv_link_group = '';
+            $whiteness          = '';
+            $tint               = '';
+            $yellowness         = '';
+            $LR                 = '';
+            $SUFFIX             = '';
+            $LONGDESCRIPTION    = '';
+            $SHORTDESCRIPTION   = '';
+            $SEARCHDESCRIPTION  = '';
           }
-          
       ?>
       <tr valign="top">
         <td><?= $no++; ?></td>
@@ -304,15 +349,15 @@
         <td><?= $rowd['kapasitas']; ?></td>
         <td><?= $rowd['warna']; ?></td>
         <td><?= $rowd['tgl_in'].' '.$rowd['jam_in']; ?></td>
-        <td><?= $row_rsv_link_group['OPERATIONCODE']; ?></td>
-        <td><?= $row_whiteness['WHITENESS']; ?></td>
-        <td><?= $row_tint['TINT']; ?></td>
-        <td><?= $row_yellowness['YELLOWNESS']; ?></td>
-        <td><?= $row_lr['LR']; ?></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><?= $prd_rsv_link_group ?></td>
+        <td><?= $whiteness; ?></td>
+        <td><?= $tint; ?></td>
+        <td><?= $yellowness; ?></td>
+        <td><?= $LR; ?></td>
+        <td><?= $SUFFIX; ?></td>
+        <td><?= $LONGDESCRIPTION ?></td>
+        <td><?= $SHORTDESCRIPTION ?></td>
+        <td><?= $SEARCHDESCRIPTION ?></td>
       </tr>
     </tbody>
     <?php } ?>
