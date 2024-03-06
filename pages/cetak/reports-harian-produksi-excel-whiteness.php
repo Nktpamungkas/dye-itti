@@ -216,7 +216,7 @@
                                                                 AND NOT q2.VALUEQUANTITY = 0						
                                                   WHERE
                                                       q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                                      AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
+                                                      AND q2.LINE = 11
                                                       AND TRIM(q2.CHARACTERISTICCODE) = 'WHITENESS'
                                                   GROUP BY
                                                       q2.LINE,
@@ -239,7 +239,7 @@
                                                         AND NOT q2.VALUEQUANTITY = 0						
                                           WHERE
                                               q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                              AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
+                                              AND q2.LINE = 13
                                               AND TRIM(q2.CHARACTERISTICCODE) = 'TINT'
                                           GROUP BY
                                               q2.LINE,
@@ -262,7 +262,7 @@
                                                               AND NOT q2.VALUEQUANTITY = 0						
                                                 WHERE
                                                     q.PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                                    AND (q2.LINE = 11 OR q2.LINE = 12 OR q2.LINE = 13)
+                                                    AND q2.LINE = 12
                                                     AND TRIM(q2.CHARACTERISTICCODE) = 'YELLOWNESS'
                                                 GROUP BY
                                                     q2.LINE,

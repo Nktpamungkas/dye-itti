@@ -62,16 +62,7 @@ include"koneksi.php";
               <td align="left"><?php echo $rowd['warna'];?></td>
               <td><?php echo $rowd['proses'];?><br><i><?php echo $rowd['tgl_buat'];?></i><br><i class="btn btn-xs bg-hijau"><?php echo $rowd['operator'];?></i></td>
               <td align="left"><span class="label bg-abu"><?php echo $rowd['nokk'];?></span><br><?php echo $rowd['ket'];?></td>
-              <td align="center">
-                <div class="btn-group">
-                  <a href="#" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs btn-info stop_edit <?php if($_SESSION['lvl_id10']=="3"){ /*echo "disabled";*/ } ?>">
-                    <i class="fa fa-edit"></i> 
-                  </a>
-                  <a href="#" onclick="confirm_del('?p=mtr_hapus&id=<?php echo $rowd['idm'] ?>');" class="btn btn-xs btn-danger <?php if($_SESSION['lvl_id10']=="3" or $rCEk['idb']!=""){echo "disabled"; } ?>">
-                    <i class="fa fa-trash"></i> 
-                  </a>
-                </div>
-              </td>
+              <td align="center"><div class="btn-group"><a href="#" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs btn-info stop_edit <?php if($_SESSION['lvl_id10']=="3"){ /*echo "disabled";*/ } ?>"><i class="fa fa-edit"></i> </a><a href="#" onclick="confirm_del('?p=mtr_hapus&id=<?php echo $rowd['idm'] ?>');" class="btn btn-xs btn-danger <?php if($_SESSION['lvl_id10']=="3" or $rCEk['idb']!=""){echo "disabled"; } ?>"><i class="fa fa-trash"></i> </a></div></td>
             </tr>
             <?php
 						$no++;

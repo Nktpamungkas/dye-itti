@@ -31,45 +31,45 @@
 
 <body>
 	<?php
-		$data = mysqli_query($con, "SELECT
-											id,
-											GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
-											if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
-											if(COUNT(lot)>1,CONCAT('(',COUNT(lot),'kk',')'),'') as kk,
-											no_mesin,
-											no_urut,
-											nodemand,
-											buyer,
-											langganan,
-											no_order,
-											no_item,
-											no_hanger,
-											no_resep,
-											nokk,
-											jenis_kain,
-											warna,
-											no_warna,
-											sum(rol) as rol,
-											sum(bruto) as bruto,
-											proses,
-											ket_status,
-											ket_kain,
-											tgl_delivery,
-											suffix,
-											suffix2,
-											high_temp
-										FROM
-											tbl_schedule 
-										WHERE
-											`status` = 'antri mesin' or `status` = 'sedang jalan' 
-										GROUP BY
-											no_mesin,
-											no_urut 
-										ORDER BY
-											no_mesin ASC,no_urut ASC");
-		$no = 1;
-		$n = 1;
-		$c = 0;
+	$data = mysqli_query($con, "SELECT
+										id,
+										GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
+										if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
+										if(COUNT(lot)>1,CONCAT('(',COUNT(lot),'kk',')'),'') as kk,
+										no_mesin,
+										no_urut,
+										nodemand,
+										buyer,
+										langganan,
+										no_order,
+										no_item,
+										no_hanger,
+										no_resep,
+										nokk,
+										jenis_kain,
+										warna,
+										no_warna,
+										sum(rol) as rol,
+										sum(bruto) as bruto,
+										proses,
+										ket_status,
+										ket_kain,
+										tgl_delivery,
+										suffix,
+										suffix2,
+										high_temp
+									FROM
+										tbl_schedule 
+									WHERE
+										`status` = 'antri mesin' or `status` = 'sedang jalan' 
+									GROUP BY
+										no_mesin,
+										no_urut 
+									ORDER BY
+										no_mesin ASC,no_urut ASC");
+	$no = 1;
+	$n = 1;
+	$c = 0;
 	?>
 	<div class="row">
 		<div class="col-xs-12">

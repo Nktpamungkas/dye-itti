@@ -16,30 +16,30 @@ $rTgl=mysqli_fetch_array($qTgl);
 <title>:: Cetak Reports Produksi Dyeing</title>
 <link href="styles_cetak.css" rel="stylesheet" type="text/css">
 <style>
-  input{
-  text-align:center;
-  border:hidden;
+input{
+text-align:center;
+border:hidden;
+}
+@media print {
+  ::-webkit-input-placeholder { /* WebKit browsers */
+      color: transparent;
   }
-  @media print {
-    ::-webkit-input-placeholder { /* WebKit browsers */
-        color: transparent;
-    }
-    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-        color: transparent;
-    }
-    ::-moz-placeholder { /* Mozilla Firefox 19+ */
-        color: transparent;
-    }
-    :-ms-input-placeholder { /* Internet Explorer 10+ */
-        color: transparent;
-    }
-    .pagebreak { page-break-before:always; }
-    .header {display:block}
-    table thead 
-    {
-      display: table-header-group;
-    }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: transparent;
   }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: transparent;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+      color: transparent;
+  }
+  .pagebreak { page-break-before:always; }
+  .header {display:block}
+  table thead 
+   {
+    display: table-header-group;
+   }
+}
 </style>
 </head>
 <body>
@@ -102,34 +102,34 @@ $rTgl=mysqli_fetch_array($qTgl);
 	$Akhir=$_GET['akhir'];	
 	if($_GET['shft']=="ALL"){$shft=" ";}else{$shft=" a.g_shift='$_GET[shft]' AND ";}
 		$sql=mysqli_query($con,"SELECT
-                            a.*,
-                            b.buyer,
-                            b.langganan,
-                            b.no_order,
-                            b.jenis_kain,
-                            b.no_mesin,
-                            b.warna,
-                            b.lot,
-                            c.rol,
-                            c.bruto,
-                            b.ket_status,
-                            c.tgl_buat as tgl_in,
-                            a.tgl_buat as tgl_out,
-                            a.kd_stop,
-                            a.mulai_stop,
-                            a.selesai_stop,
-                            a.ket,
-                            b.proses 
-                          FROM
-                            tbl_hasilcelup a
-                            LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
-                            LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
-                          WHERE
-                            $shft 
-                            DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
-                            AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
-                          ORDER BY
-                            b.no_mesin ASC");
+	a.*,
+	b.buyer,
+	b.langganan,
+	b.no_order,
+	b.jenis_kain,
+	b.no_mesin,
+	b.warna,
+	b.lot,
+	c.rol,
+	c.bruto,
+	b.ket_status,
+	c.tgl_buat as tgl_in,
+	a.tgl_buat as tgl_out,
+	a.kd_stop,
+	a.mulai_stop,
+	a.selesai_stop,
+	a.ket,
+	b.proses 
+FROM
+	tbl_hasilcelup a
+	LEFT JOIN tbl_montemp c ON a.id_montemp=c.id
+	LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
+WHERE
+	$shft 
+	DATE_FORMAT( a.tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir'
+	AND a.`status`='OK' AND (b.proses='Celup Greige' OR b.proses='Cuci Misty' OR b.proses='Cuci Yarn Dye (Y/D)')
+ORDER BY
+	b.no_mesin ASC");
   
    $no=1;
    

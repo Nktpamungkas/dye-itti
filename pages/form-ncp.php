@@ -12,15 +12,15 @@ $cekNM=mysqli_num_rows($sqlCekNM);
 $rcekNM=mysqli_fetch_array($sqlCekNM);
 
 $sqlCek=mysqli_query($con,"SELECT
-								a.*,b.id as idm 
-							FROM
-								tbl_schedule a
-							LEFT JOIN tbl_montemp b ON a.id=b.id_schedule	
-							WHERE
-								a.nokk = '$nokk' and not (a.no_mesin='CB11' or a.no_mesin='WS11')
-							ORDER BY
-								a.id DESC 
-								LIMIT 1");
+	a.*,b.id as idm 
+FROM
+	tbl_schedule a
+LEFT JOIN tbl_montemp b ON a.id=b.id_schedule	
+WHERE
+	a.nokk = '$nokk' and not (a.no_mesin='CB11' or a.no_mesin='WS11')
+ORDER BY
+	a.id DESC 
+	LIMIT 1");
 $cek=mysqli_num_rows($sqlCek);
 $rcek=mysqli_fetch_array($sqlCek);
 $sqlCek1=mysqli_query($con,"SELECT
@@ -139,16 +139,16 @@ $tglBuat	= isset($_POST['tglbuat']) ? $_POST['tglbuat'] : '';
                   <div class="col-sm-4">
                     <input name="no_order" type="text" required class="form-control" id="no_order" placeholder="No Order" 
                     value="<?php 
-								if($cek>0){
-								echo $rcek['no_order'];}
-									else{
-										if($r['NoOrder']!=""){
-											echo $r['NoOrder'];}
-										else if($nokk!="" and $_GET['manual']=="ya"){
-											echo $cekNCP1['no_order'];}
-										else if($nokk!=""){
-											echo $cekM['no_order'];}
-								} ?>" readonly="readonly">
+					if($cek>0){
+					echo $rcek['no_order'];}
+						   else{
+							   if($r['NoOrder']!=""){
+							   	echo $r['NoOrder'];}
+							   else if($nokk!="" and $_GET['manual']=="ya"){
+								echo $cekNCP1['no_order'];}
+						   	   else if($nokk!=""){
+								echo $cekM['no_order'];}
+					} ?>" readonly="readonly">
                   </div>				   
         </div>  
 		<div class="form-group">

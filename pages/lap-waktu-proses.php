@@ -94,6 +94,7 @@ include "koneksi.php";
           <h3 class="box-title">Data Produksi Waktu Proses</h3><br>
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $_POST['awal'] . " to " . $_POST['akhir']; ?></b>
             <div class="pull-right">
+              <a href="pages/cetak/reports-waktu-proses-print.php?&awal=<?php echo $Awal; ?>&akhir=<?php echo $Akhir; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary " target="_blank" data-toggle="tooltip" data-html="true" title="Produksi Waktu Proses Excel"><i class="fa fa-file-excel-o"></i> Print</a>
               <a href="pages/cetak/reports-waktu-proses-excel.php?&awal=<?php echo $Awal; ?>&akhir=<?php echo $Akhir; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Produksi Waktu Proses Excel"><i class="fa fa-file-excel-o"></i> Cetak</a>
             </div>
           <?php } ?>
