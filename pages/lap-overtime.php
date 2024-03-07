@@ -32,6 +32,7 @@
                                             <th width="26"><div align="center">Prod. Order</div></th>
                                             <th width="26"><div align="center">Prod. Demand</div></th>
                                             <th width="165"><div align="center">Pelanggan</div></th>
+                                            <th width="165"><div align="center">Buyer</div></th>
                                             <th width="121"><div align="center">No. Order</div></th>
                                             <th width="121"><div align="center">No. Item</div></th>
                                             <th width="125"><div align="center">Jenis Kain</div></th>
@@ -88,7 +89,8 @@
                                             <td align="center"><?php echo $row_detailkk['no_mesin']; ?></a></td>
                                             <td align="center"><?php echo $row_detailkk['nokk']; ?></td>
                                             <td align="center"><?php echo $row_detailkk['nodemand']; ?></td>
-                                            <td><?php echo $row_detailkk['langganan'] . "/" . $row_detailkk['buyer']; ?></td>
+                                            <td><?php echo $row_detailkk['langganan']; ?></td>
+                                            <td><?php echo $row_detailkk['buyer']; ?></td>
                                             <td align="center"><?php echo $row_detailkk['no_order']; ?></td>
                                             <td align="center"><?php echo $row_detailkk['no_hanger']; ?></td>
                                             <td><?php echo $row_detailkk['jenis_kain']; ?></td>
