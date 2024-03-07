@@ -15,7 +15,16 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<a href="?p=Form-Matching-Dyeing" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
+                    <div class="col-sm-2">
+                        <a href="?p=Form-Matching-Dyeing" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambaha</a>
+                    </div>
+                    <div class="col-sm-4">
+						<form action="" method="POST">
+							<input type="date" name="tgl1" class="input-sm" value="<?= $tgl1; ?>"> S/D
+							<input type="date" name="tgl2" class="input-sm" value="<?= $tgl2; ?>">
+							<button type="submit" class="btn btn-primary btn-sm" name="sort" ><i class="fa fa-search"></i> Sort</button>
+						</form>
+					</div>
 				</div>
 				<div class="box-body">
 					<table id="example1" class="table table-bordered table-hover table-striped" width="100%">
@@ -38,7 +47,15 @@
 						</thead>
 						<tbody>
                             <?php
-                                $q_matching_dye    = mysqli_query($con, "SELECT * FROM tbl_matching_dyeing ORDER BY id DESC");
+                                $tgl1	= $_POST['tgl1'];
+                                $tgl2	= $_POST['tgl2'];
+                        
+                                if($tgl1 && $tgl2){
+                                    $_sortTgl = "DATE_FORMAT( SUBSTR(createdatetime, 1,10), '%Y-%m-%d' ) BETWEEN '$tgl1' AND '$tgl2'";
+                                }else{
+                                    $_sortTgl = "SUBSTR(createdatetime, 1,10) BETWEEN DATE_SUB(SUBSTR(NOW(), 1,10), INTERVAL 1 DAY) AND SUBSTR(NOW(), 1,10)";
+                                }
+                                $q_matching_dye    = mysqli_query($con, "SELECT * FROM tbl_matching_dyeing WHERE $_sortTgl ORDER BY id DESC");
                                 $no = 1;
                             ?>
                             <?php while ($row_matching_dye = mysqli_fetch_array($q_matching_dye)) { ?>
