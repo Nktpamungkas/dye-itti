@@ -96,7 +96,7 @@
                                 <td width="94%" rowspan="4">
                                     <div align="center">
                                         <h2>FORM LAPORAN HARIAN BUKA BON RESEP</h2>
-                                        <p>FW - 14 - DYE - 26 / 00</p>
+                                        <p>FW - 14 - DYE - 25 / 00</p>
                                     </div>
                                 </td>
                             </tr>
