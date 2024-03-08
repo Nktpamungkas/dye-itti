@@ -113,6 +113,8 @@ $shft = $_GET['shft'];
       <th rowspan="2" bgcolor="#99FF99">Arah Warna</th>
       <th rowspan="2" bgcolor="#99FF99">Status Warna</th>
       <th rowspan="2" bgcolor="#99FF99">Keterangan Kartu Kerja</th>
+      <th rowspan="2" bgcolor="#99FF99">Schedule Proses</th>
+      <th rowspan="2" bgcolor="#99FF99">Analisa Waktu Tunggu</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -228,7 +230,8 @@ $shft = $_GET['shft'];
                                         a.tambah_dyestuff,
                                         a.arah_warna,
                                         a.status_warna,
-                                        a.point2
+                                        a.point2,
+                                        c.note_wt
                                       FROM
                                         tbl_schedule b
                                           LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -433,6 +436,7 @@ $shft = $_GET['shft'];
         <td><?= $rowd['status_warna']; ?></td>
         <td><?= $rowd['leader']; ?></td>
         <td><?= $rowd['ket_status']; ?></td>
+        <td><?= $rowd['note_wt']; ?></td>
       </tr>
     <?php
       $totrol += $rol;
