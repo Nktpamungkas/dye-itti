@@ -37,8 +37,23 @@ include("../koneksi.php");
         <tbody>
           <?php
 
-          $qry = mysqli_query($con, " SELECT *,IF(DATEDIFF(now(),tgl_delivery) > 0,'Urgent',
-IF(DATEDIFF(now(),tgl_delivery) > -4,'Potensi Delay','')) as `sts` FROM tbl_schedule a WHERE a.no_mesin='$_GET[id]' AND NOT `status` = 'selesai' ORDER BY a.no_urut ASC ");
+
+          $qry = mysqli_query($con, "SELECT *,
+                                          IF(DATEDIFF( now(), tgl_delivery ) > 0, 'Urgent',
+                                          IF( DATEDIFF( now(), tgl_delivery ) > - 4, 'Potensi Delay', '' )) AS `sts`,
+                                          CASE
+                                            WHEN b.tgl_stop IS NOT NULL AND b.tgl_mulai IS NULL THEN 'stop mesin'
+                                            ELSE a.status
+                                          END AS status_aktual,
+                                          b.ket_stopmesin
+                                        FROM
+                                          tbl_schedule a 
+                                        LEFT JOIN tbl_montemp b ON b.id_schedule = a.id
+                                        WHERE
+                                          a.no_mesin = '$_GET[id]' 
+                                          AND NOT a.`status` = 'selesai' 
+                                        ORDER BY
+                                          a.no_urut ASC ");
           $no = 1;
 
           $c = 0;
@@ -67,11 +82,20 @@ IF(DATEDIFF(now(),tgl_delivery) > -4,'Potensi Delay','')) as `sts` FROM tbl_sche
               <td>
                 <?php echo $rowd['tgl_delivery']; ?>
               </td>
-              <td bgcolor="<?php echo $bg; ?>"><?php echo $rowd['ket_status']; ?><br><span class="label <?php if ($rowd['status'] == "sedang jalan") {
-                                                                                                          echo "label-success";
-                                                                                                        } else {
-                                                                                                          echo "label-warning";
-                                                                                                        } ?>"><?php echo $rowd['status']; ?></span></td>
+              <td bgcolor="<?php echo $bg; ?>">
+                <?php echo $rowd['ket_status']; ?>
+                <br>
+                <span class="label <?php if ($rowd['status_aktual'] == "sedang jalan") {
+                                          echo "label-success";
+                                        } elseif ($rowd['status_aktual'] == "antri mesin") {
+                                          echo "label-primary";
+                                        } else{
+                                          echo "label-danger";
+                                        }?>">
+                  <?php echo $rowd['status_aktual']; ?>
+                </span>
+                <?php echo $rowd['ket_stopmesin']; ?>
+              </td>
               <td bgcolor="<?php if ($rowd['sts'] == "Potensi Delay") {
                               echo " orange";
                             } else if ($rowd['sts'] == "Urgent") {

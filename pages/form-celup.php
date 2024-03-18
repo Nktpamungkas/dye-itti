@@ -926,7 +926,7 @@
 					</div>
 					<label for="point_proses" class="col-sm-1 control-label">Point</label>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="point2" required>
+						<input type="text" class="form-control" name="point2" value="<?= $rcek['target']; ?>" readonly>
 					</div>
 				</div>
 				<div class="form-group" hidden="">

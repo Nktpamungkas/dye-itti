@@ -42,6 +42,8 @@ if ($Awal != "") {
       <th bgcolor="#99FF99">KETERANGAN</th>
       <th bgcolor="#99FF99">SUFFIX</th>
       <th bgcolor="#99FF99">SUFFIX 2</th>
+      <th bgcolor="#99FF99">NO KK</th>
+      <th bgcolor="#99FF99">NO DEMAND</th>
     </tr>
     <?php
     if ($awal != "") {
@@ -75,7 +77,8 @@ if ($Awal != "") {
                                   mc_from,
                                   suffix,
                                   suffix2,
-                                  no_hanger
+                                  no_hanger,
+                                  nodemand
                                 FROM
                                   tbl_schedule 
                                 WHERE
@@ -115,6 +118,8 @@ if ($Awal != "") {
           <?php echo $rowd['mc_from']; ?> </td>
         <td valign="top">'<?php echo $rowd['suffix']; ?></td>
         <td valign="top">'<?php echo $rowd['suffix2']; ?></td>
+        <td valign="top">'<?php echo $rowd['nokk']; ?></td>
+        <td valign="top">'<?php echo $rowd['nodemand']; ?></td>
       </tr>
     <?php
       $totrol += $rowd['rol'];

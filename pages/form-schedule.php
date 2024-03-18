@@ -1143,7 +1143,7 @@
                   </div>
 				</div>  
 				-->
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label for="target" class="col-md-3 control-label">Std Target</label>
 					<div class="col-md-3">
 						<div class="input-group">
@@ -1152,7 +1152,7 @@
 							<span class="help-block with-errors"></span>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<label for="personil" class="col-sm-3 control-label">Personil</label>
 					<div class="col-sm-5">
