@@ -39,7 +39,8 @@
                             $where = " ";
                             $where1 = " ";
                         } else {
-                            $where = "AND NOT a.no_urut='1'";
+                            // $where = "AND NOT a.no_urut='1'";
+                            $where = " ";
                             $where1 = " WHERE not no_urut='1' ";
                         }
 
@@ -56,21 +57,25 @@
                         $c = 0;
                         while ($rowd = mysqli_fetch_array($qry)) {
                             $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
-
                         ?>
                             <tr>
                                 <td>
-                                    <select name="no_urut[<?php echo $rowd['id']; ?>]" class="form-control">
-                                        <option value="">Pilih</option>
-                                        <?php
-                                            $sqlKap = mysqli_query($con, "SELECT no_urut FROM tbl_urut $where1 ORDER BY no_urut ASC");
-                                        ?>
-                                        <?php while ($rK = mysqli_fetch_array($sqlKap)) { ?>
-                                            <option value="<?php echo $rK['no_urut']; ?>" <?php if ($rK['no_urut'] == $rowd['no_urut']) {
-                                                                                                echo "SELECTED";
-                                                                                            } ?>><?php echo $rK['no_urut']; ?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <?php if($rowd['no_urut'] == '1') : ?>
+                                        <?= $rowd['no_urut']; ?>
+                                        <input type="hidden" class="form-control col-sm-2" value="<?= $rowd['no_urut']; ?>" name="no_urut[<?php echo $rowd['id']; ?>]" readonly>
+                                    <?php else : ?>
+                                        <select name="no_urut[<?php echo $rowd['id']; ?>]" class="form-control" >
+                                            <option value="">Pilih</option>
+                                            <?php
+                                                $sqlKap = mysqli_query($con, "SELECT no_urut FROM tbl_urut $where1 ORDER BY no_urut ASC");
+                                            ?>
+                                            <?php while ($rK = mysqli_fetch_array($sqlKap)) { ?>
+                                                <option value="<?php echo $rK['no_urut']; ?>" <?php if ($rK['no_urut'] == $rowd['no_urut']) {
+                                                                                                    echo "SELECTED";
+                                                                                                } ?>><?php echo $rK['no_urut']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <div class="col-md-12">
@@ -86,23 +91,30 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><?php echo $rowd['nokk']; ?><br><input type="hidden" id="personil" name="personil" value="<?php echo $_SESSION['nama10']; ?>" readonly></td>
-                                <td><?php echo $rowd['buyer']; ?></td>
-                                <td><?php echo $rowd['langganan']; ?></td>
-                                <td><?php echo $rowd['po']; ?></td>
-                                <td><?php echo $rowd['no_order']; ?></td>
-                                <td><?php echo $rowd['no_hanger']; ?></td>
-                                <td><?php echo $rowd['lot']; ?></td>
-                                <td><?php echo $rowd['warna']; ?></td>
-                                <td><?php echo $rowd['proses']; ?></td>
+                                <td>
+                                    <?php echo $rowd['nokk']; ?>
+                                    <br><input type="hidden" id="personil" name="personil" value="<?php echo $_SESSION['nama10']; ?>" readonly>
+                                </td>
+                                <td><?= $rowd['buyer']; ?></td>
+                                <td><?= $rowd['langganan']; ?></td>
+                                <td><?= $rowd['po']; ?></td>
+                                <td><?= $rowd['no_order']; ?></td>
+                                <td><?= $rowd['no_hanger']; ?></td>
+                                <td><?= $rowd['lot']; ?></td>
+                                <td><?= $rowd['warna']; ?></td>
+                                <td><?= $rowd['proses']; ?></td>
                                 <td>
                                     <?php echo $rowd['tgl_delivery']; ?>
                                 </td>
-                                <td bgcolor="<?php echo $bg; ?>"><?php echo $rowd['ket_status']; ?><br><span class="label <?php if ($rowd['status'] == "sedang jalan") {
-                                                                                                                                echo "label-success";
-                                                                                                                            } else {
-                                                                                                                                echo "label-warning";
-                                                                                                                            } ?>"><?php echo $rowd['status']; ?></span></td>
+                                <td bgcolor="<?= $bg; ?>">
+                                    <?php echo $rowd['ket_status']; ?>
+                                    <br>
+                                    <span class="label <?php if ($rowd['status'] == "sedang jalan") {
+                                                                                    echo "label-success";
+                                                                                } else {
+                                                                                    echo "label-warning";
+                                                                                } ?>"><?php echo $rowd['status']; ?></span>
+                                </td>
                                 <td bgcolor="<?php if ($rowd['sts'] == "Potensi Delay") {
                                                     echo " orange";
                                                 } else if ($rowd['sts'] == "Urgent") {

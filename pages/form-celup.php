@@ -1489,132 +1489,132 @@
 	</div>
 </div>
 <?php
-if ($_POST['save'] == "save") {
-	$ket = str_replace("'", "''", $_POST['ket']);
-	$analisa =	str_replace("'", "''", $_POST['analisa']);
-	$point = substr($_POST['point_proses'], (strpos($_POST['point_proses'], "#") + 1), 2);
-	$propoint = substr($_POST['point_proses'], 0, (strpos($_POST['point_proses'], "#") - 1));
-	$mulai = $_POST['mulaism'] . " " . $_POST['waktu_mulai'];
-	$selesai = $_POST['selesaism'] . " " . $_POST['waktu_stop'];
-	if ($_POST['kodesm'] != "") {
-		$jam_stop = " mulai_stop='$mulai', selesai_stop='$selesai', ";
-	} else {
-		$jam_stop = " ";
-	}
-	$sqlData = mysqli_query($con, "INSERT INTO tbl_hasilcelup SET
-							id_montemp='" . $_POST['id'] . "',
-							nokk='" . $_POST['nokk'] . "',
-							nodemand='" . $_POST['demand'] . "',
-							shift='" . $_POST['shift'] . "',
-							g_shift='" . $_POST['g_shift'] . "',
-							lama_proses='" . $_POST['lama_proses'] . "',
-							`status`='" . $_POST['sts'] . "',		
-							ph_cb='" . $_POST['ph_cb'] . "',
-							suhu_cb='" . $_POST['suhu_cb'] . "',
-							ph_poly='" . $_POST['ph_poly'] . "',
-							suhu_poly='" . $_POST['suhu_poly'] . "',
-							ph_cott='" . $_POST['ph_cott'] . "',
-							suhu_cott='" . $_POST['suhu_cott'] . "',
-							berat_jns='" . $_POST['berat_jns'] . "',
-							ph_naco='" . $_POST['ph_naco'] . "',
-							a_panas='" . $_POST['a_panas'] . "',
-							a_dingin='" . $_POST['a_dingin'] . "',
-							`point`='$point', 
-							proses_point='$propoint',
-							proses='" . $_POST['proses'] . "',
-							k_resep='" . $_POST['k_resep'] . "',
-							jml_topping='" . $_POST['jml_topping'] . "',
-							analisa='$analisa',
-							rcode='" . $_POST['rcode1'] . "',
-							operator_keluar='" . $_POST['operator'] . "',
-							operator_potong='" . $_POST['operator_potong'] . "',
-							acc_keluar='" . $_POST['acc_keluar'] . "',
-							tambah_obat='" . $_POST['tambah_obat'] . "',
-							tambah_obat1='" . $_POST['tambah_obat1'] . "',
-							tambah_obat2='" . $_POST['tambah_obat2'] . "',
-							tambah_obat3='" . $_POST['tambah_obat3'] . "',
-							tambah_obat4='" . $_POST['tambah_obat4'] . "',
-							tambah_obat5='" . $_POST['tambah_obat5'] . "',
-							tambah_obat6='" . $_POST['tambah_obat6'] . "',
-							kd_stop='" . $_POST['kodesm'] . "',
-							$jam_stop 
-							ket='$ket',
-							air_akhir='" . $_POST['air_akhir'] . "',
-							gerobak='" . $_POST['gerobak'] . "',
-							jns_gerobak='" . $_POST['jns_gerobak'] . "',
-							analisa_topping='" . $_POST['analisa_topping'] . "',
-							no_resep='" . $_POST['no_resep'] . "',
-							no_resep2='" . $_POST['no_resep2'] . "',
-							resep='" . $_POST['resep'] . "',
-							kategori_warna='" . $_POST['kategori_warna'] . "',
-							tgl_buat=now(),
-							tgl_update=now(),
-							status_resep='Belum Analisa',
-							tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "',
-							arah_warna='" . $_POST['arah_warna'] . "',
-							status_warna='" . $_POST['status_warna'] . "',
-							leader='" . $_POST['leader'] . "',
-							point2='" . $_POST['point2'] . "'") or die(mysqli_error($con));
+	if ($_POST['save'] == "save") {
+		$ket = str_replace("'", "''", $_POST['ket']);
+		$analisa =	str_replace("'", "''", $_POST['analisa']);
+		$point = substr($_POST['point_proses'], (strpos($_POST['point_proses'], "#") + 1), 2);
+		$propoint = substr($_POST['point_proses'], 0, (strpos($_POST['point_proses'], "#") - 1));
+		$mulai = $_POST['mulaism'] . " " . $_POST['waktu_mulai'];
+		$selesai = $_POST['selesaism'] . " " . $_POST['waktu_stop'];
+		if ($_POST['kodesm'] != "") {
+			$jam_stop = " mulai_stop='$mulai', selesai_stop='$selesai', ";
+		} else {
+			$jam_stop = " ";
+		}
+		$sqlData = mysqli_query($con, "INSERT INTO tbl_hasilcelup SET
+								id_montemp='" . $_POST['id'] . "',
+								nokk='" . $_POST['nokk'] . "',
+								nodemand='" . $_POST['demand'] . "',
+								shift='" . $_POST['shift'] . "',
+								g_shift='" . $_POST['g_shift'] . "',
+								lama_proses='" . $_POST['lama_proses'] . "',
+								`status`='" . $_POST['sts'] . "',		
+								ph_cb='" . $_POST['ph_cb'] . "',
+								suhu_cb='" . $_POST['suhu_cb'] . "',
+								ph_poly='" . $_POST['ph_poly'] . "',
+								suhu_poly='" . $_POST['suhu_poly'] . "',
+								ph_cott='" . $_POST['ph_cott'] . "',
+								suhu_cott='" . $_POST['suhu_cott'] . "',
+								berat_jns='" . $_POST['berat_jns'] . "',
+								ph_naco='" . $_POST['ph_naco'] . "',
+								a_panas='" . $_POST['a_panas'] . "',
+								a_dingin='" . $_POST['a_dingin'] . "',
+								`point`='$point', 
+								proses_point='$propoint',
+								proses='" . $_POST['proses'] . "',
+								k_resep='" . $_POST['k_resep'] . "',
+								jml_topping='" . $_POST['jml_topping'] . "',
+								analisa='$analisa',
+								rcode='" . $_POST['rcode1'] . "',
+								operator_keluar='" . $_POST['operator'] . "',
+								operator_potong='" . $_POST['operator_potong'] . "',
+								acc_keluar='" . $_POST['acc_keluar'] . "',
+								tambah_obat='" . $_POST['tambah_obat'] . "',
+								tambah_obat1='" . $_POST['tambah_obat1'] . "',
+								tambah_obat2='" . $_POST['tambah_obat2'] . "',
+								tambah_obat3='" . $_POST['tambah_obat3'] . "',
+								tambah_obat4='" . $_POST['tambah_obat4'] . "',
+								tambah_obat5='" . $_POST['tambah_obat5'] . "',
+								tambah_obat6='" . $_POST['tambah_obat6'] . "',
+								kd_stop='" . $_POST['kodesm'] . "',
+								$jam_stop 
+								ket='$ket',
+								air_akhir='" . $_POST['air_akhir'] . "',
+								gerobak='" . $_POST['gerobak'] . "',
+								jns_gerobak='" . $_POST['jns_gerobak'] . "',
+								analisa_topping='" . $_POST['analisa_topping'] . "',
+								no_resep='" . $_POST['no_resep'] . "',
+								no_resep2='" . $_POST['no_resep2'] . "',
+								resep='" . $_POST['resep'] . "',
+								kategori_warna='" . $_POST['kategori_warna'] . "',
+								tgl_buat=now(),
+								tgl_update=now(),
+								status_resep='Belum Analisa',
+								tambah_dyestuff='" . $_POST['tambah_dyestuff'] . "',
+								arah_warna='" . $_POST['arah_warna'] . "',
+								status_warna='" . $_POST['status_warna'] . "',
+								leader='" . $_POST['leader'] . "',
+								point2='" . $_POST['point2'] . "'") or die(mysqli_error($con));
 
-	if ($sqlData) {
-		/* awal form potong */
-		$sqlCekP = mysqli_query($con, "SELECT a.*,c.k_resep,c.acc_keluar,c.operator_keluar,c.shift as shift_keluar,c.g_shift as g_shift_keluar,c.id as idcelup from tbl_schedule a
-										INNER JOIN tbl_montemp b ON a.id=b.id_schedule
-										INNER JOIN tbl_hasilcelup c ON b.id=c.id_montemp 
-										WHERE a.nokk='" . $_POST['nokk'] . "' ORDER BY c.id DESC LIMIT 1");
-		$rcekP = mysqli_fetch_array($sqlCekP);
-		$sqlDataP = mysqli_query($con, "INSERT INTO tbl_potongcelup SET
-		  id_hasilcelup='" . $rcekP['idcelup'] . "',
-		  nokk='" . $_POST['nokk'] . "',
-		  shift='" . $_POST['shift'] . "',
-		  g_shift='" . $_POST['g_shift'] . "',
-		  operator='" . $_POST['operator_potong'] . "',
-		  tgl_buat=now(),
-		  tgl_update=now()");
-		/* akhir form potong */
-		$sqlMonT = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id='" . $_POST['id'] . "'");
-		$rMonT = mysqli_fetch_array($sqlMonT);
-		$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
-		  `status`='selesai',
-		  tgl_update=now()
-		  WHERE no_mesin = '" . $rcek['no_mesin'] . "' and no_urut='1' and `status`='sedang jalan' ");
-		$sqlDT = mysqli_query($con, "UPDATE tbl_montemp SET 
-		  `status`='selesai',
-		  tgl_update=now()
-		  WHERE id='" . $_POST['id'] . "'");
-		$sqlUrut = mysqli_query($con, "UPDATE tbl_schedule 
-		  SET no_urut = no_urut - 1 
-		  WHERE no_mesin = '" . $rcek['no_mesin'] . "' 
-		  AND `status` = 'antri mesin' AND not no_urut='1' ");
-		echo "<script>swal({
-			title: 'Data Tersimpan',   
-			text: 'Klik Ok untuk input data kembali',
-			type: 'success',
-			}).then((result) => {
-			if (result.value) {
-				
-				window.location.href='?p=Hasil-Celup'; 
-			}
-			});</script>";
+		if ($sqlData) {
+			/* awal form potong */
+			$sqlCekP = mysqli_query($con, "SELECT a.*,c.k_resep,c.acc_keluar,c.operator_keluar,c.shift as shift_keluar,c.g_shift as g_shift_keluar,c.id as idcelup from tbl_schedule a
+											INNER JOIN tbl_montemp b ON a.id=b.id_schedule
+											INNER JOIN tbl_hasilcelup c ON b.id=c.id_montemp 
+											WHERE a.nokk='" . $_POST['nokk'] . "' ORDER BY c.id DESC LIMIT 1");
+			$rcekP = mysqli_fetch_array($sqlCekP);
+			$sqlDataP = mysqli_query($con, "INSERT INTO tbl_potongcelup SET
+			id_hasilcelup='" . $rcekP['idcelup'] . "',
+			nokk='" . $_POST['nokk'] . "',
+			shift='" . $_POST['shift'] . "',
+			g_shift='" . $_POST['g_shift'] . "',
+			operator='" . $_POST['operator_potong'] . "',
+			tgl_buat=now(),
+			tgl_update=now()");
+			/* akhir form potong */
+			$sqlMonT = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id='" . $_POST['id'] . "'");
+			$rMonT = mysqli_fetch_array($sqlMonT);
+			$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
+			`status`='selesai',
+			tgl_update=now()
+			WHERE no_mesin = '" . $rcek['no_mesin'] . "' and no_urut='1' and `status`='sedang jalan' ");
+			$sqlDT = mysqli_query($con, "UPDATE tbl_montemp SET 
+			`status`='selesai',
+			tgl_update=now()
+			WHERE id='" . $_POST['id'] . "'");
+			$sqlUrut = mysqli_query($con, "UPDATE tbl_schedule 
+			SET no_urut = no_urut - 1 
+			WHERE no_mesin = '" . $rcek['no_mesin'] . "' 
+			AND `status` = 'antri mesin' AND not no_urut='1' ");
+			echo "<script>swal({
+				title: 'Data Tersimpan',   
+				text: 'Klik Ok untuk input data kembali',
+				type: 'success',
+				}).then((result) => {
+				if (result.value) {
+					
+					window.location.href='?p=Hasil-Celup'; 
+				}
+				});</script>";
+		}
 	}
-}
-if ($_POST['update'] == "update") {
-	$sqlData = mysqli_query($con, "UPDATE tbl_hasilcelup SET 
-										analisa_resep = '$_POST[analisa_resep]',
-										status_resep = '$_POST[status_resep]'
-										WHERE nokk='" . $_POST['nokk'] . "'");
+	if ($_POST['update'] == "update") {
+		$sqlData = mysqli_query($con, "UPDATE tbl_hasilcelup SET 
+											analisa_resep = '$_POST[analisa_resep]',
+											status_resep = '$_POST[status_resep]'
+											WHERE nokk='" . $_POST['nokk'] . "'");
 
-	if ($sqlData) {
-		echo "<script>swal({
-			title: 'Data Telah DiUbah',   
-			text: 'Klik Ok untuk input data kembali',
-			type: 'success',
-			}).then((result) => {
-			if (result.value) {
-				
-				window.location.href='?p=Hasil-Celup'; 
-			}
-			});</script>";
+		if ($sqlData) {
+			echo "<script>swal({
+				title: 'Data Telah DiUbah',   
+				text: 'Klik Ok untuk input data kembali',
+				type: 'success',
+				}).then((result) => {
+				if (result.value) {
+					
+					window.location.href='?p=Hasil-Celup'; 
+				}
+				});</script>";
+		}
 	}
-}
 ?>
