@@ -60,7 +60,7 @@
                         ?>
                             <tr>
                                 <td>
-                                    <?php if($rowd['no_urut'] == '1') : ?>
+                                    <?php if($rowd['no_urut'] == '1' && !($_GET['id'] == 'CB11') && !($_GET['id'] == 'WS11')) : ?>
                                         <?= $rowd['no_urut']; ?>
                                         <input type="hidden" class="form-control col-sm-2" value="<?= $rowd['no_urut']; ?>" name="no_urut[<?php echo $rowd['id']; ?>]" readonly>
                                     <?php else : ?>
