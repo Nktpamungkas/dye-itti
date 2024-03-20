@@ -68,7 +68,6 @@
                 <input name="tgl_stop" type="date" class="form-control pull-right" max="<?= Date('Y-m-d'); ?>" placeholder="0000-00-00" value="<?php echo $r['tglS']; ?>" />
               </div>
             </div>
-
           </div>
           <div class="form-group">
             <label for="selesaism" class="col-sm-3 control-label">Selesai Stop Mesin</label>

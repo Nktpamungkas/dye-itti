@@ -1090,6 +1090,22 @@ desired effect
         }
       });
     });
+    $(document).on('click', '.edit_jammasukkain', function(e) {
+      var m = $(this).attr("id");
+      $.ajax({
+        url: "pages/jammasukkain_edit.php",
+        type: "GET",
+        data: {
+          id: m,
+        },
+        success: function(ajaxData) {
+          $("#EditJamMasukKain").html(ajaxData);
+          $("#EditJamMasukKain").modal('show', {
+            backdrop: 'true'
+          });
+        }
+      });
+    });
     $(document).on('click', '.edit_stscelup', function(e) {
       var m = $(this).attr("id");
       $.ajax({
