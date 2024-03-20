@@ -124,9 +124,13 @@ include "koneksi.php";
                                     <td align="center"><?php echo $rowd['no_order']; ?></td>
                                     <td align="left"><?php echo $rowd['warna']; ?></td>
                                     <td align="left">
-                                        <a href="#" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs bg-purple edit_jammasukkain">
+                                        <?php if ($_SESSION['lvl_id10'] == "5") : ?>
+                                            <a href="#" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs bg-purple edit_jammasukkain">
+                                                <?php echo $rowd['jammasukkain']; ?>
+                                            </a>
+                                        <?php else : ?>
                                             <?php echo $rowd['jammasukkain']; ?>
-                                        </a>
+                                        <?php endif; ?>
                                         <br><br>
                                         <span class="label bg-red">
                                             <?php echo $rowd['tgl_update']; ?>
