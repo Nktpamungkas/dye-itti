@@ -1077,8 +1077,8 @@
 				<div class="form-group">
 					<label for="resep" class="col-sm-3 control-label">Resep</label>
 					<div class="col-sm-3">
-						<select name="resep" disabled="disabled" class="form-control" id="resep">
-							<option value="">Pilih</option>
+						<select name="resep" disabled="disabled" required class="form-control" id="resep">
+							<option value="-">Pilih</option>
 							<option value="Baru">Baru</option>
 							<option value="Lama">Lama</option>
 							<option value="Setting">Setting</option>

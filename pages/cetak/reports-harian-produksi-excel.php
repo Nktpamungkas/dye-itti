@@ -140,7 +140,8 @@ $shft = $_GET['shft'];
       } else {
         $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
       }
-      $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
+      $sql = mysqli_query($con, "SELECT x.*, a.no_mesin as mc 
+                                    FROM tbl_mesin a
                                         RIGHT JOIN
                                         (SELECT
                                         a.kd_stop,
@@ -172,7 +173,7 @@ $shft = $_GET['shft'];
                                         b.loading,
                                         b.resep,
                                         b.kategori_warna,
-                                          b.target,
+                                        b.target,
                                         c.l_r,
                                         c.rol,
                                         c.bruto,
@@ -248,27 +249,27 @@ $shft = $_GET['shft'];
       $totberat = 0;
 
       while ($rowd = mysqli_fetch_array($sql)) {
-      if ($_GET['shft'] == "ALL") {
-        $shftSM = " ";
-      } else {
-        $shftSM = " g_shift='$_GET[shft]' AND ";
-      }
-      $sqlSM = mysqli_query($con, "SELECT *, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as menitSM,
-        DATE_FORMAT(mulai,'%Y-%m-%d') as tgl_masuk,
-        DATE_FORMAT(selesai,'%Y-%m-%d') as tgl_selesai,
-        TIME_FORMAT(mulai,'%H:%i') as jam_masuk,
-        TIME_FORMAT(selesai,'%H:%i') as jam_selesai,
-        kapasitas as kapSM,
-        g_shift as shiftSM
-        FROM tbl_stopmesin
-        WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]'");
-      $rowSM = mysqli_fetch_array($sqlSM);
-      if (strlen($rowd['rol']) > 5) {
-        $jk = strlen($rowd['rol']) - 5;
-        $rl = substr($rowd['rol'], 0, $jk);
-      } else {
-        $rl = $rowd['rol'];
-      }
+        if ($_GET['shft'] == "ALL") {
+          $shftSM = " ";
+        } else {
+          $shftSM = " g_shift='$_GET[shft]' AND ";
+        }
+        $sqlSM = mysqli_query($con, "SELECT *, TIME_FORMAT(timediff(selesai,mulai),'%H:%i') as menitSM,
+          DATE_FORMAT(mulai,'%Y-%m-%d') as tgl_masuk,
+          DATE_FORMAT(selesai,'%Y-%m-%d') as tgl_selesai,
+          TIME_FORMAT(mulai,'%H:%i') as jam_masuk,
+          TIME_FORMAT(selesai,'%H:%i') as jam_selesai,
+          kapasitas as kapSM,
+          g_shift as shiftSM
+          FROM tbl_stopmesin
+          WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]'");
+        $rowSM = mysqli_fetch_array($sqlSM);
+        if (strlen($rowd['rol']) > 5) {
+          $jk = strlen($rowd['rol']) - 5;
+          $rl = substr($rowd['rol'], 0, $jk);
+        } else {
+          $rl = $rowd['rol'];
+        }
     ?>
       <tr valign="top">
         <td><?php echo $no; ?></td>
@@ -318,17 +319,20 @@ $shft = $_GET['shft'];
                   echo "<br>Test Kestabilan";
                 } ?></td>
         <td><?php echo $rowd['k_resep']; ?></td>
-        <td><?php if ($rowd['ket_status'] == "") {
-              echo "";
-            } else if ($rowd['ket_status'] != "MC Stop") {
-              if ($rowd['resep'] == "Baru") {
-                echo "R.B";
-              } elseif ($rowd['resep'] == "Lama") {
-                echo "R.L";
-              }elseif ($rowd['resep'] == "Setting") {
-                echo "R.S";
-              }
-            } ?></td>
+        <td>
+          <?php 
+            // if ($rowd['resep'] == "Baru") {
+            //   echo "R.B";
+            // }
+            // if ($rowd['resep'] == "Lama") {
+            //   echo "R.L";
+            // }
+            // if ($rowd['resep'] == "Setting") {
+            //   echo "R.S";
+            // }
+          ?>
+          <?= $rowd['resep']; ?>
+        </td>
         <td><?php echo $rowd['sts']; ?></td>
         <td><?php echo $rowd['dyestuff']; ?></td>
         <td><?php echo $rowd['energi']; ?></td>
