@@ -1097,6 +1097,22 @@
 		</div>
 		<div class="box-footer">
 			<button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Monitoring-Tempelan'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
+			<?php
+				if($_GET['nokk']){
+					if($rcek['target'] == '0.00' OR empty($rcek['target'])){
+						echo "<script>swal({
+								title: 'Standart target harus di isi terlebih dahulu ! ',
+								text: 'Klik Ok untuk input kembali',
+								type: 'warning',
+								}).then((result) => {
+									if (result.value) {
+										window.location='index1.php?p=Schedule';
+									}
+								});
+							</script>";
+					}
+				}
+			?>
 			<?php if ($cek1 > 0) {
 				echo "<script>swal({
 								title: 'No Kartu Sudah diinput dan belum selesai proses',
@@ -1107,16 +1123,17 @@
 									window.location='index1.php?p=Form-Monitoring';
 								}
 								});</script>";
-											} else if ($rcek['no_urut'] != "1" and $nokk != "") {
-												echo "<script>swal({
-								title: 'Harus No Urut `1` ',
-								text: 'Klik Ok untuk input kembali',
-								type: 'warning',
-								}).then((result) => {
+			} else if ($rcek['no_urut'] != "1" and $nokk != "") {
+				echo "<script>swal({
+							title: 'Harus No Urut `1` ',
+							text: 'Klik Ok untuk input kembali',
+							type: 'warning',
+							}).then((result) => {
 								if (result.value) {
 									window.location='index1.php?p=Form-Monitoring';
 								}
-								});</script>";
+							});
+						</script>";
 			?>
 			<?php } else { ?>
 				<button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button>
