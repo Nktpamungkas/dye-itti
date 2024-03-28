@@ -130,7 +130,11 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" name="ubah" type="submit">Update</button>
+                <?php if ($_SESSION['lvl_id10'] == "5") : ?>
+                    <button class="btn btn-danger" name="ubah_stdtarget" type="submit">Update Std Target</button>
+                <?php else : ?>
+                    <button class="btn btn-danger" name="ubah" type="submit">Update</button>
+                <?php endif; ?>
             </div>
         </form>
     </div>
