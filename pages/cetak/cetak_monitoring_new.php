@@ -305,7 +305,7 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
   $target = explode(".", $rowmt['target']);
   $jamtarget = $target[0];
   $menittarget = $target[1];
-  if ($menittarget == '5') {
+  if ($menittarget == '50') {
     $mintarget = 30;
   } else {
     $mintarget = 0;
@@ -524,7 +524,24 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['blower']; ?></td>
       <td style="border-right:0px #000000 solid;">Jam Target Keluar</td>
-      <td width="9%" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">: <?php echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?></td>
+      <td width="9%" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">: 
+        <?php echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?>
+        <?php
+          // $waktu_awal = strtotime(substr($rowmt2['tgl_buat'], 11, 5)); // Waktu awal
+          // $jam_tambahan = $rowmt['target']; // Jam yang ingin ditambahkan
+
+          $waktu_awal = strtotime("13:00:00"); // Waktu awal
+          $jam_tambahan = 1.48; // Jam yang ingin ditambahkan
+
+          $jam = floor($jam_tambahan); // Bagian jam utuh
+          $menit = round(($jam_tambahan - $jam) * 60); // Bagian menit
+
+          $waktu_hasil = strtotime("+$jam hours", $waktu_awal); // Menambahkan jam
+          $waktu_hasil = strtotime("+$menit minutes", $waktu_hasil); // Menambahkan menit
+
+          // echo date("H:i:s", $waktu_hasil); // Output: 14:29:00
+        ?>
+      </td>
       <td width="9%" style="border-left:0px #000000 solid; font-size:7px">&nbsp;</td>
     </tr>
     <tr>
