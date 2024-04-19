@@ -525,21 +525,27 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['blower']; ?></td>
       <td style="border-right:0px #000000 solid;">Jam Target Keluar</td>
       <td width="9%" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">: 
-        <?php echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?>
+        <?php // echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?>
         <?php
-          // $waktu_awal = strtotime(substr($rowmt2['tgl_buat'], 11, 5)); // Waktu awal
           // $jam_tambahan = $rowmt['target']; // Jam yang ingin ditambahkan
+          $waktu_awal = strtotime(substr($rowmt2['tgl_buat'], 11, 5)); // Waktu awal
+          $jam_tambahan = $target[0];; // Jam tambahan
+          $menit_tambahan = $target[1];; // Menit tambahan
 
-          $waktu_awal = strtotime("13:00:00"); // Waktu awal
-          $jam_tambahan = 1.48; // Jam yang ingin ditambahkan
+          // Konversi waktu awal ke dalam detik
+          $detik_awal = $waktu_awal;
 
-          $jam = floor($jam_tambahan); // Bagian jam utuh
-          $menit = round(($jam_tambahan - $jam) * 60); // Bagian menit
+          // Hitung jumlah detik yang akan ditambahkan berdasarkan waktu tambahan
+          $detik_tambahan = ($jam_tambahan * 3600) + ($menit_tambahan * 60);
 
-          $waktu_hasil = strtotime("+$jam hours", $waktu_awal); // Menambahkan jam
-          $waktu_hasil = strtotime("+$menit minutes", $waktu_hasil); // Menambahkan menit
+          // Tambahkan detik tambahan ke waktu awal
+          $waktu_hasil = $detik_awal + $detik_tambahan;
 
-          // echo date("H:i:s", $waktu_hasil); // Output: 14:29:00
+          // Konversi kembali ke format waktu (HH:mm:ss)
+          $waktu_hasil_format = date("H:i", $waktu_hasil);
+
+          echo $waktu_hasil_format; // Output: 14:48:00
+
         ?>
       </td>
       <td width="9%" style="border-left:0px #000000 solid; font-size:7px">&nbsp;</td>
