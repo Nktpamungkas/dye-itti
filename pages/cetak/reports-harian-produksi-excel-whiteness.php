@@ -1,6 +1,6 @@
 <?php
 header("content-type:application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=report-produksi-whiteness" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
+header("Content-Disposition: attachment; filename=report-produksi-whiteness" . substr($_GET['awal'], 0, 10) . ".xls");
 ?>
 <?php
 ini_set("error_reporting", 1);
@@ -60,117 +60,73 @@ $shft = $_GET['shft'];
     </thead>
     <tbody>
       <?php
-      $Awal = $_GET['awal'];
-      $Akhir = $_GET['akhir'];
+      $Awal     = $_GET['awal'];
+      $Akhir    = $_GET['akhir'];
+      $GShift   = $_GET['shft'];
+
       $Tgl = substr($Awal, 0, 10);
-      if ($Awal != $Akhir) {
-        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
-      } else {
-        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
-      }
-      if ($_GET['shft'] == "ALL") {
+      if ($GShift == "ALL") {
         $shft = " ";
       } else {
-        $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
+        $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$GShift' AND ";
       }
-      $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
-                                        RIGHT JOIN
-                                        (SELECT
-                                        a.kd_stop,
-                                        a.mulai_stop,
-                                        a.selesai_stop,
-                                        a.ket,	if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))) as lama_proses,
-                                        a.status as sts,
-                                        TIME_FORMAT(if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),'%H') as jam,
-                                        TIME_FORMAT(if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),'%i') as menit,
-                                        a.point,
-                                        DATE_FORMAT(a.mulai_stop,'%Y-%m-%d') as t_mulai,
-                                        DATE_FORMAT(a.selesai_stop,'%Y-%m-%d') as t_selesai,
-                                        TIME_FORMAT(a.mulai_stop,'%H:%i') as j_mulai,
-                                        TIME_FORMAT(a.selesai_stop,'%H:%i') as j_selesai,
-                                        TIMESTAMPDIFF(MINUTE,a.mulai_stop,a.selesai_stop) as lama_stop_menit,
-                                        a.acc_keluar,
-                                        if(a.proses='' or ISNULL(a.proses),b.proses,a.proses) as proses,
-                                        b.buyer,
-                                        b.langganan,
-                                        b.no_order,
-                                        b.jenis_kain,
-                                        b.no_mesin,
-                                        b.warna,
-                                        b.lot,
-                                        b.energi,
-                                        b.dyestuff,	
-                                        b.ket_status,
-                                        b.kapasitas,
-                                        b.loading,
-                                        b.resep,
-                                        b.kategori_warna,
-                                          b.target,
-                                        c.l_r,
-                                        c.rol,
-                                        c.bruto,
-                                        c.pakai_air,
-                                        c.no_program,
-                                        c.pjng_kain,
-                                        c.cycle_time,
-                                        c.rpm,
-                                        c.tekanan,
-                                        c.nozzle,
-                                        c.plaiter,
-                                        c.blower,
-                                        DATE_FORMAT(c.tgl_buat,'%Y-%m-%d') as tgl_in,
-                                        DATE_FORMAT(a.tgl_buat,'%Y-%m-%d') as tgl_out,
-                                        DATE_FORMAT(c.tgl_buat,'%H:%i') as jam_in,
-                                        DATE_FORMAT(a.tgl_buat,'%H:%i') as jam_out,
-                                        if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
-                                        a.operator_keluar,
-                                        a.k_resep,
-                                        a.status,
-                                        a.proses_point,
-                                        a.analisa,
-                                        b.nokk,
-                                        b.no_warna,
-                                        b.lebar,
-                                        b.gramasi,
-                                        c.carry_over,
-                                        b.no_hanger,
-                                        b.no_item,
-                                        b.po,	
-                                        b.tgl_delivery,
-                                        b.kk_kestabilan,
-                                        b.kk_normal,
-                                        c.air_awal,
-                                        a.air_akhir,
-                                        c.nokk_legacy,
-                                        c.loterp,
-                                        c.nodemand,
-                                        a.tambah_obat,
-                                        a.tambah_obat1,
-                                        a.tambah_obat2,
-                                        a.tambah_obat3,
-                                        a.tambah_obat4,
-                                        a.tambah_obat5,
-                                        a.tambah_obat6,
-                                        c.leader,
-                                        b.suffix,
-                                        b.suffix2,
-                                        c.l_r_2,
-                                        c.lebar_fin,
-                                        c.grm_fin,
-                                        c.lebar_a,
-                                        c.gramasi_a,
-                                        c.operator,
-                                        a.tambah_dyestuff,
-                                        a.arah_warna,
-                                        a.status_warna
-                                      FROM
-                                        tbl_schedule b
-                                          LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
-                                          LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id	
-                                      WHERE
-                                        $shft 
-                                        $Where
-                                        )x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) ORDER BY a.no_mesin");
+
+      $jamA   = $_GET['awal'];
+      $jamAr  = $_GET['akhir'];
+      if (strlen($jamA) == 5) {
+        $start_date = $jamA;
+      } else {
+        $start_date = $jamA;
+      }
+      if (strlen($jamAr) == 5) {
+        $stop_date  = $jamAr;
+      } else {
+        $stop_date  = $jamAr;
+      }
+  
+      $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$start_date' AND '$stop_date' ";
+      if ($Awal != "" and $Akhir != "") {
+        $Where1 = "WHERE NOT x.nokk IS NULL";
+      } else {
+        $Where1 = " WHERE a.id='' AND NOT x.nokk IS NULL";
+      }
+      $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
+                                  LEFT JOIN
+                                  (SELECT
+                                    a.rcode,
+                                    b.nokk,
+                                    b.nodemand,
+                                    c.tgl_update,
+                                    b.buyer,
+                                    b.langganan,
+                                    b.no_order,
+                                    b.jenis_kain,
+                                    b.lot,
+                                    b.no_mesin,
+                                    b.warna,
+                                    b.proses,
+                                    b.target,
+                                    if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
+                                    c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
+                                    b.`status` as sts,
+                                    a.`status` as stscelup,
+                                    a.proses as proses_aktual,
+                                    a.id as idclp,
+                                    a.analisa_resep,
+                                    a.status_resep,
+                                    b.no_hanger,
+                                    b.qty_order,
+                                    a.tambah_dyestuff
+                                  FROM
+                                    tbl_schedule b
+                                    LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                    LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+                                  WHERE
+                                      $shft
+                                      $Where
+                                      ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) 
+                                  $Where1 
+                                  ORDER BY tgl_update DESC");
 
       $no = 1;
       while ($rowd = mysqli_fetch_array($sql)) {
@@ -314,8 +270,8 @@ $shft = $_GET['shft'];
             $row_lr = db2_fetch_assoc($q_lr);
 
             $q_detail_scouring  = db2_exec($conn2, "SELECT
-                                                        LISTAGG(i.LONGDESCRIPTION || '(' || CAST(i.CONSUMPTION AS DECIMAL(10,2)) || ')', ', ') AS DESCRIPTION,
-                                                        LISTAGG(i.COMMENTLINE) AS DESCRIPTION2
+                                                        LISTAGG(i.LONGDESCRIPTION || '(' || CAST(i.CONSUMPTION AS DECIMAL(10,2)) || ')', ', ') AS DESKRIPSI,
+                                                        LISTAGG(i.COMMENTLINE) AS DESKRIPSI2
                                                     FROM
                                                       ITXVIEWRESEP i
                                                     WHERE
@@ -336,7 +292,7 @@ $shft = $_GET['shft'];
           $LONGDESCRIPTION      = $row_lr['LONGDESCRIPTION'];
           $SHORTDESCRIPTION     = $row_lr['SHORTDESCRIPTION'];
           $SEARCHDESCRIPTION    = $row_lr['SEARCHDESCRIPTION'];
-          $row_detail_scouring  = $row_detail_scouring['DESCRIPTION'].','.$row_detail_scouring['DESCRIPTION2'];
+          $detail_scouring      = $row_detail_scouring['DESKRIPSI'].','.$row_detail_scouring['DESKRIPSI2'];
         } else {
           $prd_rsv_link_group   = '';
           $whiteness            = '';
@@ -347,7 +303,7 @@ $shft = $_GET['shft'];
           $LONGDESCRIPTION      = '';
           $SHORTDESCRIPTION     = '';
           $SEARCHDESCRIPTION    = '';
-          $row_detail_scouring  = '';
+          $detail_scouring      = '';
 
         }
       ?>
@@ -379,7 +335,7 @@ $shft = $_GET['shft'];
           <td><?= $yellowness; ?></td>
           <td><?= $LR; ?></td>
           <td><?= $SUFFIX; ?></td>
-          <td><?= $row_detail_scouring; ?></td>
+          <td><?= $detail_scouring; ?></td>
           <td><?= $LONGDESCRIPTION ?></td>
           <td><?= $SHORTDESCRIPTION ?></td>
           <td><?= $SEARCHDESCRIPTION ?></td>
