@@ -273,55 +273,55 @@ $shft = $_GET['shft'];
 
           if ($row_rsv_link_group['STEPNUMBER']) {
             $q_lr   = db2_exec($conn2, "SELECT 
-                                                LISTAGG(TRIM(SUBCODE01)) AS Rcode,
-	                                              LISTAGG(TRIM(SUFFIXCODE)) AS RcodeSuffix,
-                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || DECIMAL(LR, 5,2), ', ') AS LR,
-                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SUBCODE01) || '-' || TRIM(SUFFIXCODE), ', ') AS SUFFIX,
-                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(LONGDESCRIPTION), ', ') AS LONGDESCRIPTION,
-                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SHORTDESCRIPTION), ', ') AS SHORTDESCRIPTION,
-                                                LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SEARCHDESCRIPTION), ', ') AS SEARCHDESCRIPTION
-                                              FROM (
-                                                SELECT 
-                                                  DISTINCT 
-                                                  p.PRODRESERVATIONLINKGROUPCODE,
-                                                  p.PICKUPQUANTITY AS LR,
-                                                  p.SUBCODE01,
-                                                  p.SUFFIXCODE,
-                                                  r.LONGDESCRIPTION,
-                                                  r.SHORTDESCRIPTION,
-                                                  r.SEARCHDESCRIPTION
-                                                FROM 
-                                                  PRODUCTIONRESERVATION p 
-                                                LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
-                                                LEFT JOIN VIEWPRODUCTIONDEMANDSTEP v ON v.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND v.GROUPSTEPNUMBER = p.GROUPSTEPNUMBER
-                                                WHERE	
-                                                  p.PRODUCTIONORDERCODE = '$rowd[nokk]'  
-                                                  AND 
-                                                  CASE 
-                                                    WHEN v.STEPTYPE = 3 THEN p.GROUPSTEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
-                                                    ELSE p.STEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
-                                                  END 
-                                                  AND p.ITEMNATURE = 9
-                                                  AND SUBSTR(p.SUBCODE01, 1,2) = 'SC' 
-                                                GROUP BY
-                                                  p.PRODRESERVATIONLINKGROUPCODE,
-                                                  p.PICKUPQUANTITY,
-                                                  p.SUBCODE01,
-                                                  p.SUFFIXCODE,
-                                                  r.LONGDESCRIPTION,
-                                                  r.SHORTDESCRIPTION,
-                                                  r.SEARCHDESCRIPTION)");
+                                            LISTAGG(TRIM(SUBCODE01)) AS RCODE,
+                                            LISTAGG(TRIM(SUFFIXCODE)) AS RCODESUFFIX,
+                                            LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || DECIMAL(LR, 5,2), ', ') AS LR,
+                                            LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SUBCODE01) || '-' || TRIM(SUFFIXCODE), ', ') AS SUFFIX,
+                                            LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(LONGDESCRIPTION), ', ') AS LONGDESCRIPTION,
+                                            LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SHORTDESCRIPTION), ', ') AS SHORTDESCRIPTION,
+                                            LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SEARCHDESCRIPTION), ', ') AS SEARCHDESCRIPTION
+                                          FROM (
+                                            SELECT 
+                                              DISTINCT 
+                                              p.PRODRESERVATIONLINKGROUPCODE,
+                                              p.PICKUPQUANTITY AS LR,
+                                              p.SUBCODE01,
+                                              p.SUFFIXCODE,
+                                              r.LONGDESCRIPTION,
+                                              r.SHORTDESCRIPTION,
+                                              r.SEARCHDESCRIPTION
+                                            FROM 
+                                              PRODUCTIONRESERVATION p 
+                                            LEFT JOIN RECIPE r ON r.SUBCODE01 = p.SUBCODE01 AND r.SUFFIXCODE = p.SUFFIXCODE 
+                                            LEFT JOIN VIEWPRODUCTIONDEMANDSTEP v ON v.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND v.GROUPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                            WHERE	
+                                              p.PRODUCTIONORDERCODE = '$rowd[nokk]'  
+                                              AND 
+                                              CASE 
+                                                WHEN v.STEPTYPE = 3 THEN p.GROUPSTEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
+                                                ELSE p.STEPNUMBER IN ($row_rsv_link_group[STEPNUMBER])
+                                              END 
+                                              AND p.ITEMNATURE = 9
+                                              AND SUBSTR(p.SUBCODE01, 1,2) = 'SC' 
+                                            GROUP BY
+                                              p.PRODRESERVATIONLINKGROUPCODE,
+                                              p.PICKUPQUANTITY,
+                                              p.SUBCODE01,
+                                              p.SUFFIXCODE,
+                                              r.LONGDESCRIPTION,
+                                              r.SHORTDESCRIPTION,
+                                              r.SEARCHDESCRIPTION)");
             $row_lr = db2_fetch_assoc($q_lr);
 
             $q_detail_scouring  = db2_exec($conn2, "SELECT
-                                                        LISTAGG(i.LONGDESCRIPTION || '(' || i.CONSUMPTION || ')', ', '),
-                                                        LISTAGG(i.COMMENTLINE)
+                                                        LISTAGG(i.LONGDESCRIPTION || '(' || CAST(i.CONSUMPTION AS DECIMAL(10,2)) || ')', ', ') AS DESCRIPTION,
+                                                        LISTAGG(i.COMMENTLINE) AS DESCRIPTION2
                                                     FROM
                                                       ITXVIEWRESEP i
                                                     WHERE
                                                       PRODUCTIONORDERCODE = '$rowd[nokk]'
-                                                      AND SUBCODE01_RESERVATION = '$row_lr[Rcode]'
-                                                      AND SUFFIXCODE_RESERVATION = '$row_lr[RcodeSuffix]'
+                                                      AND SUBCODE01_RESERVATION = '$row_lr[RCODE]'
+                                                      AND SUFFIXCODE_RESERVATION = '$row_lr[RCODESUFFIX]'
                                                       AND COMPANYCODE = '100'");
             $row_detail_scouring = db2_fetch_assoc($q_detail_scouring);
 
@@ -378,7 +378,7 @@ $shft = $_GET['shft'];
           <td><?= $tint; ?></td>
           <td><?= $yellowness; ?></td>
           <td><?= $LR; ?></td>
-          <td><?= $SUFFIX; ?></td>\
+          <td><?= $SUFFIX; ?></td>
           <td><?= $row_detail_scouring; ?></td>
           <td><?= $LONGDESCRIPTION ?></td>
           <td><?= $SHORTDESCRIPTION ?></td>
