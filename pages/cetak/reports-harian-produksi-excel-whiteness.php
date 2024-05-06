@@ -1,28 +1,28 @@
 <?php
-  header("content-type:application/vnd-ms-excel");
-  header("Content-Disposition: attachment; filename=report-produksi-whiteness" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
+header("content-type:application/vnd-ms-excel");
+header("Content-Disposition: attachment; filename=report-produksi-whiteness" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
 ?>
 <?php
-  ini_set("error_reporting", 1);
-  include "../../koneksi.php";
-  include "../../koneksiLAB.php";
-  include "../../tgl_indo.php";
-  //--
-  $idkk = $_REQUEST['idkk'];
-  $act = $_GET['g'];
-  //-
-  $qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
-  $rTgl = mysqli_fetch_array($qTgl);
-  $Awal = $_GET['awal'];
-  $Akhir = $_GET['akhir'];
-  if ($Awal == $Akhir) {
-    $TglPAl = substr($Awal, 0, 10);
-    $TglPAr = substr($Akhir, 0, 10);
-  } else {
-    $TglPAl = $Awal;
-    $TglPAr = $Akhir;
-  }
-  $shft = $_GET['shft'];
+ini_set("error_reporting", 1);
+include "../../koneksi.php";
+include "../../koneksiLAB.php";
+include "../../tgl_indo.php";
+//--
+$idkk = $_REQUEST['idkk'];
+$act = $_GET['g'];
+//-
+$qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
+$rTgl = mysqli_fetch_array($qTgl);
+$Awal = $_GET['awal'];
+$Akhir = $_GET['akhir'];
+if ($Awal == $Akhir) {
+  $TglPAl = substr($Awal, 0, 10);
+  $TglPAr = substr($Akhir, 0, 10);
+} else {
+  $TglPAl = $Awal;
+  $TglPAr = $Akhir;
+}
+$shft = $_GET['shft'];
 ?>
 
 <body>
@@ -52,6 +52,7 @@
         <th bgcolor="#99FF99">YELLOWNESS</th>
         <th bgcolor="#99FF99">LR</th>
         <th bgcolor="#99FF99">SUFFIX</th>
+        <th bgcolor="#99FF99">CONSAGENT</th>
         <th bgcolor="#99FF99">LONG DESCRIPTION</th>
         <th bgcolor="#99FF99">SHORT DESCRIPTION</th>
         <th bgcolor="#99FF99">SEARCH DESCRIPTION</th>
@@ -59,20 +60,20 @@
     </thead>
     <tbody>
       <?php
-        $Awal = $_GET['awal'];
-        $Akhir = $_GET['akhir'];
-        $Tgl = substr($Awal, 0, 10);
-        if ($Awal != $Akhir) {
-          $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
-        } else {
-          $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
-        }
-        if ($_GET['shft'] == "ALL") {
-          $shft = " ";
-        } else {
-          $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
-        }
-        $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
+      $Awal = $_GET['awal'];
+      $Akhir = $_GET['akhir'];
+      $Tgl = substr($Awal, 0, 10);
+      if ($Awal != $Akhir) {
+        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
+      } else {
+        $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
+      }
+      if ($_GET['shft'] == "ALL") {
+        $shft = " ";
+      } else {
+        $shft = " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$_GET[shft]' AND ";
+      }
+      $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc FROM tbl_mesin a
                                         RIGHT JOIN
                                         (SELECT
                                         a.kd_stop,
@@ -171,16 +172,16 @@
                                         $Where
                                         )x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) ORDER BY a.no_mesin");
 
-        $no = 1;
-        while ($rowd = mysqli_fetch_array($sql)) {
-          $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$rowd[nokk]' LIMIT 1");
-          $dt_ITXVIEWKK	  = db2_fetch_assoc($sql_ITXVIEWKK);
+      $no = 1;
+      while ($rowd = mysqli_fetch_array($sql)) {
+        $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$rowd[nokk]' LIMIT 1");
+        $dt_ITXVIEWKK    = db2_fetch_assoc($sql_ITXVIEWKK);
 
-          $q_uploadspectro    = mysqli_query($con_nowprd, "SELECT * FROM `upload_spectro` WHERE SUBSTR(batch_name, 1,8) = '$rowd[nokk]'");
-          $data_uploadspectro = mysqli_fetch_assoc($q_uploadspectro);
+        $q_uploadspectro    = mysqli_query($con_nowprd, "SELECT * FROM `upload_spectro` WHERE SUBSTR(batch_name, 1,8) = '$rowd[nokk]'");
+        $data_uploadspectro = mysqli_fetch_assoc($q_uploadspectro);
 
-          if(!empty($data_uploadspectro)){
-            $q_rsv_link_group   = db2_exec($conn2, "SELECT
+        if (!empty($data_uploadspectro)) {
+          $q_rsv_link_group   = db2_exec($conn2, "SELECT
                                                       q2.LINE,
                                                       q.PRODUCTIONORDERCODE,
                                                       LISTAGG('''' || a.valueint || '''', ',') AS STEPNUMBER,
@@ -199,9 +200,9 @@
                                                     GROUP BY
                                                       q2.LINE,
                                                       q.PRODUCTIONORDERCODE");
-            $row_rsv_link_group = db2_fetch_assoc($q_rsv_link_group);
+          $row_rsv_link_group = db2_fetch_assoc($q_rsv_link_group);
 
-            $q_whiteness    = db2_exec($conn2, "SELECT
+          $q_whiteness    = db2_exec($conn2, "SELECT
                                                       q2.LINE,
                                                       q.PRODUCTIONORDERCODE,
                                                       LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS WHITENESS,
@@ -222,9 +223,9 @@
                                                       q2.LINE,
                                                       q.PRODUCTIONORDERCODE,
                                                       q2.CHARACTERISTICCODE");
-            $row_whiteness  = db2_fetch_assoc($q_whiteness);
-            
-            $q_tint    = db2_exec($conn2, "SELECT
+          $row_whiteness  = db2_fetch_assoc($q_whiteness);
+
+          $q_tint    = db2_exec($conn2, "SELECT
                                               q2.LINE,
                                               q.PRODUCTIONORDERCODE,
                                               LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS TINT,
@@ -245,9 +246,9 @@
                                               q2.LINE,
                                               q.PRODUCTIONORDERCODE,
                                               q2.CHARACTERISTICCODE");
-            $row_tint  = db2_fetch_assoc($q_tint);
-            
-            $q_yellowness    = db2_exec($conn2, "SELECT
+          $row_tint  = db2_fetch_assoc($q_tint);
+
+          $q_yellowness    = db2_exec($conn2, "SELECT
                                                     q2.LINE,
                                                     q.PRODUCTIONORDERCODE,
                                                     LISTAGG(TRIM(q.OPERATIONCODE) || ' = ' || DECIMAL(q2.VALUEQUANTITY, 5,2), ', ') AS YELLOWNESS,
@@ -268,10 +269,12 @@
                                                     q2.LINE,
                                                     q.PRODUCTIONORDERCODE,
                                                     q2.CHARACTERISTICCODE");
-            $row_yellowness  = db2_fetch_assoc($q_yellowness);
+          $row_yellowness  = db2_fetch_assoc($q_yellowness);
 
-            if($row_rsv_link_group['STEPNUMBER']){
-                $q_lr   = db2_exec($conn2, "SELECT 
+          if ($row_rsv_link_group['STEPNUMBER']) {
+            $q_lr   = db2_exec($conn2, "SELECT 
+                                                LISTAGG(TRIM(SUBCODE01)) AS Rcode,
+	                                              LISTAGG(TRIM(SUFFIXCODE)) AS RcodeSuffix,
                                                 LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || DECIMAL(LR, 5,2), ', ') AS LR,
                                                 LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(SUBCODE01) || '-' || TRIM(SUFFIXCODE), ', ') AS SUFFIX,
                                                 LISTAGG(TRIM(PRODRESERVATIONLINKGROUPCODE) || ' = ' || TRIM(LONGDESCRIPTION), ', ') AS LONGDESCRIPTION,
@@ -308,63 +311,80 @@
                                                   r.LONGDESCRIPTION,
                                                   r.SHORTDESCRIPTION,
                                                   r.SEARCHDESCRIPTION)");
-              $row_lr = db2_fetch_assoc($q_lr);
-            }
+            $row_lr = db2_fetch_assoc($q_lr);
 
-            $prd_rsv_link_group = $row_rsv_link_group['OPERATIONCODE'];
-            $whiteness          = $row_whiteness['WHITENESS'];
-            $tint               = $row_tint['TINT'];
-            $yellowness         = $row_yellowness['YELLOWNESS'];
-            $LR                 = $row_lr['LR'];
-            $SUFFIX             = $row_lr['SUFFIX'];
-            $LONGDESCRIPTION    = $row_lr['LONGDESCRIPTION'];
-            $SHORTDESCRIPTION   = $row_lr['SHORTDESCRIPTION'];
-            $SEARCHDESCRIPTION  = $row_lr['SEARCHDESCRIPTION'];
-          }else{
-            $prd_rsv_link_group = '';
-            $whiteness          = '';
-            $tint               = '';
-            $yellowness         = '';
-            $LR                 = '';
-            $SUFFIX             = '';
-            $LONGDESCRIPTION    = '';
-            $SHORTDESCRIPTION   = '';
-            $SEARCHDESCRIPTION  = '';
+            $q_detail_scouring  = db2_exec($conn2, "SELECT
+                                                        LISTAGG(i.LONGDESCRIPTION || '(' || i.CONSUMPTION || ')', ', '),
+                                                        LISTAGG(i.COMMENTLINE)
+                                                    FROM
+                                                      ITXVIEWRESEP i
+                                                    WHERE
+                                                      PRODUCTIONORDERCODE = '$rowd[nokk]'
+                                                      AND SUBCODE01_RESERVATION = '$row_lr[Rcode]'
+                                                      AND SUFFIXCODE_RESERVATION = '$row_lr[RcodeSuffix]'
+                                                      AND COMPANYCODE = '100'");
+            $row_detail_scouring = db2_fetch_assoc($q_detail_scouring);
+
           }
+
+          $prd_rsv_link_group   = $row_rsv_link_group['OPERATIONCODE'];
+          $whiteness            = $row_whiteness['WHITENESS'];
+          $tint                 = $row_tint['TINT'];
+          $yellowness           = $row_yellowness['YELLOWNESS'];
+          $LR                   = $row_lr['LR'];
+          $SUFFIX               = $row_lr['SUFFIX'];
+          $LONGDESCRIPTION      = $row_lr['LONGDESCRIPTION'];
+          $SHORTDESCRIPTION     = $row_lr['SHORTDESCRIPTION'];
+          $SEARCHDESCRIPTION    = $row_lr['SEARCHDESCRIPTION'];
+          $row_detail_scouring  = $row_detail_scouring['DESCRIPTION'].','.$row_detail_scouring['DESCRIPTION2'];
+        } else {
+          $prd_rsv_link_group   = '';
+          $whiteness            = '';
+          $tint                 = '';
+          $yellowness           = '';
+          $LR                   = '';
+          $SUFFIX               = '';
+          $LONGDESCRIPTION      = '';
+          $SHORTDESCRIPTION     = '';
+          $SEARCHDESCRIPTION    = '';
+          $row_detail_scouring  = '';
+
+        }
       ?>
-      <tr valign="top">
-        <td><?= $no++; ?></td>
-        <td>'<?= $rowd['nokk']; ?></td>
-        <td>'<?= $rowd['nodemand']; ?></td>
-        <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td>
-        <td><?= $rowd['no_hanger']; ?></td>
-        <td><?= $dt_ITXVIEWKK['COLORGROUP']; ?></td>
-        <td><?= $dt_ITXVIEWKK['SUBCODE01']; ?></td>
-        <td>
-          <?php
+        <tr valign="top">
+          <td><?= $no++; ?></td>
+          <td>'<?= $rowd['nokk']; ?></td>
+          <td>'<?= $rowd['nodemand']; ?></td>
+          <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td>
+          <td><?= $rowd['no_hanger']; ?></td>
+          <td><?= $dt_ITXVIEWKK['COLORGROUP']; ?></td>
+          <td><?= $dt_ITXVIEWKK['SUBCODE01']; ?></td>
+          <td>
+            <?php
             $q_variant    = db2_exec($conn2, "SELECT TRIM(SUBCODE04) AS SUBCODE04 FROM PRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]' AND (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')");
             $row_variant  = db2_fetch_assoc($q_variant);
             echo $row_variant['SUBCODE04'];
-          ?>
-        </td>
-        <td><?= $rowd['jenis_kain']; ?></td>
-        <td><?= $rowd['gramasi']; ?></td>
-        <td><?= $rowd['bruto']; ?></td>
-        <td><?= $rowd['mc']; ?></td>
-        <td><?= $rowd['kapasitas']; ?></td>
-        <td><?= $rowd['warna']; ?></td>
-        <td><?= $rowd['tgl_in'].' '.$rowd['jam_in']; ?></td>
-        <td><?= $prd_rsv_link_group ?></td>
-        <td><?= $whiteness; ?></td>
-        <td><?= $tint; ?></td>
-        <td><?= $yellowness; ?></td>
-        <td><?= $LR; ?></td>
-        <td><?= $SUFFIX; ?></td>
-        <td><?= $LONGDESCRIPTION ?></td>
-        <td><?= $SHORTDESCRIPTION ?></td>
-        <td><?= $SEARCHDESCRIPTION ?></td>
-      </tr>
+            ?>
+          </td>
+          <td><?= $rowd['jenis_kain']; ?></td>
+          <td><?= $rowd['gramasi']; ?></td>
+          <td><?= $rowd['bruto']; ?></td>
+          <td><?= $rowd['mc']; ?></td>
+          <td><?= $rowd['kapasitas']; ?></td>
+          <td><?= $rowd['warna']; ?></td>
+          <td><?= $rowd['tgl_in'] . ' ' . $rowd['jam_in']; ?></td>
+          <td><?= $prd_rsv_link_group ?></td>
+          <td><?= $whiteness; ?></td>
+          <td><?= $tint; ?></td>
+          <td><?= $yellowness; ?></td>
+          <td><?= $LR; ?></td>
+          <td><?= $SUFFIX; ?></td>\
+          <td><?= $row_detail_scouring; ?></td>
+          <td><?= $LONGDESCRIPTION ?></td>
+          <td><?= $SHORTDESCRIPTION ?></td>
+          <td><?= $SEARCHDESCRIPTION ?></td>
+        </tr>
     </tbody>
-    <?php } ?>
+  <?php } ?>
   </table>
 </body>
