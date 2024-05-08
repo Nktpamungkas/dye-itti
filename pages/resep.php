@@ -25,7 +25,7 @@
 				}
 				$sqlc = "select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where YARN='$rCek[nokk]' " . $ket . " order by createtime Desc";
 				//--lot
-				$qryc = sqlsrv_query($conn1, $sqlc, array(), array("Scrollable" => "buffered"));
+				// $qryc = sqlsrv_query($conn1, $sqlc, array(), array("Scrollable" => "buffered"));
 
 				$countdata = sqlsrv_num_rows($qryc);
 				$row = sqlsrv_fetch_array($qryc);
@@ -43,7 +43,7 @@
 					echo "<hr>";
 
 					$sqlstep = "select distinct(STEP_NO),RECIPE_CODE from Ticket_detail where ID_No='$row[ID_NO]' order by Step_NO asc";
-					$qrystep = sqlsrv_query($conn1, $sqlstep);
+					// $qrystep = sqlsrv_query($conn1, $sqlstep);
 
 					while ($rowst = sqlsrv_fetch_array($qrystep)) {
 
@@ -51,14 +51,14 @@
 
 						$sqlisi = "select ID_NO,STEP_NO,RECIPE_CODE,PRODUCT_CODE,CONC,CONCUNIT,TARGET_WT,REMARK from Ticket_detail 
 											where ID_No='$row[ID_NO]' and STEP_NO='$rowst[STEP_NO]' order by Step_NO Desc";
-						$qryisi = sqlsrv_query($conn1, $sqlisi);
+						// $qryisi = sqlsrv_query($conn1, $sqlisi);
 
 						echo " <table width='80%' border='0'>";
 						while ($rowisi = sqlsrv_fetch_array($qryisi)) {
 							echo "  <tr>";
 							echo "   <td class='normal333' width=60><div align='left'>$rowisi[PRODUCT_CODE]</div></td>";
 
-							$sqlp = sqlsrv_query($conn1, "Select ProductName from Product where ProductCode='$rowisi[PRODUCT_CODE]'");
+							// $sqlp = sqlsrv_query($conn1, "Select ProductName from Product where ProductCode='$rowisi[PRODUCT_CODE]'");
 							$qryp = sqlsrv_fetch_array($sqlp);
 
 							echo "   <td class='normal333' width=300><div align='left'>$qryp[ProductName] </div></td>";

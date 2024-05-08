@@ -34,75 +34,75 @@ $idkk=$_GET['kk'];
 	//$conn=mssql_connect($host,$username,$password) or die ("Sorry our web is under maintenance. Please visit us later");
 	//mssql_select_db($db_name) or die ("Under maintenance");
 	//--
-$sql="select
-			x.SONumber,x.TglSO,x.PONumber,x.DocumentNo,x.Quantity,udq.UnitName,x.PCBID,x.PCID,x.NoKK,x.LotNo,x.TglKK,x.Bruto, 
-			udw.UnitName as WeightUnitName, x.ChildLevel,x.RootID,
-			cust.PartnerNumber as CustomerNumber, cust.CompanyTitle as CustomerTitle, cust.PartnerName as CustomerName,
-			buy.PartnerNumber as BuyerNumber, buy.CompanyTitle as BuyerTitle, buy.PartnerName as BuyerName,
-			pm.ProductNumber, pm.Description as ProductDesc, pm.ColorNo, pm.Color
-		from
-			(
-			select
-				so.SONumber, convert(char(10),so.SODate,103) as TglSO, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
-				sod.ID as SODID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID, 
-				soda.RefNo as DetailRefNo,
-				pcb.ID as PCBID, pcb.DocumentNo as NoKK,convert(char(10),pcb.Dated,103) as TglKK, pcb.Gross as Bruto,
-				pcb.Quantity as BatchQuantity, pcb.UnitID as BatchUnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
-				pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID				
-			from
-				SalesOrders so inner join
-				JobOrders jo on jo.SOID=so.ID inner join
-				SODetails sod on so.ID = sod.SOID inner join
-				SODetailsAdditional soda on sod.ID = soda.SODID left join
-				ProcessControlJO pcjo on sod.ID = pcjo.SODID left join
-				ProcessControlBatches pcb on pcjo.PCID = pcb.PCID left join
-				ProcessControlBatchesLastPosition pcblp on pcb.ID = pcblp.PCBID left join
-				ProcessFlowProcessNo pfpn on pfpn.EntryType = 2 and pcb.ID = pfpn.ParentID and pfpn.MachineType = 24 left join
-				ProcessFlowDetailsNote pfdn on pfpn.EntryType = pfdn.EntryType and pfpn.ID = pfdn.ParentID
-			where pcb.documentno='$modal_id'
-				group by
-					so.SONumber, so.SODate, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
-					sod.ID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID,
-					soda.RefNo,pcb.DocumentNo,pcb.Dated,
-					pcb.ID, pcb.DocumentNo, pcb.Gross,
-					pcb.Quantity, pcb.UnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
-					pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID
-				) x inner join
-				ProductMaster pm on x.ProductID = pm.ID left join
-				Departments dep on x.DepartmentID  = dep.ID left join
-				Departments pdep on dep.RootID = pdep.ID left join				
-				Partners cust on x.CustomerID = cust.ID left join
-				Partners buy on x.BuyerID = buy.ID left join
-				UnitDescription udq on x.UnitID = udq.ID left join
-				UnitDescription udw on x.WeightUnitID = udw.ID left join
-				UnitDescription udb on x.BatchUnitID = udb.ID
-			order by
-				x.SODID desc, x.PCBID";
-				 //--lot
-$qry=sqlsrv_query($conn,$sql);
-$row=sqlsrv_fetch_array($qry);
+// $sql="select
+// 			x.SONumber,x.TglSO,x.PONumber,x.DocumentNo,x.Quantity,udq.UnitName,x.PCBID,x.PCID,x.NoKK,x.LotNo,x.TglKK,x.Bruto, 
+// 			udw.UnitName as WeightUnitName, x.ChildLevel,x.RootID,
+// 			cust.PartnerNumber as CustomerNumber, cust.CompanyTitle as CustomerTitle, cust.PartnerName as CustomerName,
+// 			buy.PartnerNumber as BuyerNumber, buy.CompanyTitle as BuyerTitle, buy.PartnerName as BuyerName,
+// 			pm.ProductNumber, pm.Description as ProductDesc, pm.ColorNo, pm.Color
+// 		from
+// 			(
+// 			select
+// 				so.SONumber, convert(char(10),so.SODate,103) as TglSO, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
+// 				sod.ID as SODID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID, 
+// 				soda.RefNo as DetailRefNo,
+// 				pcb.ID as PCBID, pcb.DocumentNo as NoKK,convert(char(10),pcb.Dated,103) as TglKK, pcb.Gross as Bruto,
+// 				pcb.Quantity as BatchQuantity, pcb.UnitID as BatchUnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
+// 				pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID				
+// 			from
+// 				SalesOrders so inner join
+// 				JobOrders jo on jo.SOID=so.ID inner join
+// 				SODetails sod on so.ID = sod.SOID inner join
+// 				SODetailsAdditional soda on sod.ID = soda.SODID left join
+// 				ProcessControlJO pcjo on sod.ID = pcjo.SODID left join
+// 				ProcessControlBatches pcb on pcjo.PCID = pcb.PCID left join
+// 				ProcessControlBatchesLastPosition pcblp on pcb.ID = pcblp.PCBID left join
+// 				ProcessFlowProcessNo pfpn on pfpn.EntryType = 2 and pcb.ID = pfpn.ParentID and pfpn.MachineType = 24 left join
+// 				ProcessFlowDetailsNote pfdn on pfpn.EntryType = pfdn.EntryType and pfpn.ID = pfdn.ParentID
+// 			where pcb.documentno='$modal_id'
+// 				group by
+// 					so.SONumber, so.SODate, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
+// 					sod.ID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID,
+// 					soda.RefNo,pcb.DocumentNo,pcb.Dated,
+// 					pcb.ID, pcb.DocumentNo, pcb.Gross,
+// 					pcb.Quantity, pcb.UnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
+// 					pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID
+// 				) x inner join
+// 				ProductMaster pm on x.ProductID = pm.ID left join
+// 				Departments dep on x.DepartmentID  = dep.ID left join
+// 				Departments pdep on dep.RootID = pdep.ID left join				
+// 				Partners cust on x.CustomerID = cust.ID left join
+// 				Partners buy on x.BuyerID = buy.ID left join
+// 				UnitDescription udq on x.UnitID = udq.ID left join
+// 				UnitDescription udw on x.WeightUnitID = udw.ID left join
+// 				UnitDescription udb on x.BatchUnitID = udb.ID
+// 			order by
+// 				x.SODID desc, x.PCBID";
+// 				 //--lot
+// $qry=sqlsrv_query($conn,$sql);
+// $row=sqlsrv_fetch_array($qry);
 
 		$child=$row['ChildLevel'];
 		
 		if($child > 0){
-			$sqlgetparent=sqlsrv_query($conn,"select ID,LotNo from ProcessControlBatches where ID='$row[RootID]' and ChildLevel='0'");
-			$rowgp=sqlsrv_fetch_array($sqlgetparent);
+			// $sqlgetparent=sqlsrv_query($conn,"select ID,LotNo from ProcessControlBatches where ID='$row[RootID]' and ChildLevel='0'");
+			// $rowgp=sqlsrv_fetch_array($sqlgetparent);
 			
-			//$nomLot=substr("$row2[LotNo]",0,1);
-			$nomLot=$rowgp['LotNo'];
-			$nomorLot="$nomLot/K$row[ChildLevel]&nbsp;";				
+			// //$nomLot=substr("$row2[LotNo]",0,1);
+			// $nomLot=$rowgp['LotNo'];
+			// $nomorLot="$nomLot/K$row[ChildLevel]&nbsp;";				
 								
 		}else{
 			$nomorLot=$row['LotNo'];
 				
 		}
 					
-					  $sqlLot="Select count(*) as TotalLot From ProcessControlBatches where PCID='$row[PCID]' and LotNo < '1000'";
-					  $qryLot = sqlsrv_query($conn,$sqlLot) 
-								or die('A error occured : ');
+					//   $sqlLot="Select count(*) as TotalLot From ProcessControlBatches where PCID='$row[PCID]' and LotNo < '1000'";
+					//   $qryLot = sqlsrv_query($conn,$sqlLot) 
+					// 			or die('A error occured : ');
 								
-					  		$rowLot=sqlsrv_fetch_array($qryLot);	
-						$lotnya="$rowLot[TotalLot]-$nomorLot";
+					//   		$rowLot=sqlsrv_fetch_array($qryLot);	
+					// 	$lotnya="$rowLot[TotalLot]-$nomorLot";
 					  
 					
 					  //--
@@ -136,8 +136,8 @@ where p.PCBID='$row[PCBID]'
 order by p.ID";
 //order by p.Dated,d.DepIn,p.Status desc";
 
-$sql2b = sqlsrv_query($conn,$sql2) or die('A error occured : ');
-		//--
+// $sql2b = sqlsrv_query($conn,$sql2) or die('A error occured : ');
+		// --
 		$c=0;
 		while ($row2=sqlsrv_fetch_array($sql2b)){
 		$bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; 

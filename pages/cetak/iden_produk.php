@@ -61,112 +61,112 @@ $act=$_GET['g'];
 if($_GET['no']!=''){$ket.=" AND ID_NO='$_GET[no]' ";}else{$ket.="";}
 $sqlc="select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where YARN='$idkk' ".$ket." order by createtime Desc";
 				 //--lot
-$qryc=sqlsrv_query($conn1,$sqlc, array(), array("Scrollable"=>"buffered"));
+// $qryc=sqlsrv_query($conn1,$sqlc, array(), array("Scrollable"=>"buffered"));
 
-$countdata=sqlsrv_num_rows($qryc);
+// $countdata=sqlsrv_num_rows($qryc);
 
 if ($countdata > 0)
 {
 date_default_timezone_set('Asia/Jakarta');
 
-$tglsvr= sqlsrv_query($conn1,"select CONVERT(VARCHAR(10),GETDATE(),105) AS  tgk");
-$sr=sqlsrv_fetch_array($tglsvr);
-$sqls=sqlsrv_query($conn,"select processcontrolJO.SODID,salesorders.ponumber,processcontrol.productid,salesorders.customerid,joborders.documentno,
-salesorders.buyerid,processcontrolbatches.lotno,productcode,productmaster.color,hangerno,colorno,description,weight,cuttablewidth from Joborders 
-left join processcontrolJO on processcontrolJO.joid = Joborders.id
-left join salesorders on soid= salesorders.id
-left join processcontrol on processcontrolJO.pcid = processcontrol.id
-left join processcontrolbatches on processcontrolbatches.pcid = processcontrol.id
-left join productmaster on productmaster.id= processcontrol.productid
-left join productpartner on productpartner.productid= processcontrol.productid
-where processcontrolbatches.documentno='$idkk'");
-		$ssr=sqlsrv_fetch_array($sqls);
-		$lgn1=sqlsrv_query($conn,"select partnername from partners where id='$ssr[customerid]'");
-		$ssr1=sqlsrv_fetch_array($lgn1);
-		$lgn2=sqlsrv_query($conn,"select partnername from partners where id='$ssr[buyerid]'");
-		$ssr2=sqlsrv_fetch_array($lgn2);
-		$itm=sqlsrv_query($conn,"select colorcode,color,productcode from productpartner where productid='$ssr[productid]' and partnerid='$ssr[customerid]'");
-		$itm2=sqlsrv_fetch_array($itm);
- $row=sqlsrv_fetch_array($qryc);
- //
- $sql=sqlsrv_query($conn,"select stockmovement.dono,stockmovement.documentno as no_doku,processcontrolbatches.documentno,lotno,customerid,
-	processcontrol.productid ,processcontrol.id as pcid, 
-  sum(stockmovementdetails.weight) as berat,
-  count(stockmovementdetails.weight) as roll,processcontrolbatches.dated as tgllot
-   from stockmovement 
-LEFT join stockmovementdetails on StockMovement.id=stockmovementdetails.StockmovementID
-left join processcontrolbatches on processcontrolbatches.id=stockmovement.pcbid
-left join processcontrol on processcontrol.id=processcontrolbatches.pcid
+// $tglsvr= sqlsrv_query($conn1,"select CONVERT(VARCHAR(10),GETDATE(),105) AS  tgk");
+// $sr=sqlsrv_fetch_array($tglsvr);
+// $sqls=sqlsrv_query($conn,"select processcontrolJO.SODID,salesorders.ponumber,processcontrol.productid,salesorders.customerid,joborders.documentno,
+// salesorders.buyerid,processcontrolbatches.lotno,productcode,productmaster.color,hangerno,colorno,description,weight,cuttablewidth from Joborders 
+// left join processcontrolJO on processcontrolJO.joid = Joborders.id
+// left join salesorders on soid= salesorders.id
+// left join processcontrol on processcontrolJO.pcid = processcontrol.id
+// left join processcontrolbatches on processcontrolbatches.pcid = processcontrol.id
+// left join productmaster on productmaster.id= processcontrol.productid
+// left join productpartner on productpartner.productid= processcontrol.productid
+// where processcontrolbatches.documentno='$idkk'");
+// 		$ssr=sqlsrv_fetch_array($sqls);
+// 		$lgn1=sqlsrv_query($conn,"select partnername from partners where id='$ssr[customerid]'");
+// 		$ssr1=sqlsrv_fetch_array($lgn1);
+// 		$lgn2=sqlsrv_query($conn,"select partnername from partners where id='$ssr[buyerid]'");
+// 		$ssr2=sqlsrv_fetch_array($lgn2);
+// 		$itm=sqlsrv_query($conn,"select colorcode,color,productcode from productpartner where productid='$ssr[productid]' and partnerid='$ssr[customerid]'");
+// 		$itm2=sqlsrv_fetch_array($itm);
+//  $row=sqlsrv_fetch_array($qryc);
+//  //
+//  $sql=sqlsrv_query($conn,"select stockmovement.dono,stockmovement.documentno as no_doku,processcontrolbatches.documentno,lotno,customerid,
+// 	processcontrol.productid ,processcontrol.id as pcid, 
+//   sum(stockmovementdetails.weight) as berat,
+//   count(stockmovementdetails.weight) as roll,processcontrolbatches.dated as tgllot
+//    from stockmovement 
+// LEFT join stockmovementdetails on StockMovement.id=stockmovementdetails.StockmovementID
+// left join processcontrolbatches on processcontrolbatches.id=stockmovement.pcbid
+// left join processcontrol on processcontrol.id=processcontrolbatches.pcid
 
 
 
-where wid='12' and processcontrolbatches.documentno='$idkk' and (transactiontype='7' or transactiontype='4')
-group by stockmovement.DocumentNo,processcontrolbatches.DocumentNo,processcontrolbatches.LotNo,stockmovement.dono,
-processcontrol.CustomerID,processcontrol.ProductID,processcontrol.ID,processcontrolbatches.Dated") or die("gagal");
-$c=0;
- $r=sqlsrv_fetch_array($sql);
- $dated = $r['tgllot']->format('Y-m-d H:i:s'); 
-	 $sqlkko=sqlsrv_query($conn,"select SODID from knittingorders  
-	where knittingorders.Kono='$r[dono]'") or die("gagal");
-	$rkko=sqlsrv_fetch_array($sqlkko);
-	 $sqlkko1=sqlsrv_query($conn,"select joid,productid from processcontroljo  
-	where sodid='$rkko[SODID]'") or die("gagal");
-	$rkko1=sqlsrv_fetch_array($sqlkko1);
-	if($r['productid']!=''){$kno1=$r['productid'];}else{$kno1=$rkko1['productid'];}
-	$sql1=sqlsrv_query($conn,"select hangerno,color from  productmaster
-	where id='$kno1'") or die("gagal"); 
-	 $r1=sqlsrv_fetch_array($sql1);
-	 $sql2=sqlsrv_query($conn,"select partnername from Partners
-	where id='$r[customerid]'") or die("gagal"); 
-	 $r2=sqlsrv_fetch_array($sql2);
-	 $sql3=sqlsrv_query($conn,"select Kono,joid from processcontroljo 
-	where pcid='$r[pcid]'") or die("gagal"); 
-	$r3=sqlsrv_fetch_array($sql3);
-	if($r3['Kono']!=''){$kno=$r3['Kono'];}else{$kno=$r['dono'];}
-	 $sql4=sqlsrv_query($conn,"select CAST(TM.dbo.knittingorders.[Note] AS VARCHAR(8000))as note,id,supplierid from knittingorders 
-	where kono='$kno'") or die("gagal");
-	 $r4=sqlsrv_fetch_array($sql4);
-	 $sql5=sqlsrv_query($conn,"select partnername from partners 
-	where id='$r4[supplierid]'") or die("gagal");
-	 $r5=sqlsrv_fetch_array($sql5);
-	 if($r3['joid']!=''){$jno=$r3['joid'];}else{$jno=$rkko1['joid'];}
-	 $sql6=sqlsrv_query($conn,"select documentno,soid from joborders 
-	where id='$jno'") or die("gagal");
-	 $r6=sqlsrv_fetch_array($sql6);
-	  $sql8=sqlsrv_query($conn,"select customerid from salesorders where id='$r6[soid]'") or die("gagal");
-	 $r8=sqlsrv_fetch_array($sql8);
-	 $sql9=sqlsrv_query($conn,"select partnername from partners where id='$r8[customerid]'") or die("gagal");
-	 $r9=sqlsrv_fetch_array($sql9);
-	 $sql10=sqlsrv_query($conn,"select id,productid from kodetails where koid='$r4[id]'") or die("gagal");
-	 $r10=sqlsrv_fetch_array($sql10);
-	 $sql11=sqlsrv_query($conn,"select productnumber from productmaster where id='$r10[productid]'") or die("gagal");
-	 $r11=sqlsrv_fetch_array($sql11);
+// where wid='12' and processcontrolbatches.documentno='$idkk' and (transactiontype='7' or transactiontype='4')
+// group by stockmovement.DocumentNo,processcontrolbatches.DocumentNo,processcontrolbatches.LotNo,stockmovement.dono,
+// processcontrol.CustomerID,processcontrol.ProductID,processcontrol.ID,processcontrolbatches.Dated") or die("gagal");
+// $c=0;
+//  $r=sqlsrv_fetch_array($sql);
+//  $dated = $r['tgllot']->format('Y-m-d H:i:s'); 
+// 	 $sqlkko=sqlsrv_query($conn,"select SODID from knittingorders  
+// 	where knittingorders.Kono='$r[dono]'") or die("gagal");
+// 	$rkko=sqlsrv_fetch_array($sqlkko);
+// 	 $sqlkko1=sqlsrv_query($conn,"select joid,productid from processcontroljo  
+// 	where sodid='$rkko[SODID]'") or die("gagal");
+// 	$rkko1=sqlsrv_fetch_array($sqlkko1);
+// 	if($r['productid']!=''){$kno1=$r['productid'];}else{$kno1=$rkko1['productid'];}
+// 	$sql1=sqlsrv_query($conn,"select hangerno,color from  productmaster
+// 	where id='$kno1'") or die("gagal"); 
+// 	 $r1=sqlsrv_fetch_array($sql1);
+// 	 $sql2=sqlsrv_query($conn,"select partnername from Partners
+// 	where id='$r[customerid]'") or die("gagal"); 
+// 	 $r2=sqlsrv_fetch_array($sql2);
+// 	 $sql3=sqlsrv_query($conn,"select Kono,joid from processcontroljo 
+// 	where pcid='$r[pcid]'") or die("gagal"); 
+// 	$r3=sqlsrv_fetch_array($sql3);
+// 	if($r3['Kono']!=''){$kno=$r3['Kono'];}else{$kno=$r['dono'];}
+// 	 $sql4=sqlsrv_query($conn,"select CAST(TM.dbo.knittingorders.[Note] AS VARCHAR(8000))as note,id,supplierid from knittingorders 
+// 	where kono='$kno'") or die("gagal");
+// 	 $r4=sqlsrv_fetch_array($sql4);
+// 	 $sql5=sqlsrv_query($conn,"select partnername from partners 
+// 	where id='$r4[supplierid]'") or die("gagal");
+// 	 $r5=sqlsrv_fetch_array($sql5);
+// 	 if($r3['joid']!=''){$jno=$r3['joid'];}else{$jno=$rkko1['joid'];}
+// 	 $sql6=sqlsrv_query($conn,"select documentno,soid from joborders 
+// 	where id='$jno'") or die("gagal");
+// 	 $r6=sqlsrv_fetch_array($sql6);
+// 	  $sql8=sqlsrv_query($conn,"select customerid from salesorders where id='$r6[soid]'") or die("gagal");
+// 	 $r8=sqlsrv_fetch_array($sql8);
+// 	 $sql9=sqlsrv_query($conn,"select partnername from partners where id='$r8[customerid]'") or die("gagal");
+// 	 $r9=sqlsrv_fetch_array($sql9);
+// 	 $sql10=sqlsrv_query($conn,"select id,productid from kodetails where koid='$r4[id]'") or die("gagal");
+// 	 $r10=sqlsrv_fetch_array($sql10);
+// 	 $sql11=sqlsrv_query($conn,"select productnumber from productmaster where id='$r10[productid]'") or die("gagal");
+// 	 $r11=sqlsrv_fetch_array($sql11);
 	 
 	 
-	 $s4=sqlsrv_query($conn,"select KOdetails.id as KODID,productmaster.id as BOMID ,KnittingOrders.SupplierID,TM.dbo.Partners.PartnerName,ProductNumber,CustomerID,SODID,KnittingOrders.ID as KOID,SalesOrders.ID as SOID from 
-(TM.dbo.KnittingOrders 
-left join TM.dbo.SODetails on TM.dbo.SODetails.ID= TM.dbo.KnittingOrders.SODID
-left join TM.dbo.KODetails on TM.dbo.KODetails.KOid= TM.dbo.KnittingOrders.ID
-left join TM.dbo.Partners on TM.dbo.Partners.ID= TM.dbo.KnittingOrders.SupplierID)
-left join TM.dbo.ProductMaster on TM.dbo.ProductMaster.ID= TM.dbo.KODetails.ProductID
-left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
-		where KONO='$kno'");
-	 $as7=sqlsrv_fetch_array($s4);
-	 $sql12=sqlsrv_query($conn,"select SODetailsBom.ProductID from SODetailsBom where SODID='$as7[SODID]' and KODID='$as7[KODID]' and Parentproductid='$as7[BOMID]' order by ID", array(), array("Scrollable"=>"buffered"));
-	  $sql14=sqlsrv_query($conn,"select count(lotno)as jmllot from processcontrolbatches where pcid='$r[pcid]' and dated='$dated'");
-	  $lt=sqlsrv_fetch_array($sql14);
-	 $ai=sqlsrv_num_rows($sql12);
-	 $sql15=sqlsrv_query($conn,"select Partnername from TM.dbo.Partners where TM.dbo.Partners.ID='$as7[CustomerID]'");
-	$as8=sqlsrv_fetch_array($sql15);
+// 	 $s4=sqlsrv_query($conn,"select KOdetails.id as KODID,productmaster.id as BOMID ,KnittingOrders.SupplierID,TM.dbo.Partners.PartnerName,ProductNumber,CustomerID,SODID,KnittingOrders.ID as KOID,SalesOrders.ID as SOID from 
+// (TM.dbo.KnittingOrders 
+// left join TM.dbo.SODetails on TM.dbo.SODetails.ID= TM.dbo.KnittingOrders.SODID
+// left join TM.dbo.KODetails on TM.dbo.KODetails.KOid= TM.dbo.KnittingOrders.ID
+// left join TM.dbo.Partners on TM.dbo.Partners.ID= TM.dbo.KnittingOrders.SupplierID)
+// left join TM.dbo.ProductMaster on TM.dbo.ProductMaster.ID= TM.dbo.KODetails.ProductID
+// left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
+// 		where KONO='$kno'");
+// 	 $as7=sqlsrv_fetch_array($s4);
+// 	 $sql12=sqlsrv_query($conn,"select SODetailsBom.ProductID from SODetailsBom where SODID='$as7[SODID]' and KODID='$as7[KODID]' and Parentproductid='$as7[BOMID]' order by ID", array(), array("Scrollable"=>"buffered"));
+// 	  $sql14=sqlsrv_query($conn,"select count(lotno)as jmllot from processcontrolbatches where pcid='$r[pcid]' and dated='$dated'");
+// 	  $lt=sqlsrv_fetch_array($sql14);
+// 	 $ai=sqlsrv_num_rows($sql12);
+// 	 $sql15=sqlsrv_query($conn,"select Partnername from TM.dbo.Partners where TM.dbo.Partners.ID='$as7[CustomerID]'");
+// 	$as8=sqlsrv_fetch_array($sql15);
 $i=0;
 
 
 
  do{
-	$as5=sqlsrv_fetch_array($sql12);
-	$sql13=sqlsrv_query($conn,"select ShortDescription from  ProductMaster where ID='$as5[ProductID]'");
-	$as6=sqlsrv_fetch_array($sql13);
-	$ar[$i]=$as6['ShortDescription'];
+	// $as5=sqlsrv_fetch_array($sql12);
+	// $sql13=sqlsrv_query($conn,"select ShortDescription from  ProductMaster where ID='$as5[ProductID]'");
+	// $as6=sqlsrv_fetch_array($sql13);
+	// $ar[$i]=$as6['ShortDescription'];
 
 $i++;
 }while($ai>=$i);
