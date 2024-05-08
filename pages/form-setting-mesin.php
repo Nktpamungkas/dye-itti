@@ -57,7 +57,7 @@ function hload(){
 }
 </script>
 <?php
-include "koneksiLAB.php";
+// include "koneksiLAB.php";
 include "koneksi.php";
 //db_connect($db_name);
 $nokk=$_GET['nokk'];

@@ -3,7 +3,7 @@
 	session_start();
 	set_time_limit(600);
 	include("../koneksi.php");
-	include "../koneksiLAB.php";
+	// include "../koneksiLAB.php";
 	//db_connect($db_name);
 	$id = $_GET['id'];
 	$qcek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE id='$id'");
