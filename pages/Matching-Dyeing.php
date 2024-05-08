@@ -2,6 +2,8 @@
 	ini_set("error_reporting", 1);
 	session_start();
 	include "koneksi.php";
+    $tgl1	= $_POST['tgl1'];
+    $tgl2	= $_POST['tgl2'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -47,9 +49,6 @@
 						</thead>
 						<tbody>
                             <?php
-                                $tgl1	= $_POST['tgl1'];
-                                $tgl2	= $_POST['tgl2'];
-                        
                                 if($tgl1 && $tgl2){
                                     $_sortTgl = "DATE_FORMAT( SUBSTR(createdatetime, 1,10), '%Y-%m-%d' ) BETWEEN '$tgl1' AND '$tgl2'";
                                 }else{
@@ -115,7 +114,7 @@
                                                         </div>
                                                         <br>
                                                         <br>
-                                                        <div class="form-group">
+                                                        <!-- <div class="form-group">
                                                             <input type="hidden" value="<?= $row_matching_dye['id'] ?>" name="id">
                                                             <label class="col-sm-4 control-label">Acc Resep</label>
                                                             <div class="col-sm-8">
@@ -131,31 +130,23 @@
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <br>
+                                                        <br> -->
                                                         <div class="form-group">
-                                                            <label for="nokk" class="col-sm-4 control-label">Oke ke</label>
+                                                            <label for="nokk" class="col-sm-4 control-label">Percobaan ke</label>
                                                             <div class="col-sm-8">
                                                                 <select name="ok_ke" class="form-control select2" style="width: 100%">
-                                                                    <option value="1" <?php if('1' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>1</option>
-                                                                    <option value="2" <?php if('2' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>2</option>
-                                                                    <option value="3" <?php if('3' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>3</option>
-                                                                    <option value="4" <?php if('4' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>4</option>
-                                                                    <option value="5" <?php if('5' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>5</option>
-                                                                    <option value="6" <?php if('6' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>6</option>
-                                                                    <option value="7" <?php if('7' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>7</option>
-                                                                    <option value="8" <?php if('8' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>8</option>
-                                                                    <option value="9" <?php if('9' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>9</option>
-                                                                    <option value="10" <?php if('10' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>10</option>
-                                                                    <option value="11" <?php if('11' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>11</option>
-                                                                    <option value="12" <?php if('12' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>12</option>
-                                                                    <option value="13" <?php if('13' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>13</option>
-                                                                    <option value="14" <?php if('14' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>14</option>
-                                                                    <option value="15" <?php if('15' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>15</option>
-                                                                    <option value="16" <?php if('16' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>16</option>
-                                                                    <option value="17" <?php if('17' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>17</option>
-                                                                    <option value="18" <?php if('18' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>18</option>
-                                                                    <option value="19" <?php if('19' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>19</option>
-                                                                    <option value="20" <?php if('20' == $row_matching_dye['ok_ke']){ echo "SELECTED"; } ?>>20</option>
+                                                                    <?php
+                                                                        $ke             = $row_matching_dye['ok_ke'];
+                                                                        if($ke){
+                                                                            $where_ke   = $row_matching_dye['ok_ke'];
+                                                                        }else{
+                                                                            $where_ke   = '0';
+                                                                        }
+                                                                        $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_percobaanke WHERE ke > $where_ke");
+                                                                    ?>
+                                                                    <?php while ($row_percobaanke 	= mysqli_fetch_array($q_percobaanke)) { ?>
+                                                                        <option value="<?= $row_percobaanke['ke']; ?>" <?php if($_POST['ok_ke'] == $row_percobaanke['ke']){ echo "SELECTED"; } ?>><?= $row_percobaanke['ke']; ?></option>
+                                                                    <?php } ?>
                                                                 </select>
                                                             </div>
                                                         </div>
