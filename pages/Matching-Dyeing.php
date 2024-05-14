@@ -117,11 +117,11 @@ $tgl2    = $_POST['tgl2'];
                                                 </button>
                                             </p>
 
-                                            <!-- <p>
+                                            <p>
                                                 <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#acc_matching_dyeing<?= $row_matching_dye['id'] ?>">
                                                     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Matching Dyeing"></i> Acc Matching Dyeing
                                                 </button>
-                                            </p> -->
+                                            </p>
 
                                             <p>
                                                 <a href="pages/cetak/reports-form-matching-print.php?&id=<?= $row_matching_dye['id']; ?>" class="btn btn-warning btn-xs" target="_blank" data-toggle="tooltip" data-html="true" title="Print Form Matching">
@@ -194,7 +194,7 @@ $tgl2    = $_POST['tgl2'];
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button>
+                                                    <!-- <button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button> -->
                                                 </div>
                                             </form>
                                         </div>
