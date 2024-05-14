@@ -505,7 +505,7 @@ if (isset($_POST['update_acc'])) {
 ?>
 <?php
 if (isset($_POST['save'])) {
-    echo $queryinserthistory     = "INSERT INTO tbl_matching_history SET
+    $queryinserthistory     = "INSERT INTO tbl_matching_history SET
                                             id_matching = '$_POST[id_matching]',
                                             pemberi_resep = '$_POST[pemberi_resep]',
                                             acc_resep = '$_POST[acc_resep]',
