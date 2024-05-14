@@ -105,11 +105,11 @@ $tgl2    = $_POST['tgl2'];
                                     <td>
                                         <div class="btn-group">
 
-                                            <!-- <p>
+                                            <p>
                                                 <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#tahapan_matching<?= $row_matching_dye['id'] ?>">
                                                     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Tahapan Matching"></i> Tahapan Matching
                                                 </button>
-                                            </p> -->
+                                            </p>
 
                                             <p>
                                                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#matching_dyeing<?= $row_matching_dye['id'] ?>">
@@ -131,13 +131,13 @@ $tgl2    = $_POST['tgl2'];
                                         </div>
                                     </td>
                                 </tr>
-                                <!-- Modal -->
+                                <!-- Modal ACC MATCHING-->
                                 <div class="modal fade" id="acc_matching_dyeing<?= $row_matching_dye['id'] ?>" role="dialog" aria-labelledby="cekresep" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" name="form1">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="exampleModalLabel">MATCHING DYEING</h3>
+                                                    <h3 class="modal-title" id="exampleModalLabel">ACC MATCHING DYEING</h3>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -150,7 +150,7 @@ $tgl2    = $_POST['tgl2'];
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <input type="hidden" value="<?= $row_matching_dye['id'] ?>" name="id">
+                                                                <input type="hidden" value="<?= $row_matching_dye['id'] ?>" name="id_matching">
                                                                 <label class="col-sm-3 control-label">Acc Resep</label>
                                                                 <div class="col-sm-9">
                                                                     <select class="form-control select2" style="width: 100%" name="acc_resep">
@@ -171,14 +171,14 @@ $tgl2    = $_POST['tgl2'];
                                                             <div class="form-group">
                                                                 <label for="nokk" class="col-sm-3 control-label">Percobaan Resep Ke</label>
                                                                 <div class="col-sm-9">
-                                                                    <select name="ok_ke" class="form-control select2" style="width: 100%">
+                                                                    <select name="percobaan_ke" class="form-control select2" style="width: 100%">
                                                                         <?php
                                                                         $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]'");
                                                                         ?>
                                                                         <?php while ($row_percobaanke     = mysqli_fetch_array($q_percobaanke)) { ?>
-                                                                            <option value="<?= $row_percobaanke['id']; ?>" <?php if ($_POST['ok_ke'] == $row_percobaanke['id']) {
-                                                                                                                                echo "SELECTED";
-                                                                                                                            } ?>>
+                                                                            <option value="<?= $row_percobaanke['ok_ke']; ?>" <?php if ($_POST['ok_ke'] == $row_percobaanke['id']) {
+                                                                                                                                    echo "SELECTED";
+                                                                                                                                } ?>>
                                                                                 percobaan ke -<?= $row_percobaanke['ok_ke']; ?>
                                                                                 Pemberi Resep : (<?= $row_percobaanke['pemberi_resep']; ?>),
                                                                                 Operator Matcher : (<?= $row_percobaanke['operator_matcher']; ?>),
@@ -194,13 +194,13 @@ $tgl2    = $_POST['tgl2'];
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <!-- <button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button> -->
+                                                    <button type="submit" class="btn btn-primary pull-right" name="update_acc" value="save">Simpan <i class="fa fa-save"></i></button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Modal -->
+                                <!-- Modal MATCHING DYEING-->
                                 <div class="modal fade" id="matching_dyeing<?= $row_matching_dye['id'] ?>" role="dialog" aria-labelledby="cekresep" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -325,7 +325,7 @@ $tgl2    = $_POST['tgl2'];
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Modal -->
+                                <!-- Modal TAHAPAN MATCHING -->
                                 <div class="modal fade" id="tahapan_matching<?= $row_matching_dye['id'] ?>" role="dialog" aria-labelledby="tahapan" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -351,31 +351,17 @@ $tgl2    = $_POST['tgl2'];
                                                                 <input type="hidden" value="<?= $row_matching_dye['id'] ?>" name="id_matching">
                                                                 <label class="col-sm-4 control-label">Operator Matcher</label>
                                                                 <div class="col-sm-8">
-                                                                    <?php if ($datalengthtahapan > 0) { ?>
-                                                                        <select disabled class="form-control select2" style="width: 100%" name="operator_matcher">
-                                                                            <?php
-                                                                            $q_staff = mysqli_query($con, "SELECT * FROM tbl_staff ");
-                                                                            ?>
-                                                                            <?php while ($row_staff     = mysqli_fetch_array($q_staff)) {
-                                                                            ?>
-                                                                                <option value="<?= $row_staff['nama']; ?>" <?php if ($row_staff['nama'] == $row_history_matching['operator_matcher']) {
-                                                                                                                                echo "SELECTED";
-                                                                                                                            } ?>><?= $row_staff['nama']; ?></option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    <?php } else { ?>
-                                                                        <select class="form-control select2" style="width: 100%" name="operator_matcher">
-                                                                            <option selected disabled value="-">Dipilih</option>
-                                                                            <?php
-                                                                            $q_staff = mysqli_query($con, "SELECT * FROM tbl_staff ");
-                                                                            ?>
-                                                                            <?php while ($row_staff     = mysqli_fetch_array($q_staff)) { ?>
-                                                                                <option value="<?= $row_staff['nama']; ?>" <?php if ($row_staff['nama'] == $row_history_matching['operator_matcher']) {
-                                                                                                                                echo "SELECTED";
-                                                                                                                            } ?>><?= $row_staff['nama']; ?></option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    <?php } ?>
+                                                                    <select class="form-control select2" style="width: 100%" name="operator_matcher">
+                                                                        <option selected disabled value="-">Dipilih</option>
+                                                                        <?php
+                                                                        $q_staff = mysqli_query($con, "SELECT * FROM tbl_staff ");
+                                                                        ?>
+                                                                        <?php while ($row_staff     = mysqli_fetch_array($q_staff)) { ?>
+                                                                            <option value="<?= $row_staff['nama']; ?>" <?php if ($row_staff['nama'] == $row_history_matching['operator_matcher']) {
+                                                                                                                            echo "SELECTED";
+                                                                                                                        } ?>><?= $row_staff['nama']; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
 
                                                                 </div>
                                                             </div>
@@ -384,26 +370,37 @@ $tgl2    = $_POST['tgl2'];
                                                             <div class="form-group">
                                                                 <label class="col-sm-4 control-label">Tahapan</label>
                                                                 <div class="col-sm-8">
-                                                                    <?php if ($datalengthtahapan > 0) { ?>
-                                                                        <select disabled class="form-control select2" style="width: 100%" name="tahapan">
+                                                                    <select class="form-control select2" style="width: 100%" name="tahapan">
+                                                                        <option selected disabled value="-">-- Pilih Tahapan --</option>
+                                                                        <?php
+                                                                        $q_tahapan = mysqli_query($con, "SELECT * FROM tbl_tahapan_matching");
+                                                                        while ($row_tahapan = mysqli_fetch_array($q_tahapan)) {
+                                                                        ?>
+                                                                            <option value="<?= $row_tahapan['id'] . '|' . $row_tahapan['name']; ?>">
+                                                                                <?= $row_tahapan['name']; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
 
-                                                                            <option value="<?= $datatahapan['tahapan']; ?>"><?= $datatahapan['tahapan']; ?></option>
-
-                                                                        </select>
-                                                                    <?php } else { ?>
-                                                                        <select class="form-control select2" style="width: 100%" name="tahapan">
-                                                                            <option selected disabled value="-">-- Pilih Tahapan --</option>
-                                                                            <?php
-                                                                            $q_tahapan = mysqli_query($con, "SELECT * FROM tbl_tahapan_matching");
-                                                                            while ($row_tahapan = mysqli_fetch_array($q_tahapan)) {
-                                                                            ?>
-                                                                                <option value="<?= $row_tahapan['id'] . '|' . $row_tahapan['name']; ?>">
-                                                                                    <?= $row_tahapan['name']; ?>
-                                                                                </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    <?php } ?>
-
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <br>
+                                                            <div class="form-group">
+                                                                <label for="nokk" class="col-sm-4 control-label">Percobaan Resep Ke</label>
+                                                                <div class="col-sm-8">
+                                                                    <select name="percobaan_ke" class="form-control select2" style="width: 100%">
+                                                                        <?php
+                                                                        $q_percobaan = mysqli_query($con, "SELECT * FROM tbl_percobaanke order by id ");
+                                                                        $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' order by 'ok_ke' DESC limit 1");
+                                                                        $percobaan_terakhir = mysqli_fetch_assoc($q_percobaanke);
+                                                                        ?>
+                                                                        <?php while ($row_percobaan     = mysqli_fetch_array($q_percobaan)) { ?>
+                                                                            <option value="<?= $row_percobaan['ke']; ?>" <?php if ($row_percobaan['ke'] == $row_history_matching['operator_matcher']) {
+                                                                                                                                echo "SELECTED";
+                                                                                                                            } ?>><?= $row_percobaan['ke']; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -411,12 +408,7 @@ $tgl2    = $_POST['tgl2'];
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <?php if ($datalengthtahapan > 0) { ?>
-
-                                                    <?php } else { ?>
-                                                        <button type="submit" class="btn btn-primary pull-right" name="simpan_tahapan" value="simpan_tahapan">Simpan <i class="fa fa-save"></i></button>
-                                                    <?php } ?>
-
+                                                    <button type="submit" class="btn btn-primary pull-right" name="simpan_tahapan" value="simpan_tahapan">Simpan <i class="fa fa-save"></i></button>
                                                 </div>
                                             </form>
                                         </div>
@@ -434,6 +426,7 @@ $tgl2    = $_POST['tgl2'];
 </body>
 
 </html>
+// SAVE TAHAPAN
 <?php
 if (isset($_POST['simpan_tahapan'])) {
     // Mendapatkan nilai tahapan dari formulir
@@ -448,7 +441,9 @@ if (isset($_POST['simpan_tahapan'])) {
                                             operator_matcher = '$_POST[operator_matcher]',
                                             tahapan = ' $tahapan_name',
                                             id_tahapan = '$tahapan_id',
+                                            percobaan_ke = '$_POST[percobaan_ke]',
                                             created_at = now()";
+
     $q_simpan   = mysqli_query($con, $queryinserthistory);
     if ($q_simpan) {
         echo "<script>swal({
@@ -473,8 +468,42 @@ if (isset($_POST['simpan_tahapan'])) {
     }
 }
 ?>
+// UPDATE ACC WARNA
 <?php
-if ($_POST['save'] == "save") {
+if (isset($_POST['update_acc'])) {
+    $acc_resep =    $_POST['acc_resep'];
+    $id_matching = $_POST['id_matching'];
+    $percobaan_ke = $_POST['percobaan_ke'];
+
+    $queryupdateacc_resep = "UPDATE tbl_matching_history SET `acc_resep` = '$acc_resep' WHERE id_matching = '$id_matching' AND ok_ke = '$percobaan_ke'";
+
+
+    $q_update  = mysqli_query($con, $queryupdateacc_resep);
+    if ($q_update) {
+        echo "<script>swal({
+                    title: 'Berhasil Acc',   
+                    text: 'Klik Ok untuk input data kembali',
+                    type: 'success',
+                    }).then((result) => {
+                    if (result.value) {
+                        window.location.href='?p=Matching-Dyeing'; 
+                    }
+                });</script>";
+    } else {
+        echo "<script>swal({
+                title: 'Gagal Acc',   
+                text: 'Klik Ok untuk input data kembali',
+                type: 'warning',
+                }).then((result) => {
+                if (result.value) {
+                    window.location.href='?p=Matching-Dyeing'; 
+                }
+            });</script>";
+    }
+}
+?>
+<?php
+if (isset($_POST['save'])) {
     echo $queryinserthistory     = "INSERT INTO tbl_matching_history SET
                                             id_matching = '$_POST[id_matching]',
                                             pemberi_resep = '$_POST[pemberi_resep]',
