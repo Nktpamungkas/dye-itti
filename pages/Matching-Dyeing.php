@@ -105,11 +105,11 @@ $tgl2    = $_POST['tgl2'];
                                     <td>
                                         <div class="btn-group">
 
-                                            <p>
+                                            <!-- <p>
                                                 <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#tahapan_matching<?= $row_matching_dye['id'] ?>">
                                                     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Tahapan Matching"></i> Tahapan Matching
                                                 </button>
-                                            </p>
+                                            </p> -->
 
                                             <p>
                                                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#matching_dyeing<?= $row_matching_dye['id'] ?>">
@@ -117,11 +117,11 @@ $tgl2    = $_POST['tgl2'];
                                                 </button>
                                             </p>
 
-                                            <p>
+                                            <!-- <p>
                                                 <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#acc_matching_dyeing<?= $row_matching_dye['id'] ?>">
                                                     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Matching Dyeing"></i> Acc Matching Dyeing
                                                 </button>
-                                            </p>
+                                            </p> -->
 
                                             <p>
                                                 <a href="pages/cetak/reports-form-matching-print.php?&id=<?= $row_matching_dye['id']; ?>" class="btn btn-warning btn-xs" target="_blank" data-toggle="tooltip" data-html="true" title="Print Form Matching">
@@ -183,6 +183,7 @@ $tgl2    = $_POST['tgl2'];
                                                                                 Pemberi Resep : (<?= $row_percobaanke['pemberi_resep']; ?>),
                                                                                 Operator Matcher : (<?= $row_percobaanke['operator_matcher']; ?>),
                                                                                 Note : (<?= $row_percobaanke['note']; ?>)
+                                                                                Time : (<?= $row_percobaanke['creationdatetime']; ?>)
                                                                             </option>
                                                                         <?php } ?>
                                                                     </select>
