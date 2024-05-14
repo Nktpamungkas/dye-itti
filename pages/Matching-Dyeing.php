@@ -172,6 +172,7 @@ $tgl2    = $_POST['tgl2'];
                                                                 <label for="nokk" class="col-sm-3 control-label">Percobaan Resep Ke</label>
                                                                 <div class="col-sm-9">
                                                                     <select name="percobaan_ke" class="form-control select2" style="width: 100%">
+                                                                    <option value="" disabled selected>Pilih percobaan ke</option>
                                                                         <?php
                                                                         $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]'");
                                                                         ?>
@@ -391,9 +392,9 @@ $tgl2    = $_POST['tgl2'];
                                                                 <div class="col-sm-8">
                                                                     <select name="percobaan_ke" class="form-control select2" style="width: 100%">
                                                                         <?php
-                                                                        $q_percobaan = mysqli_query($con, "SELECT * FROM tbl_percobaanke order by id ");
-                                                                        $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' order by 'ok_ke' DESC limit 1");
-                                                                        $percobaan_terakhir = mysqli_fetch_assoc($q_percobaanke);
+                                                                            $q_percobaan = mysqli_query($con, "SELECT * FROM tbl_percobaanke WHERE ke > $where_ke ORDER BY id ASC");
+                                                                            $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' order by 'ok_ke' DESC limit 1");
+                                                                            $percobaan_terakhir = mysqli_fetch_assoc($q_percobaanke);
                                                                         ?>
                                                                         <?php while ($row_percobaan     = mysqli_fetch_array($q_percobaan)) { ?>
                                                                             <option value="<?= $row_percobaan['ke']; ?>" <?php if ($row_percobaan['ke'] == $row_history_matching['operator_matcher']) {
@@ -475,7 +476,7 @@ if (isset($_POST['update_acc'])) {
     $id_matching = $_POST['id_matching'];
     $percobaan_ke = $_POST['percobaan_ke'];
 
-    $queryupdateacc_resep = "UPDATE tbl_matching_history SET `acc_resep` = '$acc_resep' WHERE id_matching = '$id_matching' AND ok_ke = '$percobaan_ke'";
+    $queryupdateacc_resep = "UPDATE tbl_matching_history SET `acc_resep` = '$acc_resep', acc_creationdatetime = now() WHERE id_matching = '$id_matching' AND ok_ke = '$percobaan_ke'";
 
 
     $q_update  = mysqli_query($con, $queryupdateacc_resep);
