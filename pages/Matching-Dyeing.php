@@ -145,7 +145,7 @@ $tgl2    = $_POST['tgl2'];
                                                 <?php
                                                 $q_history_matching     = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' ORDER BY id DESC LIMIT 1");
                                                 $row_history_matching   = mysqli_fetch_assoc($q_history_matching);
-                                                // cek sudah acc resep atau blm
+                                                //  cek sudah acc resep atau blm
                                                 $acc_or_no    = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' AND acc_resep != '' AND acc_resep IS NOT NULL ORDER BY id DESC LIMIT 1");
                                                 $cek_acc = mysqli_num_rows($acc_or_no);
                                                 ?>
@@ -198,7 +198,7 @@ $tgl2    = $_POST['tgl2'];
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    // cek sudah acc resep atau blm
+                                                    <!-- cek sudah acc resep atau blm -->
                                                     <?php if ($cek_acc < 1) { ?>
                                                         <button type="submit" class="btn btn-primary pull-right" name="update_acc" value="save">Simpan <i class="fa fa-save"></i></button>
                                                     <?php } ?>
