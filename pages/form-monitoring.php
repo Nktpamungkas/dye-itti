@@ -1259,7 +1259,7 @@ if ($_POST['save'] == "save") {
 										tekanan='" . $_POST['tekanan'] . "',
 										nozzle='" . $_POST['nozzle'] . "',
 										benang='$benang',
-										std_cok_wrn='" . $_POST['std_cok_wrn'] . "',
+										std_cok_wrn='" . addslashes($_POST['std_cok_wrn']) . "',
 										ket='" . $_POST['ket'] . "',
 										tgl_buat= '$_POST[jammasukkain] $_POST[tglmasukkain]',
 										tgl_target=ADDDATE('$_POST[jammasukkain] $_POST[tglmasukkain]', INTERVAL '" . $_POST['target'] . "' HOUR_MINUTE),
@@ -1280,10 +1280,10 @@ if ($_POST['save'] == "save") {
 
 	if ($sqlData) {
 		$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
-		  status='sedang jalan',
-		  tgl_update=now()
-		  WHERE status='antri mesin' and no_mesin='" . $rcek['no_mesin'] . "' and no_urut='1' ");
-		echo "<script>swal({
+									status='sedang jalan',
+									tgl_update=now()
+									WHERE status='antri mesin' and no_mesin='" . $rcek['no_mesin'] . "' and no_urut='1' ");
+			echo "<script>swal({
 					title: 'Data Tersimpan',   
 					text: 'Klik Ok untuk input data kembali',
 					type: 'success',
