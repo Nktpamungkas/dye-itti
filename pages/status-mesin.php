@@ -555,7 +555,7 @@ include "koneksi.php";
 										<p><?php echo Waktu("1457"); ?></p>
 									</span> </td>
 								<td align="center" bgcolor="#ECE7E7"> <span class="detail_status btn btn-sm <?php echo NoMesin("1477"); ?>" id="1477" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1477"); ?>">1477
-										<p><?php echo Waktu("1457"); ?></p>
+										<p><?php echo Waktu("1477"); ?></p>
 									</span> </td>
 								<!-- <td align="center" bgcolor="#ECE7E7"><span class="detail_status btn btn-sm <?php echo NoMesin("2660"); ?>" id="2660" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("2660"); ?>">2660
 										<p><?php echo Waktu("2660"); ?></p>
@@ -636,7 +636,7 @@ include "koneksi.php";
 										<p><?php echo Waktu("1456"); ?></p>
 									</span> </td>
 								<td align="center" bgcolor="#ECE7E7"> <span class="detail_status btn btn-sm <?php echo NoMesin("1476"); ?>" id="1476" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1476"); ?>">1476
-										<p><?php echo Waktu("1457"); ?></p>
+										<p><?php echo Waktu("1476"); ?></p>
 									</span> </td>
 								<!-- <td align="center" bgcolor="#ECE7E7"><span class="detail_status btn btn-sm <?php echo NoMesin("2661"); ?>" id="2661" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("2661"); ?>">2661
 										<p><?php echo Waktu("2661"); ?></p>
@@ -716,7 +716,7 @@ include "koneksi.php";
 										<p><?php echo Waktu("2624"); ?></p>
 									</span></td>
 								<td align="center" bgcolor="#ECE7E7"><span class="detail_status btn btn-sm <?php echo NoMesin("1478"); ?>" id="1478" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1478"); ?>">1478
-										<p><?php echo Waktu("2624"); ?></p>
+										<p><?php echo Waktu("1478"); ?></p>
 									</span></td>
 								<td align="center" bgcolor="#E0DDDD">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7"> <span class="detail_status btn btn-sm <?php echo NoMesin("2044"); ?>" id="2044" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("2044"); ?>">2044
@@ -823,7 +823,7 @@ include "koneksi.php";
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#E0DDDD">&nbsp;</td>
 								<td colspan="2" align="center" bgcolor="#E0DDDD">&nbsp;</td>
-								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
+								<td align="center" bgcolor="#ECE7E7"></td>
 								<td colspan="2" align="center" bgcolor="#E0DDDD">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
@@ -831,8 +831,16 @@ include "koneksi.php";
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#E0DDDD">&nbsp;</td>
 								<td align="center" bgcolor="#E0DDDD">&nbsp;</td>
-								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
-								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
+								<td align="center" bgcolor="#ECE7E7">
+									<span class="detail_status btn btn-sm <?php echo NoMesin("1481"); ?>" id="1481" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1481"); ?>">1481
+										<p><?php echo Waktu("1481"); ?></p>
+									</span> 
+								</td>
+								<td align="center" bgcolor="#ECE7E7">
+									<span class="detail_status btn btn-sm <?php echo NoMesin("1482"); ?>" id="1482" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1482"); ?>">1482
+										<p><?php echo Waktu("1482"); ?></p>
+									</span>
+								</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#E0DDDD">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
