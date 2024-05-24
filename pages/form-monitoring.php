@@ -3,9 +3,11 @@
 	include "koneksi.php";
 	//db_connect($db_name);
 	$nokk = $_GET['nokk'];
-	$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
-	$cek = mysqli_num_rows($sqlCek);
-	$rcek = mysqli_fetch_array($sqlCek);
+	if($nokk){
+		$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
+		$cek = mysqli_num_rows($sqlCek);
+		$rcek = mysqli_fetch_array($sqlCek);
+	}
 	$splitresep = explode('-', $rcek['no_resep']);
 	$prdorder = $splitresep[0];
 	$grpline = $splitresep[1];
@@ -600,7 +602,7 @@
 						<select name="no_mc" class="form-control">
 							<option value="">Pilih</option>
 							<?php
-							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $rcek['kapasitas'] . "' ORDER BY no_mesin ASC");
+							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]' ORDER BY no_mesin ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['no_mesin']; ?>" <?php if ($rcek['no_mesin'] == $rK['no_mesin']) {
