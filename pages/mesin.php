@@ -11,32 +11,47 @@ if (isset($_POST['delete'])) {
 
    // Mendapatkan informasi user dan IP
    $user_name = $_SESSION['user_id10']; // Misalnya username disimpan di session
-   $user_ip = $_SERVER['REMOTE_ADDR']; // Mendapatkan IP user
+   $user_ip   = $_SERVER['REMOTE_ADDR']; // Mendapatkan IP user
 
     // Mendapatkan no_mesin dari tabel tbl_mesin
-   $no_mesin_query = "SELECT * FROM tbl_mesin WHERE id='$id'";
-   $result = mysqli_query($con, $no_mesin_query);
-   $row = mysqli_fetch_assoc($result);
-   $no_mesin = $row['no_mesin'];
-   $no_mesin_baru = $row['no_mesin_baru'];
-   $no_mc_lama = $row['no_mc_lama'];
+                $no_mesin_query = "SELECT * FROM tbl_mesin WHERE id='$id'";
+                $result         = mysqli_query($con, $no_mesin_query);
+                $row            = mysqli_fetch_assoc($result);
+                $no_mesin       = $row['no_mesin'];
+                $no_mesin_baru  = $row['no_mesin_baru'];
+                $no_mc_lama     = $row['no_mc_lama'];
    
 
    // Query untuk menyimpan log penghapusan
-   $log_sql = "INSERT INTO tbl_delete_log_mesin (id, user_name, user_ip, no_mesin, no_mc_lama, no_mesin_baru) VALUES ('$id', '$user_name', '$user_ip','$no_mesin','$no_mc_lama','$no_mesin_baru')";
+   $log_sql = "INSERT INTO tbl_delete_log_mesin 
+                          (id, 
+                          user_name, 
+                          user_ip, 
+                          no_mesin, 
+                          no_mc_lama, 
+                          no_mesin_baru) 
+                          VALUES ('$id', 
+                          '$user_name', 
+                          '$user_ip',
+                          '$no_mesin',
+                          '$no_mc_lama',
+                          '$no_mesin_baru')";
 
    if (mysqli_query($con, $log_sql)) {
        // Query untuk menghapus item
-       $delete_sql = "DELETE FROM tbl_mesin WHERE id='$id'";
+       $delete_sql = "DELETE FROM tbl_mesin WHERE id = '$id'";
 
        if (mysqli_query($con, $delete_sql)) {
-           $_SESSION['message'] = "Data mesin berhasil dihapus.";
-       } else {
-           $_SESSION['message'] = "Error deleting record: " . mysqli_error($con);
+           $_SESSION['message']   = "Data mesin berhasil dihapus.";
+       } 
+       else 
+       { 
+            $_SESSION['message']  = "Error deleting record: " . mysqli_error($con);
        }
-   } else {
-       $_SESSION['message'] = "Error logging deletion: " . mysqli_error($con);
-   }
+      } 
+      else { 
+            $_SESSION['message']  = "Error logging deletion: " . mysqli_error($con);
+  }
 
   // Set a flag to indicate that the deletion process is complete
   echo '<script type="text/javascript">
