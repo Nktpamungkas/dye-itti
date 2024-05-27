@@ -6,7 +6,8 @@ $password="Xou@RUnivV!6";
 $db_name="TM";
 // $connInfo = array( "Database"=>$db_name, "UID"=>$username, "PWD"=>$password);
 // $conn     = sqlsrv_connect( $host, $connInfo);
-$con=mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
+// $con=mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
+$con=mysqli_connect("localhost","root","","db_dying");
 $cond=mysqli_connect("10.0.0.10","dit","4dm1n","db_qc");
 $con_nowprd     = mysqli_connect("10.0.0.10","dit","4dm1n","nowprd");
 if (mysqli_connect_errno()) {
