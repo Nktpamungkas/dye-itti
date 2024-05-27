@@ -107,7 +107,7 @@ if (isset($_POST['delete'])) {
                       <a href="#" id='<?php echo $rowd['id'] ?>' class="btn btn-info mesin_edit"><i class="fa fa-edit"></i> </a>
                       <?php
                                             // Hanya tampilkan tombol delete untuk pengguna Lukman dan Andri
-                                            if ($_SESSION['user_id10'] == 'lukman' || $_SESSION['user_id10'] == 'andri') {
+                                            if ($_SESSION['user_id10'] == 'lukman' || $_SESSION['user_id10'] == 'andri'|| $_SESSION['user_id10'] == 'dit') {
                                             ?>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $rowd['id']; ?>"><i class="fa fa-trash"></i></button>
                                             <?php
