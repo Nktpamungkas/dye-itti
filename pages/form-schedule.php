@@ -876,8 +876,8 @@
 							<select name="kapasitas" onchange="window.location='?p=Form-Schedule&nokk='+document.getElementById('nokk').value+'&kap='+this.value" class="form-control">
 								<option value="">Pilih</option>
 								<?php
-									$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
-									while ($rK = mysqli_fetch_array($sqlKap)) {
+								$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
+								while ($rK = mysqli_fetch_array($sqlKap)) {
 								?>
 									<option value="<?php echo $rK['kapasitas']; ?>" <?php if ($_GET['kap'] == $rK['kapasitas']) {
 																						echo "SELECTED";
