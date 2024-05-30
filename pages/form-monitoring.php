@@ -313,7 +313,17 @@
 					</div>
 					<label for="jammasukkain" class="col-sm-2 control-label">Jam Masuk Kain</label>
 					<div class="col-sm-2">
-						<input name="jammasukkain" type="date" class="form-control col-sm-2" required>
+					<?php
+						// Mengatur zona waktu
+						date_default_timezone_set('Asia/Jakarta');
+
+						// Mendapatkan tanggal hari ini
+						$tanggal_hari_ini = date('Y-m-d');
+
+						// Mendapatkan tanggal kemarin
+						$tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
+					?>
+						<input name="jammasukkain" type="date" class="form-control col-sm-2" required min="<?php echo $tanggal_kemarin; ?>" max="<?php echo $tanggal_hari_ini; ?>">
 						</div>
 					<div class="col-sm-2">
 						<input name="tglmasukkain" type="text" class="form-control col-sm-2" id="tglmasukkain" required placeholder="00:00" pattern="[0-9]{2}:[0-9]{2}$" title=" e.g 14:25" onkeyup="
@@ -598,7 +608,7 @@
 				} ?>
 				<div class="form-group">
 					<label for="no_mc" class="col-sm-3 control-label">No MC</label>
-					<div class="col-sm-2">
+					<div cltbl_jenis_prosesass="col-sm-2">
 						<select name="no_mc" class="form-control">
 							<option value="">Pilih</option>
 							<?php
