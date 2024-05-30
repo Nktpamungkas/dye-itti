@@ -3,9 +3,11 @@
 	include "koneksi.php";
 	//db_connect($db_name);
 	$nokk = $_GET['nokk'];
-	$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
-	$cek = mysqli_num_rows($sqlCek);
-	$rcek = mysqli_fetch_array($sqlCek);
+	if($nokk){
+		$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
+		$cek = mysqli_num_rows($sqlCek);
+		$rcek = mysqli_fetch_array($sqlCek);
+	}
 	$splitresep = explode('-', $rcek['no_resep']);
 	$prdorder = $splitresep[0];
 	$grpline = $splitresep[1];
@@ -600,7 +602,7 @@
 						<select name="no_mc" class="form-control">
 							<option value="">Pilih</option>
 							<?php
-							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $rcek['kapasitas'] . "' ORDER BY no_mesin ASC");
+							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]' ORDER BY no_mesin ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['no_mesin']; ?>" <?php if ($rcek['no_mesin'] == $rK['no_mesin']) {
@@ -1259,7 +1261,7 @@ if ($_POST['save'] == "save") {
 										tekanan='" . $_POST['tekanan'] . "',
 										nozzle='" . $_POST['nozzle'] . "',
 										benang='$benang',
-										std_cok_wrn='" . $_POST['std_cok_wrn'] . "',
+										std_cok_wrn='" . addslashes($_POST['std_cok_wrn']) . "',
 										ket='" . $_POST['ket'] . "',
 										tgl_buat= '$_POST[jammasukkain] $_POST[tglmasukkain]',
 										tgl_target=ADDDATE('$_POST[jammasukkain] $_POST[tglmasukkain]', INTERVAL '" . $_POST['target'] . "' HOUR_MINUTE),
@@ -1280,10 +1282,10 @@ if ($_POST['save'] == "save") {
 
 	if ($sqlData) {
 		$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
-		  status='sedang jalan',
-		  tgl_update=now()
-		  WHERE status='antri mesin' and no_mesin='" . $rcek['no_mesin'] . "' and no_urut='1' ");
-		echo "<script>swal({
+									status='sedang jalan',
+									tgl_update=now()
+									WHERE status='antri mesin' and no_mesin='" . $rcek['no_mesin'] . "' and no_urut='1' ");
+			echo "<script>swal({
 					title: 'Data Tersimpan',   
 					text: 'Klik Ok untuk input data kembali',
 					type: 'success',

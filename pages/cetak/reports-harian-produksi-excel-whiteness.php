@@ -34,17 +34,18 @@ $shft = $_GET['shft'];
         <th bgcolor="#99FF99">NO.</th>
         <th bgcolor="#99FF99">PRODUCTION ORDER</th>
         <th bgcolor="#99FF99">PRODUCTION DEMAND</th>
-        <th bgcolor="#99FF99">ORIGINAL PD CODE</th>
+        <!-- <th bgcolor="#99FF99">ORIGINAL PD CODE</th> -->
         <th bgcolor="#99FF99">NO ITEM</th>
         <th bgcolor="#99FF99">COLOR GROUP</th>
         <th bgcolor="#99FF99">FABRIC TYPE</th>
-        <th bgcolor="#99FF99">LIGHT/DARK</th>
+        <!-- <th bgcolor="#99FF99">LIGHT/DARK</th> -->
         <th bgcolor="#99FF99">JENIS KAIN</th>
         <th bgcolor="#99FF99">GRAMASI</th>
         <th bgcolor="#99FF99">QTY</th>
         <th bgcolor="#99FF99">NOMOR MESIN</th>
         <th bgcolor="#99FF99">KAPASITAS MESIN</th>
         <th bgcolor="#99FF99">WARNA</th>
+        <th bgcolor="#99FF99">NO WARNA</th>
         <th bgcolor="#99FF99">WAKTU IN</th>
         <th bgcolor="#99FF99">PRD. RSV. LINK GROUP CODE</th>
         <th bgcolor="#99FF99">WHITENESS</th>
@@ -375,23 +376,24 @@ $shft = $_GET['shft'];
           <td><?= $no++; ?></td>
           <td>'<?= $rowd['nokk']; ?></td>
           <td>'<?= $rowd['nodemand']; ?></td>
-          <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td>
+          <!-- <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> -->
           <td><?= $rowd['no_hanger']; ?></td>
           <td><?= $dt_ITXVIEWKK['COLORGROUP']; ?></td>
           <td><?= $dt_ITXVIEWKK['SUBCODE01']; ?></td>
-          <td>
+          <!-- <td>
             <?php
-            $q_variant    = db2_exec($conn2, "SELECT TRIM(SUBCODE04) AS SUBCODE04 FROM PRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]' AND (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')");
-            $row_variant  = db2_fetch_assoc($q_variant);
-            echo $row_variant['SUBCODE04'];
+              // $q_variant    = db2_exec($conn2, "SELECT TRIM(SUBCODE04) AS SUBCODE04 FROM PRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$row_whiteness[PRODUCTIONORDERCODE]' AND (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')");
+              // $row_variant  = db2_fetch_assoc($q_variant);
+              // echo $row_variant['SUBCODE04'];
             ?>
-          </td>
+          </td> -->
           <td><?= $rowd['jenis_kain']; ?></td>
           <td><?= $rowd['gramasi']; ?></td>
           <td><?= $rowd['bruto']; ?></td>
           <td><?= $rowd['mc']; ?></td>
           <td><?= $rowd['kapasitas']; ?></td>
           <td><?= $rowd['warna']; ?></td>
+          <td><?= $rowd['no_warna']; ?></td>
           <td><?= $rowd['tgl_in'] . ' ' . $rowd['jam_in']; ?></td>
           <td><?= $prd_rsv_link_group ?></td>
           <td><?= $whiteness; ?></td>
