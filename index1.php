@@ -466,7 +466,7 @@ desired effect
                           } ?>"><a href="?p=lap-harian-produksi"><i class="fa fa-columns text-red"></i> <span>Lap Harian Produksi</span></a></li>
               <li class="<?php if ($_GET['p'] == "lap-harian-matching") {
                             echo "active";
-                          } ?>"><a href="?p=lap-harian-dyeing"><i class="fa fa-columns text-red"></i> <span>Lap Harian Dyeing</span></a></li>
+                          } ?>"><a href="?p=lap-harian-dyeing"><i class="fa fa-columns text-red"></i> <span>Laporan Harian Matching Dyeing</span></a></li>
               <!-- <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
                                 echo "active";
                               } ?>"><a href="?p=lap-harian-matching"><i class="fa fa-columns text-yellow"></i> <span>Lap Harian Matching</span></a></li> -->
