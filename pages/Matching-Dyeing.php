@@ -1,4 +1,4 @@
-<?PHP
+<?php
 ini_set("error_reporting", 1);
 session_start();
 include "koneksi.php";
@@ -145,7 +145,7 @@ $tgl2    = $_POST['tgl2'];
                                                 <?php
                                                 $q_history_matching     = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' ORDER BY id DESC LIMIT 1");
                                                 $row_history_matching   = mysqli_fetch_assoc($q_history_matching);
-                                                //  cek sudah acc resep atau blm
+                                                // cek sudah acc resep atau blm
                                                 $acc_or_no    = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' AND acc_resep != '' AND acc_resep IS NOT NULL ORDER BY id DESC LIMIT 1");
                                                 $cek_acc = mysqli_num_rows($acc_or_no);
                                                 ?>
@@ -398,7 +398,7 @@ $tgl2    = $_POST['tgl2'];
                                                                 <div class="col-sm-8">
                                                                     <select name="percobaan_ke" class="form-control select2" style="width: 100%">
                                                                         <?php
-                                                                        $q_percobaan = mysqli_query($con, "SELECT * FROM tbl_percobaanke WHERE ke > $where_ke ORDER BY id ASC");
+                                                                        $q_percobaan = mysqli_query($con, "SELECT * FROM tbl_percobaanke WHERE ke >= $where_ke ORDER BY id ASC");
                                                                         $q_percobaanke  = mysqli_query($con, "SELECT * FROM tbl_matching_history WHERE id_matching = '$row_matching_dye[id]' order by 'ok_ke' DESC limit 1");
                                                                         $percobaan_terakhir = mysqli_fetch_assoc($q_percobaanke);
                                                                         ?>
@@ -433,7 +433,7 @@ $tgl2    = $_POST['tgl2'];
 </body>
 
 </html>
-// SAVE TAHAPAN
+<!-- SAVE TAHAPAN -->
 <?php
 if (isset($_POST['simpan_tahapan'])) {
     // Mendapatkan nilai tahapan dari formulir
@@ -475,7 +475,7 @@ if (isset($_POST['simpan_tahapan'])) {
     }
 }
 ?>
-// UPDATE ACC WARNA
+<!-- UPDATE ACC WARNA -->
 <?php
 if (isset($_POST['update_acc'])) {
     $acc_resep =    $_POST['acc_resep'];
