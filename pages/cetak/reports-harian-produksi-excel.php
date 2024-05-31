@@ -1,8 +1,8 @@
 <?php
-header("Content-type: application/octet-stream");
-header("Content-Disposition: attachment; filename=report-produksi-" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
-header("Pragma: no-cache");
-header("Expires: 0");
+// header("Content-type: application/octet-stream");
+// header("Content-Disposition: attachment; filename=report-produksi-" . substr($_GET['awal'], 0, 10) . ".xls"); //ganti nama sesuai keperluan
+// header("Pragma: no-cache");
+// header("Expires: 0");
 //disini script laporan anda
 ?>
 <?php
@@ -62,6 +62,15 @@ $shft = $_GET['shft'];
       <th colspan="4" bgcolor="#99FF99">STOP MESIN</th>
       <th rowspan="2" bgcolor="#99FF99">LAMA STOP</th>
       <th rowspan="2" bgcolor="#99FF99">KODE STOP</th>
+      <th colspan="4" bgcolor="#99FF99">STOP MESIN 2</th>
+      <th rowspan="2" bgcolor="#99FF99">LAMA STOP 2</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE STOP 2</th>
+      <th colspan="4" bgcolor="#99FF99">STOP MESIN 3</th>
+      <th rowspan="2" bgcolor="#99FF99">LAMA STOP 3</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE STOP 3</th>
+      <th colspan="4" bgcolor="#99FF99">STOP MESIN 4</th>
+      <th rowspan="2" bgcolor="#99FF99">LAMA STOP 4</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE STOP 4</th>
       <th rowspan="2" bgcolor="#99FF99">Acc Keluar Kain</th>
       <th rowspan="2" bgcolor="#99FF99">Operator</th>
       <th rowspan="2" bgcolor="#99FF99">NoKK</th>
@@ -121,6 +130,22 @@ $shft = $_GET['shft'];
       <th bgcolor="#99FF99">IN</th>
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">OUT</th>
+
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">JAM</th>
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">S/D</th>
+      
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">JAM</th>
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">S/D</th>
+      
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">JAM</th>
+      <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">S/D</th>
+      
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">JAM</th>
       <th bgcolor="#99FF99">TGL</th>
@@ -340,10 +365,15 @@ $shft = $_GET['shft'];
         <td><?php echo $rowd['jam_in']; ?></td>
         <td><?php echo $rowd['tgl_out']; ?></td>
         <td><?php echo $rowd['jam_out']; ?></td>
-        <td><?php if ($rowd['lama_proses'] != "") {
+        <td>
+          <?php
+            if ($rowd['lama_proses'] != "") {
               echo $rowd['jam'] . ":" . $rowd['menit'];
-            } ?></td>
+            } 
+          ?>
+        </td>
         <td><?php echo $rowd['point2']; ?></td>
+
         <td><?php if ($rowd['langganan'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
               echo $rowSM['tgl_masuk'];
             } else {
@@ -376,6 +406,28 @@ $shft = $_GET['shft'];
             } else {
               echo $rowd['kd_stop'];
             } ?></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
         <td><?php echo $rowd['acc_keluar']; ?></td>
         <td><?php echo $rowd['operator_keluar']; ?></td>
         <td>'<?php echo $rowd['nokk']; ?></td>
