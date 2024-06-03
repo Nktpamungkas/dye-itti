@@ -393,6 +393,7 @@ $tgl2    = $_POST['tgl2'];
                                                             </div>
                                                             <br>
                                                             <br>
+                                                            <!-- Tahapan ke berapa sesuai dengan percobaan yang sedang berlangsung -->
                                                             <div class="form-group">
                                                                 <label for="nokk" class="col-sm-4 control-label">Percobaan Resep Ke</label>
                                                                 <div class="col-sm-8">
