@@ -1,8 +1,8 @@
 <?php
-    // NOW
-	    $nokk = $_GET['nokk'];
+// NOW
+$nokk = $_GET['nokk'];
 
-        $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
+$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
                                                 TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
                                                 TRIM(DEAMAND) AS DEMAND,
                                                 ORIGDLVSALORDERLINEORDERLINE,
@@ -21,38 +21,38 @@
                                                 ITXVIEWKK 
                                             WHERE 
                                                 PRODUCTIONORDERCODE = '$nokk'");
-        $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
 
-        $sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
+$sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
                                                     WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' AND CODE = '$dt_ITXVIEWKK[PROJECTCODE]'");
-        $dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
+$dt_pelanggan_buyer		= db2_fetch_assoc($sql_pelanggan_buyer);
 
-        $sql_demand		= db2_exec($conn2, "SELECT LISTAGG(TRIM(DEAMAND), ', ') AS DEMAND,
+$sql_demand		= db2_exec($conn2, "SELECT LISTAGG(TRIM(DEAMAND), ', ') AS DEMAND,
                                             LISTAGG(''''|| TRIM(ORIGDLVSALORDERLINEORDERLINE) ||'''', ', ')  AS ORIGDLVSALORDERLINEORDERLINE
                                             FROM ITXVIEWKK 
                                             WHERE PRODUCTIONORDERCODE = '$nokk'");
-        $dt_demand		= db2_fetch_assoc($sql_demand);
+$dt_demand		= db2_fetch_assoc($sql_demand);
 
-        if (!empty($dt_demand['ORIGDLVSALORDERLINEORDERLINE'])) {
-            $orderline	= $dt_demand['ORIGDLVSALORDERLINEORDERLINE'];
-        } else {
-            $orderline	= '0';
-        }
+if (!empty($dt_demand['ORIGDLVSALORDERLINEORDERLINE'])) {
+	$orderline	= $dt_demand['ORIGDLVSALORDERLINEORDERLINE'];
+} else {
+	$orderline	= '0';
+}
 
-        $sql_po			= db2_exec($conn2, "SELECT TRIM(EXTERNALREFERENCE) AS NO_PO FROM ITXVIEW_KGBRUTO 
+$sql_po			= db2_exec($conn2, "SELECT TRIM(EXTERNALREFERENCE) AS NO_PO FROM ITXVIEW_KGBRUTO 
                                             WHERE PROJECTCODE = '$dt_ITXVIEWKK[PROJECTCODE]' AND ORIGDLVSALORDERLINEORDERLINE IN ($orderline)");
-        $dt_po    		= db2_fetch_assoc($sql_po);
+$dt_po    		= db2_fetch_assoc($sql_po);
 
-        $sql_noitem     = db2_exec($conn2, "SELECT * FROM ORDERITEMORDERPARTNERLINK WHERE INACTIVE = 0
+$sql_noitem     = db2_exec($conn2, "SELECT * FROM ORDERITEMORDERPARTNERLINK WHERE INACTIVE = 0
                                             AND ORDPRNCUSTOMERSUPPLIERCODE = '$dt_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' 
                                             AND SUBCODE01 = '$dt_ITXVIEWKK[SUBCODE01]' AND SUBCODE02 = '$dt_ITXVIEWKK[SUBCODE02]' 
                                             AND SUBCODE03 = '$dt_ITXVIEWKK[SUBCODE03]' AND SUBCODE04 = '$dt_ITXVIEWKK[SUBCODE04]' 
                                             AND SUBCODE05 = '$dt_ITXVIEWKK[SUBCODE05]' AND SUBCODE06 = '$dt_ITXVIEWKK[SUBCODE06]'
                                             AND SUBCODE07 = '$dt_ITXVIEWKK[SUBCODE07]' AND SUBCODE08 ='$dt_ITXVIEWKK[SUBCODE08]'
                                             AND SUBCODE09 = '$dt_ITXVIEWKK[SUBCODE09]' AND SUBCODE10 ='$dt_ITXVIEWKK[SUBCODE10]'");
-        $dt_item        = db2_fetch_assoc($sql_noitem);
+$dt_item        = db2_fetch_assoc($sql_noitem);
 
-        $sql_lebargramasi	= db2_exec($conn2, "SELECT i.LEBAR,
+$sql_lebargramasi	= db2_exec($conn2, "SELECT i.LEBAR,
                                                         CASE
                                                             WHEN i2.GRAMASI_KFF IS NULL THEN i2.GRAMASI_FKF
                                                             ELSE i2.GRAMASI_KFF
@@ -62,9 +62,9 @@
                                                     LEFT JOIN ITXVIEWGRAMASI i2 ON i2.SALESORDERCODE = '$dt_ITXVIEWKK[PROJECTCODE]' AND i2.ORDERLINE = '$dt_ITXVIEWKK[ORIGDLVSALORDERLINEORDERLINE]'
                                                     WHERE 
                                                     i.SALESORDERCODE = '$dt_ITXVIEWKK[PROJECTCODE]' AND i.ORDERLINE = '$dt_ITXVIEWKK[ORIGDLVSALORDERLINEORDERLINE]'");
-        $dt_lg				= db2_fetch_assoc($sql_lebargramasi);
+$dt_lg				= db2_fetch_assoc($sql_lebargramasi);
 
-        $sql_warna		= db2_exec($conn2, "SELECT DISTINCT TRIM(WARNA) AS WARNA FROM ITXVIEWCOLOR 
+$sql_warna		= db2_exec($conn2, "SELECT DISTINCT TRIM(WARNA) AS WARNA FROM ITXVIEWCOLOR 
                                         WHERE ITEMTYPECODE = '$dt_ITXVIEWKK[ITEMTYPEAFICODE]' 
                                             AND SUBCODE01 = '$dt_ITXVIEWKK[SUBCODE01]' 
                                             AND SUBCODE02 = '$dt_ITXVIEWKK[SUBCODE02]'
@@ -76,9 +76,9 @@
                                             AND SUBCODE08 = '$dt_ITXVIEWKK[SUBCODE08]'
                                             AND SUBCODE09 = '$dt_ITXVIEWKK[SUBCODE09]' 
                                             AND SUBCODE10 = '$dt_ITXVIEWKK[SUBCODE10]'");
-        $dt_warna		= db2_fetch_assoc($sql_warna);
+$dt_warna		= db2_fetch_assoc($sql_warna);
 
-        $sql_qtyorder   = db2_exec($conn2, "SELECT DISTINCT
+$sql_qtyorder   = db2_exec($conn2, "SELECT DISTINCT
 												GROUPSTEPNUMBER,
                                                 INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
                                                 INITIALUSERSECONDARYQUANTITY AS QTY_ORDER_YARD
@@ -88,15 +88,15 @@
                                                 PRODUCTIONORDERCODE = '$nokk'
 											ORDER BY
 												GROUPSTEPNUMBER ASC LIMIT 1");
-        $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
+$dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
-        $sql_roll		= db2_exec($conn2, "SELECT count(*) AS ROLL, s2.PRODUCTIONORDERCODE
+$sql_roll		= db2_exec($conn2, "SELECT count(*) AS ROLL, s2.PRODUCTIONORDERCODE
                                             FROM STOCKTRANSACTION s2 
                                             WHERE s2.ITEMTYPECODE ='KGF' AND s2.PRODUCTIONORDERCODE = '$dt_ITXVIEWKK[PRODUCTIONORDERCODE]'
                                             GROUP BY s2.PRODUCTIONORDERCODE");
-        $dt_roll   		= db2_fetch_assoc($sql_roll);
+$dt_roll   		= db2_fetch_assoc($sql_roll);
 
-        $sql_mesinknt	= db2_exec($conn2, "SELECT DISTINCT
+$sql_mesinknt	= db2_exec($conn2, "SELECT DISTINCT
                                                 s.LOTCODE,
                                                 CASE
                                                     WHEN a.VALUESTRING IS NULL THEN '-'
@@ -106,9 +106,9 @@
                                             LEFT JOIN PRODUCTIONDEMAND p ON p.CODE = s.LOTCODE 
                                             LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.NAMENAME = 'MachineNo'
                                             WHERE s.PRODUCTIONORDERCODE = '$nokk'");
-        $dt_mesinknt	= db2_fetch_assoc($sql_mesinknt);
+$dt_mesinknt	= db2_fetch_assoc($sql_mesinknt);
 
-        $sql_prod_reservation   = db2_exec($conn2, "SELECT
+$sql_prod_reservation   = db2_exec($conn2, "SELECT
                                                         TRIM(SUBCODE04) AS SUBCODE04
                                                     FROM
                                                         PRODUCTIONRESERVATION
@@ -117,28 +117,28 @@
                                                         AND PRODUCTIONORDERCODE = '$nokk'
                                                         AND ORDERCODE = '$dt_ITXVIEWKK[DEMAND]' 
                                                     LIMIT 1");
-        $row_prod_reservation   = db2_fetch_assoc($sql_prod_reservation);
-    // NOW
+$row_prod_reservation   = db2_fetch_assoc($sql_prod_reservation);
+// NOW
 ?>
 <script type="text/javascript">
-	function bonresep1(){
-		var no_resep		= document.getElementById("no_resep").value;
-		var prod_order		= no_resep.substring(0, 8);
-		var group_number	= no_resep.substring(9);
+	function bonresep1() {
+		var no_resep = document.getElementById("no_resep").value;
+		var prod_order = no_resep.substring(0, 8);
+		var group_number = no_resep.substring(9);
 		// alert("no_resep");
 
-		$.get("api_schedule.php?prod_order="+prod_order+"&group_number="+group_number,function(data){
+		$.get("api_schedule.php?prod_order=" + prod_order + "&group_number=" + group_number, function(data) {
 			document.getElementById("suffix").value = data.SUFFIX_CODE;
 		});
 	}
 
-	function bonresep2(){
-		var no_resep2		= document.getElementById("no_resep2").value;
-		var prod_order2		= no_resep2.substring(0, 8);
-		var group_number2	= no_resep2.substring(9);
+	function bonresep2() {
+		var no_resep2 = document.getElementById("no_resep2").value;
+		var prod_order2 = no_resep2.substring(0, 8);
+		var group_number2 = no_resep2.substring(9);
 		// alert("no_resep");
 
-		$.get("api_schedule.php?prod_order="+prod_order2+"&group_number="+group_number2,function(data2){
+		$.get("api_schedule.php?prod_order=" + prod_order2 + "&group_number=" + group_number2, function(data2) {
 			document.getElementById("suffix2").value = data2.SUFFIX_CODE;
 		});
 	}
@@ -248,7 +248,7 @@
 					<div class="col-sm-2">
 						<input name="lot" type="text" class="form-control" readonly value="<?= $dt_ITXVIEWKK['LOT']; ?>" placeholder="Lot">
 					</div>
-				</div> 
+				</div>
 				<div class="form-group">
 					<label for="jml_bruto" class="col-sm-3 control-label">Roll &amp; Qty</label>
 					<div class="col-sm-2">
@@ -264,6 +264,13 @@
 			</div>
 			<!-- col -->
 			<div class="col-md-6">
+				<div class="form-group">
+					<label for="kapasitas" class="col-sm-3 control-label">Kapasitas</label>
+					<div class="col-sm-2">
+						<input name="kapasitas" type="number" class="form-control" value="" id='kapasitas'>
+					</div>
+
+				</div>
 				<div class="form-group">
 					<label for="shift" class="col-sm-3 control-label">Shift</label>
 					<div class="col-sm-2">
@@ -294,7 +301,7 @@
 						<select name="no_resep" class="form-control select2" id='no_resep' onchange="bonresep1()">
 							<option disabled selected>Pilih Bon Resep</option>
 							<?php
-								$q_bonresep				= db2_exec($conn2, "SELECT DISTINCT
+							$q_bonresep				= db2_exec($conn2, "SELECT DISTINCT
                                                                                 PRODUCTIONRESERVATION.GROUPLINE,
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
@@ -306,7 +313,7 @@
 																				AND	PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk'
 																			ORDER BY
 																				PRODUCTIONRESERVATION.GROUPLINE ASC");
-								while ($row_bonresep 	= db2_fetch_assoc($q_bonresep)) {
+							while ($row_bonresep 	= db2_fetch_assoc($q_bonresep)) {
 							?>
 								<option value="<?= $row_bonresep['BONRESEP1'] ?>"><?= $row_bonresep['BONRESEP1'] ?></option>
 							<?php } ?>
@@ -322,7 +329,7 @@
 						<select name="no_resep2" class="form-control select2" id='no_resep2' onchange="bonresep2()">
 							<option disabled selected>Pilih Bon Resep</option>
 							<?php
-								$q_bonresep2				= db2_exec($conn2, "SELECT DISTINCT
+							$q_bonresep2				= db2_exec($conn2, "SELECT DISTINCT
                                                                                 PRODUCTIONRESERVATION.GROUPLINE,
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
 																				TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) AS BONRESEP1,
@@ -334,7 +341,7 @@
 																				AND	PRODUCTIONRESERVATION.PRODUCTIONORDERCODE = '$nokk'
 																			ORDER BY
 																				PRODUCTIONRESERVATION.GROUPLINE ASC");
-								while ($row_bonresep2 	= db2_fetch_assoc($q_bonresep2)) {
+							while ($row_bonresep2 	= db2_fetch_assoc($q_bonresep2)) {
 							?>
 								<option value="<?= $row_bonresep2['BONRESEP1'] ?>"><?= $row_bonresep2['BONRESEP1'] ?></option>
 							<?php } ?>
@@ -388,7 +395,7 @@
 						<input name="personil" type="text" class="form-control" id="personil" value="<?php echo $_SESSION['nama10']; ?>" placeholder="personil" readonly>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="ket" class="col-sm-3 control-label">Keterangan</label>
 					<div class="col-sm-5">
@@ -413,14 +420,14 @@
 		</div>
 		<div class="box-footer">
 			<button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Buka-Resep'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
-            <button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button>
+			<button type="submit" class="btn btn-primary pull-right" name="save" value="save">Simpan <i class="fa fa-save"></i></button>
 		</div>
 	</div>
 </form>
 
 <?php
-	if ($_POST['save'] == "save") {
-        $q_simpan   = mysqli_query($con, "INSERT INTO tbl_bukaresep 
+if ($_POST['save'] == "save") {
+	$q_simpan   = mysqli_query($con, "INSERT INTO tbl_bukaresep 
                                                 SET nokk 		= '$_POST[nokk]',
                                                     nodemand 	= '$_POST[demand]',
 													no_order 	= '$_POST[no_order]',
@@ -440,9 +447,10 @@
                                                     personil 	= '$_POST[personil]',
                                                     jml_gerobak = '$_POST[jml_gerobak]',
                                                     proses 		= '$_POST[proses]',
+													kapasitas 	= '$_POST[kapasitas]',
                                                     createdatetime = now()");
-        if($q_simpan){
-            echo "<script>swal({
+	if ($q_simpan) {
+		echo "<script>swal({
                     title: 'Data Tersimpan',   
                     text: 'Klik Ok untuk input data kembali',
                     type: 'success',
@@ -451,6 +459,6 @@
                         window.location.href='?p=Form-buka-resep'; 
                     }
                 });</script>";
-        }
-    }
+	}
+}
 ?>
