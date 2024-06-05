@@ -62,7 +62,7 @@ $shft = $_GET['shft'];
       <th colspan="4" bgcolor="#99FF99">STOP MESIN</th>
       <th rowspan="2" bgcolor="#99FF99">LAMA STOP</th>
       <th rowspan="2" bgcolor="#99FF99">KODE STOP</th>
-      <th colspan="4" bgcolor="#99FF99">STOP MESIN 2</th>
+      <!-- <th colspan="4" bgcolor="#99FF99">STOP MESIN 2</th>
       <th rowspan="2" bgcolor="#99FF99">LAMA STOP 2</th>
       <th rowspan="2" bgcolor="#99FF99">KODE STOP 2</th>
       <th colspan="4" bgcolor="#99FF99">STOP MESIN 3</th>
@@ -70,7 +70,7 @@ $shft = $_GET['shft'];
       <th rowspan="2" bgcolor="#99FF99">KODE STOP 3</th>
       <th colspan="4" bgcolor="#99FF99">STOP MESIN 4</th>
       <th rowspan="2" bgcolor="#99FF99">LAMA STOP 4</th>
-      <th rowspan="2" bgcolor="#99FF99">KODE STOP 4</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE STOP 4</th> -->
       <th rowspan="2" bgcolor="#99FF99">Acc Keluar Kain</th>
       <th rowspan="2" bgcolor="#99FF99">Operator</th>
       <th rowspan="2" bgcolor="#99FF99">NoKK</th>
@@ -131,7 +131,7 @@ $shft = $_GET['shft'];
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">OUT</th>
 
-      <th bgcolor="#99FF99">TGL</th>
+      <!-- <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">JAM</th>
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">S/D</th>
@@ -149,7 +149,7 @@ $shft = $_GET['shft'];
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">JAM</th>
       <th bgcolor="#99FF99">TGL</th>
-      <th bgcolor="#99FF99">S/D</th>
+      <th bgcolor="#99FF99">S/D</th> -->
     </tr>
     <?php
       $Awal = $_GET['awal'];
@@ -407,14 +407,7 @@ $shft = $_GET['shft'];
               echo $rowd['kd_stop'];
             } ?></td>
         
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        
-        <td></td>
+        <!-- <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -427,6 +420,13 @@ $shft = $_GET['shft'];
         <td></td>
         <td></td>
         <td></td>
+        
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td> -->
 
         <td><?php echo $rowd['acc_keluar']; ?></td>
         <td><?php echo $rowd['operator_keluar']; ?></td>
