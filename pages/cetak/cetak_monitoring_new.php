@@ -305,7 +305,7 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
   $target = explode(".", $rowmt['target']);
   $jamtarget = $target[0];
   $menittarget = $target[1];
-  if ($menittarget == '5') {
+  if ($menittarget == '50') {
     $mintarget = 30;
   } else {
     $mintarget = 0;
@@ -524,7 +524,30 @@ left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['blower']; ?></td>
       <td style="border-right:0px #000000 solid;">Jam Target Keluar</td>
-      <td width="9%" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">: <?php echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?></td>
+      <td width="9%" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">: 
+        <?php // echo date('H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowmt2['tgl_buat']))); ?>
+        <?php
+          // $jam_tambahan = $rowmt['target']; // Jam yang ingin ditambahkan
+          $waktu_awal = strtotime(substr($rowmt2['tgl_buat'], 11, 5)); // Waktu awal
+          $jam_tambahan = $target[0];; // Jam tambahan
+          $menit_tambahan = $target[1];; // Menit tambahan
+
+          // Konversi waktu awal ke dalam detik
+          $detik_awal = $waktu_awal;
+
+          // Hitung jumlah detik yang akan ditambahkan berdasarkan waktu tambahan
+          $detik_tambahan = ($jam_tambahan * 3600) + ($menit_tambahan * 60);
+
+          // Tambahkan detik tambahan ke waktu awal
+          $waktu_hasil = $detik_awal + $detik_tambahan;
+
+          // Konversi kembali ke format waktu (HH:mm:ss)
+          $waktu_hasil_format = date("H:i", $waktu_hasil);
+
+          echo $waktu_hasil_format; // Output: 14:48:00
+
+        ?>
+      </td>
       <td width="9%" style="border-left:0px #000000 solid; font-size:7px">&nbsp;</td>
     </tr>
     <tr>

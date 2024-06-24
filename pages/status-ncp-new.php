@@ -34,9 +34,9 @@ $sql=" select d.DepartmentName from PCCardPosition p left join
 Departments d on d.ID=p.DepartmentID
 left join ProcessControlBatches a on p.PCBID=a.ID
 where a.DocumentNo='$nokk' and (d.DepartmentName='KK Oke' or p.CounterDepartmentID='60') order by p.Dated ";
-$qry=sqlsrv_query($conn,$sql);
-$jmrow=sqlsrv_num_rows($qry);
-	return $jmrow;
+// $qry=sqlsrv_query($conn,$sql);
+// $jmrow=sqlsrv_num_rows($qry);
+	// return $jmrow;
 	
 }	
 ?>

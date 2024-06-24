@@ -48,11 +48,11 @@ $page  = strtolower($page);
             'November',
             'Desember'
           );
-          $sqlsvr = sqlsrv_query($conn,"select count(*) as jml,MONTH(GETDATE()) as bln,YEAR(GETDATE()) as thn from
-                                NCP ncp inner join
-                                ProcessControlBatches pcb on ncp.PCBID = pcb.ID 
-                                where ncp.DocumentNo LIKE 'DYE%' and convert(char(7),ncp.Dated,120)=convert(char(7),GETDATE(),120)");
-          $rsvr = sqlsrv_fetch_array($sqlsvr);
+          // $sqlsvr = sqlsrv_query($conn,"select count(*) as jml,MONTH(GETDATE()) as bln,YEAR(GETDATE()) as thn from
+          //                       NCP ncp inner join
+          //                       ProcessControlBatches pcb on ncp.PCBID = pcb.ID 
+          //                       where ncp.DocumentNo LIKE 'DYE%' and convert(char(7),ncp.Dated,120)=convert(char(7),GETDATE(),120)");
+          // $rsvr = sqlsrv_fetch_array($sqlsvr);
           ?>
           <h3><?php echo $rsvr['jml']; ?></h3>
           <p>NCP Dyeing Bulan <?php echo $bulan[$rsvr['bln']] . " " . $rsvr['thn']; ?></p>
@@ -71,11 +71,11 @@ $page  = strtolower($page);
       <div class="small-box bg-green">
         <div class="inner">
           <?php
-          $sqlsvr1 = sqlsrv_query($conn,"select count(*) as jml,YEAR(GETDATE()) as thn from
-                              NCP ncp inner join
-                              ProcessControlBatches pcb on ncp.PCBID = pcb.ID 
-                              where ncp.DocumentNo LIKE 'DYE%' and convert(char(4),ncp.Dated,120)=convert(char(4),GETDATE(),120)");
-          $rsvr1 = sqlsrv_fetch_array($sqlsvr1);
+          // $sqlsvr1 = sqlsrv_query($conn,"select count(*) as jml,YEAR(GETDATE()) as thn from
+          //                     NCP ncp inner join
+          //                     ProcessControlBatches pcb on ncp.PCBID = pcb.ID 
+          //                     where ncp.DocumentNo LIKE 'DYE%' and convert(char(4),ncp.Dated,120)=convert(char(4),GETDATE(),120)");
+          // $rsvr1 = sqlsrv_fetch_array($sqlsvr1);
           ?>
           <h3><?php echo $rsvr1['jml']; ?></h3>
           <p>NCP Dyeing Tahun <?php echo $rsvr1['thn']; ?></p>

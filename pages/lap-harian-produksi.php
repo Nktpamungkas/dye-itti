@@ -251,42 +251,42 @@
                     $Where1 = " WHERE a.id='' AND NOT x.nokk IS NULL";
                   }
                   $sql = mysqli_query($con, "SELECT x.*,a.no_mesin as mc,a.no_mc_lama as mc_lama FROM tbl_mesin a
-                                          LEFT JOIN
-                                          (SELECT
-                                            a.rcode,
-                                            b.nokk,
-                                            b.nodemand,
-                                            c.tgl_update,
-                                            b.buyer,
-                                            b.langganan,
-                                            b.no_order,
-                                            b.jenis_kain,
-                                            b.lot,
-                                            b.no_mesin,
-                                            b.warna,
-                                            b.proses,
-                                            b.target,
-                                            if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
-                                            c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
-                                            b.`status` as sts,
-                                            a.`status` as stscelup,
-                                            a.proses as proses_aktual,
-                                            a.id as idclp,
-                                            a.analisa_resep,
-                                            a.status_resep,
-                                            b.no_hanger,
-                                            b.qty_order,
-                                            a.tambah_dyestuff
-                                          FROM
-                                            tbl_schedule b
-                                            LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
-                                            LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
-                                          WHERE
-                                              $shft
-                                              $Where
-                                              ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) 
-                                          $Where1 
-                                          ORDER BY tgl_update DESC");
+                                              LEFT JOIN
+                                              (SELECT
+                                                a.rcode,
+                                                b.nokk,
+                                                b.nodemand,
+                                                c.tgl_update,
+                                                b.buyer,
+                                                b.langganan,
+                                                b.no_order,
+                                                b.jenis_kain,
+                                                b.lot,
+                                                b.no_mesin,
+                                                b.warna,
+                                                b.proses,
+                                                b.target,
+                                                if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
+                                                c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
+                                                b.`status` as sts,
+                                                a.`status` as stscelup,
+                                                a.proses as proses_aktual,
+                                                a.id as idclp,
+                                                a.analisa_resep,
+                                                a.status_resep,
+                                                b.no_hanger,
+                                                b.qty_order,
+                                                a.tambah_dyestuff
+                                              FROM
+                                                tbl_schedule b
+                                                LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+                                                LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id
+                                              WHERE
+                                                  $shft
+                                                  $Where
+                                                  ) x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) 
+                                              $Where1 
+                                              ORDER BY tgl_update DESC");
                 }
                 while ($rowd = mysqli_fetch_array($sql)) {
                   if ($GShift == "ALL") {

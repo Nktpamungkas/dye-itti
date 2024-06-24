@@ -168,10 +168,10 @@
 		}
 		$sqlc = "select USER28 from ticket_title where YARN='$nokk' " . $ket . " order by createtime Desc";
 		//--lot
-		$qryc = sqlsrv_query($conn1, $sqlc);
-		$row = sqlsrv_fetch_array($qryc);
-		$rcode = $row['USER28'];
-		return $rcode;
+		// $qryc = sqlsrv_query($conn1, $sqlc);
+		// $row = sqlsrv_fetch_array($qryc);
+		// $rcode = $row['USER28'];
+		// return $rcode;
 	}
 	$sqlCek = mysqli_query($con, "SELECT
 										a.*,b.id as idm 

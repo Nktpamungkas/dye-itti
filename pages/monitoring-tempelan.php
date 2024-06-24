@@ -140,7 +140,7 @@ include "koneksi.php";
                                     <td align="left"><span class="label bg-abu"><?php echo $rowd['nokk']; ?></span><br><?php echo $rowd['ket']; ?></td>
                                     <td align="center">
                                         <div class="btn-group">
-                                            <a href="#" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs btn-info stop_edit <?php if ($_SESSION['lvl_id10'] == "3") { /*echo "disabled";*/
+                                            <a href="#<?php echo $rowd['idm']; ?>" id='<?php echo $rowd['idm']; ?>' class="btn btn-xs btn-info stop_edit <?php if ($_SESSION['lvl_id10'] == "3") { /*echo "disabled";*/
                                                                                                                                 } ?>">
                                                 <i class="fa fa-edit"></i>
                                             </a>

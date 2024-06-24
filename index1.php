@@ -3,7 +3,7 @@ ini_set("error_reporting", 1);
 session_start();
 //include config
 //require_once "waktu.php";
-include_once('koneksi.php');
+include_once 'koneksi.php';
 //include"koneksi.php";
 //include_once ('tgl_indo.php');
 ?>
@@ -30,8 +30,8 @@ if (!isset($_SESSION['user_id10'])) {
 
 //request page
 $page = isset($_GET['p']) ? $_GET['p'] : '';
-$act  = isset($_GET['act']) ? $_GET['act'] : '';
-$id   = isset($_GET['id']) ? $_GET['id'] : '';
+$act = isset($_GET['act']) ? $_GET['act'] : '';
+$id = isset($_GET['id']) ? $_GET['id'] : '';
 $page = strtolower($page);
 $iduser = $_SESSION['id10'];
 ?>
@@ -104,6 +104,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     .blink_me1 {
       animation: blinker 7s linear infinite;
+    }
+
+    .main-sidebar {
+      position: sticky;
+      overflow-y: scroll;
+      max-height: 100vh;
     }
 
     .bulat {
@@ -208,7 +214,8 @@ desired effect
                         </a>
                       </li>
                       <!-- end notification -->
-                    <?php } ?>
+                    <?php
+                    } ?>
                   </ul>
                 </li>
                 <li class="footer"><a href="index1.php?p=Form-NCP">Tampil Semua</a></li>
@@ -230,8 +237,8 @@ desired effect
                 <li>
                   <!-- Inner menu: contains the tasks -->
                   <ul class="menu">
-                    <?php $qryNCP3 = mysqli_query($cond, "SELECT id,no_ncp_gabungan FROM tbl_ncp_qcf_new 
-				WHERE NOT ISNULL(tgl_rencana) 
+                    <?php $qryNCP3 = mysqli_query($cond, "SELECT id,no_ncp_gabungan FROM tbl_ncp_qcf_new
+				WHERE NOT ISNULL(tgl_rencana)
 				AND dept='DYE'
 				AND status='Belum OK'
 				");
@@ -258,7 +265,8 @@ desired effect
                         </a>
                       </li>
                       <!-- end task item -->
-                    <?php } ?>
+                    <?php
+                    } ?>
                   </ul>
                 </li>
                 <li class="footer">
@@ -266,7 +274,7 @@ desired effect
                 </li>
               </ul>
             </li>
-            <?php $qryNCP4 = mysqli_query($cond, "SELECT COUNT(*) as jml from tbl_ncp_qcf_new 
+            <?php $qryNCP4 = mysqli_query($cond, "SELECT COUNT(*) as jml from tbl_ncp_qcf_new
 		  WHERE ISNULL(akar_masalah) or akar_masalah='' or ISNULL(solusi_panjang) or solusi_panjang=''");
             $rNCP4 = mysqli_fetch_array($qryNCP4);
             ?>
@@ -282,11 +290,11 @@ desired effect
                 <li>
                   <!-- Inner menu: contains the tasks -->
                   <ul class="menu">
-                    <?php $qryNCP5 = mysqli_query($cond, "SELECT id,no_ncp_gabungan FROM tbl_ncp_qcf_new 
+                    <?php $qryNCP5 = mysqli_query($cond, "SELECT id,no_ncp_gabungan FROM tbl_ncp_qcf_new
 				WHERE (ISNULL(akar_masalah) or akar_masalah='' or ISNULL(solusi_panjang) or solusi_panjang='')
 				AND dept='DYE'
 				");
-                    while ($rNCP5 = mysqli_fetch_array($qryNCP5)) {  ?>
+                    while ($rNCP5 = mysqli_fetch_array($qryNCP5)) { ?>
                       <li><!-- Task item -->
                         <a href="index1.php?p=Status-NCP-NEW&id=<?php echo $rNCP5['id']; ?>">
                           <!-- Task title and progress text -->
@@ -456,9 +464,12 @@ desired effect
               <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
                             echo "active";
                           } ?>"><a href="?p=lap-harian-produksi"><i class="fa fa-columns text-red"></i> <span>Lap Harian Produksi</span></a></li>
-              <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
+              <li class="<?php if ($_GET['p'] == "lap-harian-matching") {
                             echo "active";
-                          } ?>"><a href="?p=lap-harian-matching"><i class="fa fa-columns text-yellow"></i> <span>Lap Harian Matching</span></a></li>
+                          } ?>"><a href="?p=lap-harian-dyeing"><i class="fa fa-columns text-red"></i> <span>Laporan Harian Matching Dyeing</span></a></li>
+              <!-- <li class="<?php if ($_GET['p'] == "lap-harian-produksi") {
+                                echo "active";
+                              } ?>"><a href="?p=lap-harian-matching"><i class="fa fa-columns text-yellow"></i> <span>Lap Harian Matching</span></a></li> -->
               <li class="<?php if ($_GET['p'] == "lap-potong-celup") {
                             echo "active";
                           } ?>"><a href="?p=lap-potong-celup"><i class="fa fa-columns text-lime"></i> <span>Lap Potong Celup</span></a></li>
@@ -473,7 +484,7 @@ desired effect
                           } ?>"><a href="?p=lap-overtime"><i class="fa fa-columns text-aqua"></i> <span>Lap Over Time</span></a></li>
             </ul>
           </li>
-          <?php if ($_SESSION['lvl_id10'] != "4") {  ?>
+          <?php if ($_SESSION['lvl_id10'] != "4") { ?>
             <li class="treeview <?php if ($_GET['p'] == "Input-DataTest-Proses" or $_GET['p'] == "Lap-DataTest-Proses" or $_GET['p'] == "Status-Data-Test") {
                                   echo "active";
                                 } ?>">
@@ -533,7 +544,8 @@ desired effect
                               } ?>"><a href="?p=Lap-Dokumen"><i class="fa fa-columns text-blue"></i> <span>Laporan</span></a></li>
                 </ul>
               </li>
-            <?php } ?>
+            <?php
+            } ?>
             <li class="treeview <?php if ($_GET['p'] == "Input-Salah-Resep" or $_GET['p'] == "Lap-Salah-Resep") {
                                   echo "active";
                                 } ?>">
@@ -627,7 +639,7 @@ desired effect
             </li>
           <?php
           } ?>
-          <?php if ($_SESSION['lvl_id10'] == "4") {  ?>
+          <?php if ($_SESSION['lvl_id10'] == "4") { ?>
             <li class="treeview <?php if ($_GET['p'] == "Lap-NCP" or $_GET['p'] == "Form-NCP" or $_GET['p'] == "Lap-NCPMemo") {
                                   echo "active";
                                 } ?>">
@@ -663,7 +675,7 @@ desired effect
               </ul>
             </li>
           <?php } ?>
-          <?php if ($_SESSION['lvl_id10'] == "4") {  ?>
+          <?php if ($_SESSION['lvl_id10'] == "4") { ?>
             <li class="treeview <?php if ($_GET['p'] == "Setting-Resep-Dye") {
                                   echo "active";
                                 } ?>">
@@ -702,9 +714,9 @@ desired effect
         }
 
         if (file_exists($files)) {
-          include_once($files);
+          include_once $files;
         } else {
-          include_once("blank.php");
+          include_once "blank.php";
         }
         ?>
 

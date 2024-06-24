@@ -29,9 +29,9 @@
 		} else if (document.forms['form1']['kapasitas'].value == "100") {
 			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1452'>1452</option><option value='1453'>1453</option><option value='1458'>1458</option><option value='2622'>2622</option><option value='2623'>2623</option><option value='2665'>2665</option><option value='2666'>2666</option><option value='2667'>2667</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "50") {
-			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1454'>1454</option><option value='1455'>1455</option><option value='1456'>1456</option><option value='1457'>1457</option><option value='1459'>1459</option><option value='2624'>2624</option><option value='2635'>2635</option><option value='2660'>2660</option><option value='2661'>2661</option><option value='2662'>2662</option><option value='2663'>2663</option><option value='2664'>2664</option>";
+			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1482'>1482</option><option value='1481'>1481</option><option value='1477'>1477</option><option value='1476'>1476</option><option value='1454'>1454</option><option value='1455'>1455</option><option value='1456'>1456</option><option value='1457'>1457</option><option value='1459'>1459</option><option value='2624'>2624</option><option value='2635'>2635</option><option value='2660'>2660</option><option value='2661'>2661</option><option value='2662'>2662</option><option value='2663'>2663</option><option value='2664'>2664</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "30") {
-			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1475'>1475</option><option value='2626'>2626</option>";
+			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='1478'>1478</option><option value='1475'>1475</option><option value='2626'>2626</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "20") {
 			document.getElementById("no_mc").innerHTML = "<option value=''>Pilih</option><option value='2042'>2042</option><option value='2043'>2043</option><option value='2044'>2044</option><option value='2045'>2045</option><option value='2639'>2639</option><option value='2640'>2640</option><option value='2641'>2641</option>";
 		} else if (document.forms['form1']['kapasitas'].value == "10") {
@@ -332,83 +332,83 @@
 		}
 		$nou = nourut();
 		$nokk = $_GET['nokk'];
-		$sql = sqlsrv_query($conn, "select top 1
-											x.*,dbo.fn_StockMovementDetails_GetTotalWeightPCC(0, x.PCBID) as Weight, 
-											pm.Weight as Gramasi,pm.CuttableWidth as Lebar, pm.Description as ProductDesc, pm.ColorNo, pm.Color,
-									dbo.fn_StockMovementDetails_GetTotalRollPCC(0, x.PCBID) as RollCount
-										from
-											(
-											select
-												so.SONumber, convert(char(10),so.SODate,103) as TglSO, so.CustomerID, so.BuyerID, so.PODate,
-												sod.ID as SODID, sod.ProductID, sod.Quantity, sod.UnitID, sod.WeightUnitID, 
-												soda.RefNo as DetailRefNo,jo.DocumentNo as NoOrder,soda.PONumber,
-												pcb.ID as PCBID, pcb.Gross as Bruto,soda.HangerNo,pp.ProductCode,
-												pcb.Quantity as BatchQuantity, pcb.UnitID as BatchUnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
-												pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID,convert(char(10),sod.RequiredDate,121) as RequiredDate
+		// $sql = sqlsrv_query($conn, "select top 1
+		// 									x.*,dbo.fn_StockMovementDetails_GetTotalWeightPCC(0, x.PCBID) as Weight, 
+		// 									pm.Weight as Gramasi,pm.CuttableWidth as Lebar, pm.Description as ProductDesc, pm.ColorNo, pm.Color,
+		// 							dbo.fn_StockMovementDetails_GetTotalRollPCC(0, x.PCBID) as RollCount
+		// 								from
+		// 									(
+		// 									select
+		// 										so.SONumber, convert(char(10),so.SODate,103) as TglSO, so.CustomerID, so.BuyerID, so.PODate,
+		// 										sod.ID as SODID, sod.ProductID, sod.Quantity, sod.UnitID, sod.WeightUnitID, 
+		// 										soda.RefNo as DetailRefNo,jo.DocumentNo as NoOrder,soda.PONumber,
+		// 										pcb.ID as PCBID, pcb.Gross as Bruto,soda.HangerNo,pp.ProductCode,
+		// 										pcb.Quantity as BatchQuantity, pcb.UnitID as BatchUnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
+		// 										pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID,convert(char(10),sod.RequiredDate,121) as RequiredDate
 												
-											from
-												SalesOrders so inner join
-												JobOrders jo on jo.SOID=so.ID inner join
-												SODetails sod on so.ID = sod.SOID inner join
-												SODetailsAdditional soda on sod.ID = soda.SODID left join
-												ProductPartner pp on pp.productid= sod.productid left join
-												ProcessControlJO pcjo on sod.ID = pcjo.SODID left join
-												ProcessControlBatches pcb on pcjo.PCID = pcb.PCID left join
-												ProcessControlBatchesLastPosition pcblp on pcb.ID = pcblp.PCBID left join
-												ProcessFlowProcessNo pfpn on pfpn.EntryType = 2 and pcb.ID = pfpn.ParentID and pfpn.MachineType = 24 left join
-												ProcessFlowDetailsNote pfdn on pfpn.EntryType = pfdn.EntryType and pfpn.ID = pfdn.ParentID
-											where pcb.DocumentNo='$nokk' and pcb.Gross<>'0'
-												group by
-													so.SONumber, so.SODate, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
-													sod.ID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID,
-													soda.RefNo,pcb.DocumentNo,soda.HangerNo,
-													pcb.ID, pcb.DocumentNo, pcb.Gross,soda.PONumber,pp.ProductCode,
-													pcb.Quantity, pcb.UnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
-													pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID,sod.RequiredDate
-												) x inner join
-												ProductMaster pm on x.ProductID = pm.ID left join
-												Departments dep on x.DepartmentID  = dep.ID left join
-												Departments pdep on dep.RootID = pdep.ID left join				
-												Partners cust on x.CustomerID = cust.ID left join
-												Partners buy on x.BuyerID = buy.ID left join
-												UnitDescription udq on x.UnitID = udq.ID left join
-												UnitDescription udw on x.WeightUnitID = udw.ID left join
-												UnitDescription udb on x.BatchUnitID = udb.ID
-											order by
-												x.SODID, x.PCBID");
-		$r = sqlsrv_fetch_array($sql);
-		$sql1 = sqlsrv_query($conn, "select partnername from partners where id='" . $r['CustomerID'] . "'");
-		$r1 = sqlsrv_fetch_array($sql1);
-		$sql2 = sqlsrv_query($conn, "select partnername from partners where id='" . $r['BuyerID'] . "'");
-		$r2 = sqlsrv_fetch_array($sql2);
-		$pelanggan = $r1['partnername'];
-		$buyer = $r2['partnername'];
-		$ko = sqlsrv_query($conn, "select ko.KONo from
-										ProcessControlJO pcjo inner join
-										ProcessControl pc on pcjo.PCID = pc.ID left join
-										KnittingOrders ko on pc.CID = ko.CID and pcjo.KONo = ko.KONo 
-									where
-										pcjo.PCID = '" . $r['PCID'] . "'
-								group by ko.KONo");
-		$rKO = sqlsrv_fetch_array($ko);
+		// 									from
+		// 										SalesOrders so inner join
+		// 										JobOrders jo on jo.SOID=so.ID inner join
+		// 										SODetails sod on so.ID = sod.SOID inner join
+		// 										SODetailsAdditional soda on sod.ID = soda.SODID left join
+		// 										ProductPartner pp on pp.productid= sod.productid left join
+		// 										ProcessControlJO pcjo on sod.ID = pcjo.SODID left join
+		// 										ProcessControlBatches pcb on pcjo.PCID = pcb.PCID left join
+		// 										ProcessControlBatchesLastPosition pcblp on pcb.ID = pcblp.PCBID left join
+		// 										ProcessFlowProcessNo pfpn on pfpn.EntryType = 2 and pcb.ID = pfpn.ParentID and pfpn.MachineType = 24 left join
+		// 										ProcessFlowDetailsNote pfdn on pfpn.EntryType = pfdn.EntryType and pfpn.ID = pfdn.ParentID
+		// 									where pcb.DocumentNo='$nokk' and pcb.Gross<>'0'
+		// 										group by
+		// 											so.SONumber, so.SODate, so.CustomerID, so.BuyerID, so.PONumber, so.PODate,jo.DocumentNo,
+		// 											sod.ID, sod.ProductID, sod.Quantity, sod.UnitID, sod.Weight, sod.WeightUnitID,
+		// 											soda.RefNo,pcb.DocumentNo,soda.HangerNo,
+		// 											pcb.ID, pcb.DocumentNo, pcb.Gross,soda.PONumber,pp.ProductCode,
+		// 											pcb.Quantity, pcb.UnitID, pcb.ScheduledDate, pcb.ProductionScheduledDate,
+		// 											pcblp.DepartmentID,pcb.LotNo,pcb.PCID,pcb.ChildLevel,pcb.RootID,sod.RequiredDate
+		// 										) x inner join
+		// 										ProductMaster pm on x.ProductID = pm.ID left join
+		// 										Departments dep on x.DepartmentID  = dep.ID left join
+		// 										Departments pdep on dep.RootID = pdep.ID left join				
+		// 										Partners cust on x.CustomerID = cust.ID left join
+		// 										Partners buy on x.BuyerID = buy.ID left join
+		// 										UnitDescription udq on x.UnitID = udq.ID left join
+		// 										UnitDescription udw on x.WeightUnitID = udw.ID left join
+		// 										UnitDescription udb on x.BatchUnitID = udb.ID
+		// 									order by
+		// 										x.SODID, x.PCBID");
+		// $r = sqlsrv_fetch_array($sql);
+		// $sql1 = sqlsrv_query($conn, "select partnername from partners where id='" . $r['CustomerID'] . "'");
+		// $r1 = sqlsrv_fetch_array($sql1);
+		// $sql2 = sqlsrv_query($conn, "select partnername from partners where id='" . $r['BuyerID'] . "'");
+		// $r2 = sqlsrv_fetch_array($sql2);
+		// $pelanggan = $r1['partnername'];
+		// $buyer = $r2['partnername'];
+		// $ko = sqlsrv_query($conn, "select ko.KONo from
+		// 								ProcessControlJO pcjo inner join
+		// 								ProcessControl pc on pcjo.PCID = pc.ID left join
+		// 								KnittingOrders ko on pc.CID = ko.CID and pcjo.KONo = ko.KONo 
+		// 							where
+		// 								pcjo.PCID = '" . $r['PCID'] . "'
+		// 						group by ko.KONo");
+		// $rKO = sqlsrv_fetch_array($ko);
 		
 		$child = $r['ChildLevel'];
 		if ($nokk != "") {
-			if ($child > 0) {
-				$sqlgetparent = sqlsrv_query($conn, "select ID,LotNo from ProcessControlBatches where ID='" . $r['RootID'] . "' and ChildLevel='0'");
-				$rowgp = sqlsrv_fetch_array($sqlgetparent);
+			// if ($child > 0) {
+			// 	$sqlgetparent = sqlsrv_query($conn, "select ID,LotNo from ProcessControlBatches where ID='" . $r['RootID'] . "' and ChildLevel='0'");
+			// 	$rowgp = sqlsrv_fetch_array($sqlgetparent);
 
-				//$nomLot=substr("$row2[LotNo]",0,1);
-				$nomLot = $rowgp['LotNo'];
-				$nomorLot = "$nomLot/K" . $r['ChildLevel'] . "";
-			} else {
-				$nomorLot = $r['LotNo'];
-			}
+			// 	//$nomLot=substr("$row2[LotNo]",0,1);
+			// 	$nomLot = $rowgp['LotNo'];
+			// 	$nomorLot = "$nomLot/K" . $r['ChildLevel'] . "";
+			// } else {
+			// 	$nomorLot = $r['LotNo'];
+			// }
 
-			$sqlLot1 = "Select count(*) as TotalLot From ProcessControlBatches where PCID='" . $r['PCID'] . "' and RootID='0' and LotNo < '1000'";
-			$qryLot1 = sqlsrv_query($conn, $sqlLot1) or die('A error occured : ');
-			$rowLot = sqlsrv_fetch_array($qryLot1);
-			$lotno = $rowLot['TotalLot'] . "-" . $nomorLot;
+			// $sqlLot1 = "Select count(*) as TotalLot From ProcessControlBatches where PCID='" . $r['PCID'] . "' and RootID='0' and LotNo < '1000'";
+			// $qryLot1 = sqlsrv_query($conn, $sqlLot1) or die('A error occured : ');
+			// $rowLot = sqlsrv_fetch_array($qryLot1);
+			// $lotno = $rowLot['TotalLot'] . "-" . $nomorLot;
 		}
 		// $sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' AND nodemand LIKE '%%' ORDER BY id DESC LIMIT 1");
 		// $cek = mysqli_num_rows($sqlCek);
@@ -862,8 +862,8 @@
 						<select name="kapasitas" class="form-control" id="kapasitas" onChange="no_msn();hload();">
 							<option value="">Pilih</option>
 							<?php
-							$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
-							while ($rK = mysqli_fetch_array($sqlKap)) {
+								$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
+								while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['kapasitas']; ?>" <?php if ($_GET['kap'] == $rK['kapasitas']) {
 																					echo "SELECTED";
@@ -876,8 +876,8 @@
 							<select name="kapasitas" onchange="window.location='?p=Form-Schedule&nokk='+document.getElementById('nokk').value+'&kap='+this.value" class="form-control">
 								<option value="">Pilih</option>
 								<?php
-								$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
-								while ($rK = mysqli_fetch_array($sqlKap)) {
+									$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
+									while ($rK = mysqli_fetch_array($sqlKap)) {
 								?>
 									<option value="<?php echo $rK['kapasitas']; ?>" <?php if ($_GET['kap'] == $rK['kapasitas']) {
 																						echo "SELECTED";
@@ -893,8 +893,8 @@
 						<select name="no_mc" class="form-control" id="no_mc" onchange="select_resep();" required>
 							<option value="">Pilih</option>
 							  <?php
-								$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $_GET['kap'] . "' ORDER BY no_mesin ASC");
-								while ($rK = mysqli_fetch_array($sqlKap)) {
+									$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $_GET['kap'] . "' ORDER BY no_mesin ASC");
+									while ($rK = mysqli_fetch_array($sqlKap)) {
 								?>
 								  <option value="<?php echo $rK['no_mesin']; ?>"><?php echo $rK['no_mesin']; ?></option>
 							 <?php } ?>	 
