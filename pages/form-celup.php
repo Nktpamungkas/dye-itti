@@ -1604,8 +1604,9 @@
 		}
 	}
 	if ($_POST['update'] == "update") {
+		$analisaresep		= addslashes($_POST['analisa_resep']);
 		$sqlData = mysqli_query($con, "UPDATE tbl_hasilcelup SET 
-											analisa_resep = '$_POST[analisa_resep]',
+											analisa_resep = '$analisaresep',
 											status_resep = '$_POST[status_resep]'
 											WHERE nokk='" . $_POST['nokk'] . "'");
 
