@@ -612,7 +612,12 @@
 					<div class="col-sm-3">
 						<!-- <input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= trim(rcode($nokk, $rRcode['no_resep'])); ?>"> -->
 						<?php
-							$cari_dari_greige	 = mysqli_query($con, "SELECT * FROM `tbl_schedule` WHERE nokk = '$_GET[nokk]' AND ket_status = 'Greige'");
+							if($_GET['nokk']){
+								$nokk = $_GET['nokk'];
+							}else{
+								$nokk = $row_hasilcelup['nokk'];
+							}
+							$cari_dari_greige	 = mysqli_query($con, "SELECT * FROM `tbl_schedule` WHERE nokk = '$nokk' AND ket_status = 'Greige'");
 							$row_schedule_greige = mysqli_fetch_assoc($cari_dari_greige);
 
 							if($row_schedule_greige['suffix'] == 001){
@@ -633,7 +638,7 @@
 																		p.PRODUCTIONORDERCODE = '$_noprod' AND GROUPLINE = '$_groupline'");
 							$dt_rcode    		= db2_fetch_assoc($db2_rcode);
 
-							$data_rcode = $dt_rcode['RCODE'];
+							$data_rcode = $dt_rcode['RCODE'];	
 						?>
 						<input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= $data_rcode; ?>" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 						
