@@ -739,9 +739,7 @@ include "koneksi.php";
 										<p><?php echo Waktu("1470"); ?></p>
 									</span>
 								</td>
-								<td align="center" bgcolor="#ECE7E7"> <span class="detail_status btn btn-sm <?php echo NoMesin("1472"); ?>" id="1472" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1472"); ?>">1472
-										<p><?php echo Waktu("1472"); ?></p>
-									</span> </td>
+								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 							</tr>
 							<tr>
@@ -899,7 +897,12 @@ include "koneksi.php";
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
-								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
+
+								<td align="center" bgcolor="#ECE7E7">
+									<span class="detail_status btn btn-sm <?php echo NoMesin("1472"); ?>" id="1472" data-toggle="tooltip" data-html="true" title="<?php echo Rajut("1472"); ?>">1472
+										<p><?php echo Waktu("1472"); ?></p>
+									</span>
+								</td>
 								<td align="center" bgcolor="#ECE7E7">&nbsp;</td>
 							</tr>
 							<tr>
