@@ -1,34 +1,34 @@
 <?php
-	// include "koneksiLAB.php";
-	include "koneksi.php";
-	//db_connect($db_name);
-	$nokk = $_GET['nokk'];
-	if($nokk){
-		$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
-		$cek = mysqli_num_rows($sqlCek);
-		$rcek = mysqli_fetch_array($sqlCek);
-	}
-	$splitresep = explode('-', $rcek['no_resep']);
-	$prdorder = $splitresep[0];
-	$grpline = $splitresep[1];
-	$sqlCekWaktu = mysqli_query($con, "SELECT th.operator_keluar, th.tgl_buat as jam_stop ,now() as jam_start
+// include "koneksiLAB.php";
+include "koneksi.php";
+//db_connect($db_name);
+$nokk = $_GET['nokk'];
+if ($nokk) {
+	$sqlCek = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
+	$cek = mysqli_num_rows($sqlCek);
+	$rcek = mysqli_fetch_array($sqlCek);
+}
+$splitresep = explode('-', $rcek['no_resep']);
+$prdorder = $splitresep[0];
+$grpline = $splitresep[1];
+$sqlCekWaktu = mysqli_query($con, "SELECT th.operator_keluar, th.tgl_buat as jam_stop ,now() as jam_start
 	FROM tbl_hasilcelup th 
 	INNER JOIN tbl_montemp tm on th.id_montemp =tm.id
 	INNER JOIN tbl_schedule ts on tm.id_schedule =ts.id
 	WHERE ts.no_mesin ='" . $rcek['no_mesin'] . "'
 	ORDER BY th.id DESC LIMIT 1");
-	$rcekW = mysqli_fetch_array($sqlCekWaktu);
-	$awalP  = strtotime($rcekW['jam_stop']);
-	$akhirP = strtotime($rcekW['jam_start']);
-	$diffP  = ($akhirP - $awalP);
-	$tjamP  = round($diffP / (60 * 60), 2);
+$rcekW = mysqli_fetch_array($sqlCekWaktu);
+$awalP  = strtotime($rcekW['jam_stop']);
+$akhirP = strtotime($rcekW['jam_start']);
+$diffP  = ($akhirP - $awalP);
+$tjamP  = round($diffP / (60 * 60), 2);
 
-	$sqlCekMc = mysqli_query($con, "SELECT no_mesin, kode, waktu_tunggu,wt_des, ket FROM db_dying.tbl_mesin WHERE no_mesin='" . $rcek['no_mesin'] . "'");
-	$rCekMc = mysqli_fetch_array($sqlCekMc);
-	$sqlCek1 = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE nokk='$nokk' and (status='antri mesin' or status='sedang jalan') ORDER BY id DESC LIMIT 1");
-	$cek1 = mysqli_num_rows($sqlCek1);
-	$rcek1 = mysqli_fetch_array($sqlCek1);
-	$sqlcek2 = mysqli_query($con, "SELECT
+$sqlCekMc = mysqli_query($con, "SELECT no_mesin, kode, waktu_tunggu,wt_des, ket FROM db_dying.tbl_mesin WHERE no_mesin='" . $rcek['no_mesin'] . "'");
+$rCekMc = mysqli_fetch_array($sqlCekMc);
+$sqlCek1 = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE nokk='$nokk' and (status='antri mesin' or status='sedang jalan') ORDER BY id DESC LIMIT 1");
+$cek1 = mysqli_num_rows($sqlCek1);
+$rcek1 = mysqli_fetch_array($sqlCek1);
+$sqlcek2 = mysqli_query($con, "SELECT
 										id,
 										if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
 										if(COUNT(lot)>1,CONCAT('(',COUNT(lot),'kk',')'),'') as kk,
@@ -46,200 +46,202 @@
 										no_urut 
 									ORDER BY
 										id ASC");
-	$cek2 = mysqli_num_rows($sqlcek2);
-	$rcek2 = mysqli_fetch_array($sqlcek2);
-	if ($rcek2['ket_kartu'] != "") {
-		$ketsts = $rcek2['ket_kartu'] . "\n(" . $rcek2['g_kk'] . ")";
+$cek2 = mysqli_num_rows($sqlcek2);
+$rcek2 = mysqli_fetch_array($sqlcek2);
+if ($rcek2['ket_kartu'] != "") {
+	$ketsts = $rcek2['ket_kartu'] . "\n(" . $rcek2['g_kk'] . ")";
+} else {
+	$ketsts = "";
+}
+function cekDesimal($angka)
+{
+	$bulat = round($angka);
+	if ($bulat > $angka) {
+		$jam = $bulat - 1;
+		$waktu = $jam . ":30";
 	} else {
-		$ketsts = "";
+		$jam = $bulat;
+		$waktu = $jam . ":00";
 	}
-	function cekDesimal($angka){
-		$bulat = round($angka);
-		if ($bulat > $angka) {
-			$jam = $bulat - 1;
-			$waktu = $jam . ":30";
-		} else {
-			$jam = $bulat;
-			$waktu = $jam . ":00";
-		}
-		return $waktu;
+	return $waktu;
+}
+function Des2($angka)
+{
+	$bulat = round($angka);
+	if ($bulat > $angka) {
+		$n = $bulat;
+		$h = $n . ".0";
+	} else {
+		$n = $bulat;
+		$h = $n . ".5";
 	}
-	function Des2($angka){
-		$bulat = round($angka);
-		if ($bulat > $angka) {
-			$n = $bulat;
-			$h = $n . ".0";
-		} else {
-			$n = $bulat;
-			$h = $n . ".5";
-		}
-		return $h;
-	}
+	return $h;
+}
 ?>
 <?php
-	// $sqlc = "select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where ID_NO='" . $rcek['no_resep'] . "' order by createtime Desc";
-	//--lot
-	// $qryc = sqlsrv_query($conn1, $sqlc, array(), array("Scrollable" => "static"));
+// $sqlc = "select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where ID_NO='" . $rcek['no_resep'] . "' order by createtime Desc";
+//--lot
+// $qryc = sqlsrv_query($conn1, $sqlc, array(), array("Scrollable" => "static"));
 
-	// $countdata = sqlsrv_num_rows($qryc);
+// $countdata = sqlsrv_num_rows($qryc);
 
-	// if ($countdata > 0) {
-	// 	date_default_timezone_set('Asia/Jakarta');
+// if ($countdata > 0) {
+// 	date_default_timezone_set('Asia/Jakarta');
 
-	// 	$tglsvr = sqlsrv_query($conn1, "select CONVERT(VARCHAR(10),GETDATE(),105) AS  tgk");
-	// 	$sr = sqlsrv_fetch_array($tglsvr);
-	// 	$sqls = sqlsrv_query($conn, "select processcontrolJO.SODID,salesorders.ponumber,processcontrol.productid,salesorders.customerid,joborders.documentno,
-	// 								salesorders.buyerid,processcontrolbatches.lotno,productcode,productmaster.color,colorno,description,weight,cuttablewidth,SOSampleColor.OtherDesc,SOSampleColor.Flag from Joborders 
-	// 								left join processcontrolJO on processcontrolJO.joid = Joborders.id
-	// 								left join salesorders on soid= salesorders.id
-	// 								Left join SOSampleColor on SOSampleColor.SOID=SalesOrders.id
-	// 								left join processcontrol on processcontrolJO.pcid = processcontrol.id
-	// 								left join processcontrolbatches on processcontrolbatches.pcid = processcontrol.id
-	// 								left join productmaster on productmaster.id= processcontrol.productid
-	// 								left join productpartner on productpartner.productid= processcontrol.productid
-	// 								where processcontrolbatches.documentno='" . $rcek['nokk'] . "'");
-	// 	$ssr = sqlsrv_fetch_array($sqls);
-	// 	$lgn1 = sqlsrv_query($conn, "select partnername from partners where id='" . $ssr['customerid'] . "'");
-	// 	$ssr1 = sqlsrv_fetch_array($lgn1);
-	// 	$lgn2 = sqlsrv_query($conn, "select partnername from partners where id='" . $ssr['buyerid'] . "'");
-	// 	$ssr2 = sqlsrv_fetch_array($lgn2);
-	// 	$itm = sqlsrv_query($conn, "select colorcode,color,productcode from productpartner where productid='" . $ssr['productid'] . "' and partnerid='" . $ssr['customerid'] . "'");
-	// 	$itm2 = sqlsrv_fetch_array($itm);
-	// 	$row = sqlsrv_fetch_array($qryc);
-	// 	//
-	// 	$sql = sqlsrv_query($conn, "select stockmovement.dono,stockmovement.documentno as no_doku,processcontrolbatches.documentno,lotno,customerid,
-	// 								processcontrol.productid ,processcontrol.id as pcid, 
-	// 							sum(stockmovementdetails.weight) as berat,
-	// 							count(stockmovementdetails.weight) as roll,processcontrolbatches.dated as tgllot
-	// 							from stockmovement 
-	// 							LEFT join stockmovementdetails on StockMovement.id=stockmovementdetails.StockmovementID
-	// 							left join processcontrolbatches on processcontrolbatches.id=stockmovement.pcbid
-	// 							left join processcontrol on processcontrol.id=processcontrolbatches.pcid
-	// 							where wid='12' and processcontrolbatches.documentno='" . $rcek['nokk'] . "' and (transactiontype='7' or transactiontype='4')
-	// 							group by stockmovement.DocumentNo,processcontrolbatches.DocumentNo,processcontrolbatches.LotNo,stockmovement.dono,
-	// 							processcontrol.CustomerID,processcontrol.ProductID,processcontrol.ID,processcontrolbatches.Dated") or die("gagal");
-	// 	$c = 0;
-	// 	$r = sqlsrv_fetch_array($sql);
-	// 	if ($r['documentno'] != '') {
-	// 		$dated = $r['tgllot']->format('Y-m-d H:i:s');
-	// 	}
-	// 	$sqlkko = sqlsrv_query($conn, "select SODID from knittingorders  
-	// 	where knittingorders.Kono='" . $r['dono'] . "'") or die("gagal");
-	// 	$rkko = sqlsrv_fetch_array($sqlkko);
-	// 	$sqlkko1 = sqlsrv_query($conn, "select joid,productid from processcontroljo  
-	// 	where sodid='" . $rkko['SODID'] . "'") or die("gagal");
-	// 	$rkko1 = sqlsrv_fetch_array($sqlkko1);
-	// 	if ($r['productid'] != '') {
-	// 		$kno1 = $r['productid'];
-	// 	} else {
-	// 		$kno1 = $rkko1['productid'];
-	// 	}
-	// 	$sql1 = sqlsrv_query($conn, "select hangerno,color from  productmaster
-	// 	where id='$kno1'") or die("gagal");
-	// 	$r1 = sqlsrv_fetch_array($sql1);
-	// 	$sql2 = sqlsrv_query($conn, "select partnername from Partners
-	// 	where id='" . $r['customerid'] . "'") or die("gagal");
-	// 	$r2 = sqlsrv_fetch_array($sql2);
-	// 	$sql3 = sqlsrv_query($conn, "select Kono,joid from processcontroljo 
-	// 	where pcid='" . $r['pcid'] . "'") or die("gagal");
-	// 	$r3 = sqlsrv_fetch_array($sql3);
-	// 	if ($r3['Kono'] != '') {
-	// 		$kno = $r3['Kono'];
-	// 	} else {
-	// 		$kno = $r['dono'];
-	// 	}
-	// 	$sql4 = sqlsrv_query($conn, "select CAST(TM.dbo.knittingorders.[Note] AS VARCHAR(8000))as note,id,supplierid from knittingorders 
-	// 	where kono='$kno'") or die("gagal");
-	// 	$r4 = sqlsrv_fetch_array($sql4);
-	// 	$sql5 = sqlsrv_query($conn, "select partnername from partners 
-	// 	where id='" . $r4['supplierid'] . "'") or die("gagal");
-	// 	$r5 = sqlsrv_fetch_array($sql5);
-	// 	if ($r3['joid'] != '') {
-	// 		$jno = $r3['joid'];
-	// 	} else {
-	// 		$jno = $rkko1['joid'];
-	// 	}
-	// 	$sql6 = sqlsrv_query($conn, "select documentno,soid from joborders 
-	// 	where id='$jno'") or die("gagal");
-	// 	$r6 = sqlsrv_fetch_array($sql6);
-	// 	$sql8 = sqlsrv_query($conn, "select customerid from salesorders where id='" . $r6['soid'] . "'") or die("gagal");
-	// 	$r8 = sqlsrv_fetch_array($sql8);
-	// 	$sql9 = sqlsrv_query($conn, "select partnername from partners where id='" . $r8['customerid'] . "'") or die("gagal");
-	// 	$r9 = sqlsrv_fetch_array($sql9);
-	// 	$sql10 = sqlsrv_query($conn, "select id,productid from kodetails where koid='" . $r4['id'] . "'") or die("gagal");
-	// 	$r10 = sqlsrv_fetch_array($sql10);
-	// 	$sql11 = sqlsrv_query($conn, "select productnumber from productmaster where id='" . $r10['productid'] . "'") or die("gagal");
-	// 	$r11 = sqlsrv_fetch_array($sql11);
+// 	$tglsvr = sqlsrv_query($conn1, "select CONVERT(VARCHAR(10),GETDATE(),105) AS  tgk");
+// 	$sr = sqlsrv_fetch_array($tglsvr);
+// 	$sqls = sqlsrv_query($conn, "select processcontrolJO.SODID,salesorders.ponumber,processcontrol.productid,salesorders.customerid,joborders.documentno,
+// 								salesorders.buyerid,processcontrolbatches.lotno,productcode,productmaster.color,colorno,description,weight,cuttablewidth,SOSampleColor.OtherDesc,SOSampleColor.Flag from Joborders 
+// 								left join processcontrolJO on processcontrolJO.joid = Joborders.id
+// 								left join salesorders on soid= salesorders.id
+// 								Left join SOSampleColor on SOSampleColor.SOID=SalesOrders.id
+// 								left join processcontrol on processcontrolJO.pcid = processcontrol.id
+// 								left join processcontrolbatches on processcontrolbatches.pcid = processcontrol.id
+// 								left join productmaster on productmaster.id= processcontrol.productid
+// 								left join productpartner on productpartner.productid= processcontrol.productid
+// 								where processcontrolbatches.documentno='" . $rcek['nokk'] . "'");
+// 	$ssr = sqlsrv_fetch_array($sqls);
+// 	$lgn1 = sqlsrv_query($conn, "select partnername from partners where id='" . $ssr['customerid'] . "'");
+// 	$ssr1 = sqlsrv_fetch_array($lgn1);
+// 	$lgn2 = sqlsrv_query($conn, "select partnername from partners where id='" . $ssr['buyerid'] . "'");
+// 	$ssr2 = sqlsrv_fetch_array($lgn2);
+// 	$itm = sqlsrv_query($conn, "select colorcode,color,productcode from productpartner where productid='" . $ssr['productid'] . "' and partnerid='" . $ssr['customerid'] . "'");
+// 	$itm2 = sqlsrv_fetch_array($itm);
+// 	$row = sqlsrv_fetch_array($qryc);
+// 	//
+// 	$sql = sqlsrv_query($conn, "select stockmovement.dono,stockmovement.documentno as no_doku,processcontrolbatches.documentno,lotno,customerid,
+// 								processcontrol.productid ,processcontrol.id as pcid, 
+// 							sum(stockmovementdetails.weight) as berat,
+// 							count(stockmovementdetails.weight) as roll,processcontrolbatches.dated as tgllot
+// 							from stockmovement 
+// 							LEFT join stockmovementdetails on StockMovement.id=stockmovementdetails.StockmovementID
+// 							left join processcontrolbatches on processcontrolbatches.id=stockmovement.pcbid
+// 							left join processcontrol on processcontrol.id=processcontrolbatches.pcid
+// 							where wid='12' and processcontrolbatches.documentno='" . $rcek['nokk'] . "' and (transactiontype='7' or transactiontype='4')
+// 							group by stockmovement.DocumentNo,processcontrolbatches.DocumentNo,processcontrolbatches.LotNo,stockmovement.dono,
+// 							processcontrol.CustomerID,processcontrol.ProductID,processcontrol.ID,processcontrolbatches.Dated") or die("gagal");
+// 	$c = 0;
+// 	$r = sqlsrv_fetch_array($sql);
+// 	if ($r['documentno'] != '') {
+// 		$dated = $r['tgllot']->format('Y-m-d H:i:s');
+// 	}
+// 	$sqlkko = sqlsrv_query($conn, "select SODID from knittingorders  
+// 	where knittingorders.Kono='" . $r['dono'] . "'") or die("gagal");
+// 	$rkko = sqlsrv_fetch_array($sqlkko);
+// 	$sqlkko1 = sqlsrv_query($conn, "select joid,productid from processcontroljo  
+// 	where sodid='" . $rkko['SODID'] . "'") or die("gagal");
+// 	$rkko1 = sqlsrv_fetch_array($sqlkko1);
+// 	if ($r['productid'] != '') {
+// 		$kno1 = $r['productid'];
+// 	} else {
+// 		$kno1 = $rkko1['productid'];
+// 	}
+// 	$sql1 = sqlsrv_query($conn, "select hangerno,color from  productmaster
+// 	where id='$kno1'") or die("gagal");
+// 	$r1 = sqlsrv_fetch_array($sql1);
+// 	$sql2 = sqlsrv_query($conn, "select partnername from Partners
+// 	where id='" . $r['customerid'] . "'") or die("gagal");
+// 	$r2 = sqlsrv_fetch_array($sql2);
+// 	$sql3 = sqlsrv_query($conn, "select Kono,joid from processcontroljo 
+// 	where pcid='" . $r['pcid'] . "'") or die("gagal");
+// 	$r3 = sqlsrv_fetch_array($sql3);
+// 	if ($r3['Kono'] != '') {
+// 		$kno = $r3['Kono'];
+// 	} else {
+// 		$kno = $r['dono'];
+// 	}
+// 	$sql4 = sqlsrv_query($conn, "select CAST(TM.dbo.knittingorders.[Note] AS VARCHAR(8000))as note,id,supplierid from knittingorders 
+// 	where kono='$kno'") or die("gagal");
+// 	$r4 = sqlsrv_fetch_array($sql4);
+// 	$sql5 = sqlsrv_query($conn, "select partnername from partners 
+// 	where id='" . $r4['supplierid'] . "'") or die("gagal");
+// 	$r5 = sqlsrv_fetch_array($sql5);
+// 	if ($r3['joid'] != '') {
+// 		$jno = $r3['joid'];
+// 	} else {
+// 		$jno = $rkko1['joid'];
+// 	}
+// 	$sql6 = sqlsrv_query($conn, "select documentno,soid from joborders 
+// 	where id='$jno'") or die("gagal");
+// 	$r6 = sqlsrv_fetch_array($sql6);
+// 	$sql8 = sqlsrv_query($conn, "select customerid from salesorders where id='" . $r6['soid'] . "'") or die("gagal");
+// 	$r8 = sqlsrv_fetch_array($sql8);
+// 	$sql9 = sqlsrv_query($conn, "select partnername from partners where id='" . $r8['customerid'] . "'") or die("gagal");
+// 	$r9 = sqlsrv_fetch_array($sql9);
+// 	$sql10 = sqlsrv_query($conn, "select id,productid from kodetails where koid='" . $r4['id'] . "'") or die("gagal");
+// 	$r10 = sqlsrv_fetch_array($sql10);
+// 	$sql11 = sqlsrv_query($conn, "select productnumber from productmaster where id='" . $r10['productid'] . "'") or die("gagal");
+// 	$r11 = sqlsrv_fetch_array($sql11);
 
 
-	// 	$s4 = sqlsrv_query($conn, "select KOdetails.id as KODID,productmaster.id as BOMID ,KnittingOrders.SupplierID,TM.dbo.Partners.PartnerName,ProductNumber,CustomerID,SODID,KnittingOrders.ID as KOID,SalesOrders.ID as SOID from 
-	// 							(TM.dbo.KnittingOrders 
-	// 							left join TM.dbo.SODetails on TM.dbo.SODetails.ID= TM.dbo.KnittingOrders.SODID
-	// 							left join TM.dbo.KODetails on TM.dbo.KODetails.KOid= TM.dbo.KnittingOrders.ID
-	// 							left join TM.dbo.Partners on TM.dbo.Partners.ID= TM.dbo.KnittingOrders.SupplierID)
-	// 							left join TM.dbo.ProductMaster on TM.dbo.ProductMaster.ID= TM.dbo.KODetails.ProductID
-	// 							left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
-	// 						where KONO='$kno'");
-	// 	$as7 = sqlsrv_fetch_array($s4);
-	// 	$sql12 = sqlsrv_query($conn, "select SODetailsBom.ProductID from SODetailsBom where SODID='" . $as7['SODID'] . "' and KODID='" . $as7['KODID'] . "' and Parentproductid='" . $as7['BOMID'] . "' order by ID", array(), array("Scrollable" => "static"));
-	// 	$sql14 = sqlsrv_query($conn, "select count(lotno)as jmllot from processcontrolbatches where pcid='" . $r['pcid'] . "' and dated='$dated'");
-	// 	$lt = sqlsrv_fetch_array($sql14);
-	// 	$ai = sqlsrv_num_rows($sql12);
-	// 	$sql15 = sqlsrv_query($conn, "select Partnername from TM.dbo.Partners where TM.dbo.Partners.ID='" . $as7['CustomerID'] . "'");
-	// 	$as8 = sqlsrv_fetch_array($sql15);
-	// 	$i = 0;
-	// 	do {
-	// 		$as5 = sqlsrv_fetch_array($sql12);
-	// 		$sql13 = sqlsrv_query($conn, "select ShortDescription from  ProductMaster where ID='" . $as5['ProductID'] . "'");
-	// 		$as6 = sqlsrv_fetch_array($sql13);
-	// 		$ar[$i] = $as6['ShortDescription'];
+// 	$s4 = sqlsrv_query($conn, "select KOdetails.id as KODID,productmaster.id as BOMID ,KnittingOrders.SupplierID,TM.dbo.Partners.PartnerName,ProductNumber,CustomerID,SODID,KnittingOrders.ID as KOID,SalesOrders.ID as SOID from 
+// 							(TM.dbo.KnittingOrders 
+// 							left join TM.dbo.SODetails on TM.dbo.SODetails.ID= TM.dbo.KnittingOrders.SODID
+// 							left join TM.dbo.KODetails on TM.dbo.KODetails.KOid= TM.dbo.KnittingOrders.ID
+// 							left join TM.dbo.Partners on TM.dbo.Partners.ID= TM.dbo.KnittingOrders.SupplierID)
+// 							left join TM.dbo.ProductMaster on TM.dbo.ProductMaster.ID= TM.dbo.KODetails.ProductID
+// 							left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
+// 						where KONO='$kno'");
+// 	$as7 = sqlsrv_fetch_array($s4);
+// 	$sql12 = sqlsrv_query($conn, "select SODetailsBom.ProductID from SODetailsBom where SODID='" . $as7['SODID'] . "' and KODID='" . $as7['KODID'] . "' and Parentproductid='" . $as7['BOMID'] . "' order by ID", array(), array("Scrollable" => "static"));
+// 	$sql14 = sqlsrv_query($conn, "select count(lotno)as jmllot from processcontrolbatches where pcid='" . $r['pcid'] . "' and dated='$dated'");
+// 	$lt = sqlsrv_fetch_array($sql14);
+// 	$ai = sqlsrv_num_rows($sql12);
+// 	$sql15 = sqlsrv_query($conn, "select Partnername from TM.dbo.Partners where TM.dbo.Partners.ID='" . $as7['CustomerID'] . "'");
+// 	$as8 = sqlsrv_fetch_array($sql15);
+// 	$i = 0;
+// 	do {
+// 		$as5 = sqlsrv_fetch_array($sql12);
+// 		$sql13 = sqlsrv_query($conn, "select ShortDescription from  ProductMaster where ID='" . $as5['ProductID'] . "'");
+// 		$as6 = sqlsrv_fetch_array($sql13);
+// 		$ar[$i] = $as6['ShortDescription'];
 
-	// 		$i++;
-	// 	} while ($ai >= $i);
-	// 	$jb1 = $ar[0];
-	// 	$jb2 = $ar[1];
-	// 	$jb3 = $ar[2];
-	// 	$jb4 = $ar[3];
-	// 	if ($ai < 2) {
-	// 		$jb1 = $ar[0];
-	// 		$jb2 = '';
-	// 		$jb3 = '';
-	// 	}
-	// 	$bng = $jb1 . "," . $jb2 . "," . $jb3 . "," . $jb4;
-	// }
+// 		$i++;
+// 	} while ($ai >= $i);
+// 	$jb1 = $ar[0];
+// 	$jb2 = $ar[1];
+// 	$jb3 = $ar[2];
+// 	$jb4 = $ar[3];
+// 	if ($ai < 2) {
+// 		$jb1 = $ar[0];
+// 		$jb2 = '';
+// 		$jb3 = '';
+// 	}
+// 	$bng = $jb1 . "," . $jb2 . "," . $jb3 . "," . $jb4;
+// }
 
-	// NOW
-		$groupline = substr($rcek['no_resep'], 9);
-		$db_viewreservation = db2_exec($conn2, "SELECT * FROM VIEWPRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$nokk' AND GROUPLINE = '$groupline'");
-		$r_viewreservation = db2_fetch_assoc($db_viewreservation);
+// NOW
+$groupline = substr($rcek['no_resep'], 9);
+$db_viewreservation = db2_exec($conn2, "SELECT * FROM VIEWPRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$nokk' AND GROUPLINE = '$groupline'");
+$r_viewreservation = db2_fetch_assoc($db_viewreservation);
 
-		$groupline2 = substr($rcek['no_resep2'], 9);
-		$db_viewreservation2 = db2_exec($conn2, "SELECT * FROM VIEWPRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$nokk' AND GROUPLINE = '$groupline2'");
-		$r_viewreservation2 = db2_fetch_assoc($db_viewreservation2);
+$groupline2 = substr($rcek['no_resep2'], 9);
+$db_viewreservation2 = db2_exec($conn2, "SELECT * FROM VIEWPRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$nokk' AND GROUPLINE = '$groupline2'");
+$r_viewreservation2 = db2_fetch_assoc($db_viewreservation2);
 
-        // $grupline   = substr($dt_schedule['no_resep'], 9);
-        // $query_br1  = db2_exec($conn2, "SELECT
-        //                                     TRIM(SUBCODE01) AS SUBCODE01,
-        //                                     TRIM(SUFFIXCODE) AS SUFFIXCODE
-        //                                 FROM
-        //                                     PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
-        //                                 WHERE
-        //                                     TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) = '$rcek[no_resep]'");
-        // $row_br1    = db2_fetch_assoc($query_br1);
+// $grupline   = substr($dt_schedule['no_resep'], 9);
+// $query_br1  = db2_exec($conn2, "SELECT
+//                                     TRIM(SUBCODE01) AS SUBCODE01,
+//                                     TRIM(SUFFIXCODE) AS SUFFIXCODE
+//                                 FROM
+//                                     PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+//                                 WHERE
+//                                     TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) = '$rcek[no_resep]'");
+// $row_br1    = db2_fetch_assoc($query_br1);
 
-		// $query_carryover    = db2_exec($conn2, "SELECT floor(a.VALUEDECIMAL) AS CARRYOVER
-        //                                         FROM 
-        //                                             RECIPE r 
-        //                                         LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.NAMENAME = 'CarryOver'
-        //                                         WHERE r.SUBCODE01 = '$row_br1[SUBCODE01]' AND r.SUFFIXCODE = '$row_br1[SUFFIXCODE]'");
-        // $row_carryover      = db2_fetch_assoc($query_carryover);
-		if(!empty($row_carryover['CARRYOVER'])){
-            $carry_over     = $row_carryover['CARRYOVER'];
-        }else{
-            $carry_over     = 0;
-        }
+// $query_carryover    = db2_exec($conn2, "SELECT floor(a.VALUEDECIMAL) AS CARRYOVER
+//                                         FROM 
+//                                             RECIPE r 
+//                                         LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.NAMENAME = 'CarryOver'
+//                                         WHERE r.SUBCODE01 = '$row_br1[SUBCODE01]' AND r.SUFFIXCODE = '$row_br1[SUFFIXCODE]'");
+// $row_carryover      = db2_fetch_assoc($query_carryover);
+if (!empty($row_carryover['CARRYOVER'])) {
+	$carry_over     = $row_carryover['CARRYOVER'];
+} else {
+	$carry_over     = 0;
+}
 
-		$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
+$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
 												TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
 												TRIM(DEAMAND) AS DEMAND,
 												ORIGDLVSALORDERLINEORDERLINE,
@@ -257,9 +259,9 @@
 												ITXVIEWKK 
 											WHERE 
 												PRODUCTIONORDERCODE = '$nokk'");
-		$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
 
-		$db_stdcckwarna = db2_exec($conn2, "SELECT 
+$db_stdcckwarna = db2_exec($conn2, "SELECT 
                                                 CASE
                                                     WHEN ic.VALUESTRING = '1' THEN 'Labdip' || ' - ' || ic2.VALUESTRING 
                                                     WHEN ic.VALUESTRING = '2' THEN 'First Lot' || ' - ' || ic2.VALUESTRING 
@@ -275,21 +277,21 @@
                                             LEFT JOIN ITXVIEW_COLORREMARKS ic2 ON ic2.UNIQUEID = s.ABSUNIQUEID 
                                             WHERE 
                                                 s.SALESORDERCODE = '$dt_ITXVIEWKK[PROJECTCODE]' AND ORDERLINE = '$dt_ITXVIEWKK[ORIGDLVSALORDERLINEORDERLINE]'");
-        $r_stdcckwarna  = db2_fetch_assoc($db_stdcckwarna);
-        if(!empty($r_stdcckwarna['STANDART_COCOK_WARNA'])){
-            $std_cck_warna  =   $r_stdcckwarna['STANDART_COCOK_WARNA'];
-        }else{
-            $std_cck_warna  = '';
-        }
-        
-	// NOW
+$r_stdcckwarna  = db2_fetch_assoc($db_stdcckwarna);
+if (!empty($r_stdcckwarna['STANDART_COCOK_WARNA'])) {
+	$std_cck_warna  =   $r_stdcckwarna['STANDART_COCOK_WARNA'];
+} else {
+	$std_cck_warna  = '';
+}
+
+// NOW
 ?>
 <?php
-	$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
-	$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
-	$Item		= isset($_POST['item']) ? $_POST['item'] : '';
-	$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
-	$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
+$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
+$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
+$Item		= isset($_POST['item']) ? $_POST['item'] : '';
+$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
+$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 ?>
 <!--alerts CSS -->
 <link href="bower_components/sweetalert/sweetalert2.css" rel="stylesheet" type="text/css">
@@ -313,7 +315,7 @@
 					</div>
 					<label for="jammasukkain" class="col-sm-2 control-label">Jam Masuk Kain</label>
 					<div class="col-sm-2">
-					<?php
+						<?php
 						// Mengatur zona waktu
 						date_default_timezone_set('Asia/Jakarta');
 
@@ -322,9 +324,9 @@
 
 						// Mendapatkan tanggal kemarin
 						$tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
-					?>
+						?>
 						<input name="jammasukkain" type="date" class="form-control col-sm-2" required min="<?php echo $tanggal_kemarin; ?>" max="<?php echo $tanggal_hari_ini; ?>">
-						</div>
+					</div>
 					<div class="col-sm-2">
 						<input name="tglmasukkain" type="text" class="form-control col-sm-2" id="tglmasukkain" required placeholder="00:00" pattern="[0-9]{2}:[0-9]{2}$" title=" e.g 14:25" onkeyup="
 																				var time = this.value;
@@ -564,8 +566,8 @@
 					</div>
 					<div class="col-sm-3">
 						<input name="pjng_kain_perlubang" type="text" class="form-control" id="pjng_kain_perlubang" value="<?php if ($cek > 0) {
-																											echo $rcek2['pjng_kain_perlubang'];
-																										} ?>" placeholder="0.00" style="text-align: right;" readonly>
+																																echo $rcek2['pjng_kain_perlubang'];
+																															} ?>" placeholder="0.00" style="text-align: right;" readonly>
 					</div>
 				</div>
 				<?php if ($cek > 0 and $_GET['kap'] != "") {
@@ -674,8 +676,8 @@
 									$i = 0;
 									while ($dCek1 = mysqli_fetch_array($qCek1)) { ?>
 										<option value="<?php echo $dCek1['analisa']; ?>" <?php if ($dCek1['analisa'] == $data[0] or $dCek1['analisa'] == $data[1] or $dCek1['analisa'] == $data[2] or $dCek1['analisa'] == $data[3] or $dCek1['analisa'] == $data[4] or $dCek1['analisa'] == $data[5]) {
-																							echo "SELECTED";
-																						} ?>><?php echo $dCek1['analisa']; ?></option>
+																								echo "SELECTED";
+																							} ?>><?php echo $dCek1['analisa']; ?></option>
 									<?php $i++;
 									} ?>
 								</select>
@@ -713,14 +715,14 @@
 					<label for="a_dingin" class="col-sm-3 control-label">Pemakaian Air</label>
 					<div class="col-sm-3">
 						<div class="input-group">
-							<?php 
-								if($r_viewreservation['PICKUPQUANTITY'] == 0){
-									$LR = $r_viewreservation2['PICKUPQUANTITY'];
-								}else{
-									$LR = $r_viewreservation['PICKUPQUANTITY'];
-								}
+							<?php
+							if ($r_viewreservation['PICKUPQUANTITY'] == 0) {
+								$LR = $r_viewreservation2['PICKUPQUANTITY'];
+							} else {
+								$LR = $r_viewreservation['PICKUPQUANTITY'];
+							}
 							?>
-							<input name="pakai_air" type="text" class="form-control" id="pakai_air" value="<?= round( $LR* $rcek['qty_order'], 2); ?>" placeholder="0.00" style="text-align: right;">
+							<input name="pakai_air" type="text" class="form-control" id="pakai_air" value="<?= round($LR * $rcek['qty_order'], 2); ?>" placeholder="0.00" style="text-align: right;">
 							<span class="input-group-addon">L</span>
 						</div>
 					</div>
@@ -744,12 +746,12 @@
 					<label for="std_cok_wrn" class="col-sm-3 control-label">Standar Cocok Warna</label>
 					<div class="col-sm-6">
 						<input name="std_cok_wrn" type="text" class="form-control" id="std_cok_wrn" value="<?= $std_cck_warna; ?><?php if ($ssr['Flag'] == " 1") {
-																												echo "Original Color";
-																											} elseif ($ssr['Flag'] == "2") {
-																												echo "Color LD";
-																											} else {
-																												echo $ssr['OtherDesc'];
-																											} ?>" placeholder="Standar Cocok Warna">
+																																		echo "Original Color";
+																																	} elseif ($ssr['Flag'] == "2") {
+																																		echo "Color LD";
+																																	} else {
+																																		echo $ssr['OtherDesc'];
+																																	} ?>" placeholder="Standar Cocok Warna">
 					</div>
 				</div>
 				<div class="form-group">
@@ -791,7 +793,7 @@
 					</div>
 					<label class="col-sm-2 control-label">Kategori Resep </label>
 					<div class="col-sm-3">
-						<select name="kategori_resep" class="form-control" >
+						<select name="kategori_resep" class="form-control">
 							<option value="">Pilih</option>
 							<option value="Setting Resep">Setting Resep</option>
 							<option value="Resep Matching">Resep Matching</option>
@@ -814,11 +816,11 @@
 					</div>
 					<label for="colorist" class="col-sm-2 control-label">Kasih Resep </label>
 					<div class="col-sm-3">
-						<select name="kasih_resep" class="form-control" >
+						<select name="kasih_resep" class="form-control">
 							<option value="">Pilih</option>
 							<?php
-								$q_kasihresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
-								while ($row_kasihresep = mysqli_fetch_array($q_kasihresep)) {
+							$q_kasihresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
+							while ($row_kasihresep = mysqli_fetch_array($q_kasihresep)) {
 							?>
 								<option value="<?= $row_kasihresep['nama_colorist']; ?>"><?= $row_kasihresep['nama_colorist']; ?></option>
 							<?php } ?>
@@ -840,11 +842,11 @@
 					</div>
 					<label for="colorist" class="col-sm-2 control-label">ACC Resep </label>
 					<div class="col-sm-3">
-						<select name="acc_resep" class="form-control" >
+						<select name="acc_resep" class="form-control">
 							<option value="">Pilih</option>
 							<?php
-								$q_accresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
-								while ($row_accresep = mysqli_fetch_array($q_accresep)) {
+							$q_accresep = mysqli_query($con, "SELECT * FROM tbl_nama_colorist ORDER BY id ASC");
+							while ($row_accresep = mysqli_fetch_array($q_accresep)) {
 							?>
 								<option value="<?= $row_accresep['nama_colorist']; ?>"><?= $row_accresep['nama_colorist']; ?></option>
 							<?php } ?>
@@ -861,10 +863,10 @@
 				<div class="form-group">
 					<label for="l_g" class="col-sm-3 control-label">L X Grm Aktual Dye</label>
 					<div class="col-sm-2">
-						<input name="lebar_a" type="text" class="form-control" id="lebar_a" value="" placeholder="0" required  maxlength="2">
+						<input name="lebar_a" type="text" class="form-control" id="lebar_a" value="" placeholder="0" required maxlength="2">
 					</div>
 					<div class="col-sm-2">
-						<input name="grms_a" type="text" class="form-control" id="grms_a" value="" placeholder="0" required onChange="hitung();"  maxlength="3">
+						<input name="grms_a" type="text" class="form-control" id="grms_a" value="" placeholder="0" required onChange="hitung();" maxlength="3">
 					</div>
 				</div>
 				<div class="form-group">
@@ -911,8 +913,8 @@
 					</div>
 					<div class="col-sm-2">
 						<input name="l_r2" type="text" class="form-control" id="l_r2" value="<?php if ($nokk != "") {
-																								echo "1:" . round($r_viewreservation2['PICKUPQUANTITY'], 2);
-																							} ?>" placeholder="L:R 2">
+																									echo "1:" . round($r_viewreservation2['PICKUPQUANTITY'], 2);
+																								} ?>" placeholder="L:R 2">
 					</div>
 					<label for="gabung" class="col-sm-2 control-label">Gabung Celup</label>
 					<div class="col-sm-2">
@@ -1015,10 +1017,10 @@
 						<input name="air_awal" type="text" class="form-control" id="air_awal" value="<?php if ($rCekMc['kode'] == "THEN") {
 																											echo "0";
 																										} ?>" placeholder="Air Awal" <?php if ($rCekMc['kode'] == "THEN") {
-																																													echo "readonly";
-																																												} else {
-																																													echo "required";
-																																												} ?> pattern=".*\S.*" style="text-align: right;" maxlength="12">
+																																			echo "readonly";
+																																		} else {
+																																			echo "required";
+																																		} ?> pattern=".*\S.*" style="text-align: right;" maxlength="12">
 					</div>
 				</div>
 				<!--  
@@ -1110,26 +1112,30 @@
 		<div class="box-footer">
 			<button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Monitoring-Tempelan'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
 			<?php
-				if($_GET['nokk']){
-					if($rcek['target'] == '0.00' OR empty($rcek['target'])){
-						echo "<script>swal({
+			if ($_GET['nokk']) {
+				if ($rcek['target'] == '0.00' or empty($rcek['target'])) {
+					echo "<script>swal({
 								title: 'Standart target harus di isi terlebih dahulu ! ',
 								text: 'Klik Ok untuk input kembali',
 								type: 'warning',
+								allowOutsideClick: false, 
+            					allowEscapeKey: false,    
 								}).then((result) => {
 									if (result.value) {
 										window.location='index1.php?p=Schedule';
 									}
 								});
 							</script>";
-					}
 				}
+			}
 			?>
 			<?php if ($cek1 > 0) {
 				echo "<script>swal({
 								title: 'No Kartu Sudah diinput dan belum selesai proses',
 								text: 'Klik Ok untuk input kembali',
 								type: 'warning',
+								allowOutsideClick: false, 
+            					allowEscapeKey: false,
 								}).then((result) => {
 								if (result.value) {
 									window.location='index1.php?p=Form-Monitoring';
@@ -1140,6 +1146,8 @@
 							title: 'Harus No Urut `1` ',
 							text: 'Klik Ok untuk input kembali',
 							type: 'warning',
+							allowOutsideClick: false, 
+            				allowEscapeKey: false,
 							}).then((result) => {
 								if (result.value) {
 									window.location='index1.php?p=Form-Monitoring';
@@ -1185,23 +1193,25 @@
 	<!-- /.modal-dialog -->
 </div>
 <?php
-	if ($_POST['simpan_analisa'] == "Simpan") {
-		$ket = strtoupper($_POST['analisa1']);
-		$sqlData1 = mysqli_query($con, "INSERT INTO tbl_analisa_mesin_tunggu SET 
+if ($_POST['simpan_analisa'] == "Simpan") {
+	$ket = strtoupper($_POST['analisa1']);
+	$sqlData1 = mysqli_query($con, "INSERT INTO tbl_analisa_mesin_tunggu SET 
 			analisa='$ket'");
-		if ($sqlData1) {
-			echo "<script>swal({
+	if ($sqlData1) {
+		echo "<script>swal({
 					title: 'Data Telah Tersimpan',   
 					text: 'Klik Ok untuk input data kembali',
 					type: 'success',
+					allowOutsideClick: false, 
+            		allowEscapeKey: false,
 					}).then((result) => {
 					if (result.value) {
 							window.location.href='?p=Form-Monitoring&nokk=" . $_GET['nokk'] . "';
 						
 					}
 					});</script>";
-		}
 	}
+}
 ?>
 <?php
 if ($_POST['save'] == "save") {
@@ -1295,10 +1305,12 @@ if ($_POST['save'] == "save") {
 									status='sedang jalan',
 									tgl_update=now()
 									WHERE status='antri mesin' and no_mesin='" . $rcek['no_mesin'] . "' and no_urut='1' ");
-			echo "<script>swal({
+		echo "<script>swal({
 					title: 'Data Tersimpan',   
 					text: 'Klik Ok untuk input data kembali',
 					type: 'success',
+					allowOutsideClick: false, 
+            		allowEscapeKey: false,
 					}).then((result) => {
 					if (result.value) {
 						
@@ -1359,6 +1371,8 @@ if ($_POST['update'] == "update") {
 				title: 'Data Telah DiUbah',   
 				text: 'Klik Ok untuk input data kembali',
 				type: 'success',
+				allowOutsideClick: false, 
+            	allowEscapeKey: false,
 				}).then((result) => {
 				if (result.value) {
 					
@@ -1375,61 +1389,61 @@ if ($_POST['update'] == "update") {
 
 	function hitung() {
 		if (document.forms['form1']['lebar_a'].value != "" && document.forms['form1']['grms_a'].value != "") {
-			var brtKain	= document.forms['form1']['qty4'].value;
-			var lebar 	= document.forms['form1']['lebar_a'].value;
-			var grms 	= document.forms['form1']['grms_a'].value;
-			var lb1		= document.forms['form1']['lb1'].value;
-			var lb2		= document.forms['form1']['lb2'].value;
-			var lb3		= document.forms['form1']['lb3'].value;
-			var lb4		= document.forms['form1']['lb4'].value;
-			var lb5		= document.forms['form1']['lb5'].value;
-			var lb6		= document.forms['form1']['lb6'].value;
-			var lb7		= document.forms['form1']['lb7'].value;
-			var lb8		= document.forms['form1']['lb8'].value;
+			var brtKain = document.forms['form1']['qty4'].value;
+			var lebar = document.forms['form1']['lebar_a'].value;
+			var grms = document.forms['form1']['grms_a'].value;
+			var lb1 = document.forms['form1']['lb1'].value;
+			var lb2 = document.forms['form1']['lb2'].value;
+			var lb3 = document.forms['form1']['lb3'].value;
+			var lb4 = document.forms['form1']['lb4'].value;
+			var lb5 = document.forms['form1']['lb5'].value;
+			var lb6 = document.forms['form1']['lb6'].value;
+			var lb7 = document.forms['form1']['lb7'].value;
+			var lb8 = document.forms['form1']['lb8'].value;
 			var m;
-			if(lb1 > 0){
+			if (lb1 > 0) {
 				var _lb1 = 1;
-			}else{
+			} else {
 				var _lb1 = 0;
 			}
-			if(lb2 > 0){
+			if (lb2 > 0) {
 				var _lb2 = 1;
-			}else{
+			} else {
 				var _lb2 = 0;
 			}
-			if(lb3 > 0){
+			if (lb3 > 0) {
 				var _lb3 = 1;
-			}else{
+			} else {
 				var _lb3 = 0;
 			}
-			if(lb4 > 0){
+			if (lb4 > 0) {
 				var _lb4 = 1;
-			}else{
+			} else {
 				var _lb4 = 0;
 			}
-			if(lb5 > 0){
+			if (lb5 > 0) {
 				var _lb5 = 1;
-			}else{
+			} else {
 				var _lb5 = 0;
 			}
-			if(lb6 > 0){
+			if (lb6 > 0) {
 				var _lb6 = 1;
-			}else{
+			} else {
 				var _lb6 = 0;
 			}
-			if(lb7 > 0){
+			if (lb7 > 0) {
 				var _lb7 = 1;
-			}else{
+			} else {
 				var _lb7 = 0;
 			}
-			if(lb8 > 0){
+			if (lb8 > 0) {
 				var _lb8 = 1;
-			}else{
+			} else {
 				var _lb8 = 0;
 			}
-			m 		 	= roundToTwo((brtKain * 39.37 * 1000) / (lebar * grms));
-			lb			= (_lb1 + _lb2 + _lb3 + _lb4 + _lb5 + _lb6 + _lb7 + _lb8);
-			m_lubang	= roundToTwo((brtKain * 39.37 * 1000) / (lebar * grms) / lb);
+			m = roundToTwo((brtKain * 39.37 * 1000) / (lebar * grms));
+			lb = (_lb1 + _lb2 + _lb3 + _lb4 + _lb5 + _lb6 + _lb7 + _lb8);
+			m_lubang = roundToTwo((brtKain * 39.37 * 1000) / (lebar * grms) / lb);
 			document.forms['form1']['pjng_kain'].value = m;
 			document.forms['form1']['pjng_kain_perlubang'].value = m_lubang;
 		}
