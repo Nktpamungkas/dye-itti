@@ -24,13 +24,26 @@ include "koneksi.php";
 		}
 
 		.wrap div {
-			width: 40px;
-			height: 40px;
-			margin: 3px;
+			width: 50px;
+			height: 50px;
+			margin: 3px 6px 3px 6px;
 			padding: 0;
 			text-align: center;
-			/* Teks akan terpusat secara horizontal */
 		}
+
+		.detail_status {
+			display: inline-block;
+			text-align: center;
+		}
+
+		.machine_number {
+			display: block;
+		}
+
+		.machine_time {
+			font-size: 10px;
+		}
+
 
 		td {
 			padding: 1px 0px;
@@ -65,246 +78,7 @@ include "koneksi.php";
 					</div>
 				</div>
 				<div class="box-body">
-					<?php
-					// function Rajut($mc)
-					// {
-					// 	include "koneksi.php";
-					// 	$qMC = mysqli_query($con, "SELECT a.langganan,a.no_order,a.warna,a.proses FROM tbl_schedule a 
-					// 									LEFT JOIN tbl_montemp b ON a.id=b.id_schedule
-					// 									WHERE a.no_mesin='$mc' and b.status='sedang jalan' ORDER BY a.no_urut ASC LIMIT 1");
-					// 	$dMC = mysqli_fetch_array($qMC);
-					// 	echo "<font size=+2><u>" . $mc . "</u></font> <br>" . $dMC['no_order'] . "<br> " . $dMC['langganan'] . "<br>" . $dMC['warna'] . "<br>" . $dMC['proses'];
-					// }
-					// function Waktu($mc)
-					// {
-					// 	include "koneksi.php";
-					// 	$qLama = mysqli_query($con, "SELECT TIME_FORMAT(timediff(b.tgl_target,now()),'%H:%i') as lama FROM tbl_schedule a
-					// 									LEFT JOIN tbl_montemp b ON a.id=b.id_schedule
-					// 									WHERE a.no_mesin='$mc' AND b.status='sedang jalan' AND (ISNULL(b.tgl_stop) or NOT ISNULL(b.tgl_mulai)) ORDER BY a.no_urut ASC LIMIT 1");
-					// 	$dLama = mysqli_fetch_array($qLama);
-					// 	if ($dLama['lama'] != "") {
-					// 		echo $dLama['lama'];
-					// 	} else {
-					// 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ";
-					// 	}
-					// }
-
-					// /* Total Status Mesin */
-					// $sqlStatus = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin");
-					// while ($rM = mysqli_fetch_array($sqlStatus)) {
-					// 	$sts = NoMesin($rM['no_mesin']);
-					// 	if (
-					// 		$sts == "btn-primary" or
-					// 		$sts == "btn-primary border-dashed" or
-					// 		$sts == "btn-primary blink_me1" or
-					// 		$sts == "btn-primary blink_me"
-					// 	) {
-					// 		$MB = "1";
-					// 	} else {
-					// 		$MB = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-purple" or
-					// 		$sts == "bg-purple border-dashed" or
-					// 		$sts == "bg-purple blink_me1" or
-					// 		$sts == "bg-purple blink_me"
-					// 	) {
-					// 		$SPT = "1";
-					// 	} else {
-					// 		$SPT = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "btn-warning" or
-					// 		$sts == "btn-warning border-dashed" or
-					// 		$sts == "btn-warning blink_me1" or
-					// 		$sts == "btn-warning blink_me"
-					// 	) {
-					// 		$FL = "1";
-					// 	} else {
-					// 		$FL = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "btn-danger" or
-					// 		$sts == "btn-danger border-dashed" or
-					// 		$sts == "btn-danger blink_me1" or
-					// 		$sts == "btn-danger blink_me"
-					// 	) {
-					// 		$PBK = "1";
-					// 	} else {
-					// 		$PBK = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "btn-success" or
-					// 		$sts == "btn-success border-dashed" or
-					// 		$sts == "btn-success blink_me1" or
-					// 		$sts == "btn-success blink_me"
-					// 	) {
-					// 		$GRG = "1";
-					// 	} else {
-					// 		$GRG = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "btn-default" or
-					// 		$sts == "btn-default border-dashed" or
-					// 		$sts == "btn-default blink_me1" or
-					// 		$sts == "btn-default blink_me"
-					// 	) {
-					// 		$GD = "1";
-					// 	} else {
-					// 		$GD = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-kuning" or
-					// 		$sts == "bg-kuning border-dashed" or
-					// 		$sts == "bg-kuning blink_me1" or
-					// 		$sts == "bg-kuning blink_me"
-					// 	) {
-					// 		$GPS = "1";
-					// 	} else {
-					// 		$GPS = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-hijau" or
-					// 		$sts == "bg-hijau border-dashed" or
-					// 		$sts == "bg-hijau blink_me1" or
-					// 		$sts == "bg-hijau blink_me"
-					// 	) {
-					// 		$CYD = "1";
-					// 	} else {
-					// 		$CYD = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-black" or
-					// 		$sts == "bg-black border-dashed" or
-					// 		$sts == "bg-black blink_me1" or
-					// 		$sts == "bg-black blink_me"
-					// 	) {
-					// 		$MCS = "1";
-					// 	} else {
-					// 		$MCS = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-abu" or
-					// 		$sts == "bg-abu border-dashed" or
-					// 		$sts == "bg-abu blink_me1" or
-					// 		$sts == "bg-abu blink_me"
-					// 	) {
-					// 		$MCR = "1";
-					// 	} else {
-					// 		$MCR = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-aqua" or
-					// 		$sts == "bg-aqua border-dashed" or
-					// 		$sts == "bg-aqua blink_me1" or
-					// 		$sts == "bg-aqua blink_me"
-					// 	) {
-					// 		$MCB = "1";
-					// 	} else {
-					// 		$MCB = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-teal" or
-					// 		$sts == "bg-teal border-dashed" or
-					// 		$sts == "bg-teal blink_me1" or
-					// 		$sts == "bg-teal blink_me"
-					// 	) {
-					// 		$CMY = "1";
-					// 	} else {
-					// 		$CMY = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-fuchsia" or
-					// 		$sts == "bg-fuchsia border-dashed" or
-					// 		$sts == "bg-fuchsia blink_me1" or
-					// 		$sts == "bg-fuchsia blink_me"
-					// 	) {
-					// 		$DTS = "1";
-					// 	} else {
-					// 		$DTS = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-lime" or
-					// 		$sts == "bg-lime border-dashed" or
-					// 		$sts == "bg-lime blink_me1" or
-					// 		$sts == "bg-lime blink_me"
-					// 	) {
-					// 		$SMS = "1";
-					// 	} else {
-					// 		$SMS = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-violet" or
-					// 		$sts == "bg-violet border-dashed" or
-					// 		$sts == "bg-violet blink_me1" or
-					// 		$sts == "bg-violet blink_me"
-					// 	) {
-					// 		$CMS = "1";
-					// 	} else {
-					// 		$CMS = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-abu border-dashed" or
-					// 		$sts == "bg-black border-dashed" or
-					// 		$sts == "bg-aqua border-dashed" or
-					// 		$sts == "bg-kuning border-dashed" or
-					// 		$sts == "bg-hijau border-dashed" or
-					// 		$sts == "btn-success border-dashed" or
-					// 		$sts == "btn-danger border-dashed" or
-					// 		$sts == "btn-warning border-dashed" or
-					// 		$sts == "btn-primary border-dashed" or
-					// 		$sts == "bg-teal border-dashed" or
-					// 		$sts == "bg-purple border-dashed" or
-					// 		$sts == "bg-fuchsia border-dashed" or
-					// 		$sts == "bg-lime border-dashed" or
-					// 		$sts == "bg-violet border-dashed"
-					// 	) {
-					// 		$PTD = "1";
-					// 	} else {
-					// 		$PTD = "0";
-					// 	}
-					// 	if (
-					// 		$sts == "bg-abu blink_me" or
-					// 		$sts == "bg-black blink_me" or
-					// 		$sts == "bg-aqua blink_me" or
-					// 		$sts == "bg-kuning blink_me" or
-					// 		$sts == "bg-hijau blink_me" or
-					// 		$sts == "btn-success blink_me" or
-					// 		$sts == "btn-danger blink_me" or
-					// 		$sts == "btn-warning blink_me" or
-					// 		$sts == "btn-primary blink_me" or
-					// 		$sts == "bg-teal blink_me" or
-					// 		$sts == "bg-fuchsia blink_me" or
-					// 		$sts == "bg-lime blink_me" or
-					// 		$sts == "bg-purple blink_me" or
-					// 		$sts == "bg-violet blink_me"
-					// 	) {
-					// 		$URG = "1";
-					// 	} else {
-					// 		$URG = "0";
-					// 	}
-
-					// 	$totPTD = $totPTD + $PTD;
-					// 	$totURG = $totURG + $URG;
-					// 	$totGRG = $totGRG + $GRG;
-					// 	$totCYD = $totCYD + $CYD;
-					// 	$totGPS = $totGPS + $GPS;
-					// 	$totPBK = $totPBK + $PBK;
-					// 	$totFL = $totFL + $FL;
-					// 	$totMB = $totMB + $MB;
-					// 	$totGD = $totGD + $GD;
-					// 	$totSPT = $totSPT + $SPT;
-					// 	$totMCR = $totMCR + $MCR;
-					// 	$totMCS = $totMCS + $MCS;
-					// 	$totMCB = $totMCB + $MCB;
-					// 	$totCMY = $totCMY + $CMY;
-					// 	$totDTS = $totDTS + $DTS;
-					// 	$totSMS = $totSMS + $SMS;
-					// 	$totCMS = $totCMS + $CMS;
-					// }
-					// 
-					?>
-					<table border="0">
+					<table border="0" width="100%">
 						<thead>
 							<tr>
 								<?php
@@ -498,7 +272,19 @@ include "koneksi.php";
 
 									return $warnaMc;
 								}
-
+								function Waktu($mc)
+								{
+									include "koneksi.php";
+									$qLama = mysqli_query($con, "SELECT TIME_FORMAT(timediff(b.tgl_target,now()),'%H:%i') as lama FROM tbl_schedule a
+														LEFT JOIN tbl_montemp b ON a.id=b.id_schedule
+														WHERE a.no_mesin='$mc' AND b.status='sedang jalan' AND (ISNULL(b.tgl_stop) or NOT ISNULL(b.tgl_mulai)) ORDER BY a.no_urut ASC LIMIT 1");
+									$dLama = mysqli_fetch_array($qLama);
+									if ($dLama['lama'] != "") {
+										echo $dLama['lama'];
+									} else {
+										echo "";
+									}
+								}
 
 								/* Total Status Mesin */
 								$sqlStatus = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin");
@@ -714,26 +500,15 @@ include "koneksi.php";
 									$totCMS = $totCMS + $CMS;
 								}
 
-								$machinesByCapacity = array(
-									'2400' => array(),
-									'1800' => array(),
-									'1200' => array(),
-									'900' => array(),
-									'800' => array(),
-									'750' => array(),
-									'600' => array(),
-									'400' => array(),
-									'300' => array(),
-									'200' => array(),
-									'150' => array(),
-									'100' => array(),
-									'50'  => array(),
-									'30'  => array(),
-									'20'  => array(),
-									'10'  => array(),
-									'5'   => array(),
-									'0'   => array()
-								);
+								$machinesByCapacity = array();
+
+								$result = mysqli_query($con, "SELECT DISTINCT kapasitas FROM tbl_mesin ORDER BY kapasitas DESC");
+
+								while ($row = mysqli_fetch_assoc($result)) {
+									$kapasitas = $row['kapasitas'];
+
+									$machinesByCapacity[$kapasitas] = array();
+								}
 
 								$dataMesin = mysqli_query($con, "SELECT no_mesin, kapasitas FROM tbl_mesin");
 
@@ -752,7 +527,7 @@ include "koneksi.php";
 									} else {
 										$length = 3;
 									}
-									$width = 300 * $length;
+									$width = 62 * $length;
 
 									$backgroundColor = '';
 									switch ($capacity) {
@@ -811,7 +586,7 @@ include "koneksi.php";
 											$backgroundColor = 'bg-teal';
 											break;
 										default:
-											$backgroundColor = 'bg-default'; // Jika tidak ada yang cocok, gunakan default
+											$backgroundColor = 'bg-primary';
 											break;
 									}
 
@@ -823,26 +598,15 @@ include "koneksi.php";
 						<tbody>
 							<tr>
 								<?php
-								$machinesByCapacity = array(
-									'2400' => array(),
-									'1800' => array(),
-									'1200' => array(),
-									'900' => array(),
-									'800' => array(),
-									'750' => array(),
-									'600' => array(),
-									'400' => array(),
-									'300' => array(),
-									'200' => array(),
-									'150' => array(),
-									'100' => array(),
-									'50'  => array(),
-									'30'  => array(),
-									'20'  => array(),
-									'10'  => array(),
-									'5'   => array(),
-									'0'   => array()
-								);
+								$machinesByCapacity = array();
+
+								$result = mysqli_query($con, "SELECT DISTINCT kapasitas FROM tbl_mesin ORDER BY kapasitas DESC");
+
+								while ($row = mysqli_fetch_assoc($result)) {
+									$kapasitas = $row['kapasitas'];
+
+									$machinesByCapacity[$kapasitas] = array();
+								}
 
 								$dataMesin = mysqli_query($con, "SELECT no_mesin, kapasitas FROM tbl_mesin");
 
@@ -863,15 +627,19 @@ include "koneksi.php";
 									} else {
 										$length = 3;
 									}
-									$width = 300 * $length;
-
+									$width = 62 * $length;
 
 									echo '<td align="center" bgcolor="#E0DDDD" style="width:' . $width . 'px; padding: 0; vertical-align: top;">';
 
 									echo '<div class="wrap">';
 									foreach ($machines as $machine) {
-										echo '<div class="detail_status btn btn-sm ' . NoMesin($machine['no_mesin']) . '">' . $machine['no_mesin'] . '</div>';
+										echo '<div class="detail_status btn btn-sm ' . NoMesin($machine['no_mesin']) . '">';
+										echo '<span class="machine_number">' . $machine['no_mesin'] . '</span>';
+										echo '<p class="machine_time">' . Waktu($machine['no_mesin']) . '</p>';
+										echo '</div>';
 									}
+
+
 
 									echo '</div>';
 
