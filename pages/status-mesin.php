@@ -275,9 +275,9 @@ include "koneksi.php";
 								function Waktu($mc)
 								{
 									include "koneksi.php";
-									$qLama = mysqli_query($con, "SELECT TIME_FORMAT(timediff(b.tgl_target,now()),'%H:%i') as lama FROM tbl_schedule a
+									$qLama = mysqli_query($con, "SELECT TIME_FORMAT(TIMEDIFF(b.tgl_target,NOW()),'%H:%i') AS lama FROM tbl_schedule a
 														LEFT JOIN tbl_montemp b ON a.id=b.id_schedule
-														WHERE a.no_mesin='$mc' AND b.status='sedang jalan' AND (ISNULL(b.tgl_stop) or NOT ISNULL(b.tgl_mulai)) ORDER BY a.no_urut ASC LIMIT 1");
+														WHERE a.no_mesin='$mc' AND b.status='sedang jalan' AND (ISNULL(b.tgl_stop) OR NOT ISNULL(b.tgl_mulai)) ORDER BY a.no_urut ASC LIMIT 1");
 									$dLama = mysqli_fetch_array($qLama);
 									if ($dLama['lama'] != "") {
 										echo $dLama['lama'];
@@ -633,7 +633,7 @@ include "koneksi.php";
 
 									echo '<div class="wrap">';
 									foreach ($machines as $machine) {
-										echo '<div class="detail_status btn btn-sm ' . NoMesin($machine['no_mesin']) . '">';
+										echo '<div class="detail_status btn btn-sm ' . NoMesin($machine['no_mesin']) . '" " id="' . $machine['no_mesin'] . '" data-toggle="tooltip" data-html="true">';
 										echo '<span class="machine_number">' . $machine['no_mesin'] . '</span>';
 										echo '<p class="machine_time">' . Waktu($machine['no_mesin']) . '</p>';
 										echo '</div>';

@@ -191,10 +191,10 @@ $rowbg = mysqli_fetch_array($sqlbg);
   //   $dated = $r['tgllot']->format('Y-m-d H:i:s');
   // }
   // $sqlkko = sqlsrv_query($conn, "select SODID from knittingorders  
-	// where knittingorders.Kono='$r[dono]'") or die("gagal");
+  // where knittingorders.Kono='$r[dono]'") or die("gagal");
   // $rkko = sqlsrv_fetch_array($sqlkko);
   // $sqlkko1 = sqlsrv_query($conn, "select joid,productid from processcontroljo  
-	// where sodid='$rkko[SODID]'") or die("gagal");
+  // where sodid='$rkko[SODID]'") or die("gagal");
   // $rkko1 = sqlsrv_fetch_array($sqlkko1);
   // if ($r['productid'] != '') {
   //   $kno1 = $r['productid'];
@@ -202,13 +202,13 @@ $rowbg = mysqli_fetch_array($sqlbg);
   //   $kno1 = $rkko1['productid'];
   // }
   // $sql1 = sqlsrv_query($conn, "select hangerno,color from  productmaster
-	// where id='$kno1'") or die("gagal");
+  // where id='$kno1'") or die("gagal");
   // $r1 = sqlsrv_fetch_array($sql1);
   // $sql2 = sqlsrv_query($conn, "select partnername from Partners
-	// where id='$r[customerid]'") or die("gagal");
+  // where id='$r[customerid]'") or die("gagal");
   // $r2 = sqlsrv_fetch_array($sql2);
   // $sql3 = sqlsrv_query($conn, "select Kono,joid from processcontroljo 
-	// where pcid='$r[pcid]'") or die("gagal");
+  // where pcid='$r[pcid]'") or die("gagal");
   // $r3 = sqlsrv_fetch_array($sql3);
   // if ($r3['Kono'] != '') {
   //   $kno = $r3['Kono'];
@@ -216,10 +216,10 @@ $rowbg = mysqli_fetch_array($sqlbg);
   //   $kno = $r['dono'];
   // }
   // $sql4 = sqlsrv_query($conn, "select CAST(TM.dbo.knittingorders.[Note] AS VARCHAR(8000))as note,id,supplierid from knittingorders 
-	// where kono='$kno'") or die("gagal");
+  // where kono='$kno'") or die("gagal");
   // $r4 = sqlsrv_fetch_array($sql4);
   // $sql5 = sqlsrv_query($conn, "select partnername from partners 
-	// where id='$r4[supplierid]'") or die("gagal");
+  // where id='$r4[supplierid]'") or die("gagal");
   // $r5 = sqlsrv_fetch_array($sql5);
   // if ($r3['joid'] != '') {
   //   $jno = $r3['joid'];
@@ -227,7 +227,7 @@ $rowbg = mysqli_fetch_array($sqlbg);
   //   $jno = $rkko1['joid'];
   // }
   // $sql6 = sqlsrv_query($conn, "select documentno,soid from joborders 
-	// where id='$jno'") or die("gagal");
+  // where id='$jno'") or die("gagal");
   // $r6 = sqlsrv_fetch_array($sql6);
   // $sql8 = sqlsrv_query($conn, "select customerid from salesorders where id='$r6[soid]'") or die("gagal");
   // $r8 = sqlsrv_fetch_array($sql8);
@@ -246,7 +246,7 @@ $rowbg = mysqli_fetch_array($sqlbg);
   //   left join TM.dbo.Partners on TM.dbo.Partners.ID= TM.dbo.KnittingOrders.SupplierID)
   //   left join TM.dbo.ProductMaster on TM.dbo.ProductMaster.ID= TM.dbo.KODetails.ProductID
   //   left join TM.dbo.SalesOrders on TM.dbo.SalesOrders.ID= TM.dbo.SODetails.SOID
-	// 	where KONO='$kno'");
+  // 	where KONO='$kno'");
   // $as7 = sqlsrv_fetch_array($s4);
   // $sql12 = sqlsrv_query($conn, "select SODetailsBom.ProductID from SODetailsBom where SODID='$as7[SODID]' and KODID='$as7[KODID]' and Parentproductid='$as7[BOMID]' order by ID", array(), array("Scrollable" => "static"));
   // $sql14 = sqlsrv_query($conn, "select  count(lotno)as jmllot from processcontrolbatches where pcid='$r[pcid]' and dated='$dated'");
@@ -878,7 +878,30 @@ $rowbg = mysqli_fetch_array($sqlbg);
       </td>
       <td width="20%" valign="top">
         <font size="-4"><?php echo $rowsmp1['tgl_buat']; ?></font><br>
-        <font size="-4"><?php echo date('Y-m-d H:i', strtotime('+' . $jamtarget . ' hour +' . $mintarget . ' minutes', strtotime($rowsmp1['tgl_buat']))); ?></font><br>
+        <font size="-4">
+          <?php
+          // $jam_tambahan = $rowmt['target']; // Jam yang ingin ditambahkan
+          $waktu_awal = strtotime(substr($rowsmp1['tgl_buat'], 11, 5)); // Waktu awal
+          $jam_tambahan = $target[0];; // Jam tambahan
+          $menit_tambahan = $target[1];; // Menit tambahan
+
+          // Konversi waktu awal ke dalam detik
+          $detik_awal = $waktu_awal;
+
+          // Hitung jumlah detik yang akan ditambahkan berdasarkan waktu tambahan
+          $detik_tambahan = ($jam_tambahan * 3600) + ($menit_tambahan * 60);
+
+          // Tambahkan detik tambahan ke waktu awal
+          $waktu_hasil = $detik_awal + $detik_tambahan;
+
+          // Konversi kembali ke format waktu (HH:mm:ss)
+          $waktu_hasil_format = date("H:i:s", $waktu_hasil);
+          $date_hasil_format = substr($rowsmp1['tgl_buat'], 0, 10);
+
+          echo  $date_hasil_format . " " . $waktu_hasil_format; // Output: 14:48:00
+
+          ?>
+        </font><br>
         <font size="-4"><?php echo $rowsmp['target']; ?> jam</font><br>
         <?php echo date("d-m-Y H:i:s", strtotime($rowsmp1['tgl_buat'])); ?>
       </td>
