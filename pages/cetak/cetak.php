@@ -880,25 +880,20 @@ $rowbg = mysqli_fetch_array($sqlbg);
         <font size="-4"><?php echo $rowsmp1['tgl_buat']; ?></font><br>
         <font size="-4">
           <?php
-          // $jam_tambahan = $rowmt['target']; // Jam yang ingin ditambahkan
-          $waktu_awal = strtotime(substr($rowsmp1['tgl_buat'], 11, 5)); // Waktu awal
-          $jam_tambahan = $target[0];; // Jam tambahan
-          $menit_tambahan = $target[1];; // Menit tambahan
 
-          // Konversi waktu awal ke dalam detik
-          $detik_awal = $waktu_awal;
+          $waktu_awal = $rowsmp1['jammasukkain'];
+          $target = $rowsmp['target'];
 
-          // Hitung jumlah detik yang akan ditambahkan berdasarkan waktu tambahan
-          $detik_tambahan = ($jam_tambahan * 3600) + ($menit_tambahan * 60);
+          $date = new DateTime($waktu_awal);
 
-          // Tambahkan detik tambahan ke waktu awal
-          $waktu_hasil = $detik_awal + $detik_tambahan;
+          list($jam, $menit) = explode('.', $target);
 
-          // Konversi kembali ke format waktu (HH:mm:ss)
-          $waktu_hasil_format = date("H:i:s", $waktu_hasil);
-          $date_hasil_format = substr($rowsmp1['tgl_buat'], 0, 10);
+          $date->modify("+{$jam} hours");
+          $date->modify("+{$menit} minutes");
 
-          echo  $date_hasil_format . " " . $waktu_hasil_format; // Output: 14:48:00
+          $tanggal_baru = $date->format('Y-m-d H:i:s');
+
+          echo $tanggal_baru;
 
           ?>
         </font><br>
