@@ -862,8 +862,8 @@
 						<select name="kapasitas" class="form-control" id="kapasitas" onChange="no_msn();hload();">
 							<option value="">Pilih</option>
 							<?php
-								$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
-								while ($rK = mysqli_fetch_array($sqlKap)) {
+							$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
+							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['kapasitas']; ?>" <?php if ($_GET['kap'] == $rK['kapasitas']) {
 																					echo "SELECTED";
@@ -876,8 +876,8 @@
 							<select name="kapasitas" onchange="window.location='?p=Form-Schedule&nokk='+document.getElementById('nokk').value+'&kap='+this.value" class="form-control">
 								<option value="">Pilih</option>
 								<?php
-									$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
-									while ($rK = mysqli_fetch_array($sqlKap)) {
+								$sqlKap = mysqli_query($con, "SELECT kapasitas FROM tbl_mesin GROUP BY kapasitas ORDER BY kapasitas DESC");
+								while ($rK = mysqli_fetch_array($sqlKap)) {
 								?>
 									<option value="<?php echo $rK['kapasitas']; ?>" <?php if ($_GET['kap'] == $rK['kapasitas']) {
 																						echo "SELECTED";
@@ -893,8 +893,8 @@
 						<select name="no_mc" class="form-control" id="no_mc" onchange="select_resep();" required>
 							<option value="">Pilih</option>
 							  <?php
-									$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $_GET['kap'] . "' ORDER BY no_mesin ASC");
-									while ($rK = mysqli_fetch_array($sqlKap)) {
+								$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='" . $_GET['kap'] . "' ORDER BY no_mesin ASC");
+								while ($rK = mysqli_fetch_array($sqlKap)) {
 								?>
 								  <option value="<?php echo $rK['no_mesin']; ?>"><?php echo $rK['no_mesin']; ?></option>
 							 <?php } ?>	 

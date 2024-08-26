@@ -144,6 +144,7 @@ border:hidden;
       <td width="12%" rowspan="2" scope="col"><div align="center">Jenis Kain</div></td>
       <td width="9%" rowspan="2" scope="col"><div align="center">Warna</div></td>
       <td width="9%" rowspan="2" scope="col"><div align="center">No. Warna</div></td>
+      <td width="4%" rowspan="2" scope="col"><div align="center">No Demand</div></td>
       <td width="4%" rowspan="2" scope="col"><div align="center">Lot</div></td>
       <td width="7%" rowspan="2" scope="col"><div align="center">Tanggal Delivery</div></td>
       <td colspan="2" scope="col"><div align="center">Quantity</div></td>
@@ -225,6 +226,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="right" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
 	  <?php } ?>	
@@ -235,6 +237,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
@@ -255,6 +258,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="right" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
 	  <?php } ?>
@@ -265,6 +269,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
@@ -285,6 +290,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="right" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
 	  <?php } ?>
@@ -295,6 +301,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
@@ -315,6 +322,7 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
       <td align="center" valign="top">&nbsp;</td>
+      <td align="center" valign="top">&nbsp;</td>
       <td align="right" valign="top">&nbsp;</td>
       <td valign="top">&nbsp;</td>
 	  <?php } ?>
@@ -329,26 +337,31 @@ LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GR
   
     <tr>
       <td width="16%" scope="col">&nbsp;</td>
-      <td width="43%" scope="col"><div align="center">Dibuat Oleh</div></td>
-      <td width="41%" scope="col"><div align="center">Diketahui Oleh</div></td>
+      <td width="29%" scope="col"><div align="center">Dibuat Oleh</div></td>
+      <td width="29%" scope="col"><div align="center">Disetujui Oleh</div></td>
+      <td width="26%" scope="col"><div align="center">Diketahui Oleh</div></td>
     </tr>
     <tr>
       <td>Nama</td>
       <td align="center">&nbsp;</td>
       <td align="center">&nbsp;</td>
+      <td align="center">&nbsp;</td>
       </tr>
     <tr>
       <td>Jabatan</td>
-      <td align="center">Ast. Supervisor</td>
+      <td align="center">Leader Planning</td>
+      <td align="center">PPC Ast. Manager</td>
       <td align="center">Dye Ast. Manager</td>
       </tr>
     <tr>
       <td>Tanggal</td>
       <td align="center">&nbsp;</td>
       <td align="center">&nbsp;</td>
+      <td align="center">&nbsp;</td>
       </tr>
     <tr>
       <td valign="top" style="height: 0.5in;">Tanda Tangan</td>
+      <td align="center">&nbsp;</td>
       <td align="center">&nbsp;</td>
       <td align="center">&nbsp;</td>
     </tr>
@@ -377,10 +390,10 @@ Tolak Basah : 0 Lot &nbsp; 0 Kg </div></td>
       <td width="20%"><pre>No. Form 	: 14-11</pre></td>
     </tr>
     <tr>
-      <td><pre>No. Revisi	: 23</pre></td>
+      <td><pre>No. Revisi	: 21</pre></td>
     </tr>
     <tr>
-      <td><pre>Tgl. Terbit	: 21 Juni 2024</pre></td>
+      <td><pre>Tgl. Terbit	: </pre></td>
     </tr>
     <tr>
       <td><pre></pre></td>

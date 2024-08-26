@@ -697,12 +697,12 @@ if ($Awal != "") {
       </tr>
       <tr>
         <td>
-          <pre>No. Revisi	: 23</pre>
+          <pre>No. Revisi	: 22</pre>
         </td>
       </tr>
       <tr>
         <td>
-          <pre>Tgl. Terbit	: 21 Juni 2024</pre>
+          <pre>Tgl. Terbit	: 19 Januari 2024</pre>
         </td>
       </tr>
       <tr>

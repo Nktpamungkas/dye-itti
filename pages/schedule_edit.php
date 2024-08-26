@@ -18,6 +18,7 @@ while ($r = mysqli_fetch_array($modal)) {
 				<div class="modal-body">
 					<input type="hidden" id="id" name="id" value="<?php echo $r['id']; ?>">
 					<input type="hidden" id="personil" name="personil" value="<?php echo $_SESSION['nama10']; ?>">
+					<input type="hidden" id="userid" name="userid" value="<?php echo $_SESSION['user_id10'];?>">
 					<div class="form-group">
 						<label for="no_mesin" class="col-md-4 control-label">No Mesin</label>
 
@@ -193,7 +194,7 @@ while ($r = mysqli_fetch_array($modal)) {
 								<?php } ?>
 							</select>
 							<span class="help-block with-errors"></span>
-						</div>
+						</div>						
 					</div>
 					<div class="form-group">
 						<label for="jml_bruto" class="col-md-4 control-label">&nbsp;</label>

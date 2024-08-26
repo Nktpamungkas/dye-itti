@@ -229,7 +229,7 @@
           $shftSM = " g_shift='$_GET[shft]' AND ";
         }
         $sqlSM = mysqli_query($con, "SELECT * FROM tbl_stopmesin
-                                      WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]' ORDER BY id DESC LIMIT 1");
+      WHERE $shftSM tgl_update BETWEEN '$_GET[awal]' AND '$_GET[akhir]' AND no_mesin='$rowd[mc]' ORDER BY id DESC LIMIT 1");
         $rowSM = mysqli_fetch_array($sqlSM);
       ?>
         <tr valign="top">
@@ -294,18 +294,14 @@
           <td>
             <div align="center"><?php echo $rowd['point']; ?></div>
           </td>
-          <td>
-            <div align="right">
-              <?php 
-                if ($rowd['nokk'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin" and $rowSM['proses'] == "Stop") {
-                  echo date('H:i', strtotime($rowSM['mulai']));
-                } else {
-                  echo "";
-                } 
-              ?>
-            </div>
+          <td>ab
+            <div align="right"><?php if ($rowd['nokk'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin" and $rowSM['proses'] == "Stop") {
+                                  echo date('H:i', strtotime($rowSM['mulai']));
+                                } else {
+                                  echo "";
+                                } ?></div>
           </td>
-          <td>
+          <td>aa
             <div align="right"><?php if ($rowd['nokk'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin" and $rowSM['proses'] == "Stop") {
                                   echo date('H:i', strtotime($rowSM['selesai']));
                                 } else {

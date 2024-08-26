@@ -9,7 +9,7 @@ $rCek=mysqli_fetch_array($qCek);
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title" id="myModalLabel">No Mesin :
+      <h4 class="modal-title" id="myModalLabel">No Mesin a:
         <?php echo $rCek['no_mesin'];?> <br> No Urut : <?php echo $rCek['no_urut'];?> 
       </h4>
     </div>

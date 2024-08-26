@@ -4,42 +4,22 @@ session_start();
 include "koneksi.php";
 
 if (isset($_POST['delete'])) {
-  $id = $_POST['delete_id'];
+        $id = $_POST['delete_id'];
 
-  // Mengamankan input terhadap SQL Injection
-  $id = mysqli_real_escape_string($con, $id);
+        // Mengamankan input terhadap SQL Injection
+        $id = mysqli_real_escape_string($con, $id);
 
-   // Mendapatkan informasi user dan IP
-   $user_name = $_SESSION['user_id10']; // Misalnya username disimpan di session
-   $user_ip = $_SERVER['REMOTE_ADDR']; // Mendapatkan IP user
+        // Query untuk menghapus item
+        $sql = "DELETE FROM tbl_mesin WHERE id='$id'";
 
-    // Mendapatkan no_mesin dari tabel tbl_mesin
-   $no_mesin_query = "SELECT * FROM tbl_mesin WHERE id='$id'";
-   $result = mysqli_query($con, $no_mesin_query);
-   $row = mysqli_fetch_assoc($result);
-   $no_mesin = $row['no_mesin'];
-   $no_mesin_baru = $row['no_mesin_baru'];
-   $no_mc_lama = $row['no_mc_lama'];
-   
+        if (mysqli_query($con, $sql)) {
+          $_SESSION['message'] = "Data mesin berhasil dihapus.";
+        } else {
+          $_SESSION['message'] = "Error deleting record: " . mysqli_error($con);
+        }
 
-   // Query untuk menyimpan log penghapusan
-   $log_sql = "INSERT INTO tbl_delete_log_mesin (id, user_name, user_ip, no_mesin, no_mc_lama, no_mesin_baru) VALUES ('$id', '$user_name', '$user_ip','$no_mesin','$no_mc_lama','$no_mesin_baru')";
-
-   if (mysqli_query($con, $log_sql)) {
-       // Query untuk menghapus item
-       $delete_sql = "DELETE FROM tbl_mesin WHERE id='$id'";
-
-       if (mysqli_query($con, $delete_sql)) {
-           $_SESSION['message'] = "Data mesin berhasil dihapus.";
-       } else {
-           $_SESSION['message'] = "Error deleting record: " . mysqli_error($con);
-       }
-   } else {
-       $_SESSION['message'] = "Error logging deletion: " . mysqli_error($con);
-   }
-
-  // Set a flag to indicate that the deletion process is complete
-  echo '<script type="text/javascript">
+        // Set a flag to indicate that the deletion process is complete
+        echo '<script type="text/javascript">
           sessionStorage.setItem("deleteMessage", "' . $_SESSION['message'] . '");
           window.location = "https://online.indotaichen.com/dye-itti/index1.php?p=Mesin";
         </script>';
@@ -126,14 +106,14 @@ if (isset($_POST['delete'])) {
                     <td align="center">
                       <a href="#" id='<?php echo $rowd['id'] ?>' class="btn btn-info mesin_edit"><i class="fa fa-edit"></i> </a>
                       <?php
-                      // Hanya tampilkan tombol delete untuk pengguna Lukman dan Andri
-                      if ($_SESSION['user_id10'] == 'lukman' || $_SESSION['user_id10'] == 'andri' || $_SESSION['user_id10'] == 'dit') {
-                      ?>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $rowd['id']; ?>"><i class="fa fa-trash"></i></button>
-                      <?php
-                      }
-                      ?>
-
+                                            // Hanya tampilkan tombol delete untuk pengguna Lukman dan Andri
+                                            if ($_SESSION['user_id10'] == 'lukman' || $_SESSION['user_id10'] == 'andri'|| $_SESSION['user_id10'] == 'dit') {
+                                            ?>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $rowd['id']; ?>"><i class="fa fa-trash"></i></button>
+                                            <?php
+                                            }
+                                            ?>
+                      
                     </td>
                   </tr>
                   <?php
