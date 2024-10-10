@@ -1,7 +1,5 @@
-.36_270 { 
-	overflow:hidden;
-}
 .e36_270 { 
+	overflow:hidden;
 	width:1902.22216796875px;
 	height:1070px;
 	position:absolute;
@@ -513,7 +511,6 @@
 	background-image:url(images1/slice_14_3.png);
 	background-repeat:no-repeat;
 	background-size:cover;
-	animation: blink 1.5s infinite; /* Menambahkan animasi blink */
 }
 .e36_284_r { 
 	width:218.27256774902344px;

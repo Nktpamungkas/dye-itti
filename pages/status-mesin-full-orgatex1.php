@@ -31,6 +31,28 @@ include"./../koneksi.php";
             	width: fit-content; /* Ukuran konten agar pas dengan teks */
 				border-radius: 10px; /* Membuat sudut border melengkung */	
         		}
+				.round-button {
+				width: 30px; /* Lebar tombol */
+				height: 30px; /* Tinggi tombol, sama dengan lebar agar berbentuk bulat */
+				background: linear-gradient(45deg, #ff0000, #ff4d4d); /* Gradien merah */
+				border: 3px solid #000; /* Border hitam dengan ketebalan 3px */
+				border-radius: 50%; /* Membuat bentuk bulat sempurna */
+				color: white; /* Warna teks di dalam tombol */
+				font-size: 12px; /* Ukuran font */
+				cursor: pointer; /* Mengubah kursor menjadi pointer saat diarahkan ke tombol */
+				text-align: center; /* Memposisikan teks di tengah */
+				line-height: 50px; /* Menyejajarkan teks secara vertikal */
+				animation: blink 1s infinite; /* Menambahkan animasi blink */
+				}
+				/* Animasi blink */
+				@keyframes blink {
+					0%, 100% {
+						opacity: 1; /* Penuh (tidak transparan) */
+					}
+					50% {
+						opacity: 0; /* Transparan di tengah-tengah */
+					}
+				}
             </style>
 			<link rel="stylesheet" href="./../bower_components/bootstrap/dist/css/bootstrap.min.css">
 			<!-- Font Awesome -->
@@ -73,28 +95,13 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     // Mengambil hasil query
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
 	
-	if ($row['Run State']=='No Batch' and $row['Online State']=='OFF'){
-		$warnaMc="";
-	}else if ($row['Run State']=='No Batch' and $row['Online State']=='ON'){
+	if ($row['Run State']=='No Batch'){
 		$warnaMc="";	
-	}else if($row['Run State']=='Batch Running' and $row['Online State']=='OFF'){	
-		$warnaMc="_r";
-	}else if($row['Run State']=='Batch Running' and $row['Online State']=='ON'){	
-		$warnaMc="_r";	
-	}else if($row['Run State']=='Controller Stopped' and $row['Online State']=='OFF'){	
+	}else if($row['Run State']=='Batch Running'){	
+		$warnaMc="_r";		
+	}else if($row['Run State']=='Controller Stopped'){	
 		$warnaMc="_s";
-	}else if($row['Run State']=='Controller Stopped' and $row['Online State']=='ON'){	
-		$warnaMc="_s";
-//	}else if($row['Run State']=='Manual Operation' and $row['Online State']=='OFF'){	
-//		$warnaMc="bg-yellow";	
-//	}else if($row['Run State']=='Manual Operation' and $row['Online State']=='ON'){	
-//		$warnaMc="bg-yellow blink_me";
-//	}else if($row['Run State']=='Finished' and $row['Online State']=='OFF'){	
-//		$warnaMc="bg-red";
-//	}else if($row['Run State']=='Finished' and $row['Online State']=='ON'){	
-//		$warnaMc="bg-red blink_me";	
-	}else{
-		
+	}else{		
 		$warnaMc="";
 	}
 			
@@ -105,10 +112,43 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 	 
     return $warnaMc;
 }
-	function Rajut($mc)
+	function McConnect($mc)
 	{
 		// Menghubungkan ke database
-		include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
+    include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
+
+    // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
+    $sql = "SELECT (Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
+(Case When ms.RunState = 1 Then 'No Batch' When ms.RunState = 2 Then 'Batch Selected'
+When ms.RunState = 3 Then 'Batch Running' When ms.RunState = 4 Then 'Controller Stopped' 
+When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms WHERE ms.Machine = ?";
+
+    // Menyiapkan statement dengan parameter
+    $params = array($mc); // Menyimpan parameter MachineCode
+    $stmt = sqlsrv_query($connORG, $sql, $params);
+
+    // Cek apakah query berhasil
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true)); // Tampilkan error jika query gagal
+    }
+
+    // Mengambil hasil query
+    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
+	
+	if ($row['Online State']=='ON'){
+		$CMc="round-button";
+	}else if ($row['Online State']=='OFF'){
+		$CMc="";	
+	}else{	
+		$CMc="";
+	}
+			
+	
+    // Tutup koneksi
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($connORG);
+	 
+    return $CMc;
 
 	}
 
@@ -161,20 +201,20 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 ?>          
           <body>
             <div class=e36_270>
-				<a href="#"><div id="1442" class="e36_271<?php echo NoMesin("1442"); ?> detail_status"><?php echo Waktu("1442"); ?></div></a>
-				<a href="#"><div id="1108" class="e36_272<?php echo NoMesin("1108"); ?> detail_status"><?php echo Waktu("1108"); ?></div></a>
-				<a href="#"><div id="1411" class="e36_273<?php echo NoMesin("1411"); ?> detail_status"><?php echo Waktu("1411"); ?></div></a>
-				<a href="#"><div id="1443" class="e36_274<?php echo NoMesin("1443"); ?> detail_status"><?php echo Waktu("1443"); ?></div></a>
-				<a href="#"><div id="1444" class="e36_275<?php echo NoMesin("1444"); ?> detail_status"><?php echo Waktu("1444"); ?></div></a>
-				<a href="#"><div id="1445" class="e36_276<?php echo NoMesin("1445"); ?> detail_status"><?php echo Waktu("1445"); ?></div></a>
-				<a href="#"><div id="1420" class="e36_277<?php echo NoMesin("1420"); ?> detail_status"><?php echo Waktu("1420"); ?></div></a>
-				<a href="#"><div id="1107" class="e36_278<?php echo NoMesin("1107"); ?> detail_status"><?php echo Waktu("1107"); ?></div></a>
-				<a href="#"><div id="1606" class="e36_279<?php echo NoMesin("1606"); ?> detail_status"><?php echo Waktu("1606"); ?></div></a>
-				<a href="#"><div id="1505" class="e36_280<?php echo NoMesin("1505"); ?> detail_status"><?php echo Waktu("1505"); ?></div></a>
-				<a href="#"><div id="1104" class="e36_281<?php echo NoMesin("1104"); ?> detail_status"><?php echo Waktu("1104"); ?></div></a>
-				<a href="#"><div id="1103" class="e36_282<?php echo NoMesin("1103"); ?> detail_status"><?php echo Waktu("1103"); ?></div></a>
-				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?></div></a>
-				<a href="#"><div id="1401" class="e36_284<?php echo NoMesin("1401"); ?> detail_status"><?php echo Waktu("1401"); ?></div></a>
+				<a href="#"><div id="1442" class="e36_271<?php echo NoMesin("1442"); ?> detail_status"><?php echo Waktu("1442"); ?><div class="<?php echo McConnect("1442"); ?>"></div></div></a>
+				<a href="#"><div id="1108" class="e36_272<?php echo NoMesin("1108"); ?> detail_status"><?php echo Waktu("1108"); ?><div class="<?php echo McConnect("1108"); ?>"></div></div></a>
+				<a href="#"><div id="1411" class="e36_273<?php echo NoMesin("1411"); ?> detail_status"><?php echo Waktu("1411"); ?><div class="<?php echo McConnect("1411"); ?>"></div></div></a>
+				<a href="#"><div id="1443" class="e36_274<?php echo NoMesin("1443"); ?> detail_status"><?php echo Waktu("1443"); ?><div class="<?php echo McConnect("1443"); ?>"></div></div></a>
+				<a href="#"><div id="1444" class="e36_275<?php echo NoMesin("1444"); ?> detail_status"><?php echo Waktu("1444"); ?><div class="<?php echo McConnect("1444"); ?>"></div></div></a>
+				<a href="#"><div id="1445" class="e36_276<?php echo NoMesin("1445"); ?> detail_status"><?php echo Waktu("1445"); ?><div class="<?php echo McConnect("1445"); ?>"></div></div></a>
+				<a href="#"><div id="1420" class="e36_277<?php echo NoMesin("1420"); ?> detail_status"><?php echo Waktu("1420"); ?><div class="<?php echo McConnect("1420"); ?>"></div></div></a>
+				<a href="#"><div id="1107" class="e36_278<?php echo NoMesin("1107"); ?> detail_status"><?php echo Waktu("1107"); ?><div class="<?php echo McConnect("1107"); ?>"></div></div></a>
+				<a href="#"><div id="1606" class="e36_279<?php echo NoMesin("1606"); ?> detail_status"><?php echo Waktu("1606"); ?><div class="<?php echo McConnect("1606"); ?>"></div></div></a>
+				<a href="#"><div id="1505" class="e36_280<?php echo NoMesin("1505"); ?> detail_status"><?php echo Waktu("1505"); ?><div class="<?php echo McConnect("1505"); ?>"></div></div></a>
+				<a href="#"><div id="1104" class="e36_281<?php echo NoMesin("1104"); ?> detail_status"><?php echo Waktu("1104"); ?><div class="<?php echo McConnect("1104"); ?>"></div></div></a>
+				<a href="#"><div id="1103" class="e36_282<?php echo NoMesin("1103"); ?> detail_status"><?php echo Waktu("1103"); ?><div class="<?php echo McConnect("1103"); ?>"></div></div></a>
+				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?><div class="<?php echo McConnect("1402"); ?>"></div></div></a>
+				<a href="#"><div id="1401" class="e36_284<?php echo NoMesin("1401"); ?> detail_status"><?php echo Waktu("1401"); ?><div class="<?php echo McConnect("1401"); ?>"></div></div></a>
 				<div  class="e36_285"></div><div  class="e36_286"></div><div  class="e36_287"></div><div  class="e36_288"></div><div  class="e36_289"></div><div  class="e36_290"></div><div  class="e36_291"></div><div  class="e36_292"></div><div  class="e36_293"></div><div  class="e36_294"></div><div  class="e36_298"></div><div  class="e36_299"></div><div  class="e36_300"></div>
 		   </div>
 		  
