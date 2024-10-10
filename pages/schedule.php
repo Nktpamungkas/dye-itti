@@ -197,6 +197,9 @@
 											<?php else : ?>
 												<a href="#" class="btn btn-danger btn-xs" onclick="confirm_high_temp('?p=high_temp&id=<?= $rowd['id'] ?>');"><i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="High Temperature"></i></a>
 											<?php endif; ?>
+											<?php if(!empty($rowd['no_resep'])) : ?>
+												<a href="https://online.indotaichen.com/laporan/orgatex_export.php?bonresep=<?= $rowd['no_resep']; ?>" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-list-alt"></i> Cek Orgatex Import </a>
+											<?php endif; ?>
 										</div>
 									</td>
 								</tr>
