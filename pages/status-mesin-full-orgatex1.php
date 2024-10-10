@@ -13,10 +13,9 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing ITTI</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-			<meta http-equiv="refresh" content="30">  
+			<meta http-equiv="refresh" content="10">  
             
-            <link rel="stylesheet" href="styles1.css">
-            
+            <link rel="stylesheet" href="styles1.css">              
             <style>
               /*
                 Figma Background for illustrative/preview purposes only.
@@ -43,6 +42,12 @@ include"./../koneksi.php";
 				text-align: center; /* Memposisikan teks di tengah */
 				line-height: 50px; /* Menyejajarkan teks secara vertikal */
 				animation: blink 1s infinite; /* Menambahkan animasi blink */
+				}
+				.round-icon {
+				font-size: 20px; /* Ukuran ikon lebih besar */
+            	color: #ff0000; /* Warna merah untuk ikon */
+				font-weight: bold; /* Membuat ikon bold */	
+            	animation: blink 1s infinite; /* Animasi berkedip */
 				}
 				/* Animasi blink */
 				@keyframes blink {
@@ -151,6 +156,35 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     return $CMc;
 
 	}
+	function Suhu($mc)
+	{
+		// Menghubungkan ke database
+    include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
+
+    // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
+    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms WHERE ms.Machine = ?";
+
+    // Menyiapkan statement dengan parameter
+    $params = array($mc); // Menyimpan parameter MachineCode
+    $stmt = sqlsrv_query($connORG, $sql, $params);
+
+    // Cek apakah query berhasil
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true)); // Tampilkan error jika query gagal
+    }
+
+    // Mengambil hasil query
+    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
+		
+	$SHMc=round($row['Temperature'],1);			
+	
+    // Tutup koneksi
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($connORG);
+	 
+    return $SHMc;
+
+	}
 
 	function Waktu($mc){
 	// Menghubungkan ke database
@@ -201,20 +235,20 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 ?>          
           <body>
             <div class=e36_270>
-				<a href="#"><div id="1442" class="e36_271<?php echo NoMesin("1442"); ?> detail_status"><?php echo Waktu("1442"); ?><div class="<?php echo McConnect("1442"); ?>"></div></div></a>
-				<a href="#"><div id="1108" class="e36_272<?php echo NoMesin("1108"); ?> detail_status"><?php echo Waktu("1108"); ?><div class="<?php echo McConnect("1108"); ?>"></div></div></a>
-				<a href="#"><div id="1411" class="e36_273<?php echo NoMesin("1411"); ?> detail_status"><?php echo Waktu("1411"); ?><div class="<?php echo McConnect("1411"); ?>"></div></div></a>
-				<a href="#"><div id="1443" class="e36_274<?php echo NoMesin("1443"); ?> detail_status"><?php echo Waktu("1443"); ?><div class="<?php echo McConnect("1443"); ?>"></div></div></a>
-				<a href="#"><div id="1444" class="e36_275<?php echo NoMesin("1444"); ?> detail_status"><?php echo Waktu("1444"); ?><div class="<?php echo McConnect("1444"); ?>"></div></div></a>
-				<a href="#"><div id="1445" class="e36_276<?php echo NoMesin("1445"); ?> detail_status"><?php echo Waktu("1445"); ?><div class="<?php echo McConnect("1445"); ?>"></div></div></a>
-				<a href="#"><div id="1420" class="e36_277<?php echo NoMesin("1420"); ?> detail_status"><?php echo Waktu("1420"); ?><div class="<?php echo McConnect("1420"); ?>"></div></div></a>
-				<a href="#"><div id="1107" class="e36_278<?php echo NoMesin("1107"); ?> detail_status"><?php echo Waktu("1107"); ?><div class="<?php echo McConnect("1107"); ?>"></div></div></a>
-				<a href="#"><div id="1606" class="e36_279<?php echo NoMesin("1606"); ?> detail_status"><?php echo Waktu("1606"); ?><div class="<?php echo McConnect("1606"); ?>"></div></div></a>
-				<a href="#"><div id="1505" class="e36_280<?php echo NoMesin("1505"); ?> detail_status"><?php echo Waktu("1505"); ?><div class="<?php echo McConnect("1505"); ?>"></div></div></a>
-				<a href="#"><div id="1104" class="e36_281<?php echo NoMesin("1104"); ?> detail_status"><?php echo Waktu("1104"); ?><div class="<?php echo McConnect("1104"); ?>"></div></div></a>
-				<a href="#"><div id="1103" class="e36_282<?php echo NoMesin("1103"); ?> detail_status"><?php echo Waktu("1103"); ?><div class="<?php echo McConnect("1103"); ?>"></div></div></a>
-				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?><div class="<?php echo McConnect("1402"); ?>"></div></div></a>
-				<a href="#"><div id="1401" class="e36_284<?php echo NoMesin("1401"); ?> detail_status"><?php echo Waktu("1401"); ?><div class="<?php echo McConnect("1401"); ?>"></div></div></a>
+				<a href="#"><div id="1442" class="e36_271<?php echo NoMesin("1442"); ?> detail_status"><?php echo Waktu("1442"); ?><?php $suhu=Suhu("1442"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1108" class="e36_272<?php echo NoMesin("1108"); ?> detail_status"><?php echo Waktu("1108"); ?><?php $suhu=Suhu("1108"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1411" class="e36_273<?php echo NoMesin("1411"); ?> detail_status"><?php echo Waktu("1411"); ?><?php $suhu=Suhu("1411"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1443" class="e36_274<?php echo NoMesin("1443"); ?> detail_status"><?php echo Waktu("1443"); ?><?php $suhu=Suhu("1443"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1444" class="e36_275<?php echo NoMesin("1444"); ?> detail_status"><?php echo Waktu("1444"); ?><?php $suhu=Suhu("1444"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1445" class="e36_276<?php echo NoMesin("1445"); ?> detail_status"><?php echo Waktu("1445"); ?><?php $suhu=Suhu("1445"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1420" class="e36_277<?php echo NoMesin("1420"); ?> detail_status"><?php echo Waktu("1420"); ?><?php $suhu=Suhu("1420"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1107" class="e36_278<?php echo NoMesin("1107"); ?> detail_status"><?php echo Waktu("1107"); ?><?php $suhu=Suhu("1107"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1606" class="e36_279<?php echo NoMesin("1606"); ?> detail_status"><?php echo Waktu("1606"); ?><?php $suhu=Suhu("1606"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1505" class="e36_280<?php echo NoMesin("1505"); ?> detail_status"><?php echo Waktu("1505"); ?><?php $suhu=Suhu("1505"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1104" class="e36_281<?php echo NoMesin("1104"); ?> detail_status"><?php echo Waktu("1104"); ?><?php $suhu=Suhu("1104"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1103" class="e36_282<?php echo NoMesin("1103"); ?> detail_status"><?php echo Waktu("1103"); ?><?php $suhu=Suhu("1103"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?><?php $suhu=Suhu("1402"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1401" class="e36_284<?php echo NoMesin("1401"); ?> detail_status"><?php echo Waktu("1401"); ?><?php $suhu=Suhu("1401"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<div  class="e36_285"></div><div  class="e36_286"></div><div  class="e36_287"></div><div  class="e36_288"></div><div  class="e36_289"></div><div  class="e36_290"></div><div  class="e36_291"></div><div  class="e36_292"></div><div  class="e36_293"></div><div  class="e36_294"></div><div  class="e36_298"></div><div  class="e36_299"></div><div  class="e36_300"></div>
 		   </div>
 		  
@@ -274,6 +308,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 		});
 
 	</script>
+<!--
 	<script>
 		$(document).ready(function() {
 			"use strict";
@@ -306,4 +341,5 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 		});
 
 	</script>
+-->
 </html>
