@@ -44,7 +44,7 @@ ms.TimeToOpcall % 60 AS Minutes
 from MachineStatus ms 
 left join [ORGATEX].[DBO].[BatchDetail] bd on ms.DyelotRefNo = bd.batch_ref_no COLLATE DATABASE_DEFAULT
 left join machines m on ms.Machine = m.MachineNo COLLATE DATABASE_DEFAULT
-WHERE ms.Machine = ? ";
+WHERE NOT (ms.RunState = 1 OR ms.RunState = 2) AND ms.Machine = ? ";
 
 		// Menyiapkan statement dengan parameter
 		$mc = $_GET['id'];	

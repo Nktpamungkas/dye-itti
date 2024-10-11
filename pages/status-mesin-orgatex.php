@@ -76,8 +76,8 @@ include "koneksi.php";
 					<h3 class="box-title">Status Mesin Dyeing ITTI-Orgatex</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						<a href="pages/status-mesin-full-orgatex.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="FullScreen"><i class="fa fa-expand"></i> 1</a>
-						<a href="pages/status-mesin-full-orgatex1.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="FullScreen"><i class="fa fa-expand"></i> 2</a>
+						<a href="pages/status-mesin-full-orgatex.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="FullScreen"  target="_blank"><i class="fa fa-expand"></i> 1</a>
+						<a href="pages/status-mesin-full-orgatex-dye-bawah.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Dyeing Bawah" target="_blank"><i class="fa fa-expand"></i> 2</a>
 						
 					</div>
 				</div>
