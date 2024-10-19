@@ -76,8 +76,9 @@ include "koneksi.php";
 					<h3 class="box-title">Status Mesin Dyeing ITTI-Orgatex</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						<a href="pages/status-mesin-full-orgatex.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="FullScreen"  target="_blank"><i class="fa fa-expand"></i> 1</a>
-						<a href="pages/status-mesin-full-orgatex-dye-bawah.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Dyeing Bawah" target="_blank"><i class="fa fa-expand"></i> 2</a>
+						<a href="pages/status-mesin-full-orgatex-dye-bawah.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Dyeing Bawah" target="_blank"><i class="fa fa-expand"></i> 1</a>
+						<a href="pages/status-mesin-full-orgatex-dye-atas.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Dyeing Atas"  target="_blank"><i class="fa fa-expand"></i> 2</a>						
+						<a href="pages/status-mesin-full-orgatex-bawah-knt.php" class="btn btn-xs" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Bawah Knitting"  target="_blank"><i class="fa fa-expand"></i> 3</a>
 						
 					</div>
 				</div>

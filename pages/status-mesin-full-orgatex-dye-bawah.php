@@ -162,7 +162,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms WHERE NOT (ms.RunState='1' OR ms.RunState='2') AND ms.Machine = ?";
+    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms WHERE ms.RunState='3' AND ms.Machine = ?";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
