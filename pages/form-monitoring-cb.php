@@ -43,7 +43,7 @@ if($rcek2['ket_kartu']!=""){$ketsts=$rcek2['ket_kartu']."\n(".$rcek2['g_kk'].")"
 <?php
 $sqlc="select convert(char(10),CreateTime,103) as TglBonResep,convert(char(10),CreateTime,108) as JamBonResep,ID_NO,COLOR_NAME,PROGRAM_NAME,PRODUCT_LOT,VOLUME,PROGRAM_CODE,YARN as NoKK,TOTAL_WT,USER25 from ticket_title where ID_NO='$rcek[no_resep]' order by createtime Desc";
 				 //--lot
-$qryc=sqlsrv_query($conn1,$sqlc, array(), array("Scrollable"=>"buffered"));
+// $qryc=sqlsrv_query($conn1,$sqlc, array(), array("Scrollable"=>"buffered"));
 
 $countdata=sqlsrv_num_rows($qryc);
 
