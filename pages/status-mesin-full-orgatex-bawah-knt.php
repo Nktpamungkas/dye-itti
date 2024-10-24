@@ -13,7 +13,7 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing Bawah KNT</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-			<meta http-equiv="refresh" content="10">  
+<!--			<meta http-equiv="refresh" content="10">  -->
             
             <link rel="stylesheet" href="styles_bawah_knt.css">              
             <style>
@@ -113,7 +113,12 @@ include"./../koneksi.php";
 			<link rel="stylesheet" href="./../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 			<link rel="stylesheet" href="./../dist/css/skins/skin-purple.min.css">
 			<link rel="icon" type="image/png" href="./../dist/img/index.ico">
-          
+          	<script>
+			// Fungsi untuk melakukan refresh ke halaman baru
+			setTimeout(function() {
+				window.location.href = "status-mesin-full-orgatex-dye-bawah.php"; // Ganti dye 01 dengan URL tujuan yang diinginkan
+			}, 10000); // 10000 ms = 10 detik
+    	  	</script>
           </head>
 <?php
 function NoMesin($mc)
