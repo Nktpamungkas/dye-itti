@@ -264,9 +264,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 				<div  class="e36_300"></div>
 		   </div>
 		  
-	<div>
-	  
-	</div>		  
+			  
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 
 	</body>

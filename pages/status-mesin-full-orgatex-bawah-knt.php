@@ -284,8 +284,8 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
           <body>
             <div class=e72_204>
 				<a href="#"><div id="1449" class="e72_144<?php echo NoMesin("1449"); ?> detail_status"></div></a>
-				<a href="#"><div id="AIRO" class="e72_145<?php echo NoMesin("AIRO"); ?> detail_status"></div></a>
-				<a href="#"><div id="WET PECH" class="e72_146<?php echo NoMesin("WET PECH"); ?> detail_status"></div></a>
+				<a href="#"><div class="e72_145"></div></a>
+				<a href="#"><div class="e72_146"></div></a>
 				<div  class="e72_193"></div>
 				<a href="#"><div id="1449" class="e72_147<?php echo NoMesin("1449"); ?> detail_status"><?php echo Waktu("1449","2"); ?><?php $suhu=Suhu("1449"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1419" class="e72_148<?php echo NoMesin("1419"); ?> detail_status"><?php echo Waktu("1419","2"); ?><?php $suhu=Suhu("1419"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
@@ -343,10 +343,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 				<div  class="e72_203"></div>
 				<div  class="e72_155"></div>
 			  </div>
-		  
-	<div>
-	  
-	</div>		  
+		  	  
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 
 	</body>
