@@ -146,11 +146,11 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
     // Mengambil hasil query
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
 	
-	if($row['Run State']=='Batch Selected'){	
+	if($row['Run State']=='Batch Selected' and $row['Dyelot']!=""){	
 		$warnaMc="_bs";		
 	}else if($row['Run State']=='Batch Running' and $row['Dyelot']!=""){	
 		$warnaMc="_r";		
-	}else if($row['Run State']=='Controller Stopped'){	
+	}else if($row['Run State']=='Controller Stopped' and $row['Dyelot']!=""){	
 		$warnaMc="_s";
 	}else{		
 		$warnaMc="";
