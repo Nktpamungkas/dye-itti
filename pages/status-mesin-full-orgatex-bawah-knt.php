@@ -297,7 +297,7 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 				<a href="#"><div class="e72_145"></div></a>
 				<a href="#"><div class="e72_146"></div></a>
 				<div  class="e72_193"></div>
-				<a href="#"><div id="1449" class="e72_147<?php echo NoMesin("1449"); ?> detail_status"><?php echo Waktu("1449","2"); ?><?php $suhu=Suhu("1449"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1413" class="e72_147<?php echo NoMesin("1413"); ?> detail_status"><?php echo Waktu("1413","2"); ?><?php $suhu=Suhu("1413"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1419" class="e72_148<?php echo NoMesin("1419"); ?> detail_status"><?php echo Waktu("1419","2"); ?><?php $suhu=Suhu("1419"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1484" class="e72_149<?php echo NoMesin("1484"); ?> detail_status"><?php echo Waktu("1484","2"); ?><?php $suhu=Suhu("1484"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1412" class="e72_156<?php echo NoMesin("1412"); ?> detail_status"><?php echo Waktu("1412","2"); ?><?php $suhu=Suhu("1412"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
