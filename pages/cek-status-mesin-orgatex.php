@@ -17,7 +17,7 @@ include("./../koneksiORGATEX.php");
       <table id="tbl3" class="table table-bordered table-hover display" width="100%" style="font-size: 18px;">
         <thead>
           <?php 
-			echo "<tr><th>Group No</th><th>Machine</th><th>DyelotRefNo</th><th>Batch Color</th><th>OnlineState</th><th>RunState</th><th>Alarm Name</th><th>Step No</th><th>Function Name</th><th>Time Opr Call</th><th>Temperature</th></tr>";
+			echo "<tr><th>Group No</th><th>Machine</th><th>Nokk</th><th>DyelotRefNo</th><th>Batch Color</th><th>OnlineState</th><th>RunState</th><th>Alarm Name</th><th>Step No</th><th>Function Name</th><th>Time Opr Call</th><th>Temperature</th></tr>";
 		  ?>	
         </thead>
         <tbody>
@@ -26,6 +26,7 @@ include("./../koneksiORGATEX.php");
 
         // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
 		$sql = "Select 
+a.Dyelot as [Dyelot],		
 m.MGroupNo as [Group No],
 ms.Machine as [Machine], ms.DyelotRefNo as [Dyelot Ref Number], 
 (Case When ms.DyelotRefNo collate Database_default is not null Then 
@@ -42,9 +43,10 @@ ms.TimeToOpcall as [Time Opr Call], (ms.InfoWord1/66.6) as [Temperature],
 FLOOR(ms.TimeToOpcall / 60) AS Hours,
 ms.TimeToOpcall % 60 AS Minutes
 from MachineStatus ms 
+left join Dyelots a on ms.DyelotRefNo = a.DyelotRefNo
 left join [ORGATEX].[DBO].[BatchDetail] bd on ms.DyelotRefNo = bd.batch_ref_no COLLATE DATABASE_DEFAULT
 left join machines m on ms.Machine = m.MachineNo COLLATE DATABASE_DEFAULT
-WHERE NOT (ms.RunState = 1 OR ms.RunState = 2) AND ms.Machine = ? ";
+WHERE ms.RunState > 1 AND ms.Machine = ? ";
 
 		// Menyiapkan statement dengan parameter
 		$mc = $_GET['id'];	
@@ -66,6 +68,7 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     echo "<tr>";
     echo "<td>" .$row['Group No']. "</td>"; //Name here should be same as the SQL Statement as [Name]
     echo "<td>" .$row['Machine']. "</td>";
+	echo "<td>" .$row['Dyelot']. "</td>";
     echo "<td>" .$row['Dyelot Ref Number']. "</td>";
     echo "<td>" .$row['Batch Number']. "</td>";
     echo "<td>" .$row['Online State']. "</td>";

@@ -13,7 +13,7 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing Bawah</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-			<meta http-equiv="refresh" content="10">  
+<!--			<meta http-equiv="refresh" content="10">  -->
             
             <link rel="stylesheet" href="styles-dye-bawah.css">              
             <style>
@@ -74,7 +74,12 @@ include"./../koneksi.php";
 			<link rel="stylesheet" href="./../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 			<link rel="stylesheet" href="./../dist/css/skins/skin-purple.min.css">
 			<link rel="icon" type="image/png" href="./../dist/img/index.ico">
-          
+          	<script>
+			// Fungsi untuk melakukan refresh ke halaman baru
+			setTimeout(function() {
+				window.location.href = "status-mesin-full-orgatex-dye-atas.php"; // Ganti dye 01 dengan URL tujuan yang diinginkan
+			}, 10000); // 10000 ms = 10 detik
+    	  	</script>
           </head>
 <?php
 function NoMesin($mc)
@@ -83,10 +88,12 @@ function NoMesin($mc)
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
+    $sql = " SELECT a.Dyelot,(Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
 (Case When ms.RunState = 1 Then 'No Batch' When ms.RunState = 2 Then 'Batch Selected'
 When ms.RunState = 3 Then 'Batch Running' When ms.RunState = 4 Then 'Controller Stopped' 
-When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms WHERE NOT (ms.RunState='1' OR ms.RunState='2') AND ms.Machine = ?";
+When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms 
+LEFT JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+WHERE ms.RunState> '1' AND ms.Machine = ? ";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -100,9 +107,9 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     // Mengambil hasil query
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
 	
-	if ($row['Run State']=='No Batch'){
-		$warnaMc="";	
-	}else if($row['Run State']=='Batch Running'){	
+	if($row['Run State']=='Batch Selected'){	
+		$warnaMc="_bs";		
+	}else if($row['Run State']=='Batch Running' and $row['Dyelot']!=""){	
 		$warnaMc="_r";		
 	}else if($row['Run State']=='Controller Stopped'){	
 		$warnaMc="_s";
@@ -123,10 +130,12 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
+    $sql = " SELECT a.Dyelot,(Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
 (Case When ms.RunState = 1 Then 'No Batch' When ms.RunState = 2 Then 'Batch Selected'
 When ms.RunState = 3 Then 'Batch Running' When ms.RunState = 4 Then 'Controller Stopped' 
-When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms WHERE NOT (ms.RunState='1' OR ms.RunState='2') AND ms.Machine = ?";
+When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms 
+LEFT JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+WHERE ms.RunState> '1' AND ms.Machine = ? ";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -162,7 +171,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms WHERE ms.RunState='3' AND ms.Machine = ?";
+    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms INNER JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo WHERE ms.RunState='3' AND ms.Machine = ?";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -192,10 +201,11 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 
     // Membuat query untuk mengambil data Run Time dari tabel MachineStatus
     $sql = "SELECT 
-           FLOOR(TimeToEnd / 60) AS Hours,
-           TimeToEnd % 60 AS Minutes
-        FROM MachineStatus 
-        WHERE Machine = ?";
+           FLOOR(ms.TimeToEnd / 60) AS Hours,
+           ms.TimeToEnd % 60 AS Minutes
+        FROM MachineStatus ms
+		INNER JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+        WHERE ms.Machine = ?";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -264,9 +274,7 @@ When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished
 				<div  class="e36_300"></div>
 		   </div>
 		  
-	<div>
-	  
-	</div>		  
+			  
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 
 	</body>
