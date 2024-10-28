@@ -127,13 +127,12 @@ function NoMesin($mc)
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
+    $sql = " SELECT a.Dyelot,(Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
 (Case When ms.RunState = 1 Then 'No Batch' When ms.RunState = 2 Then 'Batch Selected'
 When ms.RunState = 3 Then 'Batch Running' When ms.RunState = 4 Then 'Controller Stopped' 
-When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms WHERE 
--- NOT (ms.RunState='1' OR ms.RunState='2') 
-ms.RunState > 2
-AND ms.Machine = ?";
+When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms 
+LEFT JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+WHERE ms.RunState> '1' AND ms.Machine = ? ";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -147,7 +146,9 @@ AND ms.Machine = ?";
     // Mengambil hasil query
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC); 
 	
-	if($row['Run State']=='Batch Running'){	
+	if($row['Run State']=='Batch Selected'){	
+		$warnaMc="_bs";		
+	}else if($row['Run State']=='Batch Running' and $row['Dyelot']!=""){	
 		$warnaMc="_r";		
 	}else if($row['Run State']=='Controller Stopped'){	
 		$warnaMc="_s";
@@ -168,13 +169,12 @@ AND ms.Machine = ?";
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
+    $sql = " SELECT a.Dyelot,(Case When ms.OnlineState = 1 Then 'ON' When ms.OnlineState = 0 Then 'OFF' End) as [Online State], 
 (Case When ms.RunState = 1 Then 'No Batch' When ms.RunState = 2 Then 'Batch Selected'
 When ms.RunState = 3 Then 'Batch Running' When ms.RunState = 4 Then 'Controller Stopped' 
-When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms WHERE 
--- NOT (ms.RunState='1' OR ms.RunState='2') 
-ms.RunState > 2
-AND ms.Machine = ?";
+When ms.RunState = 5 Then 'Manual Operation' When ms.RunState = 6 Then 'Finished' End) as [Run State] FROM MachineStatus ms 
+LEFT JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+WHERE ms.RunState> '1' AND ms.Machine = ? ";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -210,7 +210,7 @@ AND ms.Machine = ?";
     include "./../koneksiORGATEX.php"; // Memastikan file koneksi sudah benar
 
     // Membuat query untuk mengambil data DyelotRefNo dari tabel MachineStatus
-    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms WHERE ms.RunState='3' AND ms.Machine = ?";
+    $sql = "SELECT (ms.InfoWord1/66.6) as [Temperature] FROM MachineStatus ms INNER JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo WHERE ms.RunState='3' AND ms.Machine = ?";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -240,10 +240,11 @@ AND ms.Machine = ?";
 
     // Membuat query untuk mengambil data Run Time dari tabel MachineStatus
     $sql = "SELECT 
-           FLOOR(TimeToEnd / 60) AS Hours,
-           TimeToEnd % 60 AS Minutes
-        FROM MachineStatus 
-        WHERE Machine = ?";
+           FLOOR(ms.TimeToEnd / 60) AS Hours,
+           ms.TimeToEnd % 60 AS Minutes
+        FROM MachineStatus ms
+		INNER JOIN Dyelots a ON ms.DyelotRefNo = a.DyelotRefNo
+        WHERE ms.Machine = ?";
 
     // Menyiapkan statement dengan parameter
     $params = array($mc); // Menyimpan parameter MachineCode
@@ -303,13 +304,13 @@ AND ms.Machine = ?";
 				<a href="#"><div id="2640" class="e131_503<?php echo NoMesin("2640"); ?> detail_status"><?php echo Waktu("2640","2"); ?><?php $suhu=Suhu("2640"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2639" class="e131_504<?php echo NoMesin("2639"); ?> detail_status"><?php echo Waktu("2639","2"); ?><?php $suhu=Suhu("2639"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2638" class="e131_505<?php echo NoMesin("2638"); ?> detail_status"><?php echo Waktu("2638","2"); ?><?php $suhu=Suhu("2638"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="test soaping" class="e131_506<?php echo NoMesin("test soaping"); ?> detail_status"><?php echo Waktu("test soaping","3"); ?><?php $suhu=Suhu("test soaping"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="1470" class="e131_507<?php echo NoMesin("1470"); ?> detail_status"><?php echo Waktu("1470","3"); ?><?php $suhu=Suhu("1470"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="test soaping" class="e131_506<?php echo NoMesin("test soaping"); ?> detail_status"><?php echo Waktu("test soaping","3"); ?><?php $suhu=Suhu("test soaping"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1470" class="e131_507<?php echo NoMesin("1470"); ?> detail_status"><?php echo Waktu("1470","3"); ?><?php $suhu=Suhu("1470"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1471" class="e131_508<?php echo NoMesin("1471"); ?> detail_status"><?php echo Waktu("1471","3"); ?><?php $suhu=Suhu("1471"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1472" class="e131_509<?php echo NoMesin("1472"); ?> detail_status"><?php echo Waktu("1472","3"); ?><?php $suhu=Suhu("1472"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1473" class="e131_510<?php echo NoMesin("1473"); ?> detail_status"><?php echo Waktu("1473","3"); ?><?php $suhu=Suhu("1473"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="1468" class="e131_511<?php echo NoMesin("1468"); ?> detail_status"><?php echo Waktu("1468","3"); ?><?php $suhu=Suhu("1468"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="1469" class="e131_512<?php echo NoMesin("1469"); ?> detail_status"><?php echo Waktu("1469","3"); ?><?php $suhu=Suhu("1469"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1468" class="e131_511<?php echo NoMesin("1468"); ?> detail_status"><?php echo Waktu("1468","3"); ?><?php $suhu=Suhu("1468"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1469" class="e131_512<?php echo NoMesin("1469"); ?> detail_status"><?php echo Waktu("1469","3"); ?><?php $suhu=Suhu("1469"); if($suhu>0){ ?><div class="xsmall-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div class="e131_513"></div></a>
 				<a href="#"><div id="2229" class="e131_514<?php echo NoMesin("2229"); ?> detail_status"><?php echo Waktu("2229","2"); ?><?php $suhu=Suhu("2229"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2231" class="e131_515<?php echo NoMesin("2231"); ?> detail_status"><?php echo Waktu("2231","2"); ?><?php $suhu=Suhu("2231"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
