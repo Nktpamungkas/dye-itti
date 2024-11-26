@@ -13,7 +13,7 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing Atas</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-<!--			<meta http-equiv="refresh" content="10">  -->
+			<meta http-equiv="refresh" content="20">  
             
             <link rel="stylesheet" href="styles_dye_atas.css">              
             <style>
@@ -117,7 +117,7 @@ include"./../koneksi.php";
 			// Fungsi untuk melakukan refresh ke halaman baru
 			setTimeout(function() {
 				window.location.href = "status-mesin-full-orgatex-bawah-knt.php"; // Ganti dye 01 dengan URL tujuan yang diinginkan
-			}, 10000); // 10000 ms = 10 detik
+			}, 120000); // 10000 ms = 10 detik
     	  	</script>
           </head>
 <?php
@@ -288,7 +288,51 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 		
 	}
     return $wkt; // Kembalikan nilai DyelotRefNo saja		
-    }
+    }	
+	function EffPer($machine_no, $time_range) {
+		$url = "http://10.0.0.10/laporan/stop_machine_efficency_cek.php";
+
+		// Build query string
+		$query = http_build_query([
+			'machine_no' => $machine_no,
+			'time_range' => $time_range
+		]);
+
+		// Initialize cURL
+		$ch = curl_init("$url?$query");
+
+		// Set cURL options
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+		// Execute cURL request
+		$response = curl_exec($ch);
+
+		// Check for cURL errors
+		if (curl_errno($ch)) {
+			echo "cURL Error: " . curl_error($ch);
+			curl_close($ch);
+			return null;
+		}
+
+		// Close cURL session
+		curl_close($ch);
+
+		// Decode JSON response
+		$data = json_decode($response, true);
+
+		// Check if decoding was successful and key exists
+		if (isset($data['persentase_efficiency_machine'])) {			
+			echo $data['persentase_efficiency_machine'];
+		} else {
+			echo "0";
+		}
+	}
+
+	
+
+	//echo EffPer("2228", "week"); 
+
 
 ?>          
           <body>
@@ -359,7 +403,18 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 	  
 	</div>		  
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<?php
+			  // Example usage
+		$machine_no = 1401;
+		$time_range = "week";
+		$response = getMachineEfficiency($machine_no, $time_range);
 
+		if ($response !== null) {
+		//	echo "Machine Efficiency Data: " . $response;
+		} else {
+		//	echo "Failed to retrieve machine efficiency data.";
+		}
+	?>
 	</body>
 	<!-- Tooltips -->
 	<!-- jQuery 3 -->

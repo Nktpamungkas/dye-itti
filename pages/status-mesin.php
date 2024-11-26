@@ -671,7 +671,7 @@ include "koneksi.php";
 
 									echo '<div class="wrap">';
 									foreach ($machines as $machine) {
-										echo '<div class="detail_status btn btn-sm ' . NoMesin($machine['no_mesin']) . '" " id="' . $machine['no_mesin'] . '" data-toggle="tooltip" data-html="true">';
+										echo '<div class="detail_status_orgatex btn btn-sm ' . NoMesin($machine['no_mesin']) . '" " id="' . $machine['no_mesin'] . '" data-toggle="tooltip" data-html="true">';
 										echo '<span class="machine_number">' . $machine['no_mesin'] . '</span>';
 										echo '<p class="machine_time">' . Waktu($machine['no_mesin']) . '</p>';
 										echo '</div>';

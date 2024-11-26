@@ -13,7 +13,7 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing Bawah KNT</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-<!--			<meta http-equiv="refresh" content="10">  -->
+			<meta http-equiv="refresh" content="20">  
             
             <link rel="stylesheet" href="styles_bawah_knt.css">              
             <style>
@@ -117,7 +117,7 @@ include"./../koneksi.php";
 			// Fungsi untuk melakukan refresh ke halaman baru
 			setTimeout(function() {
 				window.location.href = "status-mesin-full-orgatex-dye-bawah.php"; // Ganti dye 01 dengan URL tujuan yang diinginkan
-			}, 10000); // 10000 ms = 10 detik
+			}, 120000); // 10000 ms = 10 detik
     	  	</script>
           </head>
 <?php
@@ -289,11 +289,51 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 	}
     return $wkt; // Kembalikan nilai DyelotRefNo saja		
     }
+	
+	function EffPer($machine_no, $time_range) {
+		$url = "http://10.0.0.10/laporan/stop_machine_efficency_cek.php";
+
+		// Build query string
+		$query = http_build_query([
+			'machine_no' => $machine_no,
+			'time_range' => $time_range
+		]);
+
+		// Initialize cURL
+		$ch = curl_init("$url?$query");
+
+		// Set cURL options
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+		// Execute cURL request
+		$response = curl_exec($ch);
+
+		// Check for cURL errors
+		if (curl_errno($ch)) {
+			echo "cURL Error: " . curl_error($ch);
+			curl_close($ch);
+			return null;
+		}
+
+		// Close cURL session
+		curl_close($ch);
+
+		// Decode JSON response
+		$data = json_decode($response, true);
+
+		// Check if decoding was successful and key exists
+		if (isset($data['persentase_efficiency_machine'])) {			
+			echo $data['persentase_efficiency_machine'];
+		} else {
+			echo "0";
+		}
+	}
 
 ?>          
           <body>
             <div class=e72_204>
-				<a href="#"><div id="1449" class="e72_144<?php echo NoMesin("1449"); ?> detail_status"></div></a>
+				<a href="#"><div id="1449" class="e72_144<?php echo NoMesin("1449"); ?> detail_status"><?php echo Waktu("1449","2"); ?><?php $suhu=Suhu("1449"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div class="e72_145"></div></a>
 				<a href="#"><div class="e72_146"></div></a>
 				<div  class="e72_193"></div>

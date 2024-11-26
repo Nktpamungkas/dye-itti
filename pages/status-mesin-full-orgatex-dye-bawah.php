@@ -13,7 +13,7 @@ include"./../koneksi.php";
             <title>Status Mesin Dyeing Bawah</title>
             <meta name="description" content="Figma htmlGenerator">
             <meta name="author" content="htmlGenerator">
-<!--			<meta http-equiv="refresh" content="10">  -->
+			<meta http-equiv="refresh" content="20">  
             
             <link rel="stylesheet" href="styles-dye-bawah.css">              
             <style>
@@ -57,7 +57,7 @@ include"./../koneksi.php";
 					50% {
 						opacity: 0; /* Transparan di tengah-tengah */
 					}
-				}
+				} 
             </style>
 			<link rel="stylesheet" href="./../bower_components/bootstrap/dist/css/bootstrap.min.css">
 			<!-- Font Awesome -->
@@ -78,7 +78,7 @@ include"./../koneksi.php";
 			// Fungsi untuk melakukan refresh ke halaman baru
 			setTimeout(function() {
 				window.location.href = "status-mesin-full-orgatex-dye-atas.php"; // Ganti dye 01 dengan URL tujuan yang diinginkan
-			}, 10000); // 10000 ms = 10 detik
+			}, 120000); // 10000 ms = 10 detik
     	  	</script>
           </head>
 <?php
@@ -241,7 +241,45 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 	}
     return $wkt; // Kembalikan nilai DyelotRefNo saja		
     }
+	function EffPer($machine_no, $time_range) {
+		$url = "http://10.0.0.10/laporan/stop_machine_efficency_cek.php";
 
+		// Build query string
+		$query = http_build_query([
+			'machine_no' => $machine_no,
+			'time_range' => $time_range
+		]);
+
+		// Initialize cURL
+		$ch = curl_init("$url?$query");
+
+		// Set cURL options
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+		// Execute cURL request
+		$response = curl_exec($ch);
+
+		// Check for cURL errors
+		if (curl_errno($ch)) {
+			echo "cURL Error: " . curl_error($ch);
+			curl_close($ch);
+			return null;
+		}
+
+		// Close cURL session
+		curl_close($ch);
+
+		// Decode JSON response
+		$data = json_decode($response, true);
+
+		// Check if decoding was successful and key exists
+		if (isset($data['persentase_efficiency_machine'])) {			
+			echo $data['persentase_efficiency_machine'];
+		} else {
+			echo "0";
+		}
+	}
 ?>          
           <body>
             <div class=e36_270>
@@ -257,7 +295,8 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 				<a href="#"><div id="1505" class="e36_280<?php echo NoMesin("1505"); ?> detail_status"><?php echo Waktu("1505"); ?><?php $suhu=Suhu("1505"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1104" class="e36_281<?php echo NoMesin("1104"); ?> detail_status"><?php echo Waktu("1104"); ?><?php $suhu=Suhu("1104"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1103" class="e36_282<?php echo NoMesin("1103"); ?> detail_status"><?php echo Waktu("1103"); ?><?php $suhu=Suhu("1103"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?><?php $suhu=Suhu("1402"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="1402" class="e36_283<?php echo NoMesin("1402"); ?> detail_status"><?php echo Waktu("1402"); ?><?php $suhu=Suhu("1402"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?>					
+					</div></a>
 				<a href="#"><div id="1401" class="e36_284<?php echo NoMesin("1401"); ?> detail_status"><?php echo Waktu("1401"); ?><?php $suhu=Suhu("1401"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<div  class="e36_285"></div>
 				<div  class="e36_286"></div>
@@ -277,6 +316,7 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 			  
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 
+	
 	</body>
 	<!-- Tooltips -->
 	<!-- jQuery 3 -->
