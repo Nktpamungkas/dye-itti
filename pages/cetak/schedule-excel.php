@@ -164,7 +164,8 @@ WHERE
       <td align="right"><?php if($rowd['tgl_out']!=""){$brt=$rowd['bruto'];}else{ $brt=0; } echo $brt; ?></td>
       <td><?php echo $rowd['loading']; ?></td>
       <td><?php echo $rowd['proses']; ?></td>
-      <td><?php echo cekDesimal($rowd['target']); ?></td>
+      <!-- <td><?php echo cekDesimal($rowd['target']); ?></td> -->
+      <td><?= $rowd['target']; ?></td>
       <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>"><?php if($rowd['lama_proses']!=""){echo $rowd['jam']." Jam ".$rowd['menit']." Menit";}?><br><?php echo $rowd['sts_hasil']; ?></td>
       <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>"><?php echo $rowd['analisa'];?><br><?php if($rowd['lama_stop_menit'] !=""){$jam=floor(round($rowd['lama_stop_menit'])/60);$menit=round($rowd['lama_stop_menit'])%60; echo $jam." Jam ".$menit." Menit";}?></td>
       <td><?php if($overtime>0){echo $hours." Jam ".$min." Menit";}else{echo "0";}?></td>
