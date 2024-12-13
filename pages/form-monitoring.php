@@ -610,22 +610,22 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 				} ?>
 				<div class="form-group">
 					<label for="no_mc" class="col-sm-3 control-label">No MC</label>
-					<div cltbl_jenis_prosesass="col-sm-2">
-						<select name="no_mc" class="form-control">
-							<option value="">Pilih</option>
-							<?php
+					<div cltbl_jenis_prosesass="col-sm-2"></div>
+					<div class="col-sm-3"> <?php if ($rCekMc['kode'] != "") {
+												echo $rCekMc['kode'] . "&nbsp; (Std Tunggu: " . $rCekMc['wt_des'] . " Jam)";
+											} ?>
+					  <select name="no_mc" class="form-control">
+					    <option value="">Pilih</option>
+					    <?php
 							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]' ORDER BY no_mesin ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
-								<option value="<?php echo $rK['no_mesin']; ?>" <?php if ($rcek['no_mesin'] == $rK['no_mesin']) {
+					    <option value="<?php echo $rK['no_mesin']; ?>" <?php if ($rcek['no_mesin'] == $rK['no_mesin']) {
 																					echo "SELECTED";
 																				} ?>><?php echo $rK['no_mesin']; ?></option>
-							<?php } ?>
-						</select>
+					    <?php } ?>
+				      </select>
 					</div>
-					<div class="col-sm-4"> <?php if ($rCekMc['kode'] != "") {
-												echo $rCekMc['kode'] . "&nbsp; (Std Tunggu: " . $rCekMc['wt_des'] . " Jam)";
-											} ?></div>
 
 				</div>
 				<div class="form-group">

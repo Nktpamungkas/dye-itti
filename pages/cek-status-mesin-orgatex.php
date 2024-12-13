@@ -4,20 +4,24 @@ session_start();
 include("../koneksi.php");
 include("./../koneksiORGATEX.php");
 
+$sqlcek=mysqli_query($con,"SELECT no_mesin FROM tbl_mesin WHERE no_mesin_lama='" .$_GET['id']. "'");
+$rcek  = mysqli_fetch_array($sqlcek);
+
 ?>
 <div class="modal-dialog modal-lg" style="width: 95%">
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title" id="myModalLabel">No Mesin Orgatex:
-        <?php echo $_GET['id']; ?>
+      <h4 class="modal-title" id="myModalLabel">IP Address Orgatex:
+        <?php echo $_GET['id']; ?><br><br>
+		Machine NEW: <?php echo $rcek['no_mesin']; ?>  
       </h4>
     </div>
     <div class="modal-body table-responsive">
       <table id="tbl3" class="table table-bordered table-hover display" width="100%" style="font-size: 18px;">
         <thead>
           <?php 
-			echo "<tr><th>Group No</th><th>Machine</th><th>Nokk</th><th>DyelotRefNo</th><th>Batch Color</th><th>OnlineState</th><th>RunState</th><th>Alarm Name</th><th>Step No</th><th>Function Name</th><th>Time Opr Call</th><th>Temperature</th></tr>";
+			echo "<tr><th>Group No</th><th>Machine NEW</th><th>Machine</th><th>Nokk</th><th>DyelotRefNo</th><th>Batch Color</th><th>OnlineState</th><th>RunState</th><th>Alarm Name</th><th>Step No</th><th>Function Name</th><th>Time Opr Call</th><th>Temperature</th></tr>";
 		  ?>	
         </thead>
         <tbody>
@@ -64,10 +68,12 @@ WHERE ms.RunState > 1 AND ms.Machine = ? ";
 
 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {	
 	$wkt=$row['Hours']." Hours ".$row['Minutes']." Minutes";
-	
+	$sql=mysqli_query($con,"SELECT no_mesin FROM tbl_mesin WHERE no_mesin_lama='" .$row['Machine']. "'");
+	$r  = mysqli_fetch_array($sql);
     echo "<tr>";
     echo "<td>" .$row['Group No']. "</td>"; //Name here should be same as the SQL Statement as [Name]
-    echo "<td>" .$row['Machine']. "</td>";
+    echo "<td>" .$r['no_mesin']. "</td>";
+	echo "<td>" .$row['Machine']. "</td>";
 	echo "<td>" .$row['Dyelot']. "</td>";
     echo "<td>" .$row['Dyelot Ref Number']. "</td>";
     echo "<td>" .$row['Batch Number']. "</td>";

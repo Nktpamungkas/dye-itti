@@ -360,9 +360,9 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 				<a href="#"><div id="2231" class="e131_515<?php echo NoMesin("2231"); ?> detail_status"><?php echo Waktu("2231","2"); ?><?php $suhu=Suhu("2231"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2230" class="e131_516<?php echo NoMesin("2230"); ?> detail_status"><?php echo Waktu("2230","2"); ?><?php $suhu=Suhu("2230"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2228" class="e131_517<?php echo NoMesin("2228"); ?> detail_status"><?php echo Waktu("2228","2"); ?><?php $suhu=Suhu("2228"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="2226" class="e131_519<?php echo NoMesin("2226"); ?> detail_status"><?php echo Waktu("2226","2"); ?><?php $suhu=Suhu("2226"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="2626" class="e131_519<?php echo NoMesin("2626"); ?> detail_status"><?php echo Waktu("2626","2"); ?><?php $suhu=Suhu("2626"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2625" class="e131_520<?php echo NoMesin("2625"); ?> detail_status"><?php echo Waktu("2625","2"); ?><?php $suhu=Suhu("2625"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
-				<a href="#"><div id="2224" class="e131_521<?php echo NoMesin("2224"); ?> detail_status"><?php echo Waktu("2224","2"); ?><?php $suhu=Suhu("2224"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="2624" class="e131_521<?php echo NoMesin("2624"); ?> detail_status"><?php echo Waktu("2624","2"); ?><?php $suhu=Suhu("2624"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2623" class="e131_522<?php echo NoMesin("2623"); ?> detail_status"><?php echo Waktu("2623","2"); ?><?php $suhu=Suhu("2623"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="2622" class="e131_523<?php echo NoMesin("2622"); ?> detail_status"><?php echo Waktu("2622","2"); ?><?php $suhu=Suhu("2622"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<a href="#"><div id="1421" class="e131_524<?php echo NoMesin("1421"); ?> detail_status"><?php echo Waktu("1421","1"); ?><?php $suhu=Suhu("1421"); if($suhu>0){ ?><div class="round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
@@ -395,7 +395,7 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 				<div  class="e131_553"></div>
 				<a href="#"><div class="e131_540"></div></a>
 				<div  class="e131_499"></div>
-				<a href="#"><div id="2227" class="e131_518<?php echo NoMesin("2227"); ?> detail_status"><?php echo Waktu("2227","2"); ?><?php $suhu=Suhu("2227"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
+				<a href="#"><div id="2627" class="e131_518<?php echo NoMesin("2627"); ?> detail_status"><?php echo Waktu("2627","2"); ?><?php $suhu=Suhu("2627"); if($suhu>0){ ?><div class="medium-round-icon"><?php echo $suhu;?> <i class="fa fa-thermometer-full"></i></div><?php } ?></div></a>
 				<div  class="e131_547"></div>
 			  </div>
 		  
@@ -405,6 +405,7 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 	<?php
 			  // Example usage
+<<<<<<< Updated upstream
 		$machine_no = 1401;
 		$time_range = "week";
 		$response = getMachineEfficiency($machine_no, $time_range);
@@ -414,6 +415,17 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 		} else {
 		//	echo "Failed to retrieve machine efficiency data.";
 		}
+=======
+//		$machine_no = 1401;
+//		$time_range = "week";
+//		$response = getMachineEfficiency($machine_no, $time_range);
+
+//		if ($response !== null) {
+		//	echo "Machine Efficiency Data: " . $response;
+//		} else {
+		//	echo "Failed to retrieve machine efficiency data.";
+//		}
+>>>>>>> Stashed changes
 	?>
 	</body>
 	<!-- Tooltips -->
