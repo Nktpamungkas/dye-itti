@@ -1001,7 +1001,35 @@
 							<?php } ?>
 						</select>
 					</div>
-
+				
+				</div>
+				<div class="form-group">
+				<label for="operatorpolyester" class="col-sm-3 control-label">Operator Polyester </label>
+					<div class="col-sm-4">
+						<select name="operatorpolyester" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+							<option value="">Pilih</option>
+							<?php
+							$sqlKap = mysqli_query($con, "SELECT nama FROM tbl_staff WHERE jabatan='Operator' ORDER BY nama ASC");
+							while ($rK = mysqli_fetch_array($sqlKap)) {
+							?>
+								<option value="<?php echo $rK['nama']; ?>" <?php if($row_hasilcelup['operator_keluar'] == $rK['nama']) { echo "SELECTED"; } ?>><?php echo $rK['nama']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+				<label for="operatorcotton" class="col-sm-3 control-label">Operator Cotton </label>
+					<div class="col-sm-4">
+						<select name="operatorcotton" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
+							<option value="">Pilih</option>
+							<?php
+							$sqlKap = mysqli_query($con, "SELECT nama FROM tbl_staff WHERE jabatan='Operator' ORDER BY nama ASC");
+							while ($rK = mysqli_fetch_array($sqlKap)) {
+							?>
+								<option value="<?php echo $rK['nama']; ?>" <?php if($row_hasilcelup['operator_keluar'] == $rK['nama']) { echo "SELECTED"; } ?>><?php echo $rK['nama']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="operator" class="col-sm-3 control-label">Operator Keluar Kain </label>
@@ -1533,6 +1561,8 @@
 								rcode='" . $_POST['rcode1'] . "',
 								operator_keluar='" . $_POST['operator'] . "',
 								operator_potong='" . $_POST['operator_potong'] . "',
+								operatorcotton='" . $_POST['operatorcotton'] . "',
+								operatorpolyester='" . $_POST['operatorpolyester'] . "',
 								acc_keluar='" . $_POST['acc_keluar'] . "',
 								tambah_obat='" . $_POST['tambah_obat'] . "',
 								tambah_obat1='" . $_POST['tambah_obat1'] . "',

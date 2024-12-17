@@ -124,6 +124,8 @@ $shft = $_GET['shft'];
       <th rowspan="2" bgcolor="#99FF99">Keterangan Kartu Kerja</th>
       <th rowspan="2" bgcolor="#99FF99">Schedule Proses</th>
       <th rowspan="2" bgcolor="#99FF99">Analisa Waktu Tunggu</th>
+      <th rowspan="2" bgcolor="#99FF99">Operator Polyester</th>
+      <th rowspan="2" bgcolor="#99FF99">Operator Cotton</th>
     </tr>
     <tr>
       <th bgcolor="#99FF99">TGL</th>
@@ -493,6 +495,8 @@ $shft = $_GET['shft'];
         <td><?= $rowd['leader']; ?></td>
         <td><?= $rowd['ket_status']; ?></td>
         <td><?= $rowd['note_wt']; ?></td>
+        <td><?= $rowd['operatorpolyester']; ?></td>
+        <td><?= $rowd['operatorcotton']; ?></td>
       </tr>
     <?php
       $totrol += $rol;
