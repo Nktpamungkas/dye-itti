@@ -259,7 +259,9 @@ $shft = $_GET['shft'];
                                         a.arah_warna,
                                         a.status_warna,
                                         a.point2,
-                                        c.note_wt
+                                        c.note_wt,
+                                        a.operatorpolyester,
+		                                    a.operatorcotton
                                       FROM
                                         tbl_schedule b
                                           LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
