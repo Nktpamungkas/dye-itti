@@ -41,6 +41,26 @@ function cekDesimal($angka)
   }
   return $waktu;
 }
+
+function convertToTime($decimalTime) {
+    // Pecah nilai desimal menjadi jam dan menit
+    $hours = floor($decimalTime); // Ambil bagian jam
+    $minutes = round(($decimalTime - $hours) * 100); // Ambil bagian menit
+    // Format ke dalam HH:MM
+    return sprintf('%02d:%02d', $hours, $minutes);
+}
+
+function calculateTimeDifference($time1, $time2) {
+  // Konversi waktu ke detik
+  $time1InSeconds = strtotime($time1);
+  $time2InSeconds = strtotime($time2);
+
+  // Hitung selisih dalam detik
+  $differenceInSeconds = abs($time1InSeconds - $time2InSeconds);
+
+  // Konversi kembali ke format HH:MM:SS
+  return gmdate('H:i:s', $differenceInSeconds);
+}
 ?>
 
 <body>
@@ -111,10 +131,15 @@ function cekDesimal($angka)
                                       a.mulai_stop,
                                       a.selesai_stop,
                                       a.ket,
-                                      IF(ISNULL(TIMEDIFF( c.tgl_mulai, c.tgl_stop )),a.lama_proses,
-                                        CONCAT(LPAD(FLOOR((((HOUR ( a.lama_proses )* 60 )+ MINUTE ( a.lama_proses ))-((HOUR (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))* 60 )+ MINUTE (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))))/ 60 ),2,0 ),
-                                          ':',
-                                          LPAD(((((HOUR ( a.lama_proses )* 60 )+ MINUTE ( a.lama_proses ))-((HOUR (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))* 60 )+ MINUTE (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))))% 60 ),2,0 ))) AS lama_proses,
+                                      CASE
+                                        WHEN ket_stopmesin = 'LIBUR' THEN 
+                                          IF(ISNULL(TIMEDIFF( c.tgl_mulai, c.tgl_stop )),a.lama_proses,
+                                            CONCAT(LPAD(FLOOR((((HOUR ( a.lama_proses )* 60 )+ MINUTE ( a.lama_proses ))-((HOUR (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))* 60 )+ MINUTE (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))))/ 60 ),2,0 ),
+                                              ':',
+                                              LPAD(((((HOUR ( a.lama_proses )* 60 )+ MINUTE ( a.lama_proses ))-((HOUR (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))* 60 )+ MINUTE (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))))% 60 ),2,0 )))
+                                        ELSE
+                                          a.lama_proses
+                                      END AS lama_proses,
                                       a.STATUS AS sts_hasil,
                                       TIME_FORMAT(IF(ISNULL(TIMEDIFF( c.tgl_mulai, c.tgl_stop )),a.lama_proses,
                                           CONCAT(LPAD(FLOOR((((HOUR ( a.lama_proses )* 60)+ MINUTE ( a.lama_proses ))-((HOUR (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))* 60 )+ MINUTE (TIMEDIFF( c.tgl_mulai, c.tgl_stop ))))/ 60 ),2,0 ),
@@ -168,6 +193,7 @@ function cekDesimal($angka)
                                       b.po,
                                       b.tgl_delivery,
                                       b.target,
+                                      CAST(TIMEDIFF(a.lama_proses, CONCAT(SUBSTRING_INDEX(b.target, '.', 1), ':', RIGHT('0' + SUBSTRING_INDEX(b.target, '.', -1), 2))) AS TIME) AS overtime,
                                       IF((TIME_FORMAT( a.lama_proses, '%H' )+ round( TIME_FORMAT( a.lama_proses, '%i' )/ 60, 2 ))> b.target,'lebih','kurang' ) AS jjm,
                                       c.ket_stopmesin,
                                       c.ket_stopmesin2,
@@ -289,17 +315,18 @@ function cekDesimal($angka)
         <td><?php echo $rowd['loading']; ?></td>
         <td><?php echo $rowd['proses']; ?></td>
         <!-- <td><?php echo cekDesimal($rowd['target']); ?></td> -->
-        <td><?= $rowd['target']; ?></td>
-        <td bgcolor="<?php if ($rowd['jjm'] == "lebih") { echo "yellow"; } ?>">
+        <td><?= convertToTime($rowd['target']); ?></td> <!-- TARGET PROSES -->
+        <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>">
           <?php 
-            if ($rowd['lama_proses'] != "") {
-              echo $rowd['jam'] . " Jam " . $rowd['menit'] . " Menit";
-            } 
+            // if ($rowd['lama_proses'] != "") {
+            //   echo $rowd['jam'] . " Jam " . $rowd['menit'] . " Menit";
+            // } 
+            echo $rowd['lama_proses'];
           ?>
           <br>
           <?php echo $rowd['sts_hasil']; ?>
-        </td>
-        <td bgcolor="<?php if ($rowd['jjm'] == "lebih") { echo "yellow"; } ?>">
+        </td><!-- LAMA PROSES -->
+        <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>">
           <?php echo $rowd['analisa']; ?>
           <br>
           <?php 
@@ -312,11 +339,15 @@ function cekDesimal($angka)
         </td>
         <td>
           <?php 
-            if ($overtime > 0) {
-              echo $hours . " Jam " . $min . " Menit";
-            } else {
-              echo "0";
-            } 
+            // if ($overtime > 0) {
+            //   echo $hours . " Jam " . $min . " Menit";
+            // } else {
+            //   echo "0";
+            // } 
+            // echo $rowd['overtime'];
+            $lamaProses   = $rowd['lama_proses'];
+            $targetProses = convertToTime($rowd['target']);
+            echo calculateTimeDifference($lamaProses, $targetProses);
           ?>
         </td>
         <td><?php echo $rowd['k_resep']; ?></td>
@@ -335,7 +366,43 @@ function cekDesimal($angka)
         </td>
         <td><?= $rowd['tgl_stop_value']+$rowd['tgl_stop2_value']+$rowd['tgl_stop3_value']+$rowd['tgl_stop4_value']; ?></td><!-- Jumlah Stop Proses -->
         <td><?= $rowd['total_stop_mesin']; ?></td><!-- Total Jam Stop Proses -->
-        <td><?= $rowd['ket_stopmesin'].' - '.$rowd['ket_stopmesin2'].' - '.$rowd['ket_stopmesin3'].' - '.$rowd['ket_stopmesin4']; ?></td><!-- Alasan Stop Proses -->
+        <?php
+          $labelTglMulai = '';
+          if($rowd['tgl_stop'] == '0000-00-00 00:00:00'){
+            $tglstop = null;
+          }else{
+            $tglstop = $rowd['tgl_stop'];
+          }
+          if($rowd['tgl_stop2'] == '0000-00-00 00:00:00'){
+            $tglstop2 = null;
+          }else{
+            $tglstop2 = $rowd['tgl_stop2'];
+          }
+          if($rowd['tgl_stop3'] == '0000-00-00 00:00:00'){
+            $tglstop3 = null;
+          }else{
+            $tglstop3 = $rowd['tgl_stop3'];
+          }
+          if($rowd['tgl_stop4'] == '0000-00-00 00:00:00'){
+            $tglstop4 = null;
+          }else{
+            $tglstop4 = $rowd['tgl_stop4'];
+          }
+          
+          if($tglstop && empty($rowd['tgl_mulai'])){
+            $labelTglMulai = "Red";
+          }
+          if($tglstop2 && empty($rowd['tgl_mulai2'])){
+            $labelTglMulai = "Red";
+          }
+          if($tglstop3 && empty($rowd['tgl_mulai3'])){
+            $labelTglMulai = "Red";
+          }
+          if($tglstop4 && empty($rowd['tgl_mulai4'])){
+            $labelTglMulai = "Red";
+          }
+        ?>
+        <td bgcolor="<?= $labelTglMulai; ?>"><?= $rowd['ket_stopmesin'].' - '.$rowd['ket_stopmesin2'].' - '.$rowd['ket_stopmesin3'].' - '.$rowd['ket_stopmesin4']; ?></td><!-- Alasan Stop Proses -->
         <td><?= $rowd['tgl_stop']; ?></td> <!-- Tgl Stop 1 -->
         <td><?= $rowd['tgl_mulai']; ?></td> <!-- Tgl Mulai 1 -->
 
