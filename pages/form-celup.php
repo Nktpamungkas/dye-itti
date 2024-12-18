@@ -1008,6 +1008,7 @@
 					<div class="col-sm-4">
 						<select name="operatorpolyester" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
+							<option value="-" > - </option>
 							<?php
 							$sqlKap = mysqli_query($con, "SELECT nama FROM tbl_staff WHERE jabatan='Operator' ORDER BY nama ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
@@ -1022,6 +1023,7 @@
 					<div class="col-sm-4">
 						<select name="operatorcotton" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
+							<option value="-" > - </option>
 							<?php
 							$sqlKap = mysqli_query($con, "SELECT nama FROM tbl_staff WHERE jabatan='Operator' ORDER BY nama ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
