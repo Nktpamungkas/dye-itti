@@ -316,17 +316,23 @@ function calculateTimeDifference($time1, $time2) {
         <td><?php echo $rowd['proses']; ?></td>
         <!-- <td><?php echo cekDesimal($rowd['target']); ?></td> -->
         <td><?= convertToTime($rowd['target']); ?></td> <!-- TARGET PROSES -->
-        <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>">
+        <?php 
+          $lamaProses   = $rowd['lama_proses'];
+          $targetProses = convertToTime($rowd['target']);
+          if($lamaProses && $targetProses){
+            $overtime = calculateTimeDifference($lamaProses, $targetProses);
+          }else{
+            $overtime = '';
+          }
+        ?>
+        <td bgcolor="<?php if ($overtime > '02:00:00') { echo "yellow"; } ?>">
           <?php 
-            // if ($rowd['lama_proses'] != "") {
-            //   echo $rowd['jam'] . " Jam " . $rowd['menit'] . " Menit";
-            // } 
             echo $rowd['lama_proses'];
           ?>
           <br>
           <?php echo $rowd['sts_hasil']; ?>
         </td><!-- LAMA PROSES -->
-        <td bgcolor="<?php if($rowd['jjm']=="lebih"){echo"yellow";} ?>">
+        <td bgcolor="<?php if ($overtime > '02:00:00') { echo "yellow"; } ?>">
           <?php echo $rowd['analisa']; ?>
           <br>
           <?php 
@@ -337,19 +343,7 @@ function calculateTimeDifference($time1, $time2) {
             }
           ?>
         </td>
-        <td>
-          <?php 
-            // if ($overtime > 0) {
-            //   echo $hours . " Jam " . $min . " Menit";
-            // } else {
-            //   echo "0";
-            // } 
-            // echo $rowd['overtime'];
-            $lamaProses   = $rowd['lama_proses'];
-            $targetProses = convertToTime($rowd['target']);
-            echo calculateTimeDifference($lamaProses, $targetProses);
-          ?>
-        </td>
+        <td><?= $overtime; ?></td><!-- OVERTIME -->
         <td><?php echo $rowd['k_resep']; ?></td>
         <td>
           <?php 
