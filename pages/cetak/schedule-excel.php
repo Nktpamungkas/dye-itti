@@ -51,15 +51,23 @@ function convertToTime($decimalTime) {
 }
 
 function calculateTimeDifference($time1, $time2) {
-  // Konversi waktu ke detik
-  $time1InSeconds = strtotime($time1);
-  $time2InSeconds = strtotime($time2);
+  // Konversi waktu ke menit
+  $toMinutes = function($time) {
+      [$hours, $minutes] = explode(':', $time);
+      return $hours * 60 + $minutes;
+  };
 
-  // Hitung selisih dalam detik
-  $differenceInSeconds = abs($time1InSeconds - $time2InSeconds);
+  $diff = $toMinutes($time1) - $toMinutes($time2);
 
-  // Konversi kembali ke format HH:MM:SS
-  return gmdate('H:i:s', $differenceInSeconds);
+  // Tentukan tanda
+  $sign = $diff < 0 ? '-' : '';
+  $absDiff = abs($diff);
+
+  // Format jam dan menit
+  $hours = str_pad(floor($absDiff / 60), 2, '0', STR_PAD_LEFT);
+  $minutes = str_pad($absDiff % 60, 2, '0', STR_PAD_LEFT);
+
+  return "{$sign}{$hours}:{$minutes}";
 }
 ?>
 
@@ -317,10 +325,11 @@ function calculateTimeDifference($time1, $time2) {
         <!-- <td><?php echo cekDesimal($rowd['target']); ?></td> -->
         <td><?= convertToTime($rowd['target']); ?></td> <!-- TARGET PROSES -->
         <?php 
-          $lamaProses   = $rowd['lama_proses'];
-          $targetProses = convertToTime($rowd['target']);
+          $lamaProses   = $rowd['lama_proses'] ?? null;
+          $targetProses = isset($rowd['target']) ? convertToTime($rowd['target']) : null;
+
           if($lamaProses && $targetProses){
-            $overtime = calculateTimeDifference($lamaProses, $targetProses);
+            $overtime = ($lamaProses && $targetProses) ? calculateTimeDifference($lamaProses, $targetProses) : '';
           }else{
             $overtime = '';
           }
