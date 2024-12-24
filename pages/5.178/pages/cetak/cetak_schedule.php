@@ -1,22 +1,22 @@
 <?php
-  include "../../koneksi.php";
-  ini_set("error_reporting", 1);
-  include "../../tgl_indo.php";
-  //--
-  $idkk = $_GET['idkk'];
-  $act = $_GET['g'];
-  //-
-  $Awal = $_GET['Awal'];
-  $Akhir = $_GET['Akhir'];
-  $qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg,DATE_FORMAT(now(),'%H:%i:%s') as jam_skrg");
-  $rTgl = mysqli_fetch_array($qTgl);
-  if ($Awal != "") {
-    $tgl = substr($Awal, 0, 10);
-    $jam = $Awal;
-  } else {
-    $tgl = $rTgl['tgl_skrg'];
-    $jam = $rTgl['jam_skrg'];
-  }
+include "../../koneksi.php";
+ini_set("error_reporting", 1);
+include "../../tgl_indo.php";
+//--
+$idkk = $_GET['idkk'];
+$act = $_GET['g'];
+//-
+$Awal = $_GET['Awal'];
+$Akhir = $_GET['Akhir'];
+$qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg,DATE_FORMAT(now(),'%H:%i:%s') as jam_skrg");
+$rTgl = mysqli_fetch_array($qTgl);
+if ($Awal != "") {
+  $tgl = substr($Awal, 0, 10);
+  $jam = $Awal;
+} else {
+  $tgl = $rTgl['tgl_skrg'];
+  $jam = $rTgl['jam_skrg'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -200,19 +200,19 @@
             </tr>
           </thead>
           <?php
-          function tampil($mc, $no, $awal, $akhir)
-          {
-            include "../../koneksi.php";
-            if ($awal != "") {
-              $where = " AND DATE_FORMAT( tgl_update, '%Y-%m-%d %H:%i:%s' ) BETWEEN '$awal' AND '$akhir' ";
-            } else {
-              $where = " ";
-            }
-            $qCek = mysqli_query($con, "SELECT
+            function tampil($mc, $no, $awal, $akhir)
+            {
+              include "../../koneksi.php";
+              if ($awal != "") {
+                $where = " AND DATE_FORMAT( tgl_update, '%Y-%m-%d %H:%i:%s' ) BETWEEN '$awal' AND '$akhir' ";
+              } else {
+                $where = " ";
+              }
+              $qCek = mysqli_query($con, "SELECT
                                             id,
                                             GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
                                             if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
-                                            no_mesin,
+                                            no_mesin,                                            
                                             nodemand,
                                             no_urut,
                                             buyer,
@@ -240,21 +240,21 @@
                                             no_urut 
                                           ORDER BY
                                             id ASC");
-            $row = mysqli_fetch_array($qCek);
-            $dt[] = $row;
-            return $dt;
-          }
-          /* $data=mysqli_query("SELECT b.* from tbl_schedule a
+              $row = mysqli_fetch_array($qCek);
+              $dt[] = $row;
+              return $dt;
+            }
+            /* $data=mysqli_query("SELECT b.* from tbl_schedule a
                     LEFT JOIN tbl_mesin b ON a.no_mesin=b.no_mesin WHERE not a.`status`='selesai' GROUP BY a.no_mesin ORDER BY a.kapasitas DESC,a.no_mesin ASC"); */
-          $data = mysqli_query($con, "SELECT b.* from tbl_mesin b ORDER BY b.kapasitas DESC,b.no_mesin ASC");
-          $no = 1;
-          $n = 1;
-          $c = 0;
+            $data = mysqli_query($con, "SELECT b.* from tbl_mesin b ORDER BY b.kapasitas DESC,b.no_mesin ASC");
+            $no = 1;
+            $n = 1;
+            $c = 0;
           ?>
           <?php
-          $col = 0;
-          while ($rowd = mysqli_fetch_array($data)) {
-            $bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
+            $col = 0;
+            while ($rowd = mysqli_fetch_array($data)) {
+              $bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
           ?>
             <tr>
               <td rowspan="7"><a class="hurufvertical">
@@ -266,6 +266,7 @@
                 <div align="center" style="font-size: 18px;"><strong><?php echo $rowd['no_mesin']; ?></strong>
                 </div>
                 <div align="center" style="font-size: 12px;">(<?php echo $rowd['kode']; ?>)</div>
+                <div align="center" style="font-size: 18px;"><em><?php echo $rowd['no_mesin_lama']; ?></em></div>
               </td>
               <td valign="top" style="height: 0.27in;">
                 <div align="center">1</div>
@@ -302,10 +303,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd['lot']; ?>
                     <?php
-                    // require_once "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // require_once "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -357,10 +358,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd1['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd1[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd1[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -406,10 +407,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd2['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd2[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd2[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -455,10 +456,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd3['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd3[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd3[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -504,10 +505,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd4['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd4[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd4[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -553,10 +554,10 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd5['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd5[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd5[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
@@ -602,18 +603,17 @@
                 <td align="center" valign="top">
                   <div style="font-size: 8px;"><?php echo $dd6['lot']; ?>
                     <?php
-                    // include "../../koneksi.php";
-                    // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd6[nodemand]'");
-                    // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
-                    // echo $dt_ITXVIEWKK['LOT'];
+                      // include "../../koneksi.php";
+                      // $sql_ITXVIEWKK  = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$dd6[nodemand]'");
+                      // $dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+                      // echo $dt_ITXVIEWKK['LOT'];
                     ?>
                   </div>
                 </td>
                 <td align="center" valign="top"><?php echo $dd6['tgl_delivery']; ?></td>
                 <td align="center" valign="top"><?php echo $dd6['rol']; ?></td>
                 <td align="right" valign="top"><?php echo $dd6['bruto']; ?></td>
-                <td valign="top">
-                  <?php echo $dd6['ket_status']; ?><br>
+                <td valign="top"><?php echo $dd6['ket_status']; ?><br>
                   <?php echo $dd6['personil']; ?><br>
                   <?php echo $dd6['ket_kain']; ?>
                   <?php echo $dd6['proses']; ?>
@@ -638,9 +638,6 @@
             <td width="29%" scope="col">
               <div align="center">Dibuat Oleh</div>
             </td>
-            <td width="29%" scope="col">
-              <div align="center">Disetujui Oleh</div>
-            </td>
             <td width="26%" scope="col">
               <div align="center">Diketahui Oleh</div>
             </td>
@@ -648,25 +645,21 @@
           <tr>
             <td>Nama</td>
             <td align="center">Bayu Nugraha</td>
-            <td align="center">Putri</td>
             <td align="center">Mucharom</td>
           </tr>
           <tr>
             <td>Jabatan</td>
-            <td align="center">Leader Planning</td>
-            <td align="center">PPC Ast. Manager</td>
+            <td align="center">Supervisor</td>
             <td align="center">Dye Ast. Manager</td>
           </tr>
           <tr>
             <td>Tanggal</td>
             <td align="center"><?php echo tanggal_indo($tgl, false); ?></td>
             <td align="center"><?php echo tanggal_indo($tgl, false); ?></td>
-            <td align="center"><?php echo tanggal_indo($tgl, false); ?></td>
           </tr>
           <tr>
             <td valign="top" style="height: 0.5in;">Tanda Tangan</td>
             <td align="center"><img src="ttd/bayu.png" width="50" height="50" alt="" /></td>
-            <td align="center"><img src="ttd/putri.png" width="50" height="50" alt="" /></td>
             <td align="center"><img src="ttd/mucharom.png" width="50" height="50" alt="" /></td>
           </tr>
 
@@ -705,12 +698,12 @@
       </tr>
       <tr>
         <td>
-          <pre>No. Revisi	: 19</pre>
+          <pre>No. Revisi	: 23</pre>
         </td>
       </tr>
       <tr>
         <td>
-          <pre>Tgl. Terbit	: 01 Juli 2022</pre>
+          <pre>Tgl. Terbit	: 21 Juni 2024</pre>
         </td>
       </tr>
       <tr>
