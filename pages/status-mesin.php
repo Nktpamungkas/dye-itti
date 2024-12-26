@@ -277,44 +277,83 @@ include "koneksi.php";
 									include "koneksi.php";
 
 									$qLama = mysqli_query($con, "SELECT 
-															b.tgl_buat, 
-															a.target, 
-															DATE_ADD(
-																DATE_ADD(
-																	b.tgl_buat,
-																	INTERVAL FLOOR(a.target) HOUR
-																),
-																INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
-															) AS tgl_buat_target,
-														TIME_FORMAT(
-																TIMEDIFF(
-																	GREATEST(NOW(), DATE_ADD(
+																	b.tgl_buat, 
+																	a.target, 
+																	DATE_ADD(
 																		DATE_ADD(
 																			b.tgl_buat,
 																			INTERVAL FLOOR(a.target) HOUR
 																		),
 																		INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
-																	)),
-																	LEAST(NOW(), DATE_ADD(
-																		DATE_ADD(
-																			b.tgl_buat,
-																			INTERVAL FLOOR(a.target) HOUR
-																		),
-																		INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
-																	))
-																), '%H:%i') AS lama
-														FROM 
-															tbl_schedule a
-														LEFT JOIN 
-															tbl_montemp b 
-														ON 
-															a.id = b.id_schedule
-														WHERE 
-															a.no_mesin = '$mc' 
-															AND b.status = 'sedang jalan'
-														ORDER BY 
-															a.no_urut ASC 
-														LIMIT 1");
+																	) AS tgl_buat_target,
+																	-- TIME_FORMAT(
+																	-- 	TIMEDIFF(
+																	-- 		GREATEST(NOW(), DATE_ADD(
+																	-- 			DATE_ADD(
+																	-- 				b.tgl_buat,
+																	-- 				INTERVAL FLOOR(a.target) HOUR
+																	-- 			),
+																	-- 			INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																	-- 		)),
+																	-- 		LEAST(NOW(), DATE_ADD(
+																	-- 			DATE_ADD(
+																	-- 				b.tgl_buat,
+																	-- 				INTERVAL FLOOR(a.target) HOUR
+																	-- 			),
+																	-- 			INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																	-- 		))
+																	-- 	), '%H:%i') AS lama
+																	CASE
+																		WHEN timediff( b.tgl_mulai, b.tgl_stop ) IS NOT NULL THEN
+																			a.target -
+																			TIME_FORMAT(
+																					TIMEDIFF(
+																						GREATEST(NOW(), DATE_ADD(
+																							DATE_ADD(
+																								b.tgl_buat,
+																								INTERVAL FLOOR(a.target) HOUR
+																							),
+																							INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																						)),
+																						LEAST(NOW(), DATE_ADD(
+																							DATE_ADD(
+																								b.tgl_buat,
+																								INTERVAL FLOOR(a.target) HOUR
+																							),
+																							INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																						))
+																					) - timediff( b.tgl_mulai, b.tgl_stop ), '%H:%i')
+																		ELSE
+																			TIME_FORMAT(
+																					TIMEDIFF(
+																						GREATEST(NOW(), DATE_ADD(
+																							DATE_ADD(
+																								b.tgl_buat,
+																								INTERVAL FLOOR(a.target) HOUR
+																							),
+																							INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																						)),
+																						LEAST(NOW(), DATE_ADD(
+																							DATE_ADD(
+																								b.tgl_buat,
+																								INTERVAL FLOOR(a.target) HOUR
+																							),
+																							INTERVAL ROUND((a.target - FLOOR(a.target)) * 100) MINUTE
+																						))
+																					), '%H:%i') 
+																	END AS lama
+																FROM 
+																	tbl_schedule a
+																LEFT JOIN 
+																	tbl_montemp b 
+																ON 
+																	a.id = b.id_schedule
+																WHERE 
+																	a.no_mesin = '$mc' 
+																	AND b.status = 'sedang jalan'
+																ORDER BY 
+																	a.no_urut ASC 
+																LIMIT 1");
 									$dLama = mysqli_fetch_array($qLama);
 									if ($dLama['lama'] != '') {
 
