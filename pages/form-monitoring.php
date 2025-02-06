@@ -219,22 +219,25 @@ $groupline2 = substr($rcek['no_resep2'], 9);
 $db_viewreservation2 = db2_exec($conn2, "SELECT * FROM VIEWPRODUCTIONRESERVATION WHERE PRODUCTIONORDERCODE = '$nokk' AND GROUPLINE = '$groupline2'");
 $r_viewreservation2 = db2_fetch_assoc($db_viewreservation2);
 
-// $grupline   = substr($dt_schedule['no_resep'], 9);
-// $query_br1  = db2_exec($conn2, "SELECT
-//                                     TRIM(SUBCODE01) AS SUBCODE01,
-//                                     TRIM(SUFFIXCODE) AS SUFFIXCODE
-//                                 FROM
-//                                     PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
-//                                 WHERE
-//                                     TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) || '-' || TRIM(PRODUCTIONRESERVATION.GROUPLINE) = '$rcek[no_resep]'");
-// $row_br1    = db2_fetch_assoc($query_br1);
 
-// $query_carryover    = db2_exec($conn2, "SELECT floor(a.VALUEDECIMAL) AS CARRYOVER
-//                                         FROM 
-//                                             RECIPE r 
-//                                         LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.NAMENAME = 'CarryOver'
-//                                         WHERE r.SUBCODE01 = '$row_br1[SUBCODE01]' AND r.SUFFIXCODE = '$row_br1[SUFFIXCODE]'");
-// $row_carryover      = db2_fetch_assoc($query_carryover);
+list($production_order, $groupline) = explode("-", $rcek['no_resep']);
+$grupline   = substr($dt_schedule['no_resep'], 9);
+$query_br1  = db2_exec($conn2, "SELECT
+                                    TRIM(SUBCODE01) AS SUBCODE01,
+                                    TRIM(SUFFIXCODE) AS SUFFIXCODE
+                                FROM
+                                    PRODUCTIONRESERVATION PRODUCTIONRESERVATION 
+                                WHERE
+                                    TRIM(PRODUCTIONRESERVATION.PRODUCTIONORDERCODE) = '$production_order'
+									AND TRIM(PRODUCTIONRESERVATION.GROUPLINE) = '$groupline'");
+$row_br1    = db2_fetch_assoc($query_br1);
+
+$query_carryover    = db2_exec($conn2, "SELECT floor(a.VALUEDECIMAL) AS CARRYOVER
+                                        FROM 
+                                            RECIPE r 
+                                        LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.NAMENAME = 'CarryOver'
+                                        WHERE r.SUBCODE01 = '$row_br1[SUBCODE01]' AND r.SUFFIXCODE = '$row_br1[SUFFIXCODE]'");
+$row_carryover      = db2_fetch_assoc($query_carryover);
 if (!empty($row_carryover['CARRYOVER'])) {
 	$carry_over     = $row_carryover['CARRYOVER'];
 } else {
