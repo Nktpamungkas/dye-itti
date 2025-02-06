@@ -405,17 +405,6 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 	<?php
 			  // Example usage
-<<<<<<< Updated upstream
-		$machine_no = 1401;
-		$time_range = "week";
-		$response = getMachineEfficiency($machine_no, $time_range);
-
-		if ($response !== null) {
-		//	echo "Machine Efficiency Data: " . $response;
-		} else {
-		//	echo "Failed to retrieve machine efficiency data.";
-		}
-=======
 //		$machine_no = 1401;
 //		$time_range = "week";
 //		$response = getMachineEfficiency($machine_no, $time_range);
@@ -425,7 +414,6 @@ WHERE ms.RunState> '1' AND ms.Machine = ? ";
 //		} else {
 		//	echo "Failed to retrieve machine efficiency data.";
 //		}
->>>>>>> Stashed changes
 	?>
 	</body>
 	<!-- Tooltips -->

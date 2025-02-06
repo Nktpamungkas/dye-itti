@@ -133,12 +133,12 @@ $shft = $_GET['shft'];
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">OUT</th>
 
-      <!-- <th bgcolor="#99FF99">TGL</th>
+      <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">JAM</th>
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">S/D</th>
       
-      <th bgcolor="#99FF99">TGL</th>
+      <!-- <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">JAM</th>
       <th bgcolor="#99FF99">TGL</th>
       <th bgcolor="#99FF99">S/D</th>
@@ -169,7 +169,7 @@ $shft = $_GET['shft'];
       }
       $sql = mysqli_query($con, "SELECT x.*, a.no_mesin as mc 
                                     FROM tbl_mesin a
-                                        RIGHT JOIN
+                                        LEFT JOIN
                                         (SELECT
                                         a.kd_stop,
                                         a.mulai_stop,

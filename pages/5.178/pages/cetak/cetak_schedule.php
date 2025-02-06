@@ -266,7 +266,7 @@ if ($Awal != "") {
                 <div align="center" style="font-size: 18px;"><strong><?php echo $rowd['no_mesin']; ?></strong>
                 </div>
                 <div align="center" style="font-size: 12px;">(<?php echo $rowd['kode']; ?>)</div>
-                <div align="center" style="font-size: 18px;"><em><?php echo $rowd['no_mesin_lama']; ?></em></div>
+                <div align="center" style="font-size: 18px;"><em><?php // echo $rowd['no_mesin_lama']; ?></em></div>
               </td>
               <td valign="top" style="height: 0.27in;">
                 <div align="center">1</div>
