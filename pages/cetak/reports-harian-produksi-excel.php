@@ -40,6 +40,7 @@ $shft = $_GET['shft'];
       <th rowspan="2" bgcolor="#99FF99">LANGGANAN</th>
       <th rowspan="2" bgcolor="#99FF99">BUYER</th>
       <th rowspan="2" bgcolor="#99FF99">NO ORDER</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE</th>
       <th rowspan="2" bgcolor="#99FF99">JENIS KAIN</th>
       <th rowspan="2" bgcolor="#99FF99">WARNA</th>
       <th rowspan="2" bgcolor="#99FF99">K.W</th>
@@ -299,6 +300,14 @@ $shft = $_GET['shft'];
         } else {
           $rl = $rowd['rol'];
         }
+        $q_itxviewkk    = db2_exec($conn2, "SELECT 
+                                          LISTAGG(DISTINCT TRIM(LOT), ', ') AS LOT,
+                                          LISTAGG(DISTINCT TRIM(SUBCODE01), ', ') AS SUBCODE01 
+                                        FROM 
+                                          ITXVIEWKK 
+                                        WHERE 
+                                          PRODUCTIONORDERCODE = '$rowd[nokk]'");
+        $d_itxviewkk    = db2_fetch_assoc($q_itxviewkk);
     ?>
       <tr valign="top">
         <td><?php echo $no; ?></td>
@@ -316,6 +325,7 @@ $shft = $_GET['shft'];
         <td><?php echo $rowd['langganan']; ?></td>
         <td><?php echo $rowd['buyer']; ?></td>
         <td><?php echo $rowd['no_order']; ?></td>
+        <td><?= $d_itxviewkk['SUBCODE01'];  ?></td>
         <td><?php echo $rowd['jenis_kain']; ?></td>
         <td><?php echo $rowd['warna']; ?></td>
         <td><?php echo $rowd['kategori_warna']; ?></td>
@@ -484,12 +494,7 @@ $shft = $_GET['shft'];
         <td><?= $rowd['lebar_a']; ?></td>
         <td><?= $rowd['gramasi_a']; ?></td>
         <td><?= $rowd['operator']; ?></td>
-        <td>'
-          <?php
-          $q_lot    = db2_exec($conn2, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$rowd[nodemand]'");
-          $d_lot    = db2_fetch_assoc($q_lot);
-          echo $d_lot['LOT'];
-          ?>
+        <td>'<?= $d_itxviewkk['LOT']; ?>
         </td>
         <td><?= $rowd['tambah_dyestuff']; ?></td>
         <td><?= $rowd['arah_warna']; ?></td>

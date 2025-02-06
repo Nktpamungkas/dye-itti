@@ -312,6 +312,49 @@
 												WHERE
 													a.id = '$_GET[id]'");
 		$row_hasilcelup	= mysqli_fetch_assoc($q_hasilcelup);
+
+		$nokk = $_GET['nokk'];
+		$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
+											TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+											TRIM(DEAMAND) AS DEMAND,
+											ORIGDLVSALORDERLINEORDERLINE,
+											PROJECTCODE,
+											ORDPRNCUSTOMERSUPPLIERCODE,
+											TRIM(SUBCODE01) AS SUBCODE01, TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03, TRIM(SUBCODE04) AS SUBCODE04,
+											TRIM(SUBCODE05) AS SUBCODE05, TRIM(SUBCODE06) AS SUBCODE06, TRIM(SUBCODE07) AS SUBCODE07, TRIM(SUBCODE08) AS SUBCODE08,
+											TRIM(SUBCODE09) AS SUBCODE09, TRIM(SUBCODE10) AS SUBCODE10, 
+											TRIM(ITEMTYPEAFICODE) AS ITEMTYPEAFICODE,
+											TRIM(SUBCODE05) AS NO_WARNA,
+											TRIM(SUBCODE02) || '-' || TRIM(SUBCODE03)  AS NO_HANGER,
+											TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
+											DELIVERYDATE,
+											LOT
+										FROM 
+											ITXVIEWKK 
+										WHERE 
+											PRODUCTIONORDERCODE = '$nokk'");
+			$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+
+			$sql_kode_kategori_warna	= db2_exec($conn2, "SELECT
+														u.CODE,
+														a.VALUESTRING,
+														CASE
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'D' THEN 'Dark'
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'H' THEN 'Heater'
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'L' THEN 'Light'
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'M' THEN 'Medium'
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'S' THEN 'Special'
+															WHEN SUBSTR(a.VALUESTRING, 1,1) = 'W' THEN 'White'
+														END AS KATEGORI_WARNA	
+													FROM
+														USERGENERICGROUP u
+													LEFT JOIN ADSTORAGE a ON a.UNIQUEID = u.ABSUNIQUEID AND a.FIELDNAME = 'ColorGroupCode'
+													LEFT JOIN USERGENERICGROUP u2 ON u2.CODE = a.VALUESTRING AND u2.USERGENERICGROUPTYPECODE = 'CLG'
+													WHERE
+														u.USERGENERICGROUPTYPECODE = 'CL1'
+														AND NOT u.SHORTDESCRIPTION LIKE '%delete%'
+														AND u.CODE = '$dt_ITXVIEWKK[NO_WARNA]'");
+			$dt_kode_kategori_warna	= db2_fetch_assoc($sql_kode_kategori_warna);
 	// UPDATE NILO
 ?>
 <?php
@@ -888,18 +931,32 @@
 					<div class="col-sm-3">
 						<select name="kategori_warna" class="form-control" id="kategori_warna"  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
-							<option value="Light" <?php if ($rcek['kategori_warna'] == 'Light' OR $row_hasilcelup['kategori_warna'] == 'Light') {
-														echo "SELECTED";
-													} ?>>Light</option>
-							<option value="Medium" <?php if ($rcek['kategori_warna'] == 'Medium' OR $row_hasilcelup['kategori_warna'] == 'Medium') {
-														echo "SELECTED";
-													} ?>>Medium</option>
-							<option value="Dark" <?php if ($rcek['kategori_warna'] == 'Dark' OR $row_hasilcelup['kategori_warna'] == 'Dark') {
-														echo "SELECTED";
-													} ?>>Dark</option>
-							<option value="White" <?php if ($rcek['kategori_warna'] == 'White' OR $row_hasilcelup['kategori_warna'] == 'White') {
-														echo "SELECTED";
-													} ?>>White</option>
+							<?php
+								$q_kategori_warna	= db2_exec($conn2, "SELECT
+																		TRIM(u.CODE) AS CODE,
+																		u.LONGDESCRIPTION,
+																		u.SHORTDESCRIPTION,
+																		u.SEARCHDESCRIPTION,
+																		CASE
+																			WHEN SUBSTR(u.CODE, 1,1) = 'D' THEN 'Dark'
+																			WHEN SUBSTR(u.CODE, 1,1) = 'H' THEN 'Heater'
+																			WHEN SUBSTR(u.CODE, 1,1) = 'L' THEN 'Light'
+																			WHEN SUBSTR(u.CODE, 1,1) = 'M' THEN 'Medium'
+																			WHEN SUBSTR(u.CODE, 1,1) = 'S' THEN 'Special'
+																			WHEN SUBSTR(u.CODE, 1,1) = 'W' THEN 'White'
+																		END AS KATEGORI_WARNA	
+																	FROM
+																		USERGENERICGROUP u
+																	WHERE
+																		u.USERGENERICGROUPTYPECODE = 'CLG'
+																		AND NOT u.CODE = 'NO'");
+							?>
+							<?php while ($row_kategori_warna = db2_fetch_assoc($q_kategori_warna)) : ?>
+								<option value="<?= $row_kategori_warna['CODE'] ?>"
+									<?php if($dt_kode_kategori_warna['VALUESTRING'] == $row_kategori_warna['CODE']) { echo "SELECTED"; } ?>>
+									<?= $row_kategori_warna['CODE'] ?> - <?= $row_kategori_warna['LONGDESCRIPTION'] ?>
+								</option>
+							<?php endwhile; ?>
 						</select>
 					</div>
 					<label for="status_warna" class="col-sm-2 control-label">Status Warna</label>
