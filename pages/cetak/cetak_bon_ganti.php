@@ -91,7 +91,7 @@ $r = mysqli_fetch_array($qry);
 		font-size: 9px;
 		font-family: sans-serif, Roman, serif;
 	}
-
+	
 	@media print {
 		::-webkit-input-placeholder {
 			/* WebKit browsers */
@@ -217,7 +217,7 @@ $nmBln = array(1 => "JANUARI", "FEBUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI
 											<td width="11%" align="right" style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
-  border-right:0px #000000 solid;">&#9745;</td>
+  border-right:0px #000000 solid;"><?php if($r['kategori']=="0"){echo "&#9745;";}else{echo "&#9744;";} ?></td>
 											<td width="89%" style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
@@ -240,7 +240,7 @@ $nmBln = array(1 => "JANUARI", "FEBUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI
 											<td width="22%" align="right" style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
-  border-right:0px #000000 solid;">&#9744;</td>
+  border-right:0px #000000 solid;"><?php if($r['kategori']=="1"){echo "&#9745;";}else{echo "&#9744;";} ?></td>
 											<td width="78%" style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
@@ -250,7 +250,7 @@ $nmBln = array(1 => "JANUARI", "FEBUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI
 											<td align="right" style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
-  border-right:0px #000000 solid;">&#9744;</td>
+  border-right:0px #000000 solid;"><?php if($r['kategori']=="2"){echo "&#9745;";}else{echo "&#9744;";} ?></td>
 											<td style="border-top:0px #000000 solid; 
   border-bottom:0px #000000 solid;
   border-left:0px #000000 solid; 
@@ -612,7 +612,7 @@ $nmBln = array(1 => "JANUARI", "FEBUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI
 			</td>
 		</tr>
 
-	</table><br /><?php echo $_GET['no_bon']; ?>
+	</table><br /><?php echo $_GET['no_bon']; echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; echo "print out: " . date('Y-m-d H:i:s');  ?>
 	<script>
 	//alert('cetak');window.print();
 	</script>
