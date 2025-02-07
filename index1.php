@@ -398,6 +398,7 @@ desired effect
           <li class="<?php if ($_GET['p'] == "Home" or $_GET['p'] == "") {
                         echo "active";
                       } ?>"><a href="?p=Home"><i class="fa fa-dashboard text-success"></i> <span>DashBoard</span></a></li>
+		  <?php if ($_SESSION['lvl_id10'] != "6") { ?>	
           <li class="treeview <?php if ($_GET['p'] == "Schedule" or $_GET['p'] == "Schedule-Cek" or $_GET['p'] == "Status-Mesin" or $_GET['p'] == "Form-Schedule" or $_GET['p'] == "Form-Schedule-Manual" or $_GET['p'] == "Monitoring-Tempelan" or $_GET['p'] == "Hasil-Celup" or $_GET['p'] == "Potong-Celup" or $_GET['p'] == "Form-Celup" or $_GET['p'] == "Form-Potong" or $_GET['p'] == "Form-Monitoring" or $_GET['p'] == "Form-Monitoring-Washing" or $_GET['p'] == "Masalah-Celupan" or $_GET['p'] == "Form-Masalah-Celupan" or $_GET['p'] == "Setting-Mesin" or $_GET['p'] == "Form-Setting-Mesin") {
                                 echo "active";
                               } ?>">
@@ -487,7 +488,8 @@ desired effect
                           } ?>"><a href="?p=lap-overtime"><i class="fa fa-columns text-aqua"></i> <span>Lap Over Time</span></a></li>
             </ul>
           </li>
-          <?php if ($_SESSION['lvl_id10'] != "4") { ?>
+		  <?php } ?>	
+          <?php if ($_SESSION['lvl_id10'] != "4" and $_SESSION['lvl_id10'] != "6") { ?>
             <li class="treeview <?php if ($_GET['p'] == "Input-DataTest-Proses" or $_GET['p'] == "Lap-DataTest-Proses" or $_GET['p'] == "Status-Data-Test") {
                                   echo "active";
                                 } ?>">
@@ -508,26 +510,9 @@ desired effect
                             } ?>"><a href="?p=Status-Data-Test"><i class="fa fa-columns text-green"></i> <span>Status Data Test Proses</span></a></li>
               </ul>
             </li>
-          <?php } ?>
-          <?php if ($_SESSION['lvl_id10'] == "1" or strtoupper($_SESSION['user_id10']) == "EKO") {
-          ?>
-            <li class="treeview <?php if ($_GET['p'] == "Input-Bon" or $_GET['p'] == "Lap-Bon" or $_GET['p'] == "input-bon-kain") {
-                                  echo "active";
-                                } ?>">
-              <a href="#"><i class="fa fa-clone text-aqua"></i> <span>Ganti Kain</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li class="<?php if ($_GET['p'] == "Input-Bon") {
-                              echo "active";
-                            } ?>"><a href="?p=Input-Bon"><i class="fa fa-columns text-yellow"></i> <span>Input Bon</span></a></li>
-                <li class="<?php if ($_GET['p'] == "Lap-Bon" or $_GET['p'] == "input-bon-kain") {
-                              echo "active";
-                            } ?>"><a href="?p=Lap-Bon"><i class="fa fa-columns text-blue"></i> <span>Laporan Bon</span></a></li>
-              </ul>
-            </li>
+          <?php } ?>          
+			
+			<?php if ($_SESSION['lvl_id10'] == "1") { ?>
             <?php if (strtoupper($_SESSION['user_id10']) == "ANDRI" or strtoupper($_SESSION['user_id10']) == "USMANAS") {
             ?>
               <li class="treeview <?php if ($_GET['p'] == "Input-Dokumen" or $_GET['p'] == "Lap-Dokumen") {
@@ -694,6 +679,26 @@ desired effect
               </ul>
             </li>
           <?php } ?>
+		  <?php if ($_SESSION['lvl_id10'] == "6" or $_SESSION['lvl_id10'] == "1") {
+            ?>
+            <li class="treeview <?php if ($_GET['p'] == "Input-Bon" or $_GET['p'] == "Lap-Bon" or $_GET['p'] == "input-bon-kain") {
+                                  echo "active";
+                                } ?>">
+              <a href="#"><i class="fa fa-clone text-aqua"></i> <span>Ganti Kain</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="<?php if ($_GET['p'] == "Input-Bon") {
+                              echo "active";
+                            } ?>"><a href="?p=Input-Bon"><i class="fa fa-columns text-yellow"></i> <span>Input Bon</span></a></li>
+                <li class="<?php if ($_GET['p'] == "Lap-Bon" or $_GET['p'] == "input-bon-kain") {
+                              echo "active";
+                            } ?>"><a href="?p=Lap-Bon"><i class="fa fa-columns text-blue"></i> <span>Laporan Bon</span></a></li>
+              </ul>
+            </li>
+			<?php } ?>	
         </ul>
         <!-- /.sidebar-menu -->
       </section>

@@ -182,7 +182,7 @@ if ($_POST) { //login user
     extract($_POST);
     $username = mysqli_real_escape_string($con,$_POST['username']);
     $password = mysqli_real_escape_string($con,$_POST['password']);
-    $sql=mysqli_query($con,"select * from tbl_user where username='$username' and password='$password' and (dept='DYE' or dept='DIT') limit 1");
+    $sql=mysqli_query($con,"select * from tbl_user where username='$username' and password='$password' and (dept='DYE' or dept='DIT' or dept='QCF' or dept='PPC' or dept='KNT' or dept='BRS' or dept='TAS' or dept='FIN' or dept='LAB' or dept='GKG') limit 1");
     if (mysqli_num_rows($sql)>0) {
         $_SESSION['user_id10']=$username;
         $_SESSION['pass_id10']=$password;
@@ -192,6 +192,7 @@ if ($_POST) { //login user
         $_SESSION['lvl_id10']=$r['level'];
         $_SESSION['status10']=$r['status'];
         $_SESSION['foto10']=$r['foto'];
+		$_SESSION['dept10']=$r['dept'];
         //login_validate();
         //echo "<script>window.location='index1.php?p=Home';</script>";
         echo "<script>swal({
