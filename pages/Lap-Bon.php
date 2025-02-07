@@ -18,6 +18,8 @@ $Awal	= isset($_POST['awal']) ? $_POST['awal'] : '';
 $Akhir	= isset($_POST['akhir']) ? $_POST['akhir'] : '';
 $Order	= isset($_POST['order']) ? $_POST['order'] : '';
 $Hanger	= isset($_POST['hanger']) ? $_POST['hanger'] : '';
+$Masalah= isset($_POST['masalah']) ? $_POST['masalah'] : '';
+$Dept	= isset($_POST['dept']) ? $_POST['dept'] : '';	
 	
 ?>
 <div class="box">
@@ -58,6 +60,44 @@ $Hanger	= isset($_POST['hanger']) ? $_POST['hanger'] : '';
 	  <div class="form-group">
         <div class="col-sm-3">
             <input name="hanger" type="text" class="form-control pull-right" id="hanger" placeholder="No Hanger" value="<?php echo $Hanger;  ?>" autocomplete="off"/>
+          </div>
+        <!-- /.input group -->
+      </div>
+	  <div class="form-group">
+        <div class="col-sm-3">
+            <select class="form-control select2" name="dept">
+							<option value="" disabled selected>Pilih Departemen</option>
+							<option value="QCF" <?php if ($Dept == "QCF") {
+													echo "SELECTED";
+												} ?>>QCF</option>
+							<option value="PPC" <?php if ($Dept == "PPC") {
+													echo "SELECTED";
+												} ?>>PPC</option>
+							<option value="FIN" <?php if ($Dept == "FIN") {
+													echo "SELECTED";
+												} ?>>FIN</option>
+							<option value="BRS" <?php if ($Dept == "BRS") {
+													echo "SELECTED";
+												} ?>>BRS</option>
+							<option value="DYE" <?php if ($Dept == "DYE") {
+													echo "SELECTED";
+												} ?>>DYE</option>
+							<option value="KNT" <?php if ($Dept == "KNT") {
+													echo "SELECTED";
+												} ?>>KNT</option>
+							<option value="GKG" <?php if ($Dept == "GKG") {
+													echo "SELECTED";
+												} ?>>GKG</option>
+							<option value="TAS" <?php if ($Dept == "TAS") {
+													echo "SELECTED";
+												} ?>>TAS</option>
+						</select>			
+          </div>
+        <!-- /.input group -->
+      </div>	
+	  <div class="form-group">
+        <div class="col-sm-3">
+            <input name="masalah" type="text" class="form-control pull-right" id="masalah" placeholder="Masalah" value="<?php echo $Masalah;  ?>" autocomplete="off"/>
           </div>
         <!-- /.input group -->
       </div>	
@@ -109,8 +149,10 @@ $Hanger	= isset($_POST['hanger']) ? $_POST['hanger'] : '';
 			if($Awal!=""){ $Where =" WHERE DATE_FORMAT( tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir' "; }
 			if($Order!=""){ $Where =" WHERE no_order= '$Order' "; }
 			if($Hanger!=""){ $Where =" WHERE no_hanger= '$Hanger' "; }
-			if($Awal=="" and $Order=="" and $Hanger==""){ $Where =" WHERE DATE_FORMAT( tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir' "; }
-	$qry1=mysqli_query($con,"SELECT * FROM tbl_gantikain $Where ORDER BY id ASC");
+			if($Masalah!=""){ $Where =" WHERE masalah LIKE '%$Masalah%' "; }
+			if($Dept!=""){ $Where =" WHERE dept= '$Dept' "; }
+			if($Awal=="" and $Order=="" and $Hanger=="" and $Masalah=="" and $Dept==""){ $Where =" WHERE DATE_FORMAT( tgl_buat, '%Y-%m-%d' ) BETWEEN '$Awal' AND '$Akhir' "; }
+			$qry1=mysqli_query($con,"SELECT * FROM tbl_gantikain $Where ORDER BY id ASC");
 			while($row1=mysqli_fetch_array($qry1)){
 			$sqlgk=mysqli_query($con," SELECT * FROM tbl_bonkain WHERE id_nsp='$row1[id]' ORDER BY no_bon ASC");
   			$rgk=mysqli_num_rows($sqlgk);
