@@ -200,7 +200,14 @@ $shft = $_GET['shft'];
                                         b.kapasitas,
                                         b.loading,
                                         b.resep,
-                                        b.kategori_warna,
+                                        CASE
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Special'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
+                                        END AS kategori_warna,
                                         b.target,
                                         c.l_r,
                                         c.rol,
@@ -497,7 +504,22 @@ $shft = $_GET['shft'];
         <td>'<?= $d_itxviewkk['LOT']; ?>
         </td>
         <td><?= $rowd['tambah_dyestuff']; ?></td>
-        <td><?= $rowd['arah_warna']; ?></td>
+        <?php 
+            $q_arah_warna = db2_exec($conn2, "SELECT
+                              a.VALUESTRING,
+                              SUBSTRING(a2.OPTIONS, 
+                                    POSITION(';' || a.VALUESTRING || '=' IN a2.OPTIONS) + LENGTH(a.VALUESTRING) + 2,
+                                    POSITION(';' IN SUBSTRING(a2.OPTIONS, POSITION(';' || a.VALUESTRING || '=' IN a2.OPTIONS) + LENGTH(a.VALUESTRING) + 2)) - 1
+                                  ) AS ARAH_WARNA
+                            FROM
+                              RECIPE r
+                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.FIELDNAME = 'Chroma'
+                            LEFT JOIN ADADDITIONALDATA a2 ON a2.NAME = a.FIELDNAME 
+                            WHERE
+                              r.SUFFIXCODE = '$rowd[suffix]'");
+            $dt_arah_warna = db2_fetch_assoc($q_arah_warna);
+          ?>
+        <td><?= $dt_arah_warna['ARAH_WARNA'] ?></td>
         <td><?= $rowd['status_warna']; ?></td>
         <td><?= $rowd['leader']; ?></td>
         <td><?= $rowd['ket_status']; ?></td>

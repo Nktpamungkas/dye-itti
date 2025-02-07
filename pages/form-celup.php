@@ -915,15 +915,22 @@
 					</div>
 					<label for="resep" class="col-sm-2 control-label">Arah Warna</label>
 					<div class="col-sm-3">
-						<select name="arah_warna" class="form-control" id="arah_warna" >
-							<option value="">Pilih</option>
-							<?php
-								$q_arah_warna = mysqli_query($con, "SELECT * FROM tbl_arah_warna ORDER BY id ASC");
-								while ($row_arah_warna = mysqli_fetch_array($q_arah_warna)) {
-							?>
-								<option value="<?php echo $row_arah_warna['arah_warna']; ?>" <?php if($row_arah_warna['arah_warna'] == $row_hasilcelup['arah_warna']) { echo "SELECTED"; } ?>><?php echo $row_arah_warna['arah_warna']; ?></option>
-							<?php } ?>
-						</select>
+						<?php 
+							$q_arah_warna = db2_exec($conn2, "SELECT
+																a.VALUESTRING,
+																SUBSTRING(a2.OPTIONS, 
+																			POSITION(';' || a.VALUESTRING || '=' IN a2.OPTIONS) + LENGTH(a.VALUESTRING) + 2,
+																			POSITION(';' IN SUBSTRING(a2.OPTIONS, POSITION(';' || a.VALUESTRING || '=' IN a2.OPTIONS) + LENGTH(a.VALUESTRING) + 2)) - 1
+																		) AS ARAH_WARNA
+															FROM
+																RECIPE r
+															LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.FIELDNAME = 'Chroma'
+															LEFT JOIN ADADDITIONALDATA a2 ON a2.NAME = a.FIELDNAME 
+															WHERE
+																r.SUFFIXCODE = '$rcek[suffix]'");
+							$dt_arah_warna = db2_fetch_assoc($q_arah_warna);
+						?>
+						<input name="arah_warna" class="form-control" value="<?= $dt_arah_warna['ARAH_WARNA'] ?>" readonly>
 					</div>
 				</div>
 				<div class="form-group">

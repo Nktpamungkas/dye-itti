@@ -1023,7 +1023,7 @@
 				<div class="form-group">
 					<label for="kategori_warna" class="col-sm-3 control-label">Kategori Warna</label>
 					<div class="col-sm-3">
-						<select name="kategori_warna" disabled="disabled" class="form-control" id="kategori_warna">
+						<select name="kategori_warna" class="form-control" id="kategori_warna">
 							<option value="">Pilih</option>
 							<?php
 								$q_kategori_warna	= db2_exec($conn2, "SELECT
