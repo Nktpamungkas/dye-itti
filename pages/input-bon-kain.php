@@ -228,13 +228,13 @@ return $nipbr;
 					</div>
                   </div>	
                   </div>
-	  			<div class="form-group hidden">
+	  			<div class="form-group">
                   <label for="analisa" class="col-sm-2 control-label">Analisa</label>
                   <div class="col-sm-6">
                     <textarea name="analisa" class="form-control" id="analisa" placeholder="Analisa"></textarea>
                   </div>
                   </div>
-	            <div class="form-group hidden">
+	            <div class="form-group">
                   <label for="pencegahan" class="col-sm-2 control-label">Pencegahan</label>
                   <div class="col-sm-6">
                     <textarea name="pencegahan" class="form-control" id="pencegahan" placeholder="Pencegahan"></textarea>
