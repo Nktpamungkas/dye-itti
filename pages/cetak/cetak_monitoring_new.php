@@ -447,7 +447,7 @@
       <td valign="top" style="border-right:0px #000000 solid;">
         <pre>L : R</pre>
       </td>
-      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:                                                                                               <?php echo $rowmt2['l_r']; ?> /<?php echo $rowmt2['l_r_2']; ?></td>
+      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:                                                                                               <?php echo $rowmt2['l_r']; ?> <?php $rowmt2_lr2 = $rowmt2['l_r_2'];if (! empty($rowmt2_lr2)) {echo " / " . $rowmt2_lr2;}?></td>
       <td valign="top" style="border-left:0px #000000 solid;">
         <pre>LB5 =                   <?php echo $rowmt2['lb5']; ?></pre>
       </td>
@@ -513,8 +513,7 @@
       </td>
     </tr>
     <tr>
-      <td align="left" valign="top" style="border-right:0px #000000 solid;">Air Panas</td>
-      <td colspan="4" align="left" valign="top" style="border-left:0px #000000 solid;">:                                                                                         <?php echo $rowmt['a_panas']; ?></td>
+      <td rowspan="2" colspan="5" align="left" valign="top" style="#000000 solid;"></td>
       <td width="6%" style="border-right:0px #000000 solid;">Blower</td>
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['blower']; ?></td>
@@ -546,8 +545,6 @@
       <td width="9%" style="border-left:0px #000000 solid; font-size:7px">&nbsp;</td>
     </tr>
     <tr>
-      <td align="left" valign="top" style="border-right:0px #000000 solid;">Air Dingin</td>
-      <td colspan="4" align="left" valign="top" style="border-left:0px #000000 solid;">:                                                                                         <?php echo $rowmt['a_dingin']; ?></td>
       <td width="6%" style="border-right:0px #000000 solid;">Plaiter</td>
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['plaiter']; ?></td>
