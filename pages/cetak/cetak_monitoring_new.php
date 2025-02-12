@@ -447,7 +447,7 @@
       <td valign="top" style="border-right:0px #000000 solid;">
         <pre>L : R</pre>
       </td>
-      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:                                                                                               <?php echo $rowmt2['l_r']; ?> <?php $rowmt2_lr2 = $rowmt2['l_r_2'];if (! empty($rowmt2_lr2)) {echo " / " . $rowmt2_lr2;}?></td>
+      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:                                                                                               <?php echo $rowmt2['l_r']; ?> <?php $rowmt2_lr2 = $rowmt2['l_r_2'];if (! empty($rowmt2_lr2) && $rowmt2_lr2 != '1:0') {echo " / " . $rowmt2_lr2;}?></td>
       <td valign="top" style="border-left:0px #000000 solid;">
         <pre>LB5 =                   <?php echo $rowmt2['lb5']; ?></pre>
       </td>
