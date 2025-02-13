@@ -205,7 +205,7 @@ $shft = $_GET['shft'];
                                           WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
                                           WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
                                           WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
-                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Special'
+                                          WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
                                           WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
                                         END AS kategori_warna,
                                         b.target,
