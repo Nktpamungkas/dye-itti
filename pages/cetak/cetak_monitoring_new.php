@@ -345,14 +345,14 @@
   </table>
   <table width="100%" border="" class="table-list1">
     <tr height="10 cm">
-      <td style="border-right:0px #000000 solid;">
-        <pre>Nomor Production Order</pre>
-      </td>
-      <td style="border-left:0px #000000 solid;">: <?php echo $rowmt['nokk'];?></td>
       <td colspan="2" style="border-right:0px #000000 solid;">
-        <pre>Nomor Production Demand</pre>
+        <pre>Nomor Production Order : <?php echo $rowmt['nokk'];?></pre>
       </td>
-      <td colspan="" style="border-left:0px #000000 solid;">: <?php echo $rowmt['nodemand'];?></td>
+      <!-- <td style="border-left:0px #000000 solid;"></td> -->
+      <td colspan="3" style="border-right:0px #000000 solid;">
+        <pre>Nomor Production Demand : <?php echo $rowmt['nodemand'];?></pre>
+      </td>
+      <!-- <td colspan="" style="border-left:0px #000000 solid;"></td> -->
       <td style="border-right:0px #000000 solid;">
         <pre>Langganan</pre>
       </td>
@@ -447,7 +447,15 @@
       <td valign="top" style="border-right:0px #000000 solid;">
         <pre>L : R</pre>
       </td>
-      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:                                                                                               <?php echo $rowmt2['l_r']; ?> <?php $rowmt2_lr2 = $rowmt2['l_r_2'];if (! empty($rowmt2_lr2) && $rowmt2_lr2 != '1:0') {echo " / " . $rowmt2_lr2;}?></td>
+      <td valign="top" style="border-left:0px #000000 solid;border-right:0px #000000 solid;">:
+        <?php echo $rowmt2['l_r']; ?> 
+        <?php 
+          $rowmt2_lr2 = TRIM($rowmt2['l_r_2']); 
+          if (!empty($rowmt2_lr2) AND $rowmt2_lr2 != '1:0') {
+            echo " / " . $rowmt2_lr2;
+          }
+        ?>
+      </td>
       <td valign="top" style="border-left:0px #000000 solid;">
         <pre>LB5 =                   <?php echo $rowmt2['lb5']; ?></pre>
       </td>
@@ -513,7 +521,8 @@
       </td>
     </tr>
     <tr>
-      <td rowspan="2" colspan="5" align="left" valign="top" style="#000000 solid;"></td>
+      <td align="left" valign="top" style="border-right:0px #000000 solid;"></td>
+      <td colspan="4" align="left" valign="top" style="border-left:0px #000000 solid;"></td>
       <td width="6%" style="border-right:0px #000000 solid;">Blower</td>
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['blower']; ?></td>
@@ -545,6 +554,8 @@
       <td width="9%" style="border-left:0px #000000 solid; font-size:7px">&nbsp;</td>
     </tr>
     <tr>
+      <td align="left" valign="top" style="border-right:0px #000000 solid;"></td>
+      <td colspan="4" align="left" valign="top" style="border-left:0px #000000 solid;"></td>
       <td width="6%" style="border-right:0px #000000 solid;">Plaiter</td>
       <td width="5%" align="center" style="border-left:0px #000000 solid;">: </td>
       <td width="9%" align="center" valign="top" style="border-left:0px #000000 solid;"><?php echo $rowmt2['plaiter']; ?></td>
