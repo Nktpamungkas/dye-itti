@@ -121,7 +121,8 @@
         <div class="box-header with-border">
           <h3 class="box-title">Data Produksi Celup</h3><br><br>
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
-            <div class="btn-group pull-right">              
+            <div class="btn-group pull-right">
+              <a href="pages/cetak/reports-harian-produksi-excel-bakarBulu.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel Bakar Bulu"><i class="fa fa-file-excel-o"></i> </a>\
               <a href="pages/cetak/reports-harian-produksi.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi"><i class="fa fa-print"></i> </a>
               <a href="pages/cetak/reports-panjang-kain.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-warning" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel Panjang Kain"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-excel-whiteness.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Whiteness Yellowness Tint"><i class="fa fa-file-excel-o"></i> </a>

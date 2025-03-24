@@ -29,7 +29,8 @@ include "koneksi.php";
                                     FROM
                                         db_dying.tbl_montemp a
                                         LEFT JOIN db_dying.tbl_schedule b ON a.id_schedule = b.id
-                                        LEFT JOIN db_dying.tbl_setting_mesin c ON b.nokk = c.nokk 
+                                        LEFT JOIN db_dying.tbl_setting_mesin c ON b.nokk = c.nokk
+                                        LEFT JOIN db_dying.tbl_bakbul d ON c.nokk = d.no_kk
                                     WHERE
                                         ( a.`status` = 'antri mesin' OR a.`status` = 'sedang jalan' ) 
                                         AND ( b.`status` = 'antri mesin' OR b.`status` = 'sedang jalan' ) 
@@ -46,6 +47,7 @@ include "koneksi.php";
                     <a href="?p=Form-Monitoring" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah Celup</a>
                     <a href="?p=Form-Monitoring-Washing" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Washing</a>
                     <a href="?p=Form-Monitoring-CB" class="btn btn-info"><i class="fa fa-plus-circle"></i> Tambah CB</a>
+                    <a href="?p=Form-Monitoring-BakBul" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Tambah Bakar Bulu</a>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-hover table-striped" width="100%">
