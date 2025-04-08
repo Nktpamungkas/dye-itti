@@ -331,6 +331,16 @@
   	      window.location.href='?p=Monitoring-Tempelan'; 
         }
       });</script>";
-  	}
+  	}else{
+      echo "<script>swal({
+        title: 'Data Gagal Tersimpan',   
+        text: 'Klik Ok untuk input data kembali',
+        type: 'warning',
+        }).then((result) => {
+        if (result.value) {
+  	      window.location.href='?p=Monitoring-Tempelan'; 
+        }
+      });</script>";
+    }
   }
 ?>
