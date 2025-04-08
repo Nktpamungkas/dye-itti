@@ -331,7 +331,7 @@
         <pre>No. Revisi</pre>
       </td>
       <td style="border-left:0px #000000 solid;">
-        <pre>: 09</pre>
+        <pre>: 10</pre>
       </td>
     </tr>
     <tr>
@@ -339,7 +339,7 @@
         <pre>Tgl. Terbit</pre>
       </td>
       <td style="border-left:0px #000000 solid;">
-        <pre>: 02 Agustus 2022</pre>
+        <pre>: 08 April 2025</pre>
       </td>
     </tr>
   </table>
