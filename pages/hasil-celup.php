@@ -183,7 +183,7 @@ include "koneksi.php";
 										</i>
 									</td>
 									<td align="center">
-										<font size="-1"><?php echo cekDesimal($rowd['target']); ?></font>
+										<font size="-1"><?php echo ($rowd['target']); ?></font>
 									</td>
 									<td align="center">
 										<font size="-1"><?php echo $rowd['lama_proses']; ?></font>
