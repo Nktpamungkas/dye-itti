@@ -5,6 +5,27 @@
 
 ?>
 
+<?php
+  include "koneksi.php";
+  mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+  if (isset($_POST['update_proses'])) {
+    $nokk = $_POST['nokk'];
+    $proses = $_POST['proses'];
+  
+    try {
+      $query = "UPDATE tbl_schedule SET proses = ?, tgl_update = NOW() WHERE nokk = ?";
+      $stmt = $con->prepare($query);
+      $stmt->bind_param("si", $proses, $nokk);
+      $stmt->execute();
+  
+      echo "OK";
+    } catch (mysqli_sql_exception $e) {
+      echo "Gagal: " . $e->getMessage();
+    }
+    exit();
+  }
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -34,6 +55,13 @@
       $stop_date  = $Akhir . ' 0' . $jamAr;
     }
     //$stop_date  = date('Y-m-d', strtotime($Awal . ' +1 day')).' 07:00:00';	
+
+    $daftarProses = [];
+    $queryProses = mysqli_query($con, "SELECT DISTINCT proses FROM tbl_proses ORDER BY proses ASC");
+    while ($rowProses = mysqli_fetch_assoc($queryProses)) {
+      $daftarProses[] = $rowProses['proses'];
+    }
+
   ?>
   <div class="box">
     <div class="box-header with-border">
@@ -322,16 +350,26 @@
                   <td align="center"><?php echo $rowd['lot']; ?></td>
                   <td><?php echo $rowd['warna']; ?></td>
                   <td><?php echo $rowd['qty_order']; ?></td>
-                  <td align="left"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
-                                      echo $rowSM['proses'];
-                                    } else {
-                                      echo $rowd['proses'];
-                                    } ?><br />
-                    <i class="label bg-hijau"><?php if ($rowd['operator_keluar'] != "") {
-                                                echo $rowd['operator_keluar'];
-                                              } else {
-                                                echo $rowd['operator'];
-                                              } ?></i>
+                  <td align="left">
+                    <?php
+                    $prosesSekarang = ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
+                    ?>
+
+                    <select name="proses_update[]" onchange="updateProses(this, '<?php echo $rowd['nokk']; ?>')">
+                      <?php
+                      foreach ($daftarProses as $proses) {
+                        $selected = ($proses == $prosesSekarang) ? 'selected' : '';
+                        echo "<option value=\"$proses\" $selected>$proses</option>";
+                      }
+                      ?>
+                    </select>
+                    
+                    <br />
+                    <i class="label bg-hijau">
+                      <?php
+                      echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator'];
+                      ?>
+                    </i>
                   </td>
                   <td align="center"><?php echo $rowd['proses_aktual']; ?></td>
                   <td align="center"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
@@ -366,11 +404,49 @@
   </div>
   <div id="EditStsCelup" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
     });
   </script>
+
+  <script>
+    function updateProses(selectEl, nokk) {
+      const proses = selectEl.value;
+    
+      Swal.fire({
+        title: 'Konfirmasi Perubahan',
+        text: `Apakah Anda yakin ingin mengubah proses menjadi "${proses}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Perbarui!',
+        cancelButtonText: 'Batal',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(window.location.href, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `update_proses=1&nokk=${nokk}&proses=${encodeURIComponent(proses)}`
+          })
+          .then(response => response.text())
+          .then(data => {
+            console.log("Respon:", data);
+            Swal.fire('Sukses!', 'Proses berhasil diperbarui.', 'success');
+          })
+          .catch(err => {
+            console.error("Error:", err);
+            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui proses.', 'error');
+          });
+        }
+      });
+    }
+  </script>
+
 </body>
 
 </html>
