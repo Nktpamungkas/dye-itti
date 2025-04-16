@@ -2,6 +2,7 @@
   ini_set("error_reporting", 1);
   session_start();
   include "koneksi.php";
+  $username = $_SESSION['user_id10'];
 
 ?>
 
@@ -351,25 +352,34 @@
                   <td><?php echo $rowd['warna']; ?></td>
                   <td><?php echo $rowd['qty_order']; ?></td>
                   <td align="left">
-                    <?php
-                    $prosesSekarang = ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
-                    ?>
+                    <?php if (in_array(strtolower($username), ['dit', 'andri', 'lukman'])) { ?>
+                      <?php
+                      $prosesSekarang = ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
+                      ?>
 
-                    <select name="proses_update[]" onchange="updateProses(this, '<?php echo $rowd['nokk']; ?>')">
+                      <select name="proses_update[]" onchange="updateProses(this, '<?php echo $rowd['nokk']; ?>')">
+                        <?php
+                        foreach ($daftarProses as $proses) {
+                          $selected = ($proses == $prosesSekarang) ? 'selected' : '';
+                          echo "<option value=\"$proses\" $selected>$proses</option>";
+                        }
+                        ?>
+                      </select>
+                      
+                      <br />
+                      <i class="label bg-hijau">
+                        <?php echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator']; ?>
+                      </i>
+                      
+                    <?php } else { ?>
                       <?php
-                      foreach ($daftarProses as $proses) {
-                        $selected = ($proses == $prosesSekarang) ? 'selected' : '';
-                        echo "<option value=\"$proses\" $selected>$proses</option>";
-                      }
+                      echo ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
                       ?>
-                    </select>
-                    
-                    <br />
-                    <i class="label bg-hijau">
-                      <?php
-                      echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator'];
-                      ?>
-                    </i>
+                      <br />
+                      <i class="label bg-hijau">
+                        <?php echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator']; ?>
+                      </i>
+                    <?php } ?>
                   </td>
                   <td align="center"><?php echo $rowd['proses_aktual']; ?></td>
                   <td align="center"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
