@@ -359,7 +359,9 @@
 										FROM 
 											ITXVIEWKK 
 										WHERE 
-											PRODUCTIONORDERCODE = '$nokk'");
+											PRODUCTIONORDERCODE = '$nokk'
+										ORDER BY
+											DELIVERYDATE ASC");
 			$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
 
 			$sql_pelanggan_buyer 	= db2_exec($conn2, "SELECT TRIM(LANGGANAN) AS PELANGGAN, TRIM(BUYER) AS BUYER FROM ITXVIEW_PELANGGAN 
