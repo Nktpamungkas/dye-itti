@@ -378,6 +378,19 @@ $sql4="
     WHERE DATE(th.tgl_update) BETWEEN '$startDate' AND '$endDate'
 ";
 
+$sql5="
+    Select
+    tm.no_mesin,
+    tm.kapasitas,
+    th.nokk,
+    th.proses
+    from tbl_mesin tm
+    left join tbl_schedule ts2 on tm.no_mesin = ts2.no_mesin
+    left join tbl_montemp tm2 on tm2.id_schedule =ts2.id
+    left join tbl_hasilcelup th on th.id_montemp = tm2.id
+    WHERE DATE(th.tgl_update) BETWEEN '$startDate' AND '$endDate'
+";
+
 // Eksekusi query pertama
 $stmt = $con->prepare($sql);
 $stmt->execute();
@@ -397,6 +410,11 @@ $result3 = $stmt3->get_result();
 $stmt4 = $con->prepare($sql4);
 $stmt4->execute();
 $result4 = $stmt4->get_result();
+
+// Eksekusi query kelima
+$stmt5 = $con->prepare($sql5);
+$stmt5->execute();
+$result5 = $stmt5->get_result();
 
 $data = [];
 while ($row = $result->fetch_assoc()) {
@@ -447,6 +465,15 @@ while ($row4 = $result4->fetch_assoc()){
     $data4[] = [
         'proses' => $row4['proses'],
         'qty' => $row4['qty_order'],
+    ];
+}
+
+$data5 = [];
+while ($row5 = $result5->fetch_assoc()){
+    $data5[] = [
+        'no_mesin' => $row5['no_mesin'],
+        'kapasitas' => $row5['kapasitas'],
+        'proses' => $row5['proses'],
     ];
 }
 
@@ -1916,6 +1943,4825 @@ while ($row4 = $result4->fetch_assoc()){
         }
     }
 // End Data Proses
+
+//Data Mesin MCxKap
+    // Celup Greige
+        $CG1401x2400 = 0;
+        $CG1402x1200 = 0;
+        $CG1103x1800 = 0;
+        $CG1104x1200 = 0;
+        $CG3505x750 = 0;
+        $CG1406x2400 = 0;
+        $CG1107x1800 = 0;
+        $CG1108x1200 = 0;
+        $CG4409x3200 = 0;
+        $CG1410x1800 = 0;
+        $CG4411x3200 = 0;
+        $CG4412x2400 = 0;
+        $CG4413x2400 = 0;
+        $CG1414x1200 = 0;
+        $CG1415x1200 = 0;
+        $CG2616x100 = 0;
+        $CG2617x100 = 0;
+        $CG2618x50 = 0;
+        $CG2619x800 = 0;
+        $CG2620x30 = 0;
+        $CG2621x800 = 0;
+        $CG2222x200 = 0;
+        $CG2223x800 = 0;
+        $CG2224x400 = 0;
+        $CG2225x400 = 0;
+        $CG2626x600 = 0;
+        $CG2627x600 = 0;
+        $CG2628x800 = 0;
+        $CG2629x50 = 0;
+        $CG2630x800 = 0;
+        $CG2631x10 = 0;
+        $CG2632x20 = 0;
+        $CG2633x20 = 0;
+        $CG2634x20 = 0;
+        $CG2241x800 = 0;
+        $CG2242x800 = 0;
+        $CG2343x1200 = 0;
+        $CG3444x600 = 0;
+        $CG1445x600 = 0;
+        $CG1446x600 = 0;
+        $CG1447x600 = 0;
+        $CG1448x600 = 0;
+        $CG1449x600 = 0;
+        $CG1450x600 = 0;
+        $CG1451x600 = 0;
+        $CG1452x600 = 0;
+        $CG3453x300 = 0;
+        $CG1154x300 = 0;
+        $CG1455x300 = 0;
+        $CG1456x300 = 0;
+        $CG1457x300 = 0;
+        $CG1458x300 = 0;
+        $CG1459x100 = 0;
+        $CG1460x100 = 0;
+        $CG1461x100 = 0;
+        $CG3462x100 = 0;
+        $CG3463x100 = 0;
+        $CG3464x100 = 0;
+        $CG1465x50 = 0;
+        $CG1466x50 = 0;
+        $CG1467x50 = 0;
+        $CG3468x30 = 0;
+        $CG3469x30 = 0;
+        $CG3470x50 = 0;
+        $CG3471x50 = 0;
+        $CG3472x30 = 0;
+        $CG3473x30 = 0;
+        $CG3474x50 = 0;
+        $CG3475x50 = 0;
+        $CG3476x150 = 0;
+        $CG1477x50 = 0;
+        $CG1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'celup greige') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CG1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CG1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CG1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CG1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CG3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CG1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CG1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CG1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CG4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CG1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CG4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CG4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CG4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CG1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CG1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CG2616x100++;
+                        break;
+                    case '2617x100':
+                        $CG2617x100++;
+                        break;
+                    case '2618x50':
+                        $CG2618x50++;
+                        break;
+                    case '2619x800':
+                        $CG2619x800++;
+                        break;
+                    case '2620x30':
+                        $CG2620x30++;
+                        break;
+                    case '2621x800':
+                        $CG2621x800++;
+                        break;
+                    case '2222x200':
+                        $CG2222x200++;
+                        break;
+                    case '2223x800':
+                        $CG2223x800++;
+                        break;
+                    case '2224x400':
+                        $CG2224x400++;
+                        break;
+                    case '2225x400':
+                        $CG2225x400++;
+                        break;
+                    case '2626x600':
+                        $CG2626x600++;
+                        break;
+                    case '2627x600':
+                        $CG2627x600++;
+                        break;
+                    case '2628x800':
+                        $CG2628x800++;
+                        break;
+                    case '2629x50':
+                        $CG2629x50++;
+                        break;
+                    case '2630x800':
+                        $CG2630x800++;
+                        break;
+                    case '2631x10':
+                        $CG2631x10++;
+                        break;
+                    case '2632x20':
+                        $CG2632x20++;
+                        break;
+                    case '2633x20':
+                        $CG2633x20++;
+                        break;
+                    case '2634x20':
+                        $CG2634x20++;
+                        break;
+                    case '2241x800':
+                        $CG2241x800++;
+                        break;
+                    case '2242x800':
+                        $CG2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CG2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CG3444x600++;
+                        break;
+                    case '1445x600':
+                        $CG1445x600++;
+                        break;
+                    case '1446x600':
+                        $CG1446x600++;
+                        break;
+                    case '1447x600':
+                        $CG1447x600++;
+                        break;
+                    case '1448x600':
+                        $CG1448x600++;
+                        break;
+                    case '1449x600':
+                        $CG1449x600++;
+                        break;
+                    case '1450x900':
+                        $CG1450x600++;
+                        break;
+                    case '1451x150':
+                        $CG1451x600++;
+                        break;
+                    case '1452x150':
+                        $CG1452x600++;
+                        break;
+                    case '3453x300':
+                        $CG3453x300++;
+                        break;
+                    case '1154x300':
+                        $CG1154x300++;
+                        break;
+                    case '1455x300':
+                        $CG1455x300++;
+                        break;
+                    case '1456x300':
+                        $CG1456x300++;
+                        break;
+                    case '1457x300':
+                        $CG1457x300++;
+                        break;
+                    case '1458x300':
+                        $CG1458x300++;
+                        break;
+                    case '1459x100':
+                        $CG1459x100++;
+                        break;
+                    case '1460x100':
+                        $CG1460x100++;
+                        break;
+                    case '1461x100':
+                        $CG1461x100++;
+                        break;
+                    case '3462x100':
+                        $CG3462x100++;
+                        break;
+                    case '3463x100':
+                        $CG3463x100++;
+                        break;
+                    case '3464x100':
+                        $CG3464x100++;
+                        break;
+                    case '1465x50':
+                        $CG1465x50++;
+                        break;
+                    case '1466x50':
+                        $CG1466x50++;
+                        break;
+                    case '1467x50':
+                        $CG1467x50++;
+                        break;
+                    case '3468x30':
+                        $CG3468x30++;
+                        break;
+                    case '3469x30':
+                        $CG3469x30++;
+                        break;
+                    case '3470x50':
+                        $CG3470x50++;
+                        break;
+                    case '3471x50':
+                        $CG3471x50++;
+                        break;
+                    case '3472x30':
+                        $CG3472x30++;
+                        break;
+                    case '3473x30':
+                        $CG3473x30++;
+                        break;
+                    case '3474x50':
+                        $CG3474x50++;
+                        break;
+                    case '3475x50':
+                        $CG3475x50++;
+                        break;
+                    case '3476x150':
+                        $CG3476x150++;
+                        break;
+                    case '1477x50':
+                        $CG1477x50++;
+                        break;
+                    case '1478x50':
+                        $CG1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Greige
+    // Celup Perbaikan Dye
+        $CPD1401x2400 = 0;
+        $CPD1402x1200 = 0;
+        $CPD1103x1800 = 0;
+        $CPD1104x1200 = 0;
+        $CPD3505x750 = 0;
+        $CPD1406x2400 = 0;
+        $CPD1107x1800 = 0;
+        $CPD1108x1200 = 0;
+        $CPD4409x3200 = 0;
+        $CPD1410x1800 = 0;
+        $CPD4411x3200 = 0;
+        $CPD4412x2400 = 0;
+        $CPD4413x2400 = 0;
+        $CPD1414x1200 = 0;
+        $CPD1415x1200 = 0;
+        $CPD2616x100 = 0;
+        $CPD2617x100 = 0;
+        $CPD2618x50 = 0;
+        $CPD2619x800 = 0;
+        $CPD2620x30 = 0;
+        $CPD2621x800 = 0;
+        $CPD2222x200 = 0;
+        $CPD2223x800 = 0;
+        $CPD2224x400 = 0;
+        $CPD2225x400 = 0;
+        $CPD2626x600 = 0;
+        $CPD2627x600 = 0;
+        $CPD2628x800 = 0;
+        $CPD2629x50 = 0;
+        $CPD2630x800 = 0;
+        $CPD2631x10 = 0;
+        $CPD2632x20 = 0;
+        $CPD2633x20 = 0;
+        $CPD2634x20 = 0;
+        $CPD2241x800 = 0;
+        $CPD2242x800 = 0;
+        $CPD2343x1200 = 0;
+        $CPD3444x600 = 0;
+        $CPD1445x600 = 0;
+        $CPD1446x600 = 0;
+        $CPD1447x600 = 0;
+        $CPD1448x600 = 0;
+        $CPD1449x600 = 0;
+        $CPD1450x600 = 0;
+        $CPD1451x600 = 0;
+        $CPD1452x600 = 0;
+        $CPD3453x300 = 0;
+        $CPD1154x300 = 0;
+        $CPD1455x300 = 0;
+        $CPD1456x300 = 0;
+        $CPD1457x300 = 0;
+        $CPD1458x300 = 0;
+        $CPD1459x100 = 0;
+        $CPD1460x100 = 0;
+        $CPD1461x100 = 0;
+        $CPD3462x100 = 0;
+        $CPD3463x100 = 0;
+        $CPD3464x100 = 0;
+        $CPD1465x50 = 0;
+        $CPD1466x50 = 0;
+        $CPD1467x50 = 0;
+        $CPD3468x30 = 0;
+        $CPD3469x30 = 0;
+        $CPD3470x50 = 0;
+        $CPD3471x50 = 0;
+        $CPD3472x30 = 0;
+        $CPD3473x30 = 0;
+        $CPD3474x50 = 0;
+        $CPD3475x50 = 0;
+        $CPD3476x150 = 0;
+        $CPD1477x50 = 0;
+        $CPD1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan DYE') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPD1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPD1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPD1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPD1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPD3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPD1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPD1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPD1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPD4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPD1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPD4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPD4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPD4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPD1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPD1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPD2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPD2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPD2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPD2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPD2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPD2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPD2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPD2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPD2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPD2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPD2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPD2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPD2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPD2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPD2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPD2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPD2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPD2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPD2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPD2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPD2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPD2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPD3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPD1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPD1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPD1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPD1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPD1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPD1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPD1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPD1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPD3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPD1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPD1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPD1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPD1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPD1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPD1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPD1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPD1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPD3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPD3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPD3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPD1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPD1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPD1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPD3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPD3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPD3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPD3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPD3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPD3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPD3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPD3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPD3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPD1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPD1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Dye
+    // Celup Perbaikan Dept.Lain
+        $CPDL1401x2400 = 0;
+        $CPDL1402x1200 = 0;
+        $CPDL1103x1800 = 0;
+        $CPDL1104x1200 = 0;
+        $CPDL3505x750 = 0;
+        $CPDL1406x2400 = 0;
+        $CPDL1107x1800 = 0;
+        $CPDL1108x1200 = 0;
+        $CPDL4409x3200 = 0;
+        $CPDL1410x1800 = 0;
+        $CPDL4411x3200 = 0;
+        $CPDL4412x2400 = 0;
+        $CPDL4413x2400 = 0;
+        $CPDL1414x1200 = 0;
+        $CPDL1415x1200 = 0;
+        $CPDL2616x100 = 0;
+        $CPDL2617x100 = 0;
+        $CPDL2618x50 = 0;
+        $CPDL2619x800 = 0;
+        $CPDL2620x30 = 0;
+        $CPDL2621x800 = 0;
+        $CPDL2222x200 = 0;
+        $CPDL2223x800 = 0;
+        $CPDL2224x400 = 0;
+        $CPDL2225x400 = 0;
+        $CPDL2626x600 = 0;
+        $CPDL2627x600 = 0;
+        $CPDL2628x800 = 0;
+        $CPDL2629x50 = 0;
+        $CPDL2630x800 = 0;
+        $CPDL2631x10 = 0;
+        $CPDL2632x20 = 0;
+        $CPDL2633x20 = 0;
+        $CPDL2634x20 = 0;
+        $CPDL2241x800 = 0;
+        $CPDL2242x800 = 0;
+        $CPDL2343x1200 = 0;
+        $CPDL3444x600 = 0;
+        $CPDL1445x600 = 0;
+        $CPDL1446x600 = 0;
+        $CPDL1447x600 = 0;
+        $CPDL1448x600 = 0;
+        $CPDL1449x600 = 0;
+        $CPDL1450x600 = 0;
+        $CPDL1451x600 = 0;
+        $CPDL1452x600 = 0;
+        $CPDL3453x300 = 0;
+        $CPDL1154x300 = 0;
+        $CPDL1455x300 = 0;
+        $CPDL1456x300 = 0;
+        $CPDL1457x300 = 0;
+        $CPDL1458x300 = 0;
+        $CPDL1459x100 = 0;
+        $CPDL1460x100 = 0;
+        $CPDL1461x100 = 0;
+        $CPDL3462x100 = 0;
+        $CPDL3463x100 = 0;
+        $CPDL3464x100 = 0;
+        $CPDL1465x50 = 0;
+        $CPDL1466x50 = 0;
+        $CPDL1467x50 = 0;
+        $CPDL3468x30 = 0;
+        $CPDL3469x30 = 0;
+        $CPDL3470x50 = 0;
+        $CPDL3471x50 = 0;
+        $CPDL3472x30 = 0;
+        $CPDL3473x30 = 0;
+        $CPDL3474x50 = 0;
+        $CPDL3475x50 = 0;
+        $CPDL3476x150 = 0;
+        $CPDL1477x50 = 0;
+        $CPDL1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan Dept.Lain') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPDL1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPDL1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPDL1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPDL1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPDL3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPDL1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPDL1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPDL1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPDL4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPDL1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPDL4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPDL4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPDL4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPDL1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPDL1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPDL2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPDL2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPDL2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPDL2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPDL2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPDL2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPDL2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPDL2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPDL2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPDL2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPDL2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPDL2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPDL2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPDL2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPDL2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPDL2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPDL2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPDL2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPDL2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPDL2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPDL2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPDL2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPDL3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPDL1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPDL1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPDL1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPDL1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPDL1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPDL1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPDL1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPDL1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPDL3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPDL1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPDL1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPDL1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPDL1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPDL1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPDL1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPDL1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPDL1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPDL3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPDL3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPDL3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPDL1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPDL1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPDL1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPDL3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPDL3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPDL3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPDL3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPDL3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPDL3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPDL3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPDL3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPDL3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPDL1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPDL1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Dept.Lain
+    // Celup Perbaikan Brs
+        $CPB1401x2400 = 0;
+        $CPB1402x1200 = 0;
+        $CPB1103x1800 = 0;
+        $CPB1104x1200 = 0;
+        $CPB3505x750 = 0;
+        $CPB1406x2400 = 0;
+        $CPB1107x1800 = 0;
+        $CPB1108x1200 = 0;
+        $CPB4409x3200 = 0;
+        $CPB1410x1800 = 0;
+        $CPB4411x3200 = 0;
+        $CPB4412x2400 = 0;
+        $CPB4413x2400 = 0;
+        $CPB1414x1200 = 0;
+        $CPB1415x1200 = 0;
+        $CPB2616x100 = 0;
+        $CPB2617x100 = 0;
+        $CPB2618x50 = 0;
+        $CPB2619x800 = 0;
+        $CPB2620x30 = 0;
+        $CPB2621x800 = 0;
+        $CPB2222x200 = 0;
+        $CPB2223x800 = 0;
+        $CPB2224x400 = 0;
+        $CPB2225x400 = 0;
+        $CPB2626x600 = 0;
+        $CPB2627x600 = 0;
+        $CPB2628x800 = 0;
+        $CPB2629x50 = 0;
+        $CPB2630x800 = 0;
+        $CPB2631x10 = 0;
+        $CPB2632x20 = 0;
+        $CPB2633x20 = 0;
+        $CPB2634x20 = 0;
+        $CPB2241x800 = 0;
+        $CPB2242x800 = 0;
+        $CPB2343x1200 = 0;
+        $CPB3444x600 = 0;
+        $CPB1445x600 = 0;
+        $CPB1446x600 = 0;
+        $CPB1447x600 = 0;
+        $CPB1448x600 = 0;
+        $CPB1449x600 = 0;
+        $CPB1450x600 = 0;
+        $CPB1451x600 = 0;
+        $CPB1452x600 = 0;
+        $CPB3453x300 = 0;
+        $CPB1154x300 = 0;
+        $CPB1455x300 = 0;
+        $CPB1456x300 = 0;
+        $CPB1457x300 = 0;
+        $CPB1458x300 = 0;
+        $CPB1459x100 = 0;
+        $CPB1460x100 = 0;
+        $CPB1461x100 = 0;
+        $CPB3462x100 = 0;
+        $CPB3463x100 = 0;
+        $CPB3464x100 = 0;
+        $CPB1465x50 = 0;
+        $CPB1466x50 = 0;
+        $CPB1467x50 = 0;
+        $CPB3468x30 = 0;
+        $CPB3469x30 = 0;
+        $CPB3470x50 = 0;
+        $CPB3471x50 = 0;
+        $CPB3472x30 = 0;
+        $CPB3473x30 = 0;
+        $CPB3474x50 = 0;
+        $CPB3475x50 = 0;
+        $CPB3476x150 = 0;
+        $CPB1477x50 = 0;
+        $CPB1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan BRS') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPB1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPB1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPB1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPB1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPB3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPB1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPB1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPB1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPB4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPB1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPB4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPB4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPB4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPB1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPB1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPB2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPB2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPB2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPB2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPB2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPB2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPB2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPB2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPB2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPB2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPB2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPB2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPB2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPB2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPB2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPB2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPB2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPB2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPB2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPB2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPB2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPB2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPB3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPB1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPB1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPB1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPB1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPB1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPB1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPB1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPB1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPB3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPB1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPB1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPB1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPB1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPB1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPB1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPB1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPB1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPB3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPB3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPB3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPB1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPB1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPB1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPB3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPB3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPB3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPB3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPB3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPB3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPB3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPB3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPB3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPB1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPB1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Brs
+    // Celup Perbaikan Fin
+        $CPF1401x2400 = 0;
+        $CPF1402x1200 = 0;
+        $CPF1103x1800 = 0;
+        $CPF1104x1200 = 0;
+        $CPF3505x750 = 0;
+        $CPF1406x2400 = 0;
+        $CPF1107x1800 = 0;
+        $CPF1108x1200 = 0;
+        $CPF4409x3200 = 0;
+        $CPF1410x1800 = 0;
+        $CPF4411x3200 = 0;
+        $CPF4412x2400 = 0;
+        $CPF4413x2400 = 0;
+        $CPF1414x1200 = 0;
+        $CPF1415x1200 = 0;
+        $CPF2616x100 = 0;
+        $CPF2617x100 = 0;
+        $CPF2618x50 = 0;
+        $CPF2619x800 = 0;
+        $CPF2620x30 = 0;
+        $CPF2621x800 = 0;
+        $CPF2222x200 = 0;
+        $CPF2223x800 = 0;
+        $CPF2224x400 = 0;
+        $CPF2225x400 = 0;
+        $CPF2626x600 = 0;
+        $CPF2627x600 = 0;
+        $CPF2628x800 = 0;
+        $CPF2629x50 = 0;
+        $CPF2630x800 = 0;
+        $CPF2631x10 = 0;
+        $CPF2632x20 = 0;
+        $CPF2633x20 = 0;
+        $CPF2634x20 = 0;
+        $CPF2241x800 = 0;
+        $CPF2242x800 = 0;
+        $CPF2343x1200 = 0;
+        $CPF3444x600 = 0;
+        $CPF1445x600 = 0;
+        $CPF1446x600 = 0;
+        $CPF1447x600 = 0;
+        $CPF1448x600 = 0;
+        $CPF1449x600 = 0;
+        $CPF1450x600 = 0;
+        $CPF1451x600 = 0;
+        $CPF1452x600 = 0;
+        $CPF3453x300 = 0;
+        $CPF1154x300 = 0;
+        $CPF1455x300 = 0;
+        $CPF1456x300 = 0;
+        $CPF1457x300 = 0;
+        $CPF1458x300 = 0;
+        $CPF1459x100 = 0;
+        $CPF1460x100 = 0;
+        $CPF1461x100 = 0;
+        $CPF3462x100 = 0;
+        $CPF3463x100 = 0;
+        $CPF3464x100 = 0;
+        $CPF1465x50 = 0;
+        $CPF1466x50 = 0;
+        $CPF1467x50 = 0;
+        $CPF3468x30 = 0;
+        $CPF3469x30 = 0;
+        $CPF3470x50 = 0;
+        $CPF3471x50 = 0;
+        $CPF3472x30 = 0;
+        $CPF3473x30 = 0;
+        $CPF3474x50 = 0;
+        $CPF3475x50 = 0;
+        $CPF3476x150 = 0;
+        $CPF1477x50 = 0;
+        $CPF1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan FIN') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPF1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPF1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPF1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPF1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPF3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPF1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPF1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPF1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPF4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPF1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPF4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPF4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPF4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPF1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPF1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPF2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPF2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPF2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPF2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPF2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPF2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPF2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPF2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPF2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPF2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPF2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPF2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPF2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPF2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPF2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPF2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPF2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPF2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPF2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPF2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPF2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPF2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPF3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPF1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPF1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPF1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPF1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPF1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPF1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPF1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPF1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPF3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPF1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPF1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPF1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPF1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPF1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPF1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPF1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPF1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPF3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPF3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPF3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPF1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPF1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPF1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPF3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPF3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPF3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPF3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPF3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPF3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPF3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPF3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPF3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPF1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPF1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Fin
+    // Celup Perbaikan Lab
+        $CPL1401x2400 = 0;
+        $CPL1402x1200 = 0;
+        $CPL1103x1800 = 0;
+        $CPL1104x1200 = 0;
+        $CPL3505x750 = 0;
+        $CPL1406x2400 = 0;
+        $CPL1107x1800 = 0;
+        $CPL1108x1200 = 0;
+        $CPL4409x3200 = 0;
+        $CPL1410x1800 = 0;
+        $CPL4411x3200 = 0;
+        $CPL4412x2400 = 0;
+        $CPL4413x2400 = 0;
+        $CPL1414x1200 = 0;
+        $CPL1415x1200 = 0;
+        $CPL2616x100 = 0;
+        $CPL2617x100 = 0;
+        $CPL2618x50 = 0;
+        $CPL2619x800 = 0;
+        $CPL2620x30 = 0;
+        $CPL2621x800 = 0;
+        $CPL2222x200 = 0;
+        $CPL2223x800 = 0;
+        $CPL2224x400 = 0;
+        $CPL2225x400 = 0;
+        $CPL2626x600 = 0;
+        $CPL2627x600 = 0;
+        $CPL2628x800 = 0;
+        $CPL2629x50 = 0;
+        $CPL2630x800 = 0;
+        $CPL2631x10 = 0;
+        $CPL2632x20 = 0;
+        $CPL2633x20 = 0;
+        $CPL2634x20 = 0;
+        $CPL2241x800 = 0;
+        $CPL2242x800 = 0;
+        $CPL2343x1200 = 0;
+        $CPL3444x600 = 0;
+        $CPL1445x600 = 0;
+        $CPL1446x600 = 0;
+        $CPL1447x600 = 0;
+        $CPL1448x600 = 0;
+        $CPL1449x600 = 0;
+        $CPL1450x600 = 0;
+        $CPL1451x600 = 0;
+        $CPL1452x600 = 0;
+        $CPL3453x300 = 0;
+        $CPL1154x300 = 0;
+        $CPL1455x300 = 0;
+        $CPL1456x300 = 0;
+        $CPL1457x300 = 0;
+        $CPL1458x300 = 0;
+        $CPL1459x100 = 0;
+        $CPL1460x100 = 0;
+        $CPL1461x100 = 0;
+        $CPL3462x100 = 0;
+        $CPL3463x100 = 0;
+        $CPL3464x100 = 0;
+        $CPL1465x50 = 0;
+        $CPL1466x50 = 0;
+        $CPL1467x50 = 0;
+        $CPL3468x30 = 0;
+        $CPL3469x30 = 0;
+        $CPL3470x50 = 0;
+        $CPL3471x50 = 0;
+        $CPL3472x30 = 0;
+        $CPL3473x30 = 0;
+        $CPL3474x50 = 0;
+        $CPL3475x50 = 0;
+        $CPL3476x150 = 0;
+        $CPL1477x50 = 0;
+        $CPL1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan LAB') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPL1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPL1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPL1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPL1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPL3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPL1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPL1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPL1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPL4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPL1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPL4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPL4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPL4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPL1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPL1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPL2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPL2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPL2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPL2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPL2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPL2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPL2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPL2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPL2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPL2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPL2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPL2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPL2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPL2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPL2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPL2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPL2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPL2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPL2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPL2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPL2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPL2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPL3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPL1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPL1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPL1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPL1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPL1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPL1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPL1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPL1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPL3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPL1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPL1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPL1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPL1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPL1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPL1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPL1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPL1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPL3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPL3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPL3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPL1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPL1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPL1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPL3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPL3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPL3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPL3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPL3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPL3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPL3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPL3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPL3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPL1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPL1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Lab
+    // Celup Perbaikan Prt
+        $CPP1401x2400 = 0;
+        $CPP1402x1200 = 0;
+        $CPP1103x1800 = 0;
+        $CPP1104x1200 = 0;
+        $CPP3505x750 = 0;
+        $CPP1406x2400 = 0;
+        $CPP1107x1800 = 0;
+        $CPP1108x1200 = 0;
+        $CPP4409x3200 = 0;
+        $CPP1410x1800 = 0;
+        $CPP4411x3200 = 0;
+        $CPP4412x2400 = 0;
+        $CPP4413x2400 = 0;
+        $CPP1414x1200 = 0;
+        $CPP1415x1200 = 0;
+        $CPP2616x100 = 0;
+        $CPP2617x100 = 0;
+        $CPP2618x50 = 0;
+        $CPP2619x800 = 0;
+        $CPP2620x30 = 0;
+        $CPP2621x800 = 0;
+        $CPP2222x200 = 0;
+        $CPP2223x800 = 0;
+        $CPP2224x400 = 0;
+        $CPP2225x400 = 0;
+        $CPP2626x600 = 0;
+        $CPP2627x600 = 0;
+        $CPP2628x800 = 0;
+        $CPP2629x50 = 0;
+        $CPP2630x800 = 0;
+        $CPP2631x10 = 0;
+        $CPP2632x20 = 0;
+        $CPP2633x20 = 0;
+        $CPP2634x20 = 0;
+        $CPP2241x800 = 0;
+        $CPP2242x800 = 0;
+        $CPP2343x1200 = 0;
+        $CPP3444x600 = 0;
+        $CPP1445x600 = 0;
+        $CPP1446x600 = 0;
+        $CPP1447x600 = 0;
+        $CPP1448x600 = 0;
+        $CPP1449x600 = 0;
+        $CPP1450x600 = 0;
+        $CPP1451x600 = 0;
+        $CPP1452x600 = 0;
+        $CPP3453x300 = 0;
+        $CPP1154x300 = 0;
+        $CPP1455x300 = 0;
+        $CPP1456x300 = 0;
+        $CPP1457x300 = 0;
+        $CPP1458x300 = 0;
+        $CPP1459x100 = 0;
+        $CPP1460x100 = 0;
+        $CPP1461x100 = 0;
+        $CPP3462x100 = 0;
+        $CPP3463x100 = 0;
+        $CPP3464x100 = 0;
+        $CPP1465x50 = 0;
+        $CPP1466x50 = 0;
+        $CPP1467x50 = 0;
+        $CPP3468x30 = 0;
+        $CPP3469x30 = 0;
+        $CPP3470x50 = 0;
+        $CPP3471x50 = 0;
+        $CPP3472x30 = 0;
+        $CPP3473x30 = 0;
+        $CPP3474x50 = 0;
+        $CPP3475x50 = 0;
+        $CPP3476x150 = 0;
+        $CPP1477x50 = 0;
+        $CPP1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan PRT') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPP1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPP1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPP1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPP1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPP3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPP1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPP1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPP1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPP4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPP1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPP4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPP4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPP4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPP1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPP1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPP2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPP2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPP2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPP2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPP2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPP2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPP2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPP2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPP2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPP2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPP2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPP2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPP2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPP2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPP2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPP2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPP2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPP2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPP2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPP2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPP2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPP2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPP3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPP1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPP1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPP1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPP1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPP1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPP1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPP1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPP1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPP3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPP1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPP1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPP1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPP1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPP1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPP1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPP1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPP1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPP3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPP3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPP3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPP1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPP1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPP1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPP3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPP3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPP3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPP3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPP3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPP3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPP3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPP3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPP3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPP1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPP1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Prt
+    // Celup Perbaikan Tas
+        $CPT1401x2400 = 0;
+        $CPT1402x1200 = 0;
+        $CPT1103x1800 = 0;
+        $CPT1104x1200 = 0;
+        $CPT3505x750 = 0;
+        $CPT1406x2400 = 0;
+        $CPT1107x1800 = 0;
+        $CPT1108x1200 = 0;
+        $CPT4409x3200 = 0;
+        $CPT1410x1800 = 0;
+        $CPT4411x3200 = 0;
+        $CPT4412x2400 = 0;
+        $CPT4413x2400 = 0;
+        $CPT1414x1200 = 0;
+        $CPT1415x1200 = 0;
+        $CPT2616x100 = 0;
+        $CPT2617x100 = 0;
+        $CPT2618x50 = 0;
+        $CPT2619x800 = 0;
+        $CPT2620x30 = 0;
+        $CPT2621x800 = 0;
+        $CPT2222x200 = 0;
+        $CPT2223x800 = 0;
+        $CPT2224x400 = 0;
+        $CPT2225x400 = 0;
+        $CPT2626x600 = 0;
+        $CPT2627x600 = 0;
+        $CPT2628x800 = 0;
+        $CPT2629x50 = 0;
+        $CPT2630x800 = 0;
+        $CPT2631x10 = 0;
+        $CPT2632x20 = 0;
+        $CPT2633x20 = 0;
+        $CPT2634x20 = 0;
+        $CPT2241x800 = 0;
+        $CPT2242x800 = 0;
+        $CPT2343x1200 = 0;
+        $CPT3444x600 = 0;
+        $CPT1445x600 = 0;
+        $CPT1446x600 = 0;
+        $CPT1447x600 = 0;
+        $CPT1448x600 = 0;
+        $CPT1449x600 = 0;
+        $CPT1450x600 = 0;
+        $CPT1451x600 = 0;
+        $CPT1452x600 = 0;
+        $CPT3453x300 = 0;
+        $CPT1154x300 = 0;
+        $CPT1455x300 = 0;
+        $CPT1456x300 = 0;
+        $CPT1457x300 = 0;
+        $CPT1458x300 = 0;
+        $CPT1459x100 = 0;
+        $CPT1460x100 = 0;
+        $CPT1461x100 = 0;
+        $CPT3462x100 = 0;
+        $CPT3463x100 = 0;
+        $CPT3464x100 = 0;
+        $CPT1465x50 = 0;
+        $CPT1466x50 = 0;
+        $CPT1467x50 = 0;
+        $CPT3468x30 = 0;
+        $CPT3469x30 = 0;
+        $CPT3470x50 = 0;
+        $CPT3471x50 = 0;
+        $CPT3472x30 = 0;
+        $CPT3473x30 = 0;
+        $CPT3474x50 = 0;
+        $CPT3475x50 = 0;
+        $CPT3476x150 = 0;
+        $CPT1477x50 = 0;
+        $CPT1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan TAS') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPT1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPT1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPT1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPT1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPT3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPT1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPT1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPT1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPT4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPT1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPT4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPT4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPT4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPT1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPT1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPT2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPT2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPT2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPT2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPT2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPT2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPT2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPT2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPT2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPT2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPT2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPT2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPT2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPT2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPT2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPT2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPT2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPT2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPT2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPT2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPT2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPT2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPT3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPT1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPT1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPT1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPT1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPT1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPT1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPT1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPT1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPT3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPT1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPT1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPT1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPT1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPT1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPT1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPT1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPT1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPT3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPT3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPT3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPT1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPT1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPT1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPT3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPT3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPT3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPT3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPT3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPT3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPT3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPT3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPT3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPT1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPT1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Tas
+    // Celup Perbaikan Rmp
+        $CPR1401x2400 = 0;
+        $CPR1402x1200 = 0;
+        $CPR1103x1800 = 0;
+        $CPR1104x1200 = 0;
+        $CPR3505x750 = 0;
+        $CPR1406x2400 = 0;
+        $CPR1107x1800 = 0;
+        $CPR1108x1200 = 0;
+        $CPR4409x3200 = 0;
+        $CPR1410x1800 = 0;
+        $CPR4411x3200 = 0;
+        $CPR4412x2400 = 0;
+        $CPR4413x2400 = 0;
+        $CPR1414x1200 = 0;
+        $CPR1415x1200 = 0;
+        $CPR2616x100 = 0;
+        $CPR2617x100 = 0;
+        $CPR2618x50 = 0;
+        $CPR2619x800 = 0;
+        $CPR2620x30 = 0;
+        $CPR2621x800 = 0;
+        $CPR2222x200 = 0;
+        $CPR2223x800 = 0;
+        $CPR2224x400 = 0;
+        $CPR2225x400 = 0;
+        $CPR2626x600 = 0;
+        $CPR2627x600 = 0;
+        $CPR2628x800 = 0;
+        $CPR2629x50 = 0;
+        $CPR2630x800 = 0;
+        $CPR2631x10 = 0;
+        $CPR2632x20 = 0;
+        $CPR2633x20 = 0;
+        $CPR2634x20 = 0;
+        $CPR2241x800 = 0;
+        $CPR2242x800 = 0;
+        $CPR2343x1200 = 0;
+        $CPR3444x600 = 0;
+        $CPR1445x600 = 0;
+        $CPR1446x600 = 0;
+        $CPR1447x600 = 0;
+        $CPR1448x600 = 0;
+        $CPR1449x600 = 0;
+        $CPR1450x600 = 0;
+        $CPR1451x600 = 0;
+        $CPR1452x600 = 0;
+        $CPR3453x300 = 0;
+        $CPR1154x300 = 0;
+        $CPR1455x300 = 0;
+        $CPR1456x300 = 0;
+        $CPR1457x300 = 0;
+        $CPR1458x300 = 0;
+        $CPR1459x100 = 0;
+        $CPR1460x100 = 0;
+        $CPR1461x100 = 0;
+        $CPR3462x100 = 0;
+        $CPR3463x100 = 0;
+        $CPR3464x100 = 0;
+        $CPR1465x50 = 0;
+        $CPR1466x50 = 0;
+        $CPR1467x50 = 0;
+        $CPR3468x30 = 0;
+        $CPR3469x30 = 0;
+        $CPR3470x50 = 0;
+        $CPR3471x50 = 0;
+        $CPR3472x30 = 0;
+        $CPR3473x30 = 0;
+        $CPR3474x50 = 0;
+        $CPR3475x50 = 0;
+        $CPR3476x150 = 0;
+        $CPR1477x50 = 0;
+        $CPR1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Perbaikan RMP') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPR1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPR1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPR1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPR1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPR3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPR1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPR1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPR1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPR4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPR1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPR4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPR4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPR4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPR1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPR1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPR2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPR2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPR2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPR2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPR2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPR2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPR2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPR2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPR2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPR2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPR2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPR2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPR2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPR2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPR2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPR2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPR2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPR2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPR2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPR2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPR2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPR2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPR3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPR1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPR1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPR1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPR1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPR1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPR1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPR1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPR1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPR3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPR1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPR1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPR1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPR1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPR1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPR1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPR1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPR1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPR3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPR3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPR3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPR1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPR1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPR1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPR3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPR3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPR3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPR3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPR3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPR3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPR3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPR3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPR3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPR1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPR1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Perbaikan Rmp
+    // Celup Proses Akw
+        $CPA1401x2400 = 0;
+        $CPA1402x1200 = 0;
+        $CPA1103x1800 = 0;
+        $CPA1104x1200 = 0;
+        $CPA3505x750 = 0;
+        $CPA1406x2400 = 0;
+        $CPA1107x1800 = 0;
+        $CPA1108x1200 = 0;
+        $CPA4409x3200 = 0;
+        $CPA1410x1800 = 0;
+        $CPA4411x3200 = 0;
+        $CPA4412x2400 = 0;
+        $CPA4413x2400 = 0;
+        $CPA1414x1200 = 0;
+        $CPA1415x1200 = 0;
+        $CPA2616x100 = 0;
+        $CPA2617x100 = 0;
+        $CPA2618x50 = 0;
+        $CPA2619x800 = 0;
+        $CPA2620x30 = 0;
+        $CPA2621x800 = 0;
+        $CPA2222x200 = 0;
+        $CPA2223x800 = 0;
+        $CPA2224x400 = 0;
+        $CPA2225x400 = 0;
+        $CPA2626x600 = 0;
+        $CPA2627x600 = 0;
+        $CPA2628x800 = 0;
+        $CPA2629x50 = 0;
+        $CPA2630x800 = 0;
+        $CPA2631x10 = 0;
+        $CPA2632x20 = 0;
+        $CPA2633x20 = 0;
+        $CPA2634x20 = 0;
+        $CPA2241x800 = 0;
+        $CPA2242x800 = 0;
+        $CPA2343x1200 = 0;
+        $CPA3444x600 = 0;
+        $CPA1445x600 = 0;
+        $CPA1446x600 = 0;
+        $CPA1447x600 = 0;
+        $CPA1448x600 = 0;
+        $CPA1449x600 = 0;
+        $CPA1450x600 = 0;
+        $CPA1451x600 = 0;
+        $CPA1452x600 = 0;
+        $CPA3453x300 = 0;
+        $CPA1154x300 = 0;
+        $CPA1455x300 = 0;
+        $CPA1456x300 = 0;
+        $CPA1457x300 = 0;
+        $CPA1458x300 = 0;
+        $CPA1459x100 = 0;
+        $CPA1460x100 = 0;
+        $CPA1461x100 = 0;
+        $CPA3462x100 = 0;
+        $CPA3463x100 = 0;
+        $CPA3464x100 = 0;
+        $CPA1465x50 = 0;
+        $CPA1466x50 = 0;
+        $CPA1467x50 = 0;
+        $CPA3468x30 = 0;
+        $CPA3469x30 = 0;
+        $CPA3470x50 = 0;
+        $CPA3471x50 = 0;
+        $CPA3472x30 = 0;
+        $CPA3473x30 = 0;
+        $CPA3474x50 = 0;
+        $CPA3475x50 = 0;
+        $CPA3476x150 = 0;
+        $CPA1477x50 = 0;
+        $CPA1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Proses AKW') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPA1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPA1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPA1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPA1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPA3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPA1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPA1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPA1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPA4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPA1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPA4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPA4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPA4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPA1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPA1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPA2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPA2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPA2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPA2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPA2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPA2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPA2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPA2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPA2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPA2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPA2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPA2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPA2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPA2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPA2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPA2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPA2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPA2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPA2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPA2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPA2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPA2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPA3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPA1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPA1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPA1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPA1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPA1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPA1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPA1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPA1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPA3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPA1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPA1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPA1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPA1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPA1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPA1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPA1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPA1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPA3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPA3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPA3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPA1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPA1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPA1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPA3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPA3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPA3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPA3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPA3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPA3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPA3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPA3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPA3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPA1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPA1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Proses Akw
+    // Celup Poly Dulu (T-Side)
+        $CPDT1401x2400 = 0;
+        $CPDT1402x1200 = 0;
+        $CPDT1103x1800 = 0;
+        $CPDT1104x1200 = 0;
+        $CPDT3505x750 = 0;
+        $CPDT1406x2400 = 0;
+        $CPDT1107x1800 = 0;
+        $CPDT1108x1200 = 0;
+        $CPDT4409x3200 = 0;
+        $CPDT1410x1800 = 0;
+        $CPDT4411x3200 = 0;
+        $CPDT4412x2400 = 0;
+        $CPDT4413x2400 = 0;
+        $CPDT1414x1200 = 0;
+        $CPDT1415x1200 = 0;
+        $CPDT2616x100 = 0;
+        $CPDT2617x100 = 0;
+        $CPDT2618x50 = 0;
+        $CPDT2619x800 = 0;
+        $CPDT2620x30 = 0;
+        $CPDT2621x800 = 0;
+        $CPDT2222x200 = 0;
+        $CPDT2223x800 = 0;
+        $CPDT2224x400 = 0;
+        $CPDT2225x400 = 0;
+        $CPDT2626x600 = 0;
+        $CPDT2627x600 = 0;
+        $CPDT2628x800 = 0;
+        $CPDT2629x50 = 0;
+        $CPDT2630x800 = 0;
+        $CPDT2631x10 = 0;
+        $CPDT2632x20 = 0;
+        $CPDT2633x20 = 0;
+        $CPDT2634x20 = 0;
+        $CPDT2241x800 = 0;
+        $CPDT2242x800 = 0;
+        $CPDT2343x1200 = 0;
+        $CPDT3444x600 = 0;
+        $CPDT1445x600 = 0;
+        $CPDT1446x600 = 0;
+        $CPDT1447x600 = 0;
+        $CPDT1448x600 = 0;
+        $CPDT1449x600 = 0;
+        $CPDT1450x600 = 0;
+        $CPDT1451x600 = 0;
+        $CPDT1452x600 = 0;
+        $CPDT3453x300 = 0;
+        $CPDT1154x300 = 0;
+        $CPDT1455x300 = 0;
+        $CPDT1456x300 = 0;
+        $CPDT1457x300 = 0;
+        $CPDT1458x300 = 0;
+        $CPDT1459x100 = 0;
+        $CPDT1460x100 = 0;
+        $CPDT1461x100 = 0;
+        $CPDT3462x100 = 0;
+        $CPDT3463x100 = 0;
+        $CPDT3464x100 = 0;
+        $CPDT1465x50 = 0;
+        $CPDT1466x50 = 0;
+        $CPDT1467x50 = 0;
+        $CPDT3468x30 = 0;
+        $CPDT3469x30 = 0;
+        $CPDT3470x50 = 0;
+        $CPDT3471x50 = 0;
+        $CPDT3472x30 = 0;
+        $CPDT3473x30 = 0;
+        $CPDT3474x50 = 0;
+        $CPDT3475x50 = 0;
+        $CPDT3476x150 = 0;
+        $CPDT1477x50 = 0;
+        $CPDT1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Celup Poly Dulu (T-Side)') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CPDT1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CPDT1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CPDT1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CPDT1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CPDT3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CPDT1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CPDT1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CPDT1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CPDT4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CPDT1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CPDT4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CPDT4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CPDT4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CPDT1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CPDT1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CPDT2616x100++;
+                        break;
+                    case '2617x100':
+                        $CPDT2617x100++;
+                        break;
+                    case '2618x50':
+                        $CPDT2618x50++;
+                        break;
+                    case '2619x800':
+                        $CPDT2619x800++;
+                        break;
+                    case '2620x30':
+                        $CPDT2620x30++;
+                        break;
+                    case '2621x800':
+                        $CPDT2621x800++;
+                        break;
+                    case '2222x200':
+                        $CPDT2222x200++;
+                        break;
+                    case '2223x800':
+                        $CPDT2223x800++;
+                        break;
+                    case '2224x400':
+                        $CPDT2224x400++;
+                        break;
+                    case '2225x400':
+                        $CPDT2225x400++;
+                        break;
+                    case '2626x600':
+                        $CPDT2626x600++;
+                        break;
+                    case '2627x600':
+                        $CPDT2627x600++;
+                        break;
+                    case '2628x800':
+                        $CPDT2628x800++;
+                        break;
+                    case '2629x50':
+                        $CPDT2629x50++;
+                        break;
+                    case '2630x800':
+                        $CPDT2630x800++;
+                        break;
+                    case '2631x10':
+                        $CPDT2631x10++;
+                        break;
+                    case '2632x20':
+                        $CPDT2632x20++;
+                        break;
+                    case '2633x20':
+                        $CPDT2633x20++;
+                        break;
+                    case '2634x20':
+                        $CPDT2634x20++;
+                        break;
+                    case '2241x800':
+                        $CPDT2241x800++;
+                        break;
+                    case '2242x800':
+                        $CPDT2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CPDT2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CPDT3444x600++;
+                        break;
+                    case '1445x600':
+                        $CPDT1445x600++;
+                        break;
+                    case '1446x600':
+                        $CPDT1446x600++;
+                        break;
+                    case '1447x600':
+                        $CPDT1447x600++;
+                        break;
+                    case '1448x600':
+                        $CPDT1448x600++;
+                        break;
+                    case '1449x600':
+                        $CPDT1449x600++;
+                        break;
+                    case '1450x900':
+                        $CPDT1450x600++;
+                        break;
+                    case '1451x150':
+                        $CPDT1451x600++;
+                        break;
+                    case '1452x150':
+                        $CPDT1452x600++;
+                        break;
+                    case '3453x300':
+                        $CPDT3453x300++;
+                        break;
+                    case '1154x300':
+                        $CPDT1154x300++;
+                        break;
+                    case '1455x300':
+                        $CPDT1455x300++;
+                        break;
+                    case '1456x300':
+                        $CPDT1456x300++;
+                        break;
+                    case '1457x300':
+                        $CPDT1457x300++;
+                        break;
+                    case '1458x300':
+                        $CPDT1458x300++;
+                        break;
+                    case '1459x100':
+                        $CPDT1459x100++;
+                        break;
+                    case '1460x100':
+                        $CPDT1460x100++;
+                        break;
+                    case '1461x100':
+                        $CPDT1461x100++;
+                        break;
+                    case '3462x100':
+                        $CPDT3462x100++;
+                        break;
+                    case '3463x100':
+                        $CPDT3463x100++;
+                        break;
+                    case '3464x100':
+                        $CPDT3464x100++;
+                        break;
+                    case '1465x50':
+                        $CPDT1465x50++;
+                        break;
+                    case '1466x50':
+                        $CPDT1466x50++;
+                        break;
+                    case '1467x50':
+                        $CPDT1467x50++;
+                        break;
+                    case '3468x30':
+                        $CPDT3468x30++;
+                        break;
+                    case '3469x30':
+                        $CPDT3469x30++;
+                        break;
+                    case '3470x50':
+                        $CPDT3470x50++;
+                        break;
+                    case '3471x50':
+                        $CPDT3471x50++;
+                        break;
+                    case '3472x30':
+                        $CPDT3472x30++;
+                        break;
+                    case '3473x30':
+                        $CPDT3473x30++;
+                        break;
+                    case '3474x50':
+                        $CPDT3474x50++;
+                        break;
+                    case '3475x50':
+                        $CPDT3475x50++;
+                        break;
+                    case '3476x150':
+                        $CPDT3476x150++;
+                        break;
+                    case '1477x50':
+                        $CPDT1477x50++;
+                        break;
+                    case '1478x50':
+                        $CPDT1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Celup Poly Dulu (T-Side)
+    // Cuci Misty
+        $CM1401x2400 = 0;
+        $CM1402x1200 = 0;
+        $CM1103x1800 = 0;
+        $CM1104x1200 = 0;
+        $CM3505x750 = 0;
+        $CM1406x2400 = 0;
+        $CM1107x1800 = 0;
+        $CM1108x1200 = 0;
+        $CM4409x3200 = 0;
+        $CM1410x1800 = 0;
+        $CM4411x3200 = 0;
+        $CM4412x2400 = 0;
+        $CM4413x2400 = 0;
+        $CM1414x1200 = 0;
+        $CM1415x1200 = 0;
+        $CM2616x100 = 0;
+        $CM2617x100 = 0;
+        $CM2618x50 = 0;
+        $CM2619x800 = 0;
+        $CM2620x30 = 0;
+        $CM2621x800 = 0;
+        $CM2222x200 = 0;
+        $CM2223x800 = 0;
+        $CM2224x400 = 0;
+        $CM2225x400 = 0;
+        $CM2626x600 = 0;
+        $CM2627x600 = 0;
+        $CM2628x800 = 0;
+        $CM2629x50 = 0;
+        $CM2630x800 = 0;
+        $CM2631x10 = 0;
+        $CM2632x20 = 0;
+        $CM2633x20 = 0;
+        $CM2634x20 = 0;
+        $CM2241x800 = 0;
+        $CM2242x800 = 0;
+        $CM2343x1200 = 0;
+        $CM3444x600 = 0;
+        $CM1445x600 = 0;
+        $CM1446x600 = 0;
+        $CM1447x600 = 0;
+        $CM1448x600 = 0;
+        $CM1449x600 = 0;
+        $CM1450x600 = 0;
+        $CM1451x600 = 0;
+        $CM1452x600 = 0;
+        $CM3453x300 = 0;
+        $CM1154x300 = 0;
+        $CM1455x300 = 0;
+        $CM1456x300 = 0;
+        $CM1457x300 = 0;
+        $CM1458x300 = 0;
+        $CM1459x100 = 0;
+        $CM1460x100 = 0;
+        $CM1461x100 = 0;
+        $CM3462x100 = 0;
+        $CM3463x100 = 0;
+        $CM3464x100 = 0;
+        $CM1465x50 = 0;
+        $CM1466x50 = 0;
+        $CM1467x50 = 0;
+        $CM3468x30 = 0;
+        $CM3469x30 = 0;
+        $CM3470x50 = 0;
+        $CM3471x50 = 0;
+        $CM3472x30 = 0;
+        $CM3473x30 = 0;
+        $CM3474x50 = 0;
+        $CM3475x50 = 0;
+        $CM3476x150 = 0;
+        $CM1477x50 = 0;
+        $CM1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Cuci Misty') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CM1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CM1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CM1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CM1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CM3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CM1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CM1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CM1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CM4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CM1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CM4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CM4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CM4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CM1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CM1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CM2616x100++;
+                        break;
+                    case '2617x100':
+                        $CM2617x100++;
+                        break;
+                    case '2618x50':
+                        $CM2618x50++;
+                        break;
+                    case '2619x800':
+                        $CM2619x800++;
+                        break;
+                    case '2620x30':
+                        $CM2620x30++;
+                        break;
+                    case '2621x800':
+                        $CM2621x800++;
+                        break;
+                    case '2222x200':
+                        $CM2222x200++;
+                        break;
+                    case '2223x800':
+                        $CM2223x800++;
+                        break;
+                    case '2224x400':
+                        $CM2224x400++;
+                        break;
+                    case '2225x400':
+                        $CM2225x400++;
+                        break;
+                    case '2626x600':
+                        $CM2626x600++;
+                        break;
+                    case '2627x600':
+                        $CM2627x600++;
+                        break;
+                    case '2628x800':
+                        $CM2628x800++;
+                        break;
+                    case '2629x50':
+                        $CM2629x50++;
+                        break;
+                    case '2630x800':
+                        $CM2630x800++;
+                        break;
+                    case '2631x10':
+                        $CM2631x10++;
+                        break;
+                    case '2632x20':
+                        $CM2632x20++;
+                        break;
+                    case '2633x20':
+                        $CM2633x20++;
+                        break;
+                    case '2634x20':
+                        $CM2634x20++;
+                        break;
+                    case '2241x800':
+                        $CM2241x800++;
+                        break;
+                    case '2242x800':
+                        $CM2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CM2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CM3444x600++;
+                        break;
+                    case '1445x600':
+                        $CM1445x600++;
+                        break;
+                    case '1446x600':
+                        $CM1446x600++;
+                        break;
+                    case '1447x600':
+                        $CM1447x600++;
+                        break;
+                    case '1448x600':
+                        $CM1448x600++;
+                        break;
+                    case '1449x600':
+                        $CM1449x600++;
+                        break;
+                    case '1450x900':
+                        $CM1450x600++;
+                        break;
+                    case '1451x150':
+                        $CM1451x600++;
+                        break;
+                    case '1452x150':
+                        $CM1452x600++;
+                        break;
+                    case '3453x300':
+                        $CM3453x300++;
+                        break;
+                    case '1154x300':
+                        $CM1154x300++;
+                        break;
+                    case '1455x300':
+                        $CM1455x300++;
+                        break;
+                    case '1456x300':
+                        $CM1456x300++;
+                        break;
+                    case '1457x300':
+                        $CM1457x300++;
+                        break;
+                    case '1458x300':
+                        $CM1458x300++;
+                        break;
+                    case '1459x100':
+                        $CM1459x100++;
+                        break;
+                    case '1460x100':
+                        $CM1460x100++;
+                        break;
+                    case '1461x100':
+                        $CM1461x100++;
+                        break;
+                    case '3462x100':
+                        $CM3462x100++;
+                        break;
+                    case '3463x100':
+                        $CM3463x100++;
+                        break;
+                    case '3464x100':
+                        $CM3464x100++;
+                        break;
+                    case '1465x50':
+                        $CM1465x50++;
+                        break;
+                    case '1466x50':
+                        $CM1466x50++;
+                        break;
+                    case '1467x50':
+                        $CM1467x50++;
+                        break;
+                    case '3468x30':
+                        $CM3468x30++;
+                        break;
+                    case '3469x30':
+                        $CM3469x30++;
+                        break;
+                    case '3470x50':
+                        $CM3470x50++;
+                        break;
+                    case '3471x50':
+                        $CM3471x50++;
+                        break;
+                    case '3472x30':
+                        $CM3472x30++;
+                        break;
+                    case '3473x30':
+                        $CM3473x30++;
+                        break;
+                    case '3474x50':
+                        $CM3474x50++;
+                        break;
+                    case '3475x50':
+                        $CM3475x50++;
+                        break;
+                    case '3476x150':
+                        $CM3476x150++;
+                        break;
+                    case '1477x50':
+                        $CM1477x50++;
+                        break;
+                    case '1478x50':
+                        $CM1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Cuci Misty
+    // Cuci Yarn Dye (Y/D)
+        $CYD1401x2400 = 0;
+        $CYD1402x1200 = 0;
+        $CYD1103x1800 = 0;
+        $CYD1104x1200 = 0;
+        $CYD3505x750 = 0;
+        $CYD1406x2400 = 0;
+        $CYD1107x1800 = 0;
+        $CYD1108x1200 = 0;
+        $CYD4409x3200 = 0;
+        $CYD1410x1800 = 0;
+        $CYD4411x3200 = 0;
+        $CYD4412x2400 = 0;
+        $CYD4413x2400 = 0;
+        $CYD1414x1200 = 0;
+        $CYD1415x1200 = 0;
+        $CYD2616x100 = 0;
+        $CYD2617x100 = 0;
+        $CYD2618x50 = 0;
+        $CYD2619x800 = 0;
+        $CYD2620x30 = 0;
+        $CYD2621x800 = 0;
+        $CYD2222x200 = 0;
+        $CYD2223x800 = 0;
+        $CYD2224x400 = 0;
+        $CYD2225x400 = 0;
+        $CYD2626x600 = 0;
+        $CYD2627x600 = 0;
+        $CYD2628x800 = 0;
+        $CYD2629x50 = 0;
+        $CYD2630x800 = 0;
+        $CYD2631x10 = 0;
+        $CYD2632x20 = 0;
+        $CYD2633x20 = 0;
+        $CYD2634x20 = 0;
+        $CYD2241x800 = 0;
+        $CYD2242x800 = 0;
+        $CYD2343x1200 = 0;
+        $CYD3444x600 = 0;
+        $CYD1445x600 = 0;
+        $CYD1446x600 = 0;
+        $CYD1447x600 = 0;
+        $CYD1448x600 = 0;
+        $CYD1449x600 = 0;
+        $CYD1450x600 = 0;
+        $CYD1451x600 = 0;
+        $CYD1452x600 = 0;
+        $CYD3453x300 = 0;
+        $CYD1154x300 = 0;
+        $CYD1455x300 = 0;
+        $CYD1456x300 = 0;
+        $CYD1457x300 = 0;
+        $CYD1458x300 = 0;
+        $CYD1459x100 = 0;
+        $CYD1460x100 = 0;
+        $CYD1461x100 = 0;
+        $CYD3462x100 = 0;
+        $CYD3463x100 = 0;
+        $CYD3464x100 = 0;
+        $CYD1465x50 = 0;
+        $CYD1466x50 = 0;
+        $CYD1467x50 = 0;
+        $CYD3468x30 = 0;
+        $CYD3469x30 = 0;
+        $CYD3470x50 = 0;
+        $CYD3471x50 = 0;
+        $CYD3472x30 = 0;
+        $CYD3473x30 = 0;
+        $CYD3474x50 = 0;
+        $CYD3475x50 = 0;
+        $CYD3476x150 = 0;
+        $CYD1477x50 = 0;
+        $CYD1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Cuci Yarn Dye (Y/D)') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $CYD1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $CYD1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $CYD1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $CYD1104x1200++;
+                        break;
+                    case '3505x750':
+                        $CYD3505x750++;
+                        break;
+                    case '1406x2400':
+                        $CYD1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $CYD1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $CYD1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $CYD4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $CYD1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $CYD4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $CYD4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $CYD4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $CYD1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $CYD1415x1200++;
+                        break;
+                    case '2616x100':
+                        $CYD2616x100++;
+                        break;
+                    case '2617x100':
+                        $CYD2617x100++;
+                        break;
+                    case '2618x50':
+                        $CYD2618x50++;
+                        break;
+                    case '2619x800':
+                        $CYD2619x800++;
+                        break;
+                    case '2620x30':
+                        $CYD2620x30++;
+                        break;
+                    case '2621x800':
+                        $CYD2621x800++;
+                        break;
+                    case '2222x200':
+                        $CYD2222x200++;
+                        break;
+                    case '2223x800':
+                        $CYD2223x800++;
+                        break;
+                    case '2224x400':
+                        $CYD2224x400++;
+                        break;
+                    case '2225x400':
+                        $CYD2225x400++;
+                        break;
+                    case '2626x600':
+                        $CYD2626x600++;
+                        break;
+                    case '2627x600':
+                        $CYD2627x600++;
+                        break;
+                    case '2628x800':
+                        $CYD2628x800++;
+                        break;
+                    case '2629x50':
+                        $CYD2629x50++;
+                        break;
+                    case '2630x800':
+                        $CYD2630x800++;
+                        break;
+                    case '2631x10':
+                        $CYD2631x10++;
+                        break;
+                    case '2632x20':
+                        $CYD2632x20++;
+                        break;
+                    case '2633x20':
+                        $CYD2633x20++;
+                        break;
+                    case '2634x20':
+                        $CYD2634x20++;
+                        break;
+                    case '2241x800':
+                        $CYD2241x800++;
+                        break;
+                    case '2242x800':
+                        $CYD2242x800++;
+                        break;
+                    case '2343x1200':
+                        $CYD2343x1200++;
+                        break;
+                    case '3444x600':
+                        $CYD3444x600++;
+                        break;
+                    case '1445x600':
+                        $CYD1445x600++;
+                        break;
+                    case '1446x600':
+                        $CYD1446x600++;
+                        break;
+                    case '1447x600':
+                        $CYD1447x600++;
+                        break;
+                    case '1448x600':
+                        $CYD1448x600++;
+                        break;
+                    case '1449x600':
+                        $CYD1449x600++;
+                        break;
+                    case '1450x900':
+                        $CYD1450x600++;
+                        break;
+                    case '1451x150':
+                        $CYD1451x600++;
+                        break;
+                    case '1452x150':
+                        $CYD1452x600++;
+                        break;
+                    case '3453x300':
+                        $CYD3453x300++;
+                        break;
+                    case '1154x300':
+                        $CYD1154x300++;
+                        break;
+                    case '1455x300':
+                        $CYD1455x300++;
+                        break;
+                    case '1456x300':
+                        $CYD1456x300++;
+                        break;
+                    case '1457x300':
+                        $CYD1457x300++;
+                        break;
+                    case '1458x300':
+                        $CYD1458x300++;
+                        break;
+                    case '1459x100':
+                        $CYD1459x100++;
+                        break;
+                    case '1460x100':
+                        $CYD1460x100++;
+                        break;
+                    case '1461x100':
+                        $CYD1461x100++;
+                        break;
+                    case '3462x100':
+                        $CYD3462x100++;
+                        break;
+                    case '3463x100':
+                        $CYD3463x100++;
+                        break;
+                    case '3464x100':
+                        $CYD3464x100++;
+                        break;
+                    case '1465x50':
+                        $CYD1465x50++;
+                        break;
+                    case '1466x50':
+                        $CYD1466x50++;
+                        break;
+                    case '1467x50':
+                        $CYD1467x50++;
+                        break;
+                    case '3468x30':
+                        $CYD3468x30++;
+                        break;
+                    case '3469x30':
+                        $CYD3469x30++;
+                        break;
+                    case '3470x50':
+                        $CYD3470x50++;
+                        break;
+                    case '3471x50':
+                        $CYD3471x50++;
+                        break;
+                    case '3472x30':
+                        $CYD3472x30++;
+                        break;
+                    case '3473x30':
+                        $CYD3473x30++;
+                        break;
+                    case '3474x50':
+                        $CYD3474x50++;
+                        break;
+                    case '3475x50':
+                        $CYD3475x50++;
+                        break;
+                    case '3476x150':
+                        $CYD3476x150++;
+                        break;
+                    case '1477x50':
+                        $CYD1477x50++;
+                        break;
+                    case '1478x50':
+                        $CYD1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Cuci Yarn Dye (Y/D)
+    // Scouring
+        $S1401x2400 = 0;
+        $S1402x1200 = 0;
+        $S1103x1800 = 0;
+        $S1104x1200 = 0;
+        $S3505x750 = 0;
+        $S1406x2400 = 0;
+        $S1107x1800 = 0;
+        $S1108x1200 = 0;
+        $S4409x3200 = 0;
+        $S1410x1800 = 0;
+        $S4411x3200 = 0;
+        $S4412x2400 = 0;
+        $S4413x2400 = 0;
+        $S1414x1200 = 0;
+        $S1415x1200 = 0;
+        $S2616x100 = 0;
+        $S2617x100 = 0;
+        $S2618x50 = 0;
+        $S2619x800 = 0;
+        $S2620x30 = 0;
+        $S2621x800 = 0;
+        $S2222x200 = 0;
+        $S2223x800 = 0;
+        $S2224x400 = 0;
+        $S2225x400 = 0;
+        $S2626x600 = 0;
+        $S2627x600 = 0;
+        $S2628x800 = 0;
+        $S2629x50 = 0;
+        $S2630x800 = 0;
+        $S2631x10 = 0;
+        $S2632x20 = 0;
+        $S2633x20 = 0;
+        $S2634x20 = 0;
+        $S2241x800 = 0;
+        $S2242x800 = 0;
+        $S2343x1200 = 0;
+        $S3444x600 = 0;
+        $S1445x600 = 0;
+        $S1446x600 = 0;
+        $S1447x600 = 0;
+        $S1448x600 = 0;
+        $S1449x600 = 0;
+        $S1450x600 = 0;
+        $S1451x600 = 0;
+        $S1452x600 = 0;
+        $S3453x300 = 0;
+        $S1154x300 = 0;
+        $S1455x300 = 0;
+        $S1456x300 = 0;
+        $S1457x300 = 0;
+        $S1458x300 = 0;
+        $S1459x100 = 0;
+        $S1460x100 = 0;
+        $S1461x100 = 0;
+        $S3462x100 = 0;
+        $S3463x100 = 0;
+        $S3464x100 = 0;
+        $S1465x50 = 0;
+        $S1466x50 = 0;
+        $S1467x50 = 0;
+        $S3468x30 = 0;
+        $S3469x30 = 0;
+        $S3470x50 = 0;
+        $S3471x50 = 0;
+        $S3472x30 = 0;
+        $S3473x30 = 0;
+        $S3474x50 = 0;
+        $S3475x50 = 0;
+        $S3476x150 = 0;
+        $S1477x50 = 0;
+        $S1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Scouring') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $S1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $S1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $S1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $S1104x1200++;
+                        break;
+                    case '3505x750':
+                        $S3505x750++;
+                        break;
+                    case '1406x2400':
+                        $S1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $S1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $S1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $S4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $S1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $S4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $S4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $S4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $S1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $S1415x1200++;
+                        break;
+                    case '2616x100':
+                        $S2616x100++;
+                        break;
+                    case '2617x100':
+                        $S2617x100++;
+                        break;
+                    case '2618x50':
+                        $S2618x50++;
+                        break;
+                    case '2619x800':
+                        $S2619x800++;
+                        break;
+                    case '2620x30':
+                        $S2620x30++;
+                        break;
+                    case '2621x800':
+                        $S2621x800++;
+                        break;
+                    case '2222x200':
+                        $S2222x200++;
+                        break;
+                    case '2223x800':
+                        $S2223x800++;
+                        break;
+                    case '2224x400':
+                        $S2224x400++;
+                        break;
+                    case '2225x400':
+                        $S2225x400++;
+                        break;
+                    case '2626x600':
+                        $S2626x600++;
+                        break;
+                    case '2627x600':
+                        $S2627x600++;
+                        break;
+                    case '2628x800':
+                        $S2628x800++;
+                        break;
+                    case '2629x50':
+                        $S2629x50++;
+                        break;
+                    case '2630x800':
+                        $S2630x800++;
+                        break;
+                    case '2631x10':
+                        $S2631x10++;
+                        break;
+                    case '2632x20':
+                        $S2632x20++;
+                        break;
+                    case '2633x20':
+                        $S2633x20++;
+                        break;
+                    case '2634x20':
+                        $S2634x20++;
+                        break;
+                    case '2241x800':
+                        $S2241x800++;
+                        break;
+                    case '2242x800':
+                        $S2242x800++;
+                        break;
+                    case '2343x1200':
+                        $S2343x1200++;
+                        break;
+                    case '3444x600':
+                        $S3444x600++;
+                        break;
+                    case '1445x600':
+                        $S1445x600++;
+                        break;
+                    case '1446x600':
+                        $S1446x600++;
+                        break;
+                    case '1447x600':
+                        $S1447x600++;
+                        break;
+                    case '1448x600':
+                        $S1448x600++;
+                        break;
+                    case '1449x600':
+                        $S1449x600++;
+                        break;
+                    case '1450x900':
+                        $S1450x600++;
+                        break;
+                    case '1451x150':
+                        $S1451x600++;
+                        break;
+                    case '1452x150':
+                        $S1452x600++;
+                        break;
+                    case '3453x300':
+                        $S3453x300++;
+                        break;
+                    case '1154x300':
+                        $S1154x300++;
+                        break;
+                    case '1455x300':
+                        $S1455x300++;
+                        break;
+                    case '1456x300':
+                        $S1456x300++;
+                        break;
+                    case '1457x300':
+                        $S1457x300++;
+                        break;
+                    case '1458x300':
+                        $S1458x300++;
+                        break;
+                    case '1459x100':
+                        $S1459x100++;
+                        break;
+                    case '1460x100':
+                        $S1460x100++;
+                        break;
+                    case '1461x100':
+                        $S1461x100++;
+                        break;
+                    case '3462x100':
+                        $S3462x100++;
+                        break;
+                    case '3463x100':
+                        $S3463x100++;
+                        break;
+                    case '3464x100':
+                        $S3464x100++;
+                        break;
+                    case '1465x50':
+                        $S1465x50++;
+                        break;
+                    case '1466x50':
+                        $S1466x50++;
+                        break;
+                    case '1467x50':
+                        $S1467x50++;
+                        break;
+                    case '3468x30':
+                        $S3468x30++;
+                        break;
+                    case '3469x30':
+                        $S3469x30++;
+                        break;
+                    case '3470x50':
+                        $S3470x50++;
+                        break;
+                    case '3471x50':
+                        $S3471x50++;
+                        break;
+                    case '3472x30':
+                        $S3472x30++;
+                        break;
+                    case '3473x30':
+                        $S3473x30++;
+                        break;
+                    case '3474x50':
+                        $S3474x50++;
+                        break;
+                    case '3475x50':
+                        $S3475x50++;
+                        break;
+                    case '3476x150':
+                        $S3476x150++;
+                        break;
+                    case '1477x50':
+                        $S1477x50++;
+                        break;
+                    case '1478x50':
+                        $S1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Scouring
+    // Gagal Proses
+        $GP1401x2400 = 0;
+        $GP1402x1200 = 0;
+        $GP1103x1800 = 0;
+        $GP1104x1200 = 0;
+        $GP3505x750 = 0;
+        $GP1406x2400 = 0;
+        $GP1107x1800 = 0;
+        $GP1108x1200 = 0;
+        $GP4409x3200 = 0;
+        $GP1410x1800 = 0;
+        $GP4411x3200 = 0;
+        $GP4412x2400 = 0;
+        $GP4413x2400 = 0;
+        $GP1414x1200 = 0;
+        $GP1415x1200 = 0;
+        $GP2616x100 = 0;
+        $GP2617x100 = 0;
+        $GP2618x50 = 0;
+        $GP2619x800 = 0;
+        $GP2620x30 = 0;
+        $GP2621x800 = 0;
+        $GP2222x200 = 0;
+        $GP2223x800 = 0;
+        $GP2224x400 = 0;
+        $GP2225x400 = 0;
+        $GP2626x600 = 0;
+        $GP2627x600 = 0;
+        $GP2628x800 = 0;
+        $GP2629x50 = 0;
+        $GP2630x800 = 0;
+        $GP2631x10 = 0;
+        $GP2632x20 = 0;
+        $GP2633x20 = 0;
+        $GP2634x20 = 0;
+        $GP2241x800 = 0;
+        $GP2242x800 = 0;
+        $GP2343x1200 = 0;
+        $GP3444x600 = 0;
+        $GP1445x600 = 0;
+        $GP1446x600 = 0;
+        $GP1447x600 = 0;
+        $GP1448x600 = 0;
+        $GP1449x600 = 0;
+        $GP1450x600 = 0;
+        $GP1451x600 = 0;
+        $GP1452x600 = 0;
+        $GP3453x300 = 0;
+        $GP1154x300 = 0;
+        $GP1455x300 = 0;
+        $GP1456x300 = 0;
+        $GP1457x300 = 0;
+        $GP1458x300 = 0;
+        $GP1459x100 = 0;
+        $GP1460x100 = 0;
+        $GP1461x100 = 0;
+        $GP3462x100 = 0;
+        $GP3463x100 = 0;
+        $GP3464x100 = 0;
+        $GP1465x50 = 0;
+        $GP1466x50 = 0;
+        $GP1467x50 = 0;
+        $GP3468x30 = 0;
+        $GP3469x30 = 0;
+        $GP3470x50 = 0;
+        $GP3471x50 = 0;
+        $GP3472x30 = 0;
+        $GP3473x30 = 0;
+        $GP3474x50 = 0;
+        $GP3475x50 = 0;
+        $GP3476x150 = 0;
+        $GP1477x50 = 0;
+        $GP1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Gagal Proses') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $GP1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $GP1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $GP1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $GP1104x1200++;
+                        break;
+                    case '3505x750':
+                        $GP3505x750++;
+                        break;
+                    case '1406x2400':
+                        $GP1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $GP1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $GP1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $GP4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $GP1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $GP4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $GP4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $GP4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $GP1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $GP1415x1200++;
+                        break;
+                    case '2616x100':
+                        $GP2616x100++;
+                        break;
+                    case '2617x100':
+                        $GP2617x100++;
+                        break;
+                    case '2618x50':
+                        $GP2618x50++;
+                        break;
+                    case '2619x800':
+                        $GP2619x800++;
+                        break;
+                    case '2620x30':
+                        $GP2620x30++;
+                        break;
+                    case '2621x800':
+                        $GP2621x800++;
+                        break;
+                    case '2222x200':
+                        $GP2222x200++;
+                        break;
+                    case '2223x800':
+                        $GP2223x800++;
+                        break;
+                    case '2224x400':
+                        $GP2224x400++;
+                        break;
+                    case '2225x400':
+                        $GP2225x400++;
+                        break;
+                    case '2626x600':
+                        $GP2626x600++;
+                        break;
+                    case '2627x600':
+                        $GP2627x600++;
+                        break;
+                    case '2628x800':
+                        $GP2628x800++;
+                        break;
+                    case '2629x50':
+                        $GP2629x50++;
+                        break;
+                    case '2630x800':
+                        $GP2630x800++;
+                        break;
+                    case '2631x10':
+                        $GP2631x10++;
+                        break;
+                    case '2632x20':
+                        $GP2632x20++;
+                        break;
+                    case '2633x20':
+                        $GP2633x20++;
+                        break;
+                    case '2634x20':
+                        $GP2634x20++;
+                        break;
+                    case '2241x800':
+                        $GP2241x800++;
+                        break;
+                    case '2242x800':
+                        $GP2242x800++;
+                        break;
+                    case '2343x1200':
+                        $GP2343x1200++;
+                        break;
+                    case '3444x600':
+                        $GP3444x600++;
+                        break;
+                    case '1445x600':
+                        $GP1445x600++;
+                        break;
+                    case '1446x600':
+                        $GP1446x600++;
+                        break;
+                    case '1447x600':
+                        $GP1447x600++;
+                        break;
+                    case '1448x600':
+                        $GP1448x600++;
+                        break;
+                    case '1449x600':
+                        $GP1449x600++;
+                        break;
+                    case '1450x900':
+                        $GP1450x600++;
+                        break;
+                    case '1451x150':
+                        $GP1451x600++;
+                        break;
+                    case '1452x150':
+                        $GP1452x600++;
+                        break;
+                    case '3453x300':
+                        $GP3453x300++;
+                        break;
+                    case '1154x300':
+                        $GP1154x300++;
+                        break;
+                    case '1455x300':
+                        $GP1455x300++;
+                        break;
+                    case '1456x300':
+                        $GP1456x300++;
+                        break;
+                    case '1457x300':
+                        $GP1457x300++;
+                        break;
+                    case '1458x300':
+                        $GP1458x300++;
+                        break;
+                    case '1459x100':
+                        $GP1459x100++;
+                        break;
+                    case '1460x100':
+                        $GP1460x100++;
+                        break;
+                    case '1461x100':
+                        $GP1461x100++;
+                        break;
+                    case '3462x100':
+                        $GP3462x100++;
+                        break;
+                    case '3463x100':
+                        $GP3463x100++;
+                        break;
+                    case '3464x100':
+                        $GP3464x100++;
+                        break;
+                    case '1465x50':
+                        $GP1465x50++;
+                        break;
+                    case '1466x50':
+                        $GP1466x50++;
+                        break;
+                    case '1467x50':
+                        $GP1467x50++;
+                        break;
+                    case '3468x30':
+                        $GP3468x30++;
+                        break;
+                    case '3469x30':
+                        $GP3469x30++;
+                        break;
+                    case '3470x50':
+                        $GP3470x50++;
+                        break;
+                    case '3471x50':
+                        $GP3471x50++;
+                        break;
+                    case '3472x30':
+                        $GP3472x30++;
+                        break;
+                    case '3473x30':
+                        $GP3473x30++;
+                        break;
+                    case '3474x50':
+                        $GP3474x50++;
+                        break;
+                    case '3475x50':
+                        $GP3475x50++;
+                        break;
+                    case '3476x150':
+                        $GP3476x150++;
+                        break;
+                    case '1477x50':
+                        $GP1477x50++;
+                        break;
+                    case '1478x50':
+                        $GP1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Gagal Proses
+    // Tolak Basah
+        $TB1401x2400 = 0;
+        $TB1402x1200 = 0;
+        $TB1103x1800 = 0;
+        $TB1104x1200 = 0;
+        $TB3505x750 = 0;
+        $TB1406x2400 = 0;
+        $TB1107x1800 = 0;
+        $TB1108x1200 = 0;
+        $TB4409x3200 = 0;
+        $TB1410x1800 = 0;
+        $TB4411x3200 = 0;
+        $TB4412x2400 = 0;
+        $TB4413x2400 = 0;
+        $TB1414x1200 = 0;
+        $TB1415x1200 = 0;
+        $TB2616x100 = 0;
+        $TB2617x100 = 0;
+        $TB2618x50 = 0;
+        $TB2619x800 = 0;
+        $TB2620x30 = 0;
+        $TB2621x800 = 0;
+        $TB2222x200 = 0;
+        $TB2223x800 = 0;
+        $TB2224x400 = 0;
+        $TB2225x400 = 0;
+        $TB2626x600 = 0;
+        $TB2627x600 = 0;
+        $TB2628x800 = 0;
+        $TB2629x50 = 0;
+        $TB2630x800 = 0;
+        $TB2631x10 = 0;
+        $TB2632x20 = 0;
+        $TB2633x20 = 0;
+        $TB2634x20 = 0;
+        $TB2241x800 = 0;
+        $TB2242x800 = 0;
+        $TB2343x1200 = 0;
+        $TB3444x600 = 0;
+        $TB1445x600 = 0;
+        $TB1446x600 = 0;
+        $TB1447x600 = 0;
+        $TB1448x600 = 0;
+        $TB1449x600 = 0;
+        $TB1450x600 = 0;
+        $TB1451x600 = 0;
+        $TB1452x600 = 0;
+        $TB3453x300 = 0;
+        $TB1154x300 = 0;
+        $TB1455x300 = 0;
+        $TB1456x300 = 0;
+        $TB1457x300 = 0;
+        $TB1458x300 = 0;
+        $TB1459x100 = 0;
+        $TB1460x100 = 0;
+        $TB1461x100 = 0;
+        $TB3462x100 = 0;
+        $TB3463x100 = 0;
+        $TB3464x100 = 0;
+        $TB1465x50 = 0;
+        $TB1466x50 = 0;
+        $TB1467x50 = 0;
+        $TB3468x30 = 0;
+        $TB3469x30 = 0;
+        $TB3470x50 = 0;
+        $TB3471x50 = 0;
+        $TB3472x30 = 0;
+        $TB3473x30 = 0;
+        $TB3474x50 = 0;
+        $TB3475x50 = 0;
+        $TB3476x150 = 0;
+        $TB1477x50 = 0;
+        $TB1478x50 = 0;
+        
+        foreach ($data5 as $row5) {
+            $proses     = strtolower(trim($row5['proses']));
+            $no_mesin   = trim($row5['no_mesin']);
+            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+        
+            if ($proses === 'Tolak Basah') {
+                switch ("{$no_mesin}x{$kapasitas}") {
+                    case '1401x2400':
+                        $TB1401x2400++;
+                        break;
+                    case '1402x1200':
+                        $TB1402x1200++;
+                        break;
+                    case '1103x1800':
+                        $TB1103x1800++;
+                        break;
+                    case '1104x1200':
+                        $TB1104x1200++;
+                        break;
+                    case '3505x750':
+                        $TB3505x750++;
+                        break;
+                    case '1406x2400':
+                        $TB1406x2400++;
+                        break;
+                    case '1107x1800':
+                        $TB1107x1800++;
+                        break;
+                    case '1108x1200':
+                        $TB1108x1200++;
+                        break;
+                    case '4409x3200':
+                        $TB4409x3200++;
+                        break;
+                    case '1410x1800':
+                        $TB1410x1800++;
+                        break;
+                    case '4411x3200':
+                        $TB4411x3200++;
+                        break;
+                    case '4412x2400':
+                        $TB4412x2400++;
+                        break;
+                    case '4413x2400':
+                        $TB4413x2400++;
+                        break;
+                    case '1414x1200':
+                        $TB1414x1200++;
+                        break;
+                    case '1415x1200':
+                        $TB1415x1200++;
+                        break;
+                    case '2616x100':
+                        $TB2616x100++;
+                        break;
+                    case '2617x100':
+                        $TB2617x100++;
+                        break;
+                    case '2618x50':
+                        $TB2618x50++;
+                        break;
+                    case '2619x800':
+                        $TB2619x800++;
+                        break;
+                    case '2620x30':
+                        $TB2620x30++;
+                        break;
+                    case '2621x800':
+                        $TB2621x800++;
+                        break;
+                    case '2222x200':
+                        $TB2222x200++;
+                        break;
+                    case '2223x800':
+                        $TB2223x800++;
+                        break;
+                    case '2224x400':
+                        $TB2224x400++;
+                        break;
+                    case '2225x400':
+                        $TB2225x400++;
+                        break;
+                    case '2626x600':
+                        $TB2626x600++;
+                        break;
+                    case '2627x600':
+                        $TB2627x600++;
+                        break;
+                    case '2628x800':
+                        $TB2628x800++;
+                        break;
+                    case '2629x50':
+                        $TB2629x50++;
+                        break;
+                    case '2630x800':
+                        $TB2630x800++;
+                        break;
+                    case '2631x10':
+                        $TB2631x10++;
+                        break;
+                    case '2632x20':
+                        $TB2632x20++;
+                        break;
+                    case '2633x20':
+                        $TB2633x20++;
+                        break;
+                    case '2634x20':
+                        $TB2634x20++;
+                        break;
+                    case '2241x800':
+                        $TB2241x800++;
+                        break;
+                    case '2242x800':
+                        $TB2242x800++;
+                        break;
+                    case '2343x1200':
+                        $TB2343x1200++;
+                        break;
+                    case '3444x600':
+                        $TB3444x600++;
+                        break;
+                    case '1445x600':
+                        $TB1445x600++;
+                        break;
+                    case '1446x600':
+                        $TB1446x600++;
+                        break;
+                    case '1447x600':
+                        $TB1447x600++;
+                        break;
+                    case '1448x600':
+                        $TB1448x600++;
+                        break;
+                    case '1449x600':
+                        $TB1449x600++;
+                        break;
+                    case '1450x900':
+                        $TB1450x600++;
+                        break;
+                    case '1451x150':
+                        $TB1451x600++;
+                        break;
+                    case '1452x150':
+                        $TB1452x600++;
+                        break;
+                    case '3453x300':
+                        $TB3453x300++;
+                        break;
+                    case '1154x300':
+                        $TB1154x300++;
+                        break;
+                    case '1455x300':
+                        $TB1455x300++;
+                        break;
+                    case '1456x300':
+                        $TB1456x300++;
+                        break;
+                    case '1457x300':
+                        $TB1457x300++;
+                        break;
+                    case '1458x300':
+                        $TB1458x300++;
+                        break;
+                    case '1459x100':
+                        $TB1459x100++;
+                        break;
+                    case '1460x100':
+                        $TB1460x100++;
+                        break;
+                    case '1461x100':
+                        $TB1461x100++;
+                        break;
+                    case '3462x100':
+                        $TB3462x100++;
+                        break;
+                    case '3463x100':
+                        $TB3463x100++;
+                        break;
+                    case '3464x100':
+                        $TB3464x100++;
+                        break;
+                    case '1465x50':
+                        $TB1465x50++;
+                        break;
+                    case '1466x50':
+                        $TB1466x50++;
+                        break;
+                    case '1467x50':
+                        $TB1467x50++;
+                        break;
+                    case '3468x30':
+                        $TB3468x30++;
+                        break;
+                    case '3469x30':
+                        $TB3469x30++;
+                        break;
+                    case '3470x50':
+                        $TB3470x50++;
+                        break;
+                    case '3471x50':
+                        $TB3471x50++;
+                        break;
+                    case '3472x30':
+                        $TB3472x30++;
+                        break;
+                    case '3473x30':
+                        $TB3473x30++;
+                        break;
+                    case '3474x50':
+                        $TB3474x50++;
+                        break;
+                    case '3475x50':
+                        $TB3475x50++;
+                        break;
+                    case '3476x150':
+                        $TB3476x150++;
+                        break;
+                    case '1477x50':
+                        $TB1477x50++;
+                        break;
+                    case '1478x50':
+                        $TB1478x50++;
+                        break;
+                }
+            }
+        }
+    // End Tolak Basah
+//End Data Mesin
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -6544,295 +11390,295 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
         $sheet->getStyle('A38')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A38:D38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E38', '0');
+            $sheet->setCellValue('E38', $CG1401x2400);
             $sheet->getStyle('E38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F38', '0');
+            $sheet->setCellValue('F38', $CG1402x1200);
             $sheet->getStyle('F38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G38', '0');
+            $sheet->setCellValue('G38', $CG1103x1800);
             $sheet->getStyle('G38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H38', '0');
+            $sheet->setCellValue('H38', $CG1104x1200);
             $sheet->getStyle('H38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I38', '0');
+            $sheet->setCellValue('I38', $CG3505x750);
             $sheet->getStyle('I38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J38', '0');
+            $sheet->setCellValue('J38', $CG1406x2400);
             $sheet->getStyle('J38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K38', '0');
+            $sheet->setCellValue('K38', $CG1107x1800);
             $sheet->getStyle('K38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L38', '0');
+            $sheet->setCellValue('L38', $CG1108x1200);
             $sheet->getStyle('L38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M38', '0');
+            $sheet->setCellValue('M38', $CG4409x3200);
             $sheet->getStyle('M38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N38', '0');
+            $sheet->setCellValue('N38', $CG1410x1800);
             $sheet->getStyle('N38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O38', '0');
+            $sheet->setCellValue('O38', $CG4411x3200);
             $sheet->getStyle('O38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P38', '0');
+            $sheet->setCellValue('P38', $CG4412x2400);
             $sheet->getStyle('P38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q38', '0');
+            $sheet->setCellValue('Q38', $CG4413x2400);
             $sheet->getStyle('Q38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R38', '0');
+            $sheet->setCellValue('R38', $CG1414x1200);
             $sheet->getStyle('R38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S38', '0');
+            $sheet->setCellValue('S38', $CG1415x1200);
             $sheet->getStyle('S38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T38', '0');
+            $sheet->setCellValue('T38', $CG2616x100);
             $sheet->getStyle('T38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U38', '0');
+            $sheet->setCellValue('U38', $CG2617x100);
             $sheet->getStyle('U38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V38', '0');
+            $sheet->setCellValue('V38', $CG2618x50);
             $sheet->getStyle('V38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W38', '0');
+            $sheet->setCellValue('W38', $CG2619x800);
             $sheet->getStyle('W38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X38', '0');
+            $sheet->setCellValue('X38', $CG2620x30);
             $sheet->getStyle('X38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y38', '0');
+            $sheet->setCellValue('Y38', $CG2621x800);
             $sheet->getStyle('Y38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z38', '0');
+            $sheet->setCellValue('Z38', $CG2222x200);
             $sheet->getStyle('Z38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA38', '0');
+            $sheet->setCellValue('AA38', $CG2223x800);
             $sheet->getStyle('AA38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB38', '0');
+            $sheet->setCellValue('AB38', $CG2224x400);
             $sheet->getStyle('AB38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC38', '0');
+            $sheet->setCellValue('AC38', $CG2225x400);
             $sheet->getStyle('AC38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD38', '0');
+            $sheet->setCellValue('AD38', $CG2626x600);
             $sheet->getStyle('AD38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE38', '0');
+            $sheet->setCellValue('AE38', $CG2627x600);
             $sheet->getStyle('AE38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF38', '0');
+            $sheet->setCellValue('AF38', $CG2628x800);
             $sheet->getStyle('AF38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG38', '0');
+            $sheet->setCellValue('AG38', $CG2629x50);
             $sheet->getStyle('AG38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH38', '0');
+            $sheet->setCellValue('AH38', $CG2630x800);
             $sheet->getStyle('AH38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI38', '0');
+            $sheet->setCellValue('AI38', $CG2631x10);
             $sheet->getStyle('AI38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ38', '0');
+            $sheet->setCellValue('AJ38', $CG2632x20);
             $sheet->getStyle('AJ38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK38', '0');
+            $sheet->setCellValue('AK38', $CG2633x20);
             $sheet->getStyle('AK38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL38', '0');
+            $sheet->setCellValue('AL38', $CG2634x20);
             $sheet->getStyle('AL38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM38', '0');
+            $sheet->setCellValue('AM38', $CG2241x800);
             $sheet->getStyle('AM38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN38', '0');
+            $sheet->setCellValue('AN38', $CG2242x800);
             $sheet->getStyle('AN38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO38', '0');
+            $sheet->setCellValue('AO38', $CG2343x1200);
             $sheet->getStyle('AO38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP38', '0');
+            $sheet->setCellValue('AP38', $CG3444x600);
             $sheet->getStyle('AP38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ38', '0');
+            $sheet->setCellValue('AQ38', $CG1445x600);
             $sheet->getStyle('AQ38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR38', '0');
+            $sheet->setCellValue('AR38', $CG1446x600);
             $sheet->getStyle('AR38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS38', '0');
+            $sheet->setCellValue('AS38', $CG1447x600);
             $sheet->getStyle('AS38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT38', '0');
+            $sheet->setCellValue('AT38', $CG1448x600);
             $sheet->getStyle('AT38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU38', '0');
+            $sheet->setCellValue('AU38', $CG1449x600);
             $sheet->getStyle('AU38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV38', '0');
+            $sheet->setCellValue('AV38', $CG1450x600);
             $sheet->getStyle('AV38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW38', '0');
+            $sheet->setCellValue('AW38', $CG1451x600);
             $sheet->getStyle('AW38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX38', '0');
+            $sheet->setCellValue('AX38', $CG1452x600);
             $sheet->getStyle('AX38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY38', '0');
+            $sheet->setCellValue('AY38', $CG3453x300);
             $sheet->getStyle('AY38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ38', '0');
+            $sheet->setCellValue('AZ38', $CG1154x300);
             $sheet->getStyle('AZ38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA38', '0');
+            $sheet->setCellValue('BA38', $CG1455x300);
             $sheet->getStyle('BA38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB38', '0');
+            $sheet->setCellValue('BB38', $CG1456x300);
             $sheet->getStyle('BB38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC38', '0');
+            $sheet->setCellValue('BC38', $CG1457x300);
             $sheet->getStyle('BC38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD38', '0');
+            $sheet->setCellValue('BD38', $CG1458x300);
             $sheet->getStyle('BD38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE38', '0');
+            $sheet->setCellValue('BE38', $CG1459x100);
             $sheet->getStyle('BE38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF38', '0');
+            $sheet->setCellValue('BF38', $CG1460x100);
             $sheet->getStyle('BF38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG38', '0');
+            $sheet->setCellValue('BG38', $CG1461x100);
             $sheet->getStyle('BG38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH38', '0');
+            $sheet->setCellValue('BH38', $CG3462x100);
             $sheet->getStyle('BH38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI38', '0');
+            $sheet->setCellValue('BI38', $CG3463x100);
             $sheet->getStyle('BI38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ38', '0');
+            $sheet->setCellValue('BJ38', $CG3464x100);
             $sheet->getStyle('BJ38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK38', '0');
+            $sheet->setCellValue('BK38', $CG1465x50);
             $sheet->getStyle('BK38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL38', '0');
+            $sheet->setCellValue('BL38', $CG1466x50);
             $sheet->getStyle('BL38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM38', '0');
+            $sheet->setCellValue('BM38', $CG1467x50);
             $sheet->getStyle('BM38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN38', '0');
+            $sheet->setCellValue('BN38', $CG3468x30);
             $sheet->getStyle('BN38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO38', '0');
+            $sheet->setCellValue('BO38', $CG3469x30);
             $sheet->getStyle('BO38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP38', '0');
+            $sheet->setCellValue('BP38', $CG3470x50);
             $sheet->getStyle('BP38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ38', '0');
+            $sheet->setCellValue('BQ38', $CG3471x50);
             $sheet->getStyle('BQ38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR38', '0');
+            $sheet->setCellValue('BR38', $CG3472x30);
             $sheet->getStyle('BR38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS38', '0');
+            $sheet->setCellValue('BS38', $CG3473x30);
             $sheet->getStyle('BS38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT38', '0');
+            $sheet->setCellValue('BT38', $CG3474x50);
             $sheet->getStyle('BT38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU38', '0');
+            $sheet->setCellValue('BU38', $CG3475x50);
             $sheet->getStyle('BU38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV38', '0');
+            $sheet->setCellValue('BV38', $CG3476x150);
             $sheet->getStyle('BV38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW38', '0');
+            $sheet->setCellValue('BW38', $CG1477x50);
             $sheet->getStyle('BW38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX38', '0');
+            $sheet->setCellValue('BX38', $CG1478x50);
             $sheet->getStyle('BX38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY38', '0');
+            $sheet->setCellValue('BY38', '=SUM(E38:BZ38)+SUM(FY38:GF38)');
             $sheet->getStyle('BY38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -6844,300 +11690,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CELUP PERBAIKAN DYE
         $sheet->mergeCells('A39:D39');
-        $sheet->setCellValue('A39', 'CELUP GREIGE');
+        $sheet->setCellValue('A39', 'CELUP PERBAIKAN DYE');
         $sheet->getStyle('A39')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A39:D39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E39', '0');
+            $sheet->setCellValue('E39', $CPD1401x2400);
             $sheet->getStyle('E39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F39', '0');
+            $sheet->setCellValue('F39', $CPD1402x1200);
             $sheet->getStyle('F39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G39', '0');
+            $sheet->setCellValue('G39', $CPD1103x1800);
             $sheet->getStyle('G39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H39', '0');
+            $sheet->setCellValue('H39',  $CPD1104x1200);
             $sheet->getStyle('H39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I39', '0');
+            $sheet->setCellValue('I39', $CPD3505x750);
             $sheet->getStyle('I39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J39', '0');
+            $sheet->setCellValue('J39', $CPD1406x2400);
             $sheet->getStyle('J39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K39', '0');
+            $sheet->setCellValue('K39', $CPD1107x1800);
             $sheet->getStyle('K39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L39', '0');
+            $sheet->setCellValue('L39', $CPD1108x1200);
             $sheet->getStyle('L39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M39', '0');
+            $sheet->setCellValue('M39', $CPD4409x3200);
             $sheet->getStyle('M39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N39', '0');
+            $sheet->setCellValue('N39', $CPD1410x1800);
             $sheet->getStyle('N39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O39', '0');
+            $sheet->setCellValue('O39', $CPD4411x3200);
             $sheet->getStyle('O39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P39', '0');
+            $sheet->setCellValue('P39', $CPD4412x2400);
             $sheet->getStyle('P39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q39', '0');
+            $sheet->setCellValue('Q39', $CPD4413x2400);
             $sheet->getStyle('Q39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R39', '0');
+            $sheet->setCellValue('R39', $CPD1414x1200);
             $sheet->getStyle('R39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S39', '0');
+            $sheet->setCellValue('S39', $CPD1415x1200);
             $sheet->getStyle('S39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T39', '0');
+            $sheet->setCellValue('T39', $CPD2616x100);
             $sheet->getStyle('T39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U39', '0');
+            $sheet->setCellValue('U39', $CPD2617x100);
             $sheet->getStyle('U39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V39', '0');
+            $sheet->setCellValue('V39', $CPD2618x50);
             $sheet->getStyle('V39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W39', '0');
+            $sheet->setCellValue('W39', $CPD2619x800);
             $sheet->getStyle('W39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X39', '0');
+            $sheet->setCellValue('X39', $CPD2620x30);
             $sheet->getStyle('X39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y39', '0');
+            $sheet->setCellValue('Y39', $CPD2621x800);
             $sheet->getStyle('Y39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z39', '0');
+            $sheet->setCellValue('Z39', $CPD2222x200);
             $sheet->getStyle('Z39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA39', '0');
+            $sheet->setCellValue('AA39', $CPD2223x800);
             $sheet->getStyle('AA39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB39', '0');
+            $sheet->setCellValue('AB39', $CPD2224x400);
             $sheet->getStyle('AB39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC39', '0');
+            $sheet->setCellValue('AC39', $CPD2225x400);
             $sheet->getStyle('AC39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD39', '0');
+            $sheet->setCellValue('AD39', $CPD2626x600);
             $sheet->getStyle('AD39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE39', '0');
+            $sheet->setCellValue('AE39', $CPD2627x600);
             $sheet->getStyle('AE39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF39', '0');
+            $sheet->setCellValue('AF39', $CPD2628x800);
             $sheet->getStyle('AF39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG39', '0');
+            $sheet->setCellValue('AG39', $CPD2629x50);
             $sheet->getStyle('AG39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH39', '0');
+            $sheet->setCellValue('AH39', $CPD2630x800);
             $sheet->getStyle('AH39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI39', '0');
+            $sheet->setCellValue('AI39', $CPD2631x10);
             $sheet->getStyle('AI39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ39', '0');
+            $sheet->setCellValue('AJ39', $CPD2632x20);
             $sheet->getStyle('AJ39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK39', '0');
+            $sheet->setCellValue('AK39', $CPD2633x20);
             $sheet->getStyle('AK39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL39', '0');
+            $sheet->setCellValue('AL39', $CPD2634x20);
             $sheet->getStyle('AL39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM39', '0');
+            $sheet->setCellValue('AM39', $CPD2241x800);
             $sheet->getStyle('AM39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN39', '0');
+            $sheet->setCellValue('AN39', $CPD2242x800);
             $sheet->getStyle('AN39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO39', '0');
+            $sheet->setCellValue('AO39', $CPD2343x1200);
             $sheet->getStyle('AO39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP39', '0');
+            $sheet->setCellValue('AP39', $CPD3444x600);
             $sheet->getStyle('AP39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ39', '0');
+            $sheet->setCellValue('AQ39', $CPD1445x600);
             $sheet->getStyle('AQ39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR39', '0');
+            $sheet->setCellValue('AR39', $CPD1446x600);
             $sheet->getStyle('AR39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS39', '0');
+            $sheet->setCellValue('AS39', $CPD1447x600);
             $sheet->getStyle('AS39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT39', '0');
+            $sheet->setCellValue('AT39', $CPD1448x600);
             $sheet->getStyle('AT39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU39', '0');
+            $sheet->setCellValue('AU39', $CPD1449x600);
             $sheet->getStyle('AU39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV39', '0');
+            $sheet->setCellValue('AV39', $CPD1450x600);
             $sheet->getStyle('AV39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW39', '0');
+            $sheet->setCellValue('AW39', $CPD1451x600);
             $sheet->getStyle('AW39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX39', '0');
+            $sheet->setCellValue('AX39', $CPD1452x600);
             $sheet->getStyle('AX39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY39', '0');
+            $sheet->setCellValue('AY39', $CPD3453x300);
             $sheet->getStyle('AY39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ39', '0');
+            $sheet->setCellValue('AZ39', $CPD1154x300);
             $sheet->getStyle('AZ39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA39', '0');
+            $sheet->setCellValue('BA39', $CPD1455x300);
             $sheet->getStyle('BA39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB39', '0');
+            $sheet->setCellValue('BB39', $CPD1456x300);
             $sheet->getStyle('BB39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC39', '0');
+            $sheet->setCellValue('BC39', $CPD1457x300);
             $sheet->getStyle('BC39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD39', '0');
+            $sheet->setCellValue('BD39', $CPD1458x300);
             $sheet->getStyle('BD39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE39', '0');
+            $sheet->setCellValue('BE39', $CPD1459x100);
             $sheet->getStyle('BE39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF39', '0');
+            $sheet->setCellValue('BF39', $CPD1460x100);
             $sheet->getStyle('BF39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG39', '0');
+            $sheet->setCellValue('BG39', $CPD1461x100);
             $sheet->getStyle('BG39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH39', '0');
+            $sheet->setCellValue('BH39', $CPD3462x100);
             $sheet->getStyle('BH39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI39', '0');
+            $sheet->setCellValue('BI39', $CPD3463x100);
             $sheet->getStyle('BI39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ39', '0');
+            $sheet->setCellValue('BJ39', $CPD3464x100);
             $sheet->getStyle('BJ39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK39', '0');
+            $sheet->setCellValue('BK39', $CPD1465x50);
             $sheet->getStyle('BK39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL39', '0');
+            $sheet->setCellValue('BL39', $CPD1466x50);
             $sheet->getStyle('BL39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM39', '0');
+            $sheet->setCellValue('BM39', $CPD1467x50);
             $sheet->getStyle('BM39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN39', '0');
+            $sheet->setCellValue('BN39', $CPD3468x30);
             $sheet->getStyle('BN39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO39', '0');
+            $sheet->setCellValue('BO39', $CPD3469x30);
             $sheet->getStyle('BO39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP39', '0');
+            $sheet->setCellValue('BP39', $CPD3470x50);
             $sheet->getStyle('BP39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ39', '0');
+            $sheet->setCellValue('BQ39', $CPD3471x50);
             $sheet->getStyle('BQ39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR39', '0');
+            $sheet->setCellValue('BR39', $CPD3472x30);
             $sheet->getStyle('BR39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS39', '0');
+            $sheet->setCellValue('BS39', $CPD3473x30);
             $sheet->getStyle('BS39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT39', '0');
+            $sheet->setCellValue('BT39', $CPD3474x50);
             $sheet->getStyle('BT39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU39', '0');
+            $sheet->setCellValue('BU39', $CPD3475x50);
             $sheet->getStyle('BU39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV39', '0');
+            $sheet->setCellValue('BV39', $CPD3476x150);
             $sheet->getStyle('BV39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW39', '0');
+            $sheet->setCellValue('BW39', $CPD1477x50);
             $sheet->getStyle('BW39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX39', '0');
+            $sheet->setCellValue('BX39', $CPD1478x50);
             $sheet->getStyle('BX39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY39', '0');
+            $sheet->setCellValue('BY39', '=SUM(E39:BZ39)+SUM(FY39:GF39)');
             $sheet->getStyle('BY39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -7149,301 +11996,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN DYE
+    // CELUP PERBAIKAN DEPT.LAIN
         $sheet->mergeCells('A40:D40');
-        $sheet->setCellValue('A40', 'CELUP PERBAIKAN DYE');
+        $sheet->setCellValue('A40', 'CELUP PERBAIKAN DEPT.LAIN');
         $sheet->getStyle('A40')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A40:D40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E40', '0');
+            $sheet->setCellValue('E40', $CPDL1401x2400);
             $sheet->getStyle('E40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F40', '0');
+            $sheet->setCellValue('F40', $CPDL1402x1200);
             $sheet->getStyle('F40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G40', '0');
+            $sheet->setCellValue('G40', $CPDL1103x1800);
             $sheet->getStyle('G40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H40', '0');
+            $sheet->setCellValue('H40', $CPDL1104x1200);
             $sheet->getStyle('H40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I40', '0');
+            $sheet->setCellValue('I40', $CPDL3505x750);
             $sheet->getStyle('I40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J40', '0');
+            $sheet->setCellValue('J40', $CPDL1406x2400);
             $sheet->getStyle('J40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K40', '0');
+            $sheet->setCellValue('K40', $CPDL1107x1800);
             $sheet->getStyle('K40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L40', '0');
+            $sheet->setCellValue('L40', $CPDL1108x1200);
             $sheet->getStyle('L40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M40', '0');
+            $sheet->setCellValue('M40', $CPDL4409x3200);
             $sheet->getStyle('M40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N40', '0');
+            $sheet->setCellValue('N40', $CPDL1410x1800);
             $sheet->getStyle('N40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O40', '0');
+            $sheet->setCellValue('O40', $CPDL4411x3200);
             $sheet->getStyle('O40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P40', '0');
+            $sheet->setCellValue('P40', $CPDL4412x2400);
             $sheet->getStyle('P40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q40', '0');
+            $sheet->setCellValue('Q40', $CPDL4413x2400);
             $sheet->getStyle('Q40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R40', '0');
+            $sheet->setCellValue('R40', $CPDL1414x1200);
             $sheet->getStyle('R40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S40', '0');
+            $sheet->setCellValue('S40', $CPDL1415x1200);
             $sheet->getStyle('S40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T40', '0');
+            $sheet->setCellValue('T40', $CPDL2616x100);
             $sheet->getStyle('T40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U40', '0');
+            $sheet->setCellValue('U40', $CPDL2617x100);
             $sheet->getStyle('U40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V40', '0');
+            $sheet->setCellValue('V40', $CPDL2618x50);
             $sheet->getStyle('V40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W40', '0');
+            $sheet->setCellValue('W40', $CPDL2619x800);
             $sheet->getStyle('W40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X40', '0');
+            $sheet->setCellValue('X40', $CPDL2620x30);
             $sheet->getStyle('X40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y40', '0');
+            $sheet->setCellValue('Y40', $CPDL2621x800);
             $sheet->getStyle('Y40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z40', '0');
+            $sheet->setCellValue('Z40', $CPDL2222x200);
             $sheet->getStyle('Z40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA40', '0');
+            $sheet->setCellValue('AA40', $CPDL2223x800);
             $sheet->getStyle('AA40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB40', '0');
+            $sheet->setCellValue('AB40', $CPDL2224x400);
             $sheet->getStyle('AB40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC40', '0');
+            $sheet->setCellValue('AC40', $CPDL2225x400);
             $sheet->getStyle('AC40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD40', '0');
+            $sheet->setCellValue('AD40', $CPDL2626x600);
             $sheet->getStyle('AD40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE40', '0');
+            $sheet->setCellValue('AE40', $CPDL2627x600);
             $sheet->getStyle('AE40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF40', '0');
+            $sheet->setCellValue('AF40', $CPDL2628x800);
             $sheet->getStyle('AF40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG40', '0');
+            $sheet->setCellValue('AG40', $CPDL2629x50);
             $sheet->getStyle('AG40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH40', '0');
+            $sheet->setCellValue('AH40', $CPDL2630x800);
             $sheet->getStyle('AH40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI40', '0');
+            $sheet->setCellValue('AI40', $CPDL2631x10);
             $sheet->getStyle('AI40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ40', '0');
+            $sheet->setCellValue('AJ40', $CPDL2632x20);
             $sheet->getStyle('AJ40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK40', '0');
+            $sheet->setCellValue('AK40', $CPDL2633x20);
             $sheet->getStyle('AK40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL40', '0');
+            $sheet->setCellValue('AL40', $CPDL2634x20);
             $sheet->getStyle('AL40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM40', '0');
+            $sheet->setCellValue('AM40', $CPDL2241x800);
             $sheet->getStyle('AM40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN40', '0');
+            $sheet->setCellValue('AN40', $CPDL2242x800);
             $sheet->getStyle('AN40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO40', '0');
+            $sheet->setCellValue('AO40', $CPDL2343x1200);
             $sheet->getStyle('AO40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP40', '0');
+            $sheet->setCellValue('AP40', $CPDL3444x600);
             $sheet->getStyle('AP40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ40', '0');
+            $sheet->setCellValue('AQ40', $CPDL1445x600);
             $sheet->getStyle('AQ40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR40', '0');
+            $sheet->setCellValue('AR40', $CPDL1446x600);
             $sheet->getStyle('AR40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS40', '0');
+            $sheet->setCellValue('AS40', $CPDL1447x600);
             $sheet->getStyle('AS40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT40', '0');
+            $sheet->setCellValue('AT40', $CPDL1448x600);
             $sheet->getStyle('AT40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU40', '0');
+            $sheet->setCellValue('AU40', $CPDL1449x600);
             $sheet->getStyle('AU40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV40', '0');
+            $sheet->setCellValue('AV40', $CPDL1450x600);
             $sheet->getStyle('AV40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW40', '0');
+            $sheet->setCellValue('AW40', $CPDL1451x600);
             $sheet->getStyle('AW40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX40', '0');
+            $sheet->setCellValue('AX40', $CPDL1452x600);
             $sheet->getStyle('AX40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY40', '0');
+            $sheet->setCellValue('AY40', $CPDL3453x300);
             $sheet->getStyle('AY40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ40', '0');
+            $sheet->setCellValue('AZ40', $CPDL1154x300);
             $sheet->getStyle('AZ40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA40', '0');
+            $sheet->setCellValue('BA40', $CPDL1455x300);
             $sheet->getStyle('BA40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB40', '0');
+            $sheet->setCellValue('BB40', $CPDL1456x300);
             $sheet->getStyle('BB40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC40', '0');
+            $sheet->setCellValue('BC40', $CPDL1457x300);
             $sheet->getStyle('BC40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD40', '0');
+            $sheet->setCellValue('BD40', $CPDL1458x300);
             $sheet->getStyle('BD40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE40', '0');
+            $sheet->setCellValue('BE40', $CPDL1459x100);
             $sheet->getStyle('BE40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF40', '0');
+            $sheet->setCellValue('BF40', $CPDL1460x100);
             $sheet->getStyle('BF40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG40', '0');
+            $sheet->setCellValue('BG40', $CPDL1461x100);
             $sheet->getStyle('BG40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH40', '0');
+            $sheet->setCellValue('BH40', $CPDL3462x100);
             $sheet->getStyle('BH40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI40', '0');
+            $sheet->setCellValue('BI40', $CPDL3463x100);
             $sheet->getStyle('BI40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ40', '0');
+            $sheet->setCellValue('BJ40', $CPDL3464x100);
             $sheet->getStyle('BJ40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK40', '0');
+            $sheet->setCellValue('BK40', $CPDL1465x50);
             $sheet->getStyle('BK40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL40', '0');
+            $sheet->setCellValue('BL40', $CPDL1466x50);
             $sheet->getStyle('BL40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM40', '0');
+            $sheet->setCellValue('BM40', $CPDL1467x50);
             $sheet->getStyle('BM40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN40', '0');
+            $sheet->setCellValue('BN40', $CPDL3468x30);
             $sheet->getStyle('BN40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO40', '0');
+            $sheet->setCellValue('BO40', $CPDL3469x30);
             $sheet->getStyle('BO40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP40', '0');
+            $sheet->setCellValue('BP40', $CPDL3470x50);
             $sheet->getStyle('BP40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ40', '0');
+            $sheet->setCellValue('BQ40', $CPDL3471x50);
             $sheet->getStyle('BQ40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR40', '0');
+            $sheet->setCellValue('BR40', $CPDL3472x30);
             $sheet->getStyle('BR40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS40', '0');
+            $sheet->setCellValue('BS40', $CPDL3473x30);
             $sheet->getStyle('BS40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT40', '0');
+            $sheet->setCellValue('BT40', $CPDL3474x50);
             $sheet->getStyle('BT40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU40', '0');
+            $sheet->setCellValue('BU40', $CPDL3475x50);
             $sheet->getStyle('BU40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV40', '0');
+            $sheet->setCellValue('BV40', $CPDL3476x150);
             $sheet->getStyle('BV40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW40', '0');
+            $sheet->setCellValue('BW40', $CPDL1477x50);
             $sheet->getStyle('BW40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX40', '0');
+            $sheet->setCellValue('BX40', $CPDL1478x50);
             $sheet->getStyle('BX40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY40', '0');
+            $sheet->setCellValue('BY40', '=SUM(E40:BZ40)+SUM(FY40:GF40)');
             $sheet->getStyle('BY40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -7455,300 +12302,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CELUP PERBAIKAN BRS
         $sheet->mergeCells('A41:D41');
-        $sheet->setCellValue('A41', 'CELUP PERBAIKAN DYE');
+        $sheet->setCellValue('A41', 'CELUP PERBAIKAN BRS');
         $sheet->getStyle('A41')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A41:D41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E41', '0');
+            $sheet->setCellValue('E41', $CPB1401x2400);
             $sheet->getStyle('E41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F41', '0');
+            $sheet->setCellValue('F41', $CPB1402x1200);
             $sheet->getStyle('F41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G41', '0');
+            $sheet->setCellValue('G41', $CPB1103x1800);
             $sheet->getStyle('G41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H41', '0');
+            $sheet->setCellValue('H41', $CPB1104x1200);
             $sheet->getStyle('H41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I41', '0');
+            $sheet->setCellValue('I41', $CPB3505x750);
             $sheet->getStyle('I41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J41', '0');
+            $sheet->setCellValue('J41', $CPB1406x2400);
             $sheet->getStyle('J41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K41', '0');
+            $sheet->setCellValue('K41', $CPB1107x1800);
             $sheet->getStyle('K41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L41', '0');
+            $sheet->setCellValue('L41', $CPB1108x1200);
             $sheet->getStyle('L41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M41', '0');
+            $sheet->setCellValue('M41', $CPB4409x3200);
             $sheet->getStyle('M41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N41', '0');
+            $sheet->setCellValue('N41', $CPB1410x1800);
             $sheet->getStyle('N41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O41', '0');
+            $sheet->setCellValue('O41', $CPB4411x3200);
             $sheet->getStyle('O41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P41', '0');
+            $sheet->setCellValue('P41', $CPB4412x2400);
             $sheet->getStyle('P41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q41', '0');
+            $sheet->setCellValue('Q41', $CPB4413x2400);
             $sheet->getStyle('Q41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R41', '0');
+            $sheet->setCellValue('R41', $CPB1414x1200);
             $sheet->getStyle('R41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S41', '0');
+            $sheet->setCellValue('S41', $CPB1415x1200);
             $sheet->getStyle('S41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T41', '0');
+            $sheet->setCellValue('T41', $CPB2616x100);
             $sheet->getStyle('T41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U41', '0');
+            $sheet->setCellValue('U41', $CPB2617x100);
             $sheet->getStyle('U41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V41', '0');
+            $sheet->setCellValue('V41', $CPB2618x50);
             $sheet->getStyle('V41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W41', '0');
+            $sheet->setCellValue('W41', $CPB2619x800);
             $sheet->getStyle('W41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X41', '0');
+            $sheet->setCellValue('X41', $CPB2620x30);
             $sheet->getStyle('X41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y41', '0');
+            $sheet->setCellValue('Y41', $CPB2621x800);
             $sheet->getStyle('Y41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z41', '0');
+            $sheet->setCellValue('Z41', $CPB2222x200);
             $sheet->getStyle('Z41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA41', '0');
+            $sheet->setCellValue('AA41', $CPB2223x800);
             $sheet->getStyle('AA41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB41', '0');
+            $sheet->setCellValue('AB41', $CPB2224x400);
             $sheet->getStyle('AB41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC41', '0');
+            $sheet->setCellValue('AC41', $CPB2225x400);
             $sheet->getStyle('AC41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD41', '0');
+            $sheet->setCellValue('AD41', $CPB2626x600);
             $sheet->getStyle('AD41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE41', '0');
+            $sheet->setCellValue('AE41', $CPB2627x600);
             $sheet->getStyle('AE41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF41', '0');
+            $sheet->setCellValue('AF41', $CPB2628x800);
             $sheet->getStyle('AF41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG41', '0');
+            $sheet->setCellValue('AG41', $CPB2629x50);
             $sheet->getStyle('AG41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH41', '0');
+            $sheet->setCellValue('AH41', $CPB2630x800);
             $sheet->getStyle('AH41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI41', '0');
+            $sheet->setCellValue('AI41', $CPB2631x10);
             $sheet->getStyle('AI41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ41', '0');
+            $sheet->setCellValue('AJ41', $CPB2632x20);
             $sheet->getStyle('AJ41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK41', '0');
+            $sheet->setCellValue('AK41', $CPB2633x20);
             $sheet->getStyle('AK41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL41', '0');
+            $sheet->setCellValue('AL41', $CPB2634x20);
             $sheet->getStyle('AL41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM41', '0');
+            $sheet->setCellValue('AM41', $CPB2241x800);
             $sheet->getStyle('AM41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN41', '0');
+            $sheet->setCellValue('AN41', $CPB2242x800);
             $sheet->getStyle('AN41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO41', '0');
+            $sheet->setCellValue('AO41', $CPB2343x1200);
             $sheet->getStyle('AO41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP41', '0');
+            $sheet->setCellValue('AP41', $CPB3444x600);
             $sheet->getStyle('AP41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ41', '0');
+            $sheet->setCellValue('AQ41', $CPB1445x600);
             $sheet->getStyle('AQ41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR41', '0');
+            $sheet->setCellValue('AR41', $CPB1446x600);
             $sheet->getStyle('AR41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS41', '0');
+            $sheet->setCellValue('AS41', $CPB1447x600);
             $sheet->getStyle('AS41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT41', '0');
+            $sheet->setCellValue('AT41', $CPB1448x600);
             $sheet->getStyle('AT41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU41', '0');
+            $sheet->setCellValue('AU41', $CPB1449x600);
             $sheet->getStyle('AU41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV41', '0');
+            $sheet->setCellValue('AV41', $CPB1450x600);
             $sheet->getStyle('AV41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW41', '0');
+            $sheet->setCellValue('AW41', $CPB1451x600);
             $sheet->getStyle('AW41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX41', '0');
+            $sheet->setCellValue('AX41', $CPB1452x600);
             $sheet->getStyle('AX41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY41', '0');
+            $sheet->setCellValue('AY41', $CPB3453x300);
             $sheet->getStyle('AY41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ41', '0');
+            $sheet->setCellValue('AZ41', $CPB1154x300);
             $sheet->getStyle('AZ41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA41', '0');
+            $sheet->setCellValue('BA41', $CPB1455x300);
             $sheet->getStyle('BA41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB41', '0');
+            $sheet->setCellValue('BB41', $CPB1456x300);
             $sheet->getStyle('BB41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC41', '0');
+            $sheet->setCellValue('BC41', $CPB1457x300);
             $sheet->getStyle('BC41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD41', '0');
+            $sheet->setCellValue('BD41', $CPB1458x300);
             $sheet->getStyle('BD41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE41', '0');
+            $sheet->setCellValue('BE41', $CPB1459x100);
             $sheet->getStyle('BE41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF41', '0');
+            $sheet->setCellValue('BF41', $CPB1460x100);
             $sheet->getStyle('BF41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG41', '0');
+            $sheet->setCellValue('BG41', $CPB1461x100);
             $sheet->getStyle('BG41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH41', '0');
+            $sheet->setCellValue('BH41', $CPB3462x100);
             $sheet->getStyle('BH41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI41', '0');
+            $sheet->setCellValue('BI41', $CPB3463x100);
             $sheet->getStyle('BI41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ41', '0');
+            $sheet->setCellValue('BJ41', $CPB3464x100);
             $sheet->getStyle('BJ41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK41', '0');
+            $sheet->setCellValue('BK41', $CPB1465x50);
             $sheet->getStyle('BK41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL41', '0');
+            $sheet->setCellValue('BL41', $CPB1466x50);
             $sheet->getStyle('BL41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM41', '0');
+            $sheet->setCellValue('BM41', $CPB1467x50);
             $sheet->getStyle('BM41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN41', '0');
+            $sheet->setCellValue('BN41', $CPB3468x30);
             $sheet->getStyle('BN41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO41', '0');
+            $sheet->setCellValue('BO41', $CPB3469x30);
             $sheet->getStyle('BO41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP41', '0');
+            $sheet->setCellValue('BP41', $CPB3470x50);
             $sheet->getStyle('BP41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ41', '0');
+            $sheet->setCellValue('BQ41', $CPB3471x50);
             $sheet->getStyle('BQ41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR41', '0');
+            $sheet->setCellValue('BR41', $CPB3472x30);
             $sheet->getStyle('BR41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS41', '0');
+            $sheet->setCellValue('BS41', $CPB3473x30);
             $sheet->getStyle('BS41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT41', '0');
+            $sheet->setCellValue('BT41', $CPB3474x50);
             $sheet->getStyle('BT41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU41', '0');
+            $sheet->setCellValue('BU41', $CPB3475x50);
             $sheet->getStyle('BU41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV41', '0');
+            $sheet->setCellValue('BV41', $CPB3476x150);
             $sheet->getStyle('BV41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW41', '0');
+            $sheet->setCellValue('BW41', $CPB1477x50);
             $sheet->getStyle('BW41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX41', '0');
+            $sheet->setCellValue('BX41', $CPB1478x50);
             $sheet->getStyle('BX41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY41', '0');
+            $sheet->setCellValue('BY41', '=SUM(E41:BZ41)+SUM(FY41:GF41)');
             $sheet->getStyle('BY41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -7760,301 +12608,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN DEPT.LAIN
+    // CELUP PERBAIKAN FIN
         $sheet->mergeCells('A42:D42');
-        $sheet->setCellValue('A42', 'CELUP PERBAIKAN DEPT.LAIN');
+        $sheet->setCellValue('A42', 'CELUP PERBAIKAN FIN');
         $sheet->getStyle('A42')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A42:D42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E42', '0');
+            $sheet->setCellValue('E42', $CPF1401x2400);
             $sheet->getStyle('E42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F42', '0');
+            $sheet->setCellValue('F42', $CPF1402x1200);
             $sheet->getStyle('F42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G42', '0');
+            $sheet->setCellValue('G42', $CPF1103x1800);
             $sheet->getStyle('G42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H42', '0');
+            $sheet->setCellValue('H42', $CPF1104x1200);
             $sheet->getStyle('H42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I42', '0');
+            $sheet->setCellValue('I42', $CPF3505x750);
             $sheet->getStyle('I42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J42', '0');
+            $sheet->setCellValue('J42', $CPF1406x2400);
             $sheet->getStyle('J42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K42', '0');
+            $sheet->setCellValue('K42', $CPF1107x1800);
             $sheet->getStyle('K42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L42', '0');
+            $sheet->setCellValue('L42', $CPF1108x1200);
             $sheet->getStyle('L42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M42', '0');
+            $sheet->setCellValue('M42', $CPF4409x3200);
             $sheet->getStyle('M42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N42', '0');
+            $sheet->setCellValue('N42', $CPF1410x1800);
             $sheet->getStyle('N42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O42', '0');
+            $sheet->setCellValue('O42', $CPF4411x3200);
             $sheet->getStyle('O42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P42', '0');
+            $sheet->setCellValue('P42', $CPF4412x2400);
             $sheet->getStyle('P42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q42', '0');
+            $sheet->setCellValue('Q42', $CPF4413x2400);
             $sheet->getStyle('Q42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R42', '0');
+            $sheet->setCellValue('R42', $CPF1414x1200);
             $sheet->getStyle('R42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S42', '0');
+            $sheet->setCellValue('S42', $CPF1415x1200);
             $sheet->getStyle('S42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T42', '0');
+            $sheet->setCellValue('T42', $CPF2616x100);
             $sheet->getStyle('T42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U42', '0');
+            $sheet->setCellValue('U42', $CPF2617x100);
             $sheet->getStyle('U42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V42', '0');
+            $sheet->setCellValue('V42', $CPF2618x50);
             $sheet->getStyle('V42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W42', '0');
+            $sheet->setCellValue('W42', $CPF2619x800);
             $sheet->getStyle('W42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X42', '0');
+            $sheet->setCellValue('X42', $CPF2620x30);
             $sheet->getStyle('X42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y42', '0');
+            $sheet->setCellValue('Y42', $CPF2621x800);
             $sheet->getStyle('Y42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z42', '0');
+            $sheet->setCellValue('Z42', $CPF2222x200);
             $sheet->getStyle('Z42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA42', '0');
+            $sheet->setCellValue('AA42', $CPF2223x800);
             $sheet->getStyle('AA42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB42', '0');
+            $sheet->setCellValue('AB42', $CPF2224x400);
             $sheet->getStyle('AB42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC42', '0');
+            $sheet->setCellValue('AC42', $CPF2225x400);
             $sheet->getStyle('AC42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD42', '0');
+            $sheet->setCellValue('AD42', $CPF2626x600);
             $sheet->getStyle('AD42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE42', '0');
+            $sheet->setCellValue('AE42', $CPF2627x600);
             $sheet->getStyle('AE42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF42', '0');
+            $sheet->setCellValue('AF42', $CPF2628x800);
             $sheet->getStyle('AF42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG42', '0');
+            $sheet->setCellValue('AG42', $CPF2629x50);
             $sheet->getStyle('AG42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH42', '0');
+            $sheet->setCellValue('AH42', $CPF2630x800);
             $sheet->getStyle('AH42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI42', '0');
+            $sheet->setCellValue('AI42', $CPF2631x10);
             $sheet->getStyle('AI42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ42', '0');
+            $sheet->setCellValue('AJ42', $CPF2632x20);
             $sheet->getStyle('AJ42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK42', '0');
+            $sheet->setCellValue('AK42', $CPF2633x20);
             $sheet->getStyle('AK42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL42', '0');
+            $sheet->setCellValue('AL42', $CPF2634x20);
             $sheet->getStyle('AL42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM42', '0');
+            $sheet->setCellValue('AM42', $CPF2241x800);
             $sheet->getStyle('AM42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN42', '0');
+            $sheet->setCellValue('AN42', $CPF2242x800);
             $sheet->getStyle('AN42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO42', '0');
+            $sheet->setCellValue('AO42', $CPF2343x1200);
             $sheet->getStyle('AO42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP42', '0');
+            $sheet->setCellValue('AP42', $CPF3444x600);
             $sheet->getStyle('AP42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ42', '0');
+            $sheet->setCellValue('AQ42', $CPF1445x600);
             $sheet->getStyle('AQ42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR42', '0');
+            $sheet->setCellValue('AR42', $CPF1446x600);
             $sheet->getStyle('AR42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS42', '0');
+            $sheet->setCellValue('AS42', $CPF1447x600);
             $sheet->getStyle('AS42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT42', '0');
+            $sheet->setCellValue('AT42', $CPF1448x600);
             $sheet->getStyle('AT42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU42', '0');
+            $sheet->setCellValue('AU42', $CPF1449x600);
             $sheet->getStyle('AU42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV42', '0');
+            $sheet->setCellValue('AV42', $CPF1450x600);
             $sheet->getStyle('AV42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW42', '0');
+            $sheet->setCellValue('AW42', $CPF1451x600);
             $sheet->getStyle('AW42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX42', '0');
+            $sheet->setCellValue('AX42', $CPF1452x600);
             $sheet->getStyle('AX42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY42', '0');
+            $sheet->setCellValue('AY42', $CPF3453x300);
             $sheet->getStyle('AY42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ42', '0');
+            $sheet->setCellValue('AZ42', $CPF1154x300);
             $sheet->getStyle('AZ42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA42', '0');
+            $sheet->setCellValue('BA42', $CPF1455x300);
             $sheet->getStyle('BA42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB42', '0');
+            $sheet->setCellValue('BB42', $CPF1456x300);
             $sheet->getStyle('BB42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC42', '0');
+            $sheet->setCellValue('BC42', $CPF1457x300);
             $sheet->getStyle('BC42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD42', '0');
+            $sheet->setCellValue('BD42', $CPF1458x300);
             $sheet->getStyle('BD42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE42', '0');
+            $sheet->setCellValue('BE42', $CPF1459x100);
             $sheet->getStyle('BE42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF42', '0');
+            $sheet->setCellValue('BF42', $CPF1460x100);
             $sheet->getStyle('BF42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG42', '0');
+            $sheet->setCellValue('BG42', $CPF1461x100);
             $sheet->getStyle('BG42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH42', '0');
+            $sheet->setCellValue('BH42', $CPF3462x100);
             $sheet->getStyle('BH42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI42', '0');
+            $sheet->setCellValue('BI42', $CPF3463x100);
             $sheet->getStyle('BI42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ42', '0');
+            $sheet->setCellValue('BJ42', $CPF3464x100);
             $sheet->getStyle('BJ42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK42', '0');
+            $sheet->setCellValue('BK42', $CPF1465x50);
             $sheet->getStyle('BK42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL42', '0');
+            $sheet->setCellValue('BL42', $CPF1466x50);
             $sheet->getStyle('BL42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM42', '0');
+            $sheet->setCellValue('BM42', $CPF1467x50);
             $sheet->getStyle('BM42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN42', '0');
+            $sheet->setCellValue('BN42', $CPF3468x30);
             $sheet->getStyle('BN42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO42', '0');
+            $sheet->setCellValue('BO42', $CPF3469x30);
             $sheet->getStyle('BO42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP42', '0');
+            $sheet->setCellValue('BP42', $CPF3470x50);
             $sheet->getStyle('BP42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ42', '0');
+            $sheet->setCellValue('BQ42', $CPF3471x50);
             $sheet->getStyle('BQ42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR42', '0');
+            $sheet->setCellValue('BR42', $CPF3472x30);
             $sheet->getStyle('BR42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS42', '0');
+            $sheet->setCellValue('BS42', $CPF3473x30);
             $sheet->getStyle('BS42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT42', '0');
+            $sheet->setCellValue('BT42', $CPF3474x50);
             $sheet->getStyle('BT42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU42', '0');
+            $sheet->setCellValue('BU42', $CPF3475x50);
             $sheet->getStyle('BU42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV42', '0');
+            $sheet->setCellValue('BV42', $CPF3476x150);
             $sheet->getStyle('BV42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW42', '0');
+            $sheet->setCellValue('BW42', $CPF1477x50);
             $sheet->getStyle('BW42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX42', '0');
+            $sheet->setCellValue('BX42', $CPF1478x50);
             $sheet->getStyle('BX42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY42', '0');
+            $sheet->setCellValue('BY42', '=SUM(E42:BZ42)+SUM(FY42:GF42)');
             $sheet->getStyle('BY42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -8066,300 +12914,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CELUP PERBAIKAN LAB
         $sheet->mergeCells('A43:D43');
-        $sheet->setCellValue('A43', 'CELUP PERBAIKAN DEPT.LAIN');
+        $sheet->setCellValue('A43', 'CELUP PERBAIKAN LAB');
         $sheet->getStyle('A43')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A43:D43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E43', '0');
+            $sheet->setCellValue('E43', $CPL1401x2400);
             $sheet->getStyle('E43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F43', '0');
+            $sheet->setCellValue('F43', $CPL1402x1200);
             $sheet->getStyle('F43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G43', '0');
+            $sheet->setCellValue('G43', $CPL1103x1800);
             $sheet->getStyle('G43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H43', '0');
+            $sheet->setCellValue('H43', $CPL1104x1200);
             $sheet->getStyle('H43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I43', '0');
+            $sheet->setCellValue('I43', $CPL3505x750);
             $sheet->getStyle('I43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J43', '0');
+            $sheet->setCellValue('J43', $CPL1406x2400);
             $sheet->getStyle('J43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K43', '0');
+            $sheet->setCellValue('K43', $CPL1107x1800);
             $sheet->getStyle('K43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L43', '0');
+            $sheet->setCellValue('L43', $CPL1108x1200);
             $sheet->getStyle('L43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M43', '0');
+            $sheet->setCellValue('M43', $CPL4409x3200);
             $sheet->getStyle('M43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N43', '0');
+            $sheet->setCellValue('N43', $CPL1410x1800);
             $sheet->getStyle('N43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O43', '0');
+            $sheet->setCellValue('O43', $CPL4411x3200);
             $sheet->getStyle('O43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P43', '0');
+            $sheet->setCellValue('P43', $CPL4412x2400);
             $sheet->getStyle('P43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q43', '0');
+            $sheet->setCellValue('Q43', $CPL4413x2400);
             $sheet->getStyle('Q43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R43', '0');
+            $sheet->setCellValue('R43', $CPL1414x1200);
             $sheet->getStyle('R43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S43', '0');
+            $sheet->setCellValue('S43', $CPL1415x1200);
             $sheet->getStyle('S43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T43', '0');
+            $sheet->setCellValue('T43', $CPL2616x100);
             $sheet->getStyle('T43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U43', '0');
+            $sheet->setCellValue('U43', $CPL2617x100);
             $sheet->getStyle('U43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V43', '0');
+            $sheet->setCellValue('V43', $CPL2618x50);
             $sheet->getStyle('V43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W43', '0');
+            $sheet->setCellValue('W43', $CPL2619x800);
             $sheet->getStyle('W43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X43', '0');
+            $sheet->setCellValue('X43', $CPL2620x30);
             $sheet->getStyle('X43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y43', '0');
+            $sheet->setCellValue('Y43', $CPL2621x800);
             $sheet->getStyle('Y43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z43', '0');
+            $sheet->setCellValue('Z43', $CPL2222x200);
             $sheet->getStyle('Z43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA43', '0');
+            $sheet->setCellValue('AA43', $CPL2223x800);
             $sheet->getStyle('AA43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB43', '0');
+            $sheet->setCellValue('AB43', $CPL2224x400);
             $sheet->getStyle('AB43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC43', '0');
+            $sheet->setCellValue('AC43', $CPL2225x400);
             $sheet->getStyle('AC43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD43', '0');
+            $sheet->setCellValue('AD43', $CPL2626x600);
             $sheet->getStyle('AD43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE43', '0');
+            $sheet->setCellValue('AE43', $CPL2627x600);
             $sheet->getStyle('AE43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF43', '0');
+            $sheet->setCellValue('AF43', $CPL2628x800);
             $sheet->getStyle('AF43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG43', '0');
+            $sheet->setCellValue('AG43', $CPL2629x50);
             $sheet->getStyle('AG43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH43', '0');
+            $sheet->setCellValue('AH43', $CPL2630x800);
             $sheet->getStyle('AH43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI43', '0');
+            $sheet->setCellValue('AI43', $CPL2631x10);
             $sheet->getStyle('AI43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ43', '0');
+            $sheet->setCellValue('AJ43', $CPL2632x20);
             $sheet->getStyle('AJ43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK43', '0');
+            $sheet->setCellValue('AK43', $CPL2633x20);
             $sheet->getStyle('AK43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL43', '0');
+            $sheet->setCellValue('AL43', $CPL2634x20);
             $sheet->getStyle('AL43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM43', '0');
+            $sheet->setCellValue('AM43', $CPL2241x800);
             $sheet->getStyle('AM43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN43', '0');
+            $sheet->setCellValue('AN43', $CPL2242x800);
             $sheet->getStyle('AN43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO43', '0');
+            $sheet->setCellValue('AO43', $CPL2343x1200);
             $sheet->getStyle('AO43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP43', '0');
+            $sheet->setCellValue('AP43', $CPL3444x600);
             $sheet->getStyle('AP43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ43', '0');
+            $sheet->setCellValue('AQ43', $CPL1445x600);
             $sheet->getStyle('AQ43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR43', '0');
+            $sheet->setCellValue('AR43', $CPL1446x600);
             $sheet->getStyle('AR43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS43', '0');
+            $sheet->setCellValue('AS43', $CPL1447x600);
             $sheet->getStyle('AS43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT43', '0');
+            $sheet->setCellValue('AT43', $CPL1443x600);
             $sheet->getStyle('AT43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU43', '0');
+            $sheet->setCellValue('AU43', $CPL1449x600);
             $sheet->getStyle('AU43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV43', '0');
+            $sheet->setCellValue('AV43', $CPL1450x600);
             $sheet->getStyle('AV43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW43', '0');
+            $sheet->setCellValue('AW43', $CPL1451x600);
             $sheet->getStyle('AW43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX43', '0');
+            $sheet->setCellValue('AX43', $CPL1452x600);
             $sheet->getStyle('AX43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY43', '0');
+            $sheet->setCellValue('AY43', $CPL3453x300);
             $sheet->getStyle('AY43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ43', '0');
+            $sheet->setCellValue('AZ43', $CPL1154x300);
             $sheet->getStyle('AZ43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA43', '0');
+            $sheet->setCellValue('BA43', $CPL1455x300);
             $sheet->getStyle('BA43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB43', '0');
+            $sheet->setCellValue('BB43', $CPL1456x300);
             $sheet->getStyle('BB43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC43', '0');
+            $sheet->setCellValue('BC43', $CPL1457x300);
             $sheet->getStyle('BC43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD43', '0');
+            $sheet->setCellValue('BD43', $CPL1458x300);
             $sheet->getStyle('BD43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE43', '0');
+            $sheet->setCellValue('BE43', $CPL1459x100);
             $sheet->getStyle('BE43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF43', '0');
+            $sheet->setCellValue('BF43', $CPL1460x100);
             $sheet->getStyle('BF43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG43', '0');
+            $sheet->setCellValue('BG43', $CPL1461x100);
             $sheet->getStyle('BG43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH43', '0');
+            $sheet->setCellValue('BH43', $CPL3462x100);
             $sheet->getStyle('BH43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI43', '0');
+            $sheet->setCellValue('BI43', $CPL3463x100);
             $sheet->getStyle('BI43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ43', '0');
+            $sheet->setCellValue('BJ43', $CPL3464x100);
             $sheet->getStyle('BJ43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK43', '0');
+            $sheet->setCellValue('BK43', $CPL1465x50);
             $sheet->getStyle('BK43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL43', '0');
+            $sheet->setCellValue('BL43', $CPL1466x50);
             $sheet->getStyle('BL43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM43', '0');
+            $sheet->setCellValue('BM43', $CPL1467x50);
             $sheet->getStyle('BM43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN43', '0');
+            $sheet->setCellValue('BN43', $CPL3468x30);
             $sheet->getStyle('BN43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO43', '0');
+            $sheet->setCellValue('BO43', $CPL3469x30);
             $sheet->getStyle('BO43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP43', '0');
+            $sheet->setCellValue('BP43', $CPL3470x50);
             $sheet->getStyle('BP43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ43', '0');
+            $sheet->setCellValue('BQ43', $CPL3471x50);
             $sheet->getStyle('BQ43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR43', '0');
+            $sheet->setCellValue('BR43', $CPL3472x30);
             $sheet->getStyle('BR43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS43', '0');
+            $sheet->setCellValue('BS43', $CPL3473x30);
             $sheet->getStyle('BS43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT43', '0');
+            $sheet->setCellValue('BT43', $CPL3474x50);
             $sheet->getStyle('BT43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU43', '0');
+            $sheet->setCellValue('BU43', $CPL3475x50);
             $sheet->getStyle('BU43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV43', '0');
+            $sheet->setCellValue('BV43', $CPL3476x150);
             $sheet->getStyle('BV43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW43', '0');
+            $sheet->setCellValue('BW43', $CPL1477x50);
             $sheet->getStyle('BW43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX43', '0');
+            $sheet->setCellValue('BX43', $CPL1478x50);
             $sheet->getStyle('BX43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY43', '0');
+            $sheet->setCellValue('BY43', '=SUM(E43:BZ43)+SUM(FY43:GF43)');
             $sheet->getStyle('BY43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -8371,301 +13220,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN BRS
+    // CELUP PERBAIKAN PRT
         $sheet->mergeCells('A44:D44');
-        $sheet->setCellValue('A44', 'CELUP PERBAIKAN BRS');
+        $sheet->setCellValue('A44', 'CELUP PERBAIKAN PRT');
         $sheet->getStyle('A44')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A44:D44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E44', '0');
+            $sheet->setCellValue('E44', $CPP1401x2400);
             $sheet->getStyle('E44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F44', '0');
+            $sheet->setCellValue('F44', $CPP1402x1200);
             $sheet->getStyle('F44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G44', '0');
+            $sheet->setCellValue('G44', $CPP1103x1800);
             $sheet->getStyle('G44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H44', '0');
+            $sheet->setCellValue('H44', $CPP1104x1200);
             $sheet->getStyle('H44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I44', '0');
+            $sheet->setCellValue('I44', $CPP3445x744);
             $sheet->getStyle('I44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J44', '0');
+            $sheet->setCellValue('J44', $CPP1406x2400);
             $sheet->getStyle('J44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K44', '0');
+            $sheet->setCellValue('K44', $CPP1107x1800);
             $sheet->getStyle('K44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L44', '0');
+            $sheet->setCellValue('L44', $CPP1108x1200);
             $sheet->getStyle('L44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M44', '0');
+            $sheet->setCellValue('M44', $CPP4409x3200);
             $sheet->getStyle('M44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N44', '0');
+            $sheet->setCellValue('N44', $CPP1410x1800);
             $sheet->getStyle('N44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O44', '0');
+            $sheet->setCellValue('O44', $CPP4411x3200);
             $sheet->getStyle('O44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P44', '0');
+            $sheet->setCellValue('P44', $CPP4412x2400);
             $sheet->getStyle('P44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q44', '0');
+            $sheet->setCellValue('Q44', $CPP4413x2400);
             $sheet->getStyle('Q44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R44', '0');
+            $sheet->setCellValue('R44', $CPP1414x1200);
             $sheet->getStyle('R44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S44', '0');
+            $sheet->setCellValue('S44', $CPP1415x1200);
             $sheet->getStyle('S44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T44', '0');
+            $sheet->setCellValue('T44', $CPP2616x100);
             $sheet->getStyle('T44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U44', '0');
+            $sheet->setCellValue('U44', $CPP2617x100);
             $sheet->getStyle('U44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V44', '0');
+            $sheet->setCellValue('V44', $CPP2618x44);
             $sheet->getStyle('V44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W44', '0');
+            $sheet->setCellValue('W44', $CPP2619x800);
             $sheet->getStyle('W44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X44', '0');
+            $sheet->setCellValue('X44', $CPP2620x30);
             $sheet->getStyle('X44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y44', '0');
+            $sheet->setCellValue('Y44', $CPP2621x800);
             $sheet->getStyle('Y44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z44', '0');
+            $sheet->setCellValue('Z44', $CPP2222x200);
             $sheet->getStyle('Z44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA44', '0');
+            $sheet->setCellValue('AA44', $CPP2223x800);
             $sheet->getStyle('AA44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB44', '0');
+            $sheet->setCellValue('AB44', $CPP2224x400);
             $sheet->getStyle('AB44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC44', '0');
+            $sheet->setCellValue('AC44', $CPP2225x400);
             $sheet->getStyle('AC44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD44', '0');
+            $sheet->setCellValue('AD44', $CPP2626x600);
             $sheet->getStyle('AD44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE44', '0');
+            $sheet->setCellValue('AE44', $CPP2627x600);
             $sheet->getStyle('AE44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF44', '0');
+            $sheet->setCellValue('AF44', $CPP2628x800);
             $sheet->getStyle('AF44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG44', '0');
+            $sheet->setCellValue('AG44', $CPP2629x44);
             $sheet->getStyle('AG44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH44', '0');
+            $sheet->setCellValue('AH44', $CPP2630x800);
             $sheet->getStyle('AH44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI44', '0');
+            $sheet->setCellValue('AI44', $CPP2631x10);
             $sheet->getStyle('AI44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ44', '0');
+            $sheet->setCellValue('AJ44', $CPP2632x20);
             $sheet->getStyle('AJ44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK44', '0');
+            $sheet->setCellValue('AK44', $CPP2633x20);
             $sheet->getStyle('AK44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL44', '0');
+            $sheet->setCellValue('AL44', $CPP2634x20);
             $sheet->getStyle('AL44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM44', '0');
+            $sheet->setCellValue('AM44', $CPP2241x800);
             $sheet->getStyle('AM44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN44', '0');
+            $sheet->setCellValue('AN44', $CPP2242x800);
             $sheet->getStyle('AN44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO44', '0');
+            $sheet->setCellValue('AO44', $CPP2343x1200);
             $sheet->getStyle('AO44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP44', '0');
+            $sheet->setCellValue('AP44', $CPP3444x600);
             $sheet->getStyle('AP44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ44', '0');
+            $sheet->setCellValue('AQ44', $CPP1445x600);
             $sheet->getStyle('AQ44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR44', '0');
+            $sheet->setCellValue('AR44', $CPP1446x600);
             $sheet->getStyle('AR44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS44', '0');
+            $sheet->setCellValue('AS44', $CPP1447x600);
             $sheet->getStyle('AS44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT44', '0');
+            $sheet->setCellValue('AT44', $CPP1448x600);
             $sheet->getStyle('AT44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU44', '0');
+            $sheet->setCellValue('AU44', $CPP1449x600);
             $sheet->getStyle('AU44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV44', '0');
+            $sheet->setCellValue('AV44', $CPP1444x600);
             $sheet->getStyle('AV44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW44', '0');
+            $sheet->setCellValue('AW44', $CPP1451x600);
             $sheet->getStyle('AW44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX44', '0');
+            $sheet->setCellValue('AX44', $CPP1452x600);
             $sheet->getStyle('AX44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY44', '0');
+            $sheet->setCellValue('AY44', $CPP3453x300);
             $sheet->getStyle('AY44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ44', '0');
+            $sheet->setCellValue('AZ44', $CPP1154x300);
             $sheet->getStyle('AZ44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA44', '0');
+            $sheet->setCellValue('BA44', $CPP1455x300);
             $sheet->getStyle('BA44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB44', '0');
+            $sheet->setCellValue('BB44', $CPP1456x300);
             $sheet->getStyle('BB44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC44', '0');
+            $sheet->setCellValue('BC44', $CPP1457x300);
             $sheet->getStyle('BC44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD44', '0');
+            $sheet->setCellValue('BD44', $CPP1458x300);
             $sheet->getStyle('BD44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE44', '0');
+            $sheet->setCellValue('BE44', $CPP1459x100);
             $sheet->getStyle('BE44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF44', '0');
+            $sheet->setCellValue('BF44', $CPP1460x100);
             $sheet->getStyle('BF44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG44', '0');
+            $sheet->setCellValue('BG44', $CPP1461x100);
             $sheet->getStyle('BG44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH44', '0');
+            $sheet->setCellValue('BH44', $CPP3462x100);
             $sheet->getStyle('BH44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI44', '0');
+            $sheet->setCellValue('BI44', $CPP3463x100);
             $sheet->getStyle('BI44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ44', '0');
+            $sheet->setCellValue('BJ44', $CPP3464x100);
             $sheet->getStyle('BJ44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK44', '0');
+            $sheet->setCellValue('BK44', $CPP1465x44);
             $sheet->getStyle('BK44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL44', '0');
+            $sheet->setCellValue('BL44', $CPP1466x44);
             $sheet->getStyle('BL44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM44', '0');
+            $sheet->setCellValue('BM44', $CPP1467x44);
             $sheet->getStyle('BM44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN44', '0');
+            $sheet->setCellValue('BN44', $CPP3468x30);
             $sheet->getStyle('BN44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO44', '0');
+            $sheet->setCellValue('BO44', $CPP3469x30);
             $sheet->getStyle('BO44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP44', '0');
+            $sheet->setCellValue('BP44', $CPP3470x44);
             $sheet->getStyle('BP44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ44', '0');
+            $sheet->setCellValue('BQ44', $CPP3471x44);
             $sheet->getStyle('BQ44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR44', '0');
+            $sheet->setCellValue('BR44', $CPP3472x30);
             $sheet->getStyle('BR44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS44', '0');
+            $sheet->setCellValue('BS44', $CPP3473x30);
             $sheet->getStyle('BS44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT44', '0');
+            $sheet->setCellValue('BT44', $CPP3474x44);
             $sheet->getStyle('BT44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU44', '0');
+            $sheet->setCellValue('BU44', $CPP3475x44);
             $sheet->getStyle('BU44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV44', '0');
+            $sheet->setCellValue('BV44', $CPP3476x144);
             $sheet->getStyle('BV44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW44', '0');
+            $sheet->setCellValue('BW44', $CPP1477x44);
             $sheet->getStyle('BW44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX44', '0');
+            $sheet->setCellValue('BX44', $CPP1478x44);
             $sheet->getStyle('BX44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY44', '0');
+            $sheet->setCellValue('BY44', '=SUM(E44:BZ44)+SUM(FY44:GF44)');
             $sheet->getStyle('BY44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -8677,300 +13526,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CELUP PERBAIKAN TAS
         $sheet->mergeCells('A45:D45');
-        $sheet->setCellValue('A45', 'CELUP PERBAIKAN BRS');
+        $sheet->setCellValue('A45', 'CELUP PERBAIKAN TAS');
         $sheet->getStyle('A45')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A45:D45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E45', '0');
+            $sheet->setCellValue('E45', $CPT1401x2400);
             $sheet->getStyle('E45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F45', '0');
+            $sheet->setCellValue('F45', $CPT1402x1200);
             $sheet->getStyle('F45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G45', '0');
+            $sheet->setCellValue('G45', $CPT1103x1800);
             $sheet->getStyle('G45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H45', '0');
+            $sheet->setCellValue('H45', $CPT1104x1200);
             $sheet->getStyle('H45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I45', '0');
+            $sheet->setCellValue('I45', $CPT3505x750);
             $sheet->getStyle('I45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J45', '0');
+            $sheet->setCellValue('J45', $CPT1406x2400);
             $sheet->getStyle('J45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K45', '0');
+            $sheet->setCellValue('K45', $CPT1107x1800);
             $sheet->getStyle('K45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L45', '0');
+            $sheet->setCellValue('L45', $CPT1108x1200);
             $sheet->getStyle('L45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M45', '0');
+            $sheet->setCellValue('M45', $CPT4409x3200);
             $sheet->getStyle('M45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N45', '0');
+            $sheet->setCellValue('N45', $CPT1410x1800);
             $sheet->getStyle('N45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O45', '0');
+            $sheet->setCellValue('O45', $CPT4411x3200);
             $sheet->getStyle('O45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P45', '0');
+            $sheet->setCellValue('P45', $CPT4412x2400);
             $sheet->getStyle('P45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q45', '0');
+            $sheet->setCellValue('Q45', $CPT4413x2400);
             $sheet->getStyle('Q45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R45', '0');
+            $sheet->setCellValue('R45', $CPT1414x1200);
             $sheet->getStyle('R45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S45', '0');
+            $sheet->setCellValue('S45', $CPT1415x1200);
             $sheet->getStyle('S45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T45', '0');
+            $sheet->setCellValue('T45', $CPT2616x100);
             $sheet->getStyle('T45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U45', '0');
+            $sheet->setCellValue('U45', $CPT2617x100);
             $sheet->getStyle('U45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V45', '0');
+            $sheet->setCellValue('V45', $CPT2618x50);
             $sheet->getStyle('V45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W45', '0');
+            $sheet->setCellValue('W45', $CPT2619x800);
             $sheet->getStyle('W45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X45', '0');
+            $sheet->setCellValue('X45', $CPT2620x30);
             $sheet->getStyle('X45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y45', '0');
+            $sheet->setCellValue('Y45', $CPT2621x800);
             $sheet->getStyle('Y45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z45', '0');
+            $sheet->setCellValue('Z45', $CPT2222x200);
             $sheet->getStyle('Z45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA45', '0');
+            $sheet->setCellValue('AA45', $CPT2223x800);
             $sheet->getStyle('AA45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB45', '0');
+            $sheet->setCellValue('AB45', $CPT2224x400);
             $sheet->getStyle('AB45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC45', '0');
+            $sheet->setCellValue('AC45', $CPT2225x400);
             $sheet->getStyle('AC45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD45', '0');
+            $sheet->setCellValue('AD45', $CPT2626x600);
             $sheet->getStyle('AD45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE45', '0');
+            $sheet->setCellValue('AE45', $CPT2627x600);
             $sheet->getStyle('AE45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF45', '0');
+            $sheet->setCellValue('AF45', $CPT2628x800);
             $sheet->getStyle('AF45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG45', '0');
+            $sheet->setCellValue('AG45', $CPT2629x50);
             $sheet->getStyle('AG45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH45', '0');
+            $sheet->setCellValue('AH45', $CPT2630x800);
             $sheet->getStyle('AH45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI45', '0');
+            $sheet->setCellValue('AI45', $CPT2631x10);
             $sheet->getStyle('AI45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ45', '0');
+            $sheet->setCellValue('AJ45', $CPT2632x20);
             $sheet->getStyle('AJ45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK45', '0');
+            $sheet->setCellValue('AK45', $CPT2633x20);
             $sheet->getStyle('AK45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL45', '0');
+            $sheet->setCellValue('AL45', $CPT2634x20);
             $sheet->getStyle('AL45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM45', '0');
+            $sheet->setCellValue('AM45', $CPT2241x800);
             $sheet->getStyle('AM45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN45', '0');
+            $sheet->setCellValue('AN45', $CPT2242x800);
             $sheet->getStyle('AN45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO45', '0');
+            $sheet->setCellValue('AO45', $CPT2343x1200);
             $sheet->getStyle('AO45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP45', '0');
+            $sheet->setCellValue('AP45', $CPT3444x600);
             $sheet->getStyle('AP45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ45', '0');
+            $sheet->setCellValue('AQ45', $CPT1445x600);
             $sheet->getStyle('AQ45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR45', '0');
+            $sheet->setCellValue('AR45', $CPT1446x600);
             $sheet->getStyle('AR45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS45', '0');
+            $sheet->setCellValue('AS45', $CPT1447x600);
             $sheet->getStyle('AS45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT45', '0');
+            $sheet->setCellValue('AT45', $CPT1448x600);
             $sheet->getStyle('AT45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU45', '0');
+            $sheet->setCellValue('AU45', $CPT1449x600);
             $sheet->getStyle('AU45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV45', '0');
+            $sheet->setCellValue('AV45', $CPT1450x600);
             $sheet->getStyle('AV45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW45', '0');
+            $sheet->setCellValue('AW45', $CPT1451x600);
             $sheet->getStyle('AW45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX45', '0');
+            $sheet->setCellValue('AX45', $CPT1445x600);
             $sheet->getStyle('AX45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY45', '0');
+            $sheet->setCellValue('AY45', $CPT3453x300);
             $sheet->getStyle('AY45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ45', '0');
+            $sheet->setCellValue('AZ45', $CPT1154x300);
             $sheet->getStyle('AZ45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA45', '0');
+            $sheet->setCellValue('BA45', $CPT1455x300);
             $sheet->getStyle('BA45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB45', '0');
+            $sheet->setCellValue('BB45', $CPT1456x300);
             $sheet->getStyle('BB45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC45', '0');
+            $sheet->setCellValue('BC45', $CPT1457x300);
             $sheet->getStyle('BC45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD45', '0');
+            $sheet->setCellValue('BD45', $CPT1458x300);
             $sheet->getStyle('BD45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE45', '0');
+            $sheet->setCellValue('BE45', $CPT1459x100);
             $sheet->getStyle('BE45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF45', '0');
+            $sheet->setCellValue('BF45', $CPT1460x100);
             $sheet->getStyle('BF45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG45', '0');
+            $sheet->setCellValue('BG45', $CPT1461x100);
             $sheet->getStyle('BG45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH45', '0');
+            $sheet->setCellValue('BH45', $CPT3462x100);
             $sheet->getStyle('BH45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI45', '0');
+            $sheet->setCellValue('BI45', $CPT3463x100);
             $sheet->getStyle('BI45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ45', '0');
+            $sheet->setCellValue('BJ45', $CPT3464x100);
             $sheet->getStyle('BJ45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK45', '0');
+            $sheet->setCellValue('BK45', $CPT1465x50);
             $sheet->getStyle('BK45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL45', '0');
+            $sheet->setCellValue('BL45', $CPT1466x50);
             $sheet->getStyle('BL45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM45', '0');
+            $sheet->setCellValue('BM45', $CPT1467x50);
             $sheet->getStyle('BM45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN45', '0');
+            $sheet->setCellValue('BN45', $CPT3468x30);
             $sheet->getStyle('BN45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO45', '0');
+            $sheet->setCellValue('BO45', $CPT3469x30);
             $sheet->getStyle('BO45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP45', '0');
+            $sheet->setCellValue('BP45', $CPT3470x50);
             $sheet->getStyle('BP45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ45', '0');
+            $sheet->setCellValue('BQ45', $CPT3471x50);
             $sheet->getStyle('BQ45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR45', '0');
+            $sheet->setCellValue('BR45', $CPT3472x30);
             $sheet->getStyle('BR45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS45', '0');
+            $sheet->setCellValue('BS45', $CPT3473x30);
             $sheet->getStyle('BS45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT45', '0');
+            $sheet->setCellValue('BT45', $CPT3474x50);
             $sheet->getStyle('BT45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU45', '0');
+            $sheet->setCellValue('BU45', $CPT3475x50);
             $sheet->getStyle('BU45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV45', '0');
+            $sheet->setCellValue('BV45', $CPT3476x150);
             $sheet->getStyle('BV45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW45', '0');
+            $sheet->setCellValue('BW45', $CPT1477x50);
             $sheet->getStyle('BW45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX45', '0');
+            $sheet->setCellValue('BX45', $CPT1478x50);
             $sheet->getStyle('BX45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY45', '0');
+            $sheet->setCellValue('BY45','=SUM(E45:BZ45)+SUM(FY45:GF45)');
             $sheet->getStyle('BY45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -8982,301 +13832,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN FIN
+    // CELUP PERBAIKAN RMP
         $sheet->mergeCells('A46:D46');
-        $sheet->setCellValue('A46', 'CELUP PERBAIKAN FIN');
+        $sheet->setCellValue('A46', 'CELUP PERBAIKAN RMP');
         $sheet->getStyle('A46')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A46:D46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E46', '0');
+            $sheet->setCellValue('E46', $CPR1401x2400);
             $sheet->getStyle('E46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F46', '0');
+            $sheet->setCellValue('F46', $CPR1402x1200);
             $sheet->getStyle('F46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G46', '0');
+            $sheet->setCellValue('G46', $CPR1103x1800);
             $sheet->getStyle('G46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H46', '0');
+            $sheet->setCellValue('H46', $CPR1104x1200);
             $sheet->getStyle('H46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I46', '0');
+            $sheet->setCellValue('I46', $CPR3505x750);
             $sheet->getStyle('I46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J46', '0');
+            $sheet->setCellValue('J46', $CPR1406x2400);
             $sheet->getStyle('J46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K46', '0');
+            $sheet->setCellValue('K46', $CPR1107x1800);
             $sheet->getStyle('K46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L46', '0');
+            $sheet->setCellValue('L46', $CPR1108x1200);
             $sheet->getStyle('L46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M46', '0');
+            $sheet->setCellValue('M46', $CPR4409x3200);
             $sheet->getStyle('M46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N46', '0');
+            $sheet->setCellValue('N46', $CPR1410x1800);
             $sheet->getStyle('N46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O46', '0');
+            $sheet->setCellValue('O46', $CPR4411x3200);
             $sheet->getStyle('O46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P46', '0');
+            $sheet->setCellValue('P46', $CPR4412x2400);
             $sheet->getStyle('P46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q46', '0');
+            $sheet->setCellValue('Q46', $CPR4413x2400);
             $sheet->getStyle('Q46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R46', '0');
+            $sheet->setCellValue('R46', $CPR1414x1200);
             $sheet->getStyle('R46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S46', '0');
+            $sheet->setCellValue('S46', $CPR1415x1200);
             $sheet->getStyle('S46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T46', '0');
+            $sheet->setCellValue('T46', $CPR2616x100);
             $sheet->getStyle('T46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U46', '0');
+            $sheet->setCellValue('U46', $CPR2617x100);
             $sheet->getStyle('U46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V46', '0');
+            $sheet->setCellValue('V46', $CPR2618x50);
             $sheet->getStyle('V46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W46', '0');
+            $sheet->setCellValue('W46', $CPR2619x800);
             $sheet->getStyle('W46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X46', '0');
+            $sheet->setCellValue('X46', $CPR2620x30);
             $sheet->getStyle('X46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y46', '0');
+            $sheet->setCellValue('Y46', $CPR2621x800);
             $sheet->getStyle('Y46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z46', '0');
+            $sheet->setCellValue('Z46', $CPR2222x200);
             $sheet->getStyle('Z46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA46', '0');
+            $sheet->setCellValue('AA46', $CPR2223x800);
             $sheet->getStyle('AA46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB46', '0');
+            $sheet->setCellValue('AB46', $CPR2224x400);
             $sheet->getStyle('AB46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC46', '0');
+            $sheet->setCellValue('AC46', $CPR2225x400);
             $sheet->getStyle('AC46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD46', '0');
+            $sheet->setCellValue('AD46', $CPR2626x600);
             $sheet->getStyle('AD46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE46', '0');
+            $sheet->setCellValue('AE46', $CPR2627x600);
             $sheet->getStyle('AE46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF46', '0');
+            $sheet->setCellValue('AF46', $CPR2628x800);
             $sheet->getStyle('AF46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG46', '0');
+            $sheet->setCellValue('AG46', $CPR2629x50);
             $sheet->getStyle('AG46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH46', '0');
+            $sheet->setCellValue('AH46', $CPR2630x800);
             $sheet->getStyle('AH46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI46', '0');
+            $sheet->setCellValue('AI46', $CPR2631x10);
             $sheet->getStyle('AI46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ46', '0');
+            $sheet->setCellValue('AJ46', $CPR2632x20);
             $sheet->getStyle('AJ46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK46', '0');
+            $sheet->setCellValue('AK46', $CPR2633x20);
             $sheet->getStyle('AK46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL46', '0');
+            $sheet->setCellValue('AL46', $CPR2634x20);
             $sheet->getStyle('AL46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM46', '0');
+            $sheet->setCellValue('AM46', $CPR2241x800);
             $sheet->getStyle('AM46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN46', '0');
+            $sheet->setCellValue('AN46', $CPR2242x800);
             $sheet->getStyle('AN46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO46', '0');
+            $sheet->setCellValue('AO46', $CPR2343x1200);
             $sheet->getStyle('AO46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP46', '0');
+            $sheet->setCellValue('AP46', $CPR3444x600);
             $sheet->getStyle('AP46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ46', '0');
+            $sheet->setCellValue('AQ46', $CPR1445x600);
             $sheet->getStyle('AQ46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR46', '0');
+            $sheet->setCellValue('AR46', $CPR1446x600);
             $sheet->getStyle('AR46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS46', '0');
+            $sheet->setCellValue('AS46', $CPR1447x600);
             $sheet->getStyle('AS46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT46', '0');
+            $sheet->setCellValue('AT46', $CPR1448x600);
             $sheet->getStyle('AT46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU46', '0');
+            $sheet->setCellValue('AU46', $CPR1449x600);
             $sheet->getStyle('AU46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV46', '0');
+            $sheet->setCellValue('AV46', $CPR1450x600);
             $sheet->getStyle('AV46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW46', '0');
+            $sheet->setCellValue('AW46', $CPR1451x600);
             $sheet->getStyle('AW46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX46', '0');
+            $sheet->setCellValue('AX46', $CPR1452x600);
             $sheet->getStyle('AX46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY46', '0');
+            $sheet->setCellValue('AY46', $CPR3453x300);
             $sheet->getStyle('AY46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ46', '0');
+            $sheet->setCellValue('AZ46', $CPR1146x300);
             $sheet->getStyle('AZ46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA46', '0');
+            $sheet->setCellValue('BA46', $CPR1455x300);
             $sheet->getStyle('BA46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB46', '0');
+            $sheet->setCellValue('BB46', $CPR1456x300);
             $sheet->getStyle('BB46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC46', '0');
+            $sheet->setCellValue('BC46', $CPR1457x300);
             $sheet->getStyle('BC46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD46', '0');
+            $sheet->setCellValue('BD46', $CPR1458x300);
             $sheet->getStyle('BD46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE46', '0');
+            $sheet->setCellValue('BE46', $CPR1459x100);
             $sheet->getStyle('BE46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF46', '0');
+            $sheet->setCellValue('BF46', $CPR1460x100);
             $sheet->getStyle('BF46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG46', '0');
+            $sheet->setCellValue('BG46', $CPR1461x100);
             $sheet->getStyle('BG46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH46', '0');
+            $sheet->setCellValue('BH46', $CPR3462x100);
             $sheet->getStyle('BH46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI46', '0');
+            $sheet->setCellValue('BI46', $CPR3463x100);
             $sheet->getStyle('BI46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ46', '0');
+            $sheet->setCellValue('BJ46', $CPR3464x100);
             $sheet->getStyle('BJ46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK46', '0');
+            $sheet->setCellValue('BK46', $CPR1465x50);
             $sheet->getStyle('BK46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL46', '0');
+            $sheet->setCellValue('BL46', $CPR1466x50);
             $sheet->getStyle('BL46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM46', '0');
+            $sheet->setCellValue('BM46', $CPR1467x50);
             $sheet->getStyle('BM46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN46', '0');
+            $sheet->setCellValue('BN46', $CPR3468x30);
             $sheet->getStyle('BN46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO46', '0');
+            $sheet->setCellValue('BO46', $CPR3469x30);
             $sheet->getStyle('BO46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP46', '0');
+            $sheet->setCellValue('BP46', $CPR3470x50);
             $sheet->getStyle('BP46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ46', '0');
+            $sheet->setCellValue('BQ46', $CPR3471x50);
             $sheet->getStyle('BQ46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR46', '0');
+            $sheet->setCellValue('BR46', $CPR3472x30);
             $sheet->getStyle('BR46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS46', '0');
+            $sheet->setCellValue('BS46', $CPR3473x30);
             $sheet->getStyle('BS46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT46', '0');
+            $sheet->setCellValue('BT46', $CPR3474x50);
             $sheet->getStyle('BT46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU46', '0');
+            $sheet->setCellValue('BU46', $CPR3475x50);
             $sheet->getStyle('BU46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV46', '0');
+            $sheet->setCellValue('BV46', $CPR3476x150);
             $sheet->getStyle('BV46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW46', '0');
+            $sheet->setCellValue('BW46', $CPR1477x50);
             $sheet->getStyle('BW46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX46', '0');
+            $sheet->setCellValue('BX46', $CPR1478x50);
             $sheet->getStyle('BX46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY46', '0');
+            $sheet->setCellValue('BY46','=SUM(E46:BZ46)+SUM(FY46:GF46)');
             $sheet->getStyle('BY46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -9288,300 +14138,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CELUP PROSES AKW
         $sheet->mergeCells('A47:D47');
-        $sheet->setCellValue('A47', 'CELUP PERBAIKAN FIN');
+        $sheet->setCellValue('A47', 'CELUP PROSES AKW');
         $sheet->getStyle('A47')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A47:D47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E47', '0');
+            $sheet->setCellValue('E47', $CPA1401x2400);
             $sheet->getStyle('E47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F47', '0');
+            $sheet->setCellValue('F47', $CPA1402x1200);
             $sheet->getStyle('F47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G47', '0');
+            $sheet->setCellValue('G47', $CPA1103x1800);
             $sheet->getStyle('G47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H47', '0');
+            $sheet->setCellValue('H47', $CPA1104x1200);
             $sheet->getStyle('H47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I47', '0');
+            $sheet->setCellValue('I47', $CPA3505x750);
             $sheet->getStyle('I47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J47', '0');
+            $sheet->setCellValue('J47', $CPA1406x2400);
             $sheet->getStyle('J47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K47', '0');
+            $sheet->setCellValue('K47', $CPA1107x1800);
             $sheet->getStyle('K47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L47', '0');
+            $sheet->setCellValue('L47', $CPA1108x1200);
             $sheet->getStyle('L47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M47', '0');
+            $sheet->setCellValue('M47', $CPA4409x3200);
             $sheet->getStyle('M47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N47', '0');
+            $sheet->setCellValue('N47', $CPA1410x1800);
             $sheet->getStyle('N47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O47', '0');
+            $sheet->setCellValue('O47', $CPA4411x3200);
             $sheet->getStyle('O47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P47', '0');
+            $sheet->setCellValue('P47', $CPA4412x2400);
             $sheet->getStyle('P47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q47', '0');
+            $sheet->setCellValue('Q47', $CPA4413x2400);
             $sheet->getStyle('Q47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R47', '0');
+            $sheet->setCellValue('R47', $CPA1414x1200);
             $sheet->getStyle('R47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S47', '0');
+            $sheet->setCellValue('S47', $CPA1415x1200);
             $sheet->getStyle('S47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T47', '0');
+            $sheet->setCellValue('T47', $CPA2616x100);
             $sheet->getStyle('T47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U47', '0');
+            $sheet->setCellValue('U47', $CPA2617x100);
             $sheet->getStyle('U47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V47', '0');
+            $sheet->setCellValue('V47', $CPA2618x50);
             $sheet->getStyle('V47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W47', '0');
+            $sheet->setCellValue('W47', $CPA2619x800);
             $sheet->getStyle('W47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X47', '0');
+            $sheet->setCellValue('X47', $CPA2620x30);
             $sheet->getStyle('X47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y47', '0');
+            $sheet->setCellValue('Y47', $CPA2621x800);
             $sheet->getStyle('Y47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z47', '0');
+            $sheet->setCellValue('Z47', $CPA2222x200);
             $sheet->getStyle('Z47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA47', '0');
+            $sheet->setCellValue('AA47', $CPA2223x800);
             $sheet->getStyle('AA47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB47', '0');
+            $sheet->setCellValue('AB47', $CPA2224x400);
             $sheet->getStyle('AB47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC47', '0');
+            $sheet->setCellValue('AC47', $CPA2225x400);
             $sheet->getStyle('AC47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD47', '0');
+            $sheet->setCellValue('AD47', $CPA2626x600);
             $sheet->getStyle('AD47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE47', '0');
+            $sheet->setCellValue('AE47', $CPA2627x600);
             $sheet->getStyle('AE47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF47', '0');
+            $sheet->setCellValue('AF47', $CPA2628x800);
             $sheet->getStyle('AF47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG47', '0');
+            $sheet->setCellValue('AG47', $CPA2629x50);
             $sheet->getStyle('AG47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH47', '0');
+            $sheet->setCellValue('AH47', $CPA2630x800);
             $sheet->getStyle('AH47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI47', '0');
+            $sheet->setCellValue('AI47', $CPA2631x10);
             $sheet->getStyle('AI47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ47', '0');
+            $sheet->setCellValue('AJ47', $CPA2632x20);
             $sheet->getStyle('AJ47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK47', '0');
+            $sheet->setCellValue('AK47', $CPA2633x20);
             $sheet->getStyle('AK47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL47', '0');
+            $sheet->setCellValue('AL47', $CPA2634x20);
             $sheet->getStyle('AL47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM47', '0');
+            $sheet->setCellValue('AM47', $CPA2241x800);
             $sheet->getStyle('AM47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN47', '0');
+            $sheet->setCellValue('AN47', $CPA2242x800);
             $sheet->getStyle('AN47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO47', '0');
+            $sheet->setCellValue('AO47', $CPA2343x1200);
             $sheet->getStyle('AO47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP47', '0');
+            $sheet->setCellValue('AP47', $CPA3444x600);
             $sheet->getStyle('AP47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ47', '0');
+            $sheet->setCellValue('AQ47', $CPA1445x600);
             $sheet->getStyle('AQ47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR47', '0');
+            $sheet->setCellValue('AR47', $CPA1446x600);
             $sheet->getStyle('AR47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS47', '0');
+            $sheet->setCellValue('AS47', $CPA1447x600);
             $sheet->getStyle('AS47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT47', '0');
+            $sheet->setCellValue('AT47', $CPA1448x600);
             $sheet->getStyle('AT47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU47', '0');
+            $sheet->setCellValue('AU47', $CPA1449x600);
             $sheet->getStyle('AU47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV47', '0');
+            $sheet->setCellValue('AV47', $CPA1450x600);
             $sheet->getStyle('AV47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW47', '0');
+            $sheet->setCellValue('AW47', $CPA1451x600);
             $sheet->getStyle('AW47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX47', '0');
+            $sheet->setCellValue('AX47', $CPA1452x600);
             $sheet->getStyle('AX47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY47', '0');
+            $sheet->setCellValue('AY47', $CPA3453x300);
             $sheet->getStyle('AY47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ47', '0');
+            $sheet->setCellValue('AZ47', $CPA1154x300);
             $sheet->getStyle('AZ47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA47', '0');
+            $sheet->setCellValue('BA47', $CPA1455x300);
             $sheet->getStyle('BA47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB47', '0');
+            $sheet->setCellValue('BB47', $CPA1447x300);
             $sheet->getStyle('BB47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC47', '0');
+            $sheet->setCellValue('BC47', $CPA1457x300);
             $sheet->getStyle('BC47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD47', '0');
+            $sheet->setCellValue('BD47', $CPA1458x300);
             $sheet->getStyle('BD47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE47', '0');
+            $sheet->setCellValue('BE47', $CPA1459x100);
             $sheet->getStyle('BE47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF47', '0');
+            $sheet->setCellValue('BF47', $CPA1460x100);
             $sheet->getStyle('BF47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG47', '0');
+            $sheet->setCellValue('BG47', $CPA1461x100);
             $sheet->getStyle('BG47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH47', '0');
+            $sheet->setCellValue('BH47', $CPA3462x100);
             $sheet->getStyle('BH47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI47', '0');
+            $sheet->setCellValue('BI47', $CPA3463x100);
             $sheet->getStyle('BI47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ47', '0');
+            $sheet->setCellValue('BJ47', $CPA3464x100);
             $sheet->getStyle('BJ47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK47', '0');
+            $sheet->setCellValue('BK47', $CPA1465x50);
             $sheet->getStyle('BK47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL47', '0');
+            $sheet->setCellValue('BL47', $CPA1466x50);
             $sheet->getStyle('BL47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM47', '0');
+            $sheet->setCellValue('BM47', $CPA1467x50);
             $sheet->getStyle('BM47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN47', '0');
+            $sheet->setCellValue('BN47', $CPA3468x30);
             $sheet->getStyle('BN47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO47', '0');
+            $sheet->setCellValue('BO47', $CPA3469x30);
             $sheet->getStyle('BO47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP47', '0');
+            $sheet->setCellValue('BP47', $CPA3470x50);
             $sheet->getStyle('BP47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ47', '0');
+            $sheet->setCellValue('BQ47', $CPA3471x50);
             $sheet->getStyle('BQ47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR47', '0');
+            $sheet->setCellValue('BR47', $CPA3472x30);
             $sheet->getStyle('BR47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS47', '0');
+            $sheet->setCellValue('BS47', $CPA3473x30);
             $sheet->getStyle('BS47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT47', '0');
+            $sheet->setCellValue('BT47', $CPA3474x50);
             $sheet->getStyle('BT47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU47', '0');
+            $sheet->setCellValue('BU47', $CPA3475x50);
             $sheet->getStyle('BU47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV47', '0');
+            $sheet->setCellValue('BV47', $CPA3476x150);
             $sheet->getStyle('BV47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW47', '0');
+            $sheet->setCellValue('BW47', $CPA1477x50);
             $sheet->getStyle('BW47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX47', '0');
+            $sheet->setCellValue('BX47', $CPA1478x50);
             $sheet->getStyle('BX47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY47', '0');
+            $sheet->setCellValue('BY47', '=SUM(E47:BZ47)+SUM(FY47:GF47)');
             $sheet->getStyle('BY47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -9593,301 +14444,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN LAB
+    // Celup Poly Dulu (T-Side)
         $sheet->mergeCells('A48:D48');
-        $sheet->setCellValue('A48', 'CELUP PERBAIKAN LAB');
+        $sheet->setCellValue('A48', 'Celup Poly Dulu (T-Side)');
         $sheet->getStyle('A48')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A48:D48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E48', '0');
+            $sheet->setCellValue('E48', $CPDT1401x2400);
             $sheet->getStyle('E48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F48', '0');
+            $sheet->setCellValue('F48', $CPDT1402x1200);
             $sheet->getStyle('F48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G48', '0');
+            $sheet->setCellValue('G48', $CPDT1103x1800);
             $sheet->getStyle('G48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H48', '0');
+            $sheet->setCellValue('H48', $CPDT1104x1200);
             $sheet->getStyle('H48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I48', '0');
+            $sheet->setCellValue('I48', $CPDT3505x750);
             $sheet->getStyle('I48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J48', '0');
+            $sheet->setCellValue('J48', $CPDT1406x2400);
             $sheet->getStyle('J48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K48', '0');
+            $sheet->setCellValue('K48', $CPDT1107x1800);
             $sheet->getStyle('K48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L48', '0');
+            $sheet->setCellValue('L48', $CPDT1108x1200);
             $sheet->getStyle('L48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M48', '0');
+            $sheet->setCellValue('M48', $CPDT4409x3200);
             $sheet->getStyle('M48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N48', '0');
+            $sheet->setCellValue('N48', $CPDT1410x1800);
             $sheet->getStyle('N48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O48', '0');
+            $sheet->setCellValue('O48', $CPDT4411x3200);
             $sheet->getStyle('O48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P48', '0');
+            $sheet->setCellValue('P48', $CPDT4412x2400);
             $sheet->getStyle('P48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q48', '0');
+            $sheet->setCellValue('Q48', $CPDT4413x2400);
             $sheet->getStyle('Q48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R48', '0');
+            $sheet->setCellValue('R48', $CPDT1414x1200);
             $sheet->getStyle('R48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S48', '0');
+            $sheet->setCellValue('S48', $CPDT1415x1200);
             $sheet->getStyle('S48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T48', '0');
+            $sheet->setCellValue('T48', $CPDT2616x100);
             $sheet->getStyle('T48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U48', '0');
+            $sheet->setCellValue('U48', $CPDT2617x100);
             $sheet->getStyle('U48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V48', '0');
+            $sheet->setCellValue('V48', $CPDT2618x50);
             $sheet->getStyle('V48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W48', '0');
+            $sheet->setCellValue('W48', $CPDT2619x800);
             $sheet->getStyle('W48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X48', '0');
+            $sheet->setCellValue('X48', $CPDT2620x30);
             $sheet->getStyle('X48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y48', '0');
+            $sheet->setCellValue('Y48', $CPDT2621x800);
             $sheet->getStyle('Y48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z48', '0');
+            $sheet->setCellValue('Z48', $CPDT2222x200);
             $sheet->getStyle('Z48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA48', '0');
+            $sheet->setCellValue('AA48', $CPDT2223x800);
             $sheet->getStyle('AA48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB48', '0');
+            $sheet->setCellValue('AB48', $CPDT2224x400);
             $sheet->getStyle('AB48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC48', '0');
+            $sheet->setCellValue('AC48', $CPDT2225x400);
             $sheet->getStyle('AC48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD48', '0');
+            $sheet->setCellValue('AD48', $CPDT2626x600);
             $sheet->getStyle('AD48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE48', '0');
+            $sheet->setCellValue('AE48', $CPDT2627x600);
             $sheet->getStyle('AE48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF48', '0');
+            $sheet->setCellValue('AF48', $CPDT2628x800);
             $sheet->getStyle('AF48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG48', '0');
+            $sheet->setCellValue('AG48', $CPDT2629x50   );
             $sheet->getStyle('AG48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH48', '0');
+            $sheet->setCellValue('AH48', $CPDT2630x800);
             $sheet->getStyle('AH48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI48', '0');
+            $sheet->setCellValue('AI48', $CPDT2631x10);
             $sheet->getStyle('AI48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ48', '0');
+            $sheet->setCellValue('AJ48', $CPDT2632x20);
             $sheet->getStyle('AJ48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK48', '0');
+            $sheet->setCellValue('AK48', $CPDT2633x20);
             $sheet->getStyle('AK48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL48', '0');
+            $sheet->setCellValue('AL48', $CPDT2634x20);
             $sheet->getStyle('AL48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM48', '0');
+            $sheet->setCellValue('AM48', $CPDT2241x800);
             $sheet->getStyle('AM48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN48', '0');
+            $sheet->setCellValue('AN48', $CPDT2242x800);
             $sheet->getStyle('AN48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO48', '0');
+            $sheet->setCellValue('AO48', $CPDT2343x1200);
             $sheet->getStyle('AO48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP48', '0');
+            $sheet->setCellValue('AP48', $CPDT3444x600);
             $sheet->getStyle('AP48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ48', '0');
+            $sheet->setCellValue('AQ48', $CPDT1445x600);
             $sheet->getStyle('AQ48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR48', '0');
+            $sheet->setCellValue('AR48', $CPDT1446x600);
             $sheet->getStyle('AR48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS48', '0');
+            $sheet->setCellValue('AS48', $CPDT1447x600);
             $sheet->getStyle('AS48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT48', '0');
+            $sheet->setCellValue('AT48', $CPDT1448x600);
             $sheet->getStyle('AT48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU48', '0');
+            $sheet->setCellValue('AU48', $CPDT1449x600);
             $sheet->getStyle('AU48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV48', '0');
+            $sheet->setCellValue('AV48', $CPDT1450x600);
             $sheet->getStyle('AV48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW48', '0');
+            $sheet->setCellValue('AW48', $CPDT1451x600);
             $sheet->getStyle('AW48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX48', '0');
+            $sheet->setCellValue('AX48', $CPDT1452x600);
             $sheet->getStyle('AX48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY48', '0');
+            $sheet->setCellValue('AY48', $CPDT3453x300);
             $sheet->getStyle('AY48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ48', '0');
+            $sheet->setCellValue('AZ48', $CPDT1154x300);
             $sheet->getStyle('AZ48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA48', '0');
+            $sheet->setCellValue('BA48', $CPDT1455x300);
             $sheet->getStyle('BA48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB48', '0');
+            $sheet->setCellValue('BB48', $CPDT1456x300);
             $sheet->getStyle('BB48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC48', '0');
+            $sheet->setCellValue('BC48', $CPDT1457x300);
             $sheet->getStyle('BC48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD48', '0');
+            $sheet->setCellValue('BD48', $CPDT1448x300);
             $sheet->getStyle('BD48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE48', '0');
+            $sheet->setCellValue('BE48', $CPDT1459x100);
             $sheet->getStyle('BE48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF48', '0');
+            $sheet->setCellValue('BF48', $CPDT1460x100);
             $sheet->getStyle('BF48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG48', '0');
+            $sheet->setCellValue('BG48', $CPDT1461x100);
             $sheet->getStyle('BG48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH48', '0');
+            $sheet->setCellValue('BH48', $CPDT3462x100);
             $sheet->getStyle('BH48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI48', '0');
+            $sheet->setCellValue('BI48', $CPDT3463x100);
             $sheet->getStyle('BI48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ48', '0');
+            $sheet->setCellValue('BJ48', $CPDT3464x100);
             $sheet->getStyle('BJ48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK48', '0');
+            $sheet->setCellValue('BK48', $CPDT1465x50);
             $sheet->getStyle('BK48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL48', '0');
+            $sheet->setCellValue('BL48', $CPDT1466x50);
             $sheet->getStyle('BL48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM48', '0');
+            $sheet->setCellValue('BM48', $CPDT1467x50);
             $sheet->getStyle('BM48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN48', '0');
+            $sheet->setCellValue('BN48', $CPDT3468x30);
             $sheet->getStyle('BN48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO48', '0');
+            $sheet->setCellValue('BO48', $CPDT3469x30);
             $sheet->getStyle('BO48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP48', '0');
+            $sheet->setCellValue('BP48', $CPDT3470x50);
             $sheet->getStyle('BP48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ48', '0');
+            $sheet->setCellValue('BQ48', $CPDT3471x50);
             $sheet->getStyle('BQ48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR48', '0');
+            $sheet->setCellValue('BR48', $CPDT3472x30);
             $sheet->getStyle('BR48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS48', '0');
+            $sheet->setCellValue('BS48', $CPDT3473x30);
             $sheet->getStyle('BS48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT48', '0');
+            $sheet->setCellValue('BT48', $CPDT3474x50);
             $sheet->getStyle('BT48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU48', '0');
+            $sheet->setCellValue('BU48', $CPDT3475x50);
             $sheet->getStyle('BU48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV48', '0');
+            $sheet->setCellValue('BV48', $CPDT3476x150);
             $sheet->getStyle('BV48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW48', '0');
+            $sheet->setCellValue('BW48', $CPDT1477x50);
             $sheet->getStyle('BW48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX48', '0');
+            $sheet->setCellValue('BX48', $CPDT1478x50);
             $sheet->getStyle('BX48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY48', '0');
+            $sheet->setCellValue('BY48', '=SUM(E47:BZ47)+SUM(FY47:GF47)');
             $sheet->getStyle('BY48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -9899,300 +14750,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // CUCI MISTY
         $sheet->mergeCells('A49:D49');
-        $sheet->setCellValue('A49', 'CELUP PERBAIKAN LAB');
+        $sheet->setCellValue('A49', 'CUCI MISTY');
         $sheet->getStyle('A49')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A49:D49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E49', '0');
+            $sheet->setCellValue('E49', $CM1401x2400);
             $sheet->getStyle('E49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F49', '0');
+            $sheet->setCellValue('F49', $CM1402x1200);
             $sheet->getStyle('F49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G49', '0');
+            $sheet->setCellValue('G49', $CM1103x1800);
             $sheet->getStyle('G49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H49', '0');
+            $sheet->setCellValue('H49', $CM1104x1200);
             $sheet->getStyle('H49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I49', '0');
+            $sheet->setCellValue('I49', $CM3505x750);
             $sheet->getStyle('I49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J49', '0');
+            $sheet->setCellValue('J49', $CM1406x2400);
             $sheet->getStyle('J49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K49', '0');
+            $sheet->setCellValue('K49', $CM1107x1800);
             $sheet->getStyle('K49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L49', '0');
+            $sheet->setCellValue('L49', $CM1108x1200);
             $sheet->getStyle('L49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M49', '0');
+            $sheet->setCellValue('M49', $CM4409x3200);
             $sheet->getStyle('M49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N49', '0');
+            $sheet->setCellValue('N49', $CM1410x1800);
             $sheet->getStyle('N49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O49', '0');
+            $sheet->setCellValue('O49', $CM4411x3200);
             $sheet->getStyle('O49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P49', '0');
+            $sheet->setCellValue('P49', $CM4412x2400);
             $sheet->getStyle('P49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q49', '0');
+            $sheet->setCellValue('Q49', $CM4413x2400);
             $sheet->getStyle('Q49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R49', '0');
+            $sheet->setCellValue('R49', $CM1414x1200);
             $sheet->getStyle('R49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S49', '0');
+            $sheet->setCellValue('S49', $CM1415x1200);
             $sheet->getStyle('S49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T49', '0');
+            $sheet->setCellValue('T49', $CM2616x100);
             $sheet->getStyle('T49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U49', '0');
+            $sheet->setCellValue('U49', $CM2617x100);
             $sheet->getStyle('U49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V49', '0');
+            $sheet->setCellValue('V49', $CM2618x50);
             $sheet->getStyle('V49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W49', '0');
+            $sheet->setCellValue('W49', $CM2619x800);
             $sheet->getStyle('W49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X49', '0');
+            $sheet->setCellValue('X49', $CM2620x30);
             $sheet->getStyle('X49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y49', '0');
+            $sheet->setCellValue('Y49', $CM2621x800);
             $sheet->getStyle('Y49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z49', '0');
+            $sheet->setCellValue('Z49', $CM2222x200);
             $sheet->getStyle('Z49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA49', '0');
+            $sheet->setCellValue('AA49', $CM2223x800);
             $sheet->getStyle('AA49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB49', '0');
+            $sheet->setCellValue('AB49', $CM2224x400);
             $sheet->getStyle('AB49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC49', '0');
+            $sheet->setCellValue('AC49', $CM2225x400);
             $sheet->getStyle('AC49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD49', '0');
+            $sheet->setCellValue('AD49', $CM2626x490);
             $sheet->getStyle('AD49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE49', '0');
+            $sheet->setCellValue('AE49', $CM2627x490);
             $sheet->getStyle('AE49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF49', '0');
+            $sheet->setCellValue('AF49', $CM2628x800);
             $sheet->getStyle('AF49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG49', '0');
+            $sheet->setCellValue('AG49', $CM2629x50);
             $sheet->getStyle('AG49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH49', '0');
+            $sheet->setCellValue('AH49', $CM2630x800);
             $sheet->getStyle('AH49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI49', '0');
+            $sheet->setCellValue('AI49', $CM2631x10);
             $sheet->getStyle('AI49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ49', '0');
+            $sheet->setCellValue('AJ49', $CM2632x20);
             $sheet->getStyle('AJ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK49', '0');
+            $sheet->setCellValue('AK49', $CM2633x20);
             $sheet->getStyle('AK49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL49', '0');
+            $sheet->setCellValue('AL49', $CM2634x20);
             $sheet->getStyle('AL49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM49', '0');
+            $sheet->setCellValue('AM49', $CM2241x800);
             $sheet->getStyle('AM49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN49', '0');
+            $sheet->setCellValue('AN49', $CM2242x800);
             $sheet->getStyle('AN49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO49', '0');
+            $sheet->setCellValue('AO49', $CM2343x1200);
             $sheet->getStyle('AO49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP49', '0');
+            $sheet->setCellValue('AP49', $CM3444x490);
             $sheet->getStyle('AP49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ49', '0');
+            $sheet->setCellValue('AQ49', $CM1445x490);
             $sheet->getStyle('AQ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR49', '0');
+            $sheet->setCellValue('AR49', $CM1446x490);
             $sheet->getStyle('AR49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS49', '0');
+            $sheet->setCellValue('AS49', $CM1447x490);
             $sheet->getStyle('AS49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT49', '0');
+            $sheet->setCellValue('AT49', $CM1448x490);
             $sheet->getStyle('AT49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU49', '0');
+            $sheet->setCellValue('AU49', $CM1449x490);
             $sheet->getStyle('AU49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV49', '0');
+            $sheet->setCellValue('AV49', $CM1450x490);
             $sheet->getStyle('AV49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW49', '0');
+            $sheet->setCellValue('AW49', $CM1451x490);
             $sheet->getStyle('AW49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX49', '0');
+            $sheet->setCellValue('AX49', $CM1452x490);
             $sheet->getStyle('AX49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY49', '0');
+            $sheet->setCellValue('AY49', $CM3453x300);
             $sheet->getStyle('AY49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ49', '0');
+            $sheet->setCellValue('AZ49', $CM1154x300);
             $sheet->getStyle('AZ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA49', '0');
+            $sheet->setCellValue('BA49', $CM1455x300);
             $sheet->getStyle('BA49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB49', '0');
+            $sheet->setCellValue('BB49', $CM1456x300);
             $sheet->getStyle('BB49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC49', '0');
+            $sheet->setCellValue('BC49', $CM1457x300);
             $sheet->getStyle('BC49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD49', '0');
+            $sheet->setCellValue('BD49', $CM1458x300);
             $sheet->getStyle('BD49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE49', '0');
+            $sheet->setCellValue('BE49', $CM1459x100);
             $sheet->getStyle('BE49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF49', '0');
+            $sheet->setCellValue('BF49', $CM1449x100);
             $sheet->getStyle('BF49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG49', '0');
+            $sheet->setCellValue('BG49', $CM1461x100);
             $sheet->getStyle('BG49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH49', '0');
+            $sheet->setCellValue('BH49', $CM3462x100);
             $sheet->getStyle('BH49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI49', '0');
+            $sheet->setCellValue('BI49', $CM3463x100);
             $sheet->getStyle('BI49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ49', '0');
+            $sheet->setCellValue('BJ49', $CM3464x100);
             $sheet->getStyle('BJ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK49', '0');
+            $sheet->setCellValue('BK49', $CM1465x50);
             $sheet->getStyle('BK49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL49', '0');
+            $sheet->setCellValue('BL49', $CM1466x50);
             $sheet->getStyle('BL49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM49', '0');
+            $sheet->setCellValue('BM49', $CM1467x50);
             $sheet->getStyle('BM49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN49', '0');
+            $sheet->setCellValue('BN49', $CM3468x30);
             $sheet->getStyle('BN49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO49', '0');
+            $sheet->setCellValue('BO49', $CM3469x30);
             $sheet->getStyle('BO49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP49', '0');
+            $sheet->setCellValue('BP49', $CM3470x50);
             $sheet->getStyle('BP49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ49', '0');
+            $sheet->setCellValue('BQ49', $CM3471x50);
             $sheet->getStyle('BQ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR49', '0');
+            $sheet->setCellValue('BR49', $CM3472x30);
             $sheet->getStyle('BR49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS49', '0');
+            $sheet->setCellValue('BS49', $CM3473x30);
             $sheet->getStyle('BS49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT49', '0');
+            $sheet->setCellValue('BT49', $CM3474x50);
             $sheet->getStyle('BT49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU49', '0');
+            $sheet->setCellValue('BU49', $CM3475x50);
             $sheet->getStyle('BU49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV49', '0');
+            $sheet->setCellValue('BV49', $CM3476x150);
             $sheet->getStyle('BV49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW49', '0');
+            $sheet->setCellValue('BW49', $CM1477x50);
             $sheet->getStyle('BW49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX49', '0');
+            $sheet->setCellValue('BX49', $CM1478x50);
             $sheet->getStyle('BX49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY49', '0');
+            $sheet->setCellValue('BY49', '=SUM(E49:BZ49)+SUM(FY49:GF49)');
             $sheet->getStyle('BY49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10204,301 +15056,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN PRT
+    // CUCI YARN DYE (Y/D)
         $sheet->mergeCells('A50:D50');
-        $sheet->setCellValue('A50', 'CELUP PERBAIKAN PRT');
+        $sheet->setCellValue('A50', 'CUCI YARN DYE (Y/D)');
         $sheet->getStyle('A50')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A50:D50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E50', '0');
+            $sheet->setCellValue('E50', $CYD1401x2400);
             $sheet->getStyle('E50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F50', '0');
+            $sheet->setCellValue('F50', $CYD1402x1200);
             $sheet->getStyle('F50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G50', '0');
+            $sheet->setCellValue('G50', $CYD1103x1800);
             $sheet->getStyle('G50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H50', '0');
+            $sheet->setCellValue('H50', $CYD1104x1200);
             $sheet->getStyle('H50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I50', '0');
+            $sheet->setCellValue('I50', $CYD3505x750);
             $sheet->getStyle('I50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J50', '0');
+            $sheet->setCellValue('J50', $CYD1406x2400);
             $sheet->getStyle('J50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K50', '0');
+            $sheet->setCellValue('K50', $CYD1107x1800);
             $sheet->getStyle('K50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L50', '0');
+            $sheet->setCellValue('L50', $CYD1108x1200);
             $sheet->getStyle('L50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M50', '0');
+            $sheet->setCellValue('M50', $CYD4409x3200);
             $sheet->getStyle('M50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N50', '0');
+            $sheet->setCellValue('N50', $CYD1410x1800);
             $sheet->getStyle('N50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O50', '0');
+            $sheet->setCellValue('O50', $CYD4411x3200);
             $sheet->getStyle('O50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P50', '0');
+            $sheet->setCellValue('P50', $CYD4412x2400);
             $sheet->getStyle('P50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q50', '0');
+            $sheet->setCellValue('Q50', $CYD4413x2400);
             $sheet->getStyle('Q50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R50', '0');
+            $sheet->setCellValue('R50', $CYD1414x1200);
             $sheet->getStyle('R50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S50', '0');
+            $sheet->setCellValue('S50', $CYD1415x1200);
             $sheet->getStyle('S50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T50', '0');
+            $sheet->setCellValue('T50', $CYD2616x100);
             $sheet->getStyle('T50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U50', '0');
+            $sheet->setCellValue('U50', $CYD2617x100);
             $sheet->getStyle('U50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V50', '0');
+            $sheet->setCellValue('V50', $CYD2618x50);
             $sheet->getStyle('V50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W50', '0');
+            $sheet->setCellValue('W50', $CYD2619x800);
             $sheet->getStyle('W50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X50', '0');
+            $sheet->setCellValue('X50', $CYD2500x30);
             $sheet->getStyle('X50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y50', '0');
+            $sheet->setCellValue('Y50', $CYD2501x800);
             $sheet->getStyle('Y50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z50', '0');
+            $sheet->setCellValue('Z50', $CYD2222x200);
             $sheet->getStyle('Z50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA50', '0');
+            $sheet->setCellValue('AA50', $CYD2223x800);
             $sheet->getStyle('AA50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB50', '0');
+            $sheet->setCellValue('AB50', $CYD2224x400);
             $sheet->getStyle('AB50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC50', '0');
+            $sheet->setCellValue('AC50', $CYD2225x400);
             $sheet->getStyle('AC50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD50', '0');
+            $sheet->setCellValue('AD50', $CYD2506x600);
             $sheet->getStyle('AD50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE50', '0');
+            $sheet->setCellValue('AE50', $CYD2507x600);
             $sheet->getStyle('AE50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF50', '0');
+            $sheet->setCellValue('AF50', $CYD2508x800);
             $sheet->getStyle('AF50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG50', '0');
+            $sheet->setCellValue('AG50', $CYD2509x50);
             $sheet->getStyle('AG50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH50', '0');
+            $sheet->setCellValue('AH50', $CYD2630x800);
             $sheet->getStyle('AH50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI50', '0');
+            $sheet->setCellValue('AI50', $CYD2631x10);
             $sheet->getStyle('AI50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ50', '0');
+            $sheet->setCellValue('AJ50', $CYD2632x20);
             $sheet->getStyle('AJ50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK50', '0');
+            $sheet->setCellValue('AK50', $CYD2633x20);
             $sheet->getStyle('AK50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL50', '0');
+            $sheet->setCellValue('AL50', $CYD2634x20);
             $sheet->getStyle('AL50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM50', '0');
+            $sheet->setCellValue('AM50', $CYD2241x800);
             $sheet->getStyle('AM50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN50', '0');
+            $sheet->setCellValue('AN50', $CYD2242x800);
             $sheet->getStyle('AN50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO50', '0');
+            $sheet->setCellValue('AO50', $CYD2343x1200);
             $sheet->getStyle('AO50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP50', '0');
+            $sheet->setCellValue('AP50', $CYD3444x600);
             $sheet->getStyle('AP50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ50', '0');
+            $sheet->setCellValue('AQ50', $CYD1445x600);
             $sheet->getStyle('AQ50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR50', '0');
+            $sheet->setCellValue('AR50', $CYD1446x600);
             $sheet->getStyle('AR50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS50', '0');
+            $sheet->setCellValue('AS50', $CYD1447x600);
             $sheet->getStyle('AS50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT50', '0');
+            $sheet->setCellValue('AT50', $CYD1448x600);
             $sheet->getStyle('AT50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU50', '0');
+            $sheet->setCellValue('AU50', $CYD1449x600);
             $sheet->getStyle('AU50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV50', '0');
+            $sheet->setCellValue('AV50', $CYD1450x600);
             $sheet->getStyle('AV50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW50', '0');
+            $sheet->setCellValue('AW50', $CYD1451x600);
             $sheet->getStyle('AW50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX50', '0');
+            $sheet->setCellValue('AX50', $CYD1452x600);
             $sheet->getStyle('AX50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY50', '0');
+            $sheet->setCellValue('AY50', $CYD3453x300);
             $sheet->getStyle('AY50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ50', '0');
+            $sheet->setCellValue('AZ50', $CYD1154x300);
             $sheet->getStyle('AZ50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA50', '0');
+            $sheet->setCellValue('BA50', $CYD1455x300);
             $sheet->getStyle('BA50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB50', '0');
+            $sheet->setCellValue('BB50', $CYD1456x300);
             $sheet->getStyle('BB50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC50', '0');
+            $sheet->setCellValue('BC50', $CYD1457x300);
             $sheet->getStyle('BC50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD50', '0');
+            $sheet->setCellValue('BD50', $CYD1458x300);
             $sheet->getStyle('BD50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE50', '0');
+            $sheet->setCellValue('BE50', $CYD1459x100);
             $sheet->getStyle('BE50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF50', '0');
+            $sheet->setCellValue('BF50', $CYD1460x100);
             $sheet->getStyle('BF50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG50', '0');
+            $sheet->setCellValue('BG50', $CYD1461x100);
             $sheet->getStyle('BG50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH50', '0');
+            $sheet->setCellValue('BH50', $CYD3450x100);
             $sheet->getStyle('BH50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI50', '0');
+            $sheet->setCellValue('BI50', $CYD3463x100);
             $sheet->getStyle('BI50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ50', '0');
+            $sheet->setCellValue('BJ50', $CYD3464x100);
             $sheet->getStyle('BJ50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK50', '0');
+            $sheet->setCellValue('BK50', $CYD1465x50);
             $sheet->getStyle('BK50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL50', '0');
+            $sheet->setCellValue('BL50', $CYD1466x50);
             $sheet->getStyle('BL50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM50', '0');
+            $sheet->setCellValue('BM50', $CYD1467x50);
             $sheet->getStyle('BM50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN50', '0');
+            $sheet->setCellValue('BN50', $CYD3468x30);
             $sheet->getStyle('BN50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO50', '0');
+            $sheet->setCellValue('BO50', $CYD3469x30);
             $sheet->getStyle('BO50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP50', '0');
+            $sheet->setCellValue('BP50', $CYD3470x50);
             $sheet->getStyle('BP50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ50', '0');
+            $sheet->setCellValue('BQ50', $CYD3471x50);
             $sheet->getStyle('BQ50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR50', '0');
+            $sheet->setCellValue('BR50', $CYD3472x30);
             $sheet->getStyle('BR50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS50', '0');
+            $sheet->setCellValue('BS50', $CYD3473x30);
             $sheet->getStyle('BS50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT50', '0');
+            $sheet->setCellValue('BT50', $CYD3474x50);
             $sheet->getStyle('BT50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU50', '0');
+            $sheet->setCellValue('BU50', $CYD3475x50);
             $sheet->getStyle('BU50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV50', '0');
+            $sheet->setCellValue('BV50', $CYD3476x150);
             $sheet->getStyle('BV50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW50', '0');
+            $sheet->setCellValue('BW50', $CYD1477x50);
             $sheet->getStyle('BW50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX50', '0');
+            $sheet->setCellValue('BX50', $CYD1478x50);
             $sheet->getStyle('BX50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY50', '0');
+            $sheet->setCellValue('BY50', '=SUM(E50:BZ50)+SUM(FY50:GF50)');
             $sheet->getStyle('BY50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10510,300 +15362,301 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // SCOURING
         $sheet->mergeCells('A51:D51');
-        $sheet->setCellValue('A51', 'CELUP PERBAIKAN PRT');
+        $sheet->setCellValue('A51', 'SCOURING');
         $sheet->getStyle('A51')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A51:D51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E51', '0');
+            $sheet->setCellValue('E51', $S1401x2400);
             $sheet->getStyle('E51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F51', '0');
+            $sheet->setCellValue('F51', $S1402x1200);
             $sheet->getStyle('F51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G51', '0');
+            $sheet->setCellValue('G51', $S1103x1800);
             $sheet->getStyle('G51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H51', '0');
+            $sheet->setCellValue('H51', $S1104x1200);
             $sheet->getStyle('H51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I51', '0');
+            $sheet->setCellValue('I51', $S3505x750);
             $sheet->getStyle('I51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J51', '0');
+            $sheet->setCellValue('J51', $S1406x2400);
             $sheet->getStyle('J51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K51', '0');
+            $sheet->setCellValue('K51', $S1107x1800);
             $sheet->getStyle('K51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L51', '0');
+            $sheet->setCellValue('L51', $S1108x1200);
             $sheet->getStyle('L51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M51', '0');
+            $sheet->setCellValue('M51', $S4409x3200);
             $sheet->getStyle('M51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N51', '0');
+            $sheet->setCellValue('N51', $S1410x1800);
             $sheet->getStyle('N51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O51', '0');
+            $sheet->setCellValue('O51', $S4411x3200);
             $sheet->getStyle('O51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P51', '0');
+            $sheet->setCellValue('P51', $S4412x2400);
             $sheet->getStyle('P51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q51', '0');
+            $sheet->setCellValue('Q51', $S4413x2400);
             $sheet->getStyle('Q51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R51', '0');
+            $sheet->setCellValue('R51', $S1414x1200);
             $sheet->getStyle('R51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S51', '0');
+            $sheet->setCellValue('S51', $S1415x1200);
             $sheet->getStyle('S51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T51', '0');
+            $sheet->setCellValue('T51', $S2616x100);
             $sheet->getStyle('T51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U51', '0');
+            $sheet->setCellValue('U51', $S2617x100);
             $sheet->getStyle('U51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V51', '0');
+            $sheet->setCellValue('V51', $S2618x50);
             $sheet->getStyle('V51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W51', '0');
+            $sheet->setCellValue('W51', $S2619x800);
             $sheet->getStyle('W51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X51', '0');
+            $sheet->setCellValue('X51', $S2620x30);
             $sheet->getStyle('X51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y51', '0');
+            $sheet->setCellValue('Y51', $S2621x800);
             $sheet->getStyle('Y51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z51', '0');
+            $sheet->setCellValue('Z51', $S2222x200);
             $sheet->getStyle('Z51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA51', '0');
+            $sheet->setCellValue('AA51', $S2223x800);
             $sheet->getStyle('AA51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB51', '0');
+            $sheet->setCellValue('AB51', $S2224x400);
             $sheet->getStyle('AB51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC51', '0');
+            $sheet->setCellValue('AC51', $S2225x400);
             $sheet->getStyle('AC51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD51', '0');
+            $sheet->setCellValue('AD51', $S2626x600);
             $sheet->getStyle('AD51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE51', '0');
+            $sheet->setCellValue('AE51', $S2627x600);
             $sheet->getStyle('AE51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF51', '0');
+            $sheet->setCellValue('AF51', $S2628x800);
             $sheet->getStyle('AF51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG51', '0');
+            $sheet->setCellValue('AG51', $S2629x50);
             $sheet->getStyle('AG51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH51', '0');
+            $sheet->setCellValue('AH51', $S2630x800);
             $sheet->getStyle('AH51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI51', '0');
+            $sheet->setCellValue('AI51', $S2631x10);
             $sheet->getStyle('AI51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ51', '0');
+            $sheet->setCellValue('AJ51', $S2632x20);
             $sheet->getStyle('AJ51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK51', '0');
+            $sheet->setCellValue('AK51', $S2633x20);
             $sheet->getStyle('AK51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL51', '0');
+            $sheet->setCellValue('AL51', $S2634x20);
             $sheet->getStyle('AL51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM51', '0');
+            $sheet->setCellValue('AM51', $S2241x800);
             $sheet->getStyle('AM51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN51', '0');
+            $sheet->setCellValue('AN51', $S2242x800);
             $sheet->getStyle('AN51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO51', '0');
+            $sheet->setCellValue('AO51', $S2343x1200);
             $sheet->getStyle('AO51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP51', '0');
+            $sheet->setCellValue('AP51', $S3444x600);
             $sheet->getStyle('AP51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ51', '0');
+            $sheet->setCellValue('AQ51', $S1445x600);
             $sheet->getStyle('AQ51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR51', '0');
+            $sheet->setCellValue('AR51', $S1446x600);
             $sheet->getStyle('AR51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS51', '0');
+            $sheet->setCellValue('AS51', $S1447x600);
             $sheet->getStyle('AS51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT51', '0');
+            $sheet->setCellValue('AT51', $S1448x600);
             $sheet->getStyle('AT51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU51', '0');
+            $sheet->setCellValue('AU51', $S1449x600);
             $sheet->getStyle('AU51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV51', '0');
+            $sheet->setCellValue('AV51', $S1450x600);
             $sheet->getStyle('AV51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW51', '0');
+            $sheet->setCellValue('AW51', $S1451x600);
             $sheet->getStyle('AW51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX51', '0');
+            $sheet->setCellValue('AX51', $S1452x600);
             $sheet->getStyle('AX51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY51', '0');
+            $sheet->setCellValue('AY51', $S3453x300);
             $sheet->getStyle('AY51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ51', '0');
+            $sheet->setCellValue('AZ51', $S1154x300);
             $sheet->getStyle('AZ51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA51', '0');
+            $sheet->setCellValue('BA51', $S1455x300);
             $sheet->getStyle('BA51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB51', '0');
+            $sheet->setCellValue('BB51', $S1456x300);
             $sheet->getStyle('BB51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC51', '0');
+            $sheet->setCellValue('BC51', $S1457x300);
             $sheet->getStyle('BC51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD51', '0');
+            $sheet->setCellValue('BD51', $S1458x300);
             $sheet->getStyle('BD51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE51', '0');
+            $sheet->setCellValue('BE51', $S1459x100);
             $sheet->getStyle('BE51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF51', '0');
+            $sheet->setCellValue('BF51', $S1460x100);
             $sheet->getStyle('BF51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG51', '0');
+            $sheet->setCellValue('BG51', $S1461x100);
             $sheet->getStyle('BG51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH51', '0');
+            $sheet->setCellValue('BH51', $S3462x100);
             $sheet->getStyle('BH51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI51', '0');
+            $sheet->setCellValue('BI51', $S3463x100);
             $sheet->getStyle('BI51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ51', '0');
+            $sheet->setCellValue('BJ51', $S3451x100);
             $sheet->getStyle('BJ51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK51', '0');
+            $sheet->setCellValue('BK51', $S1465x50);
             $sheet->getStyle('BK51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL51', '0');
+            $sheet->setCellValue('BL51', $S1466x50);
             $sheet->getStyle('BL51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM51', '0');
+            $sheet->setCellValue('BM51', $S1467x50);
             $sheet->getStyle('BM51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN51', '0');
+            $sheet->setCellValue('BN51', $S3468x30);
             $sheet->getStyle('BN51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO51', '0');
+            $sheet->setCellValue('BO51', $S3469x30);
             $sheet->getStyle('BO51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP51', '0');
+            $sheet->setCellValue('BP51', $S3470x50);
             $sheet->getStyle('BP51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ51', '0');
+            $sheet->setCellValue('BQ51', $S3471x50);
             $sheet->getStyle('BQ51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR51', '0');
+            $sheet->setCellValue('BR51', $S3472x30);
             $sheet->getStyle('BR51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS51', '0');
+            $sheet->setCellValue('BS51', $S3473x30);
             $sheet->getStyle('BS51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT51', '0');
+            $sheet->setCellValue('BT51', $S3474x50);
             $sheet->getStyle('BT51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU51', '0');
+            $sheet->setCellValue('BU51', $S3475x50);
             $sheet->getStyle('BU51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV51', '0');
+            $sheet->setCellValue('BV51', $S3476x150);
             $sheet->getStyle('BV51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW51', '0');
+            $sheet->setCellValue('BW51', $S1477x50);
             $sheet->getStyle('BW51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX51', '0');
+            $sheet->setCellValue('BX51', $S1478x50);
             $sheet->getStyle('BX51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY51', '0');
+            $sheet->setCellValue('BY51', '=SUM(E51:BZ51)+SUM(FY51:GF51)');
             $sheet->getStyle('BY51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10815,301 +15668,302 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN TAS
+
+    // GAGAL PROSES
         $sheet->mergeCells('A52:D52');
-        $sheet->setCellValue('A52', 'CELUP PERBAIKAN TAS');
+        $sheet->setCellValue('A52', 'GAGAL PROSES');
         $sheet->getStyle('A52')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A52:D52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E52', '0');
+            $sheet->setCellValue('E52', $GP1401x2400);
             $sheet->getStyle('E52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F52', '0');
+            $sheet->setCellValue('F52', $GP1402x1200);
             $sheet->getStyle('F52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G52', '0');
+            $sheet->setCellValue('G52', $GP1103x1800);
             $sheet->getStyle('G52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H52', '0');
+            $sheet->setCellValue('H52', $GP1104x1200);
             $sheet->getStyle('H52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I52', '0');
+            $sheet->setCellValue('I52', $GP3505x750);
             $sheet->getStyle('I52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J52', '0');
+            $sheet->setCellValue('J52', $GP1406x2400);
             $sheet->getStyle('J52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K52', '0');
+            $sheet->setCellValue('K52', $GP1107x1800);
             $sheet->getStyle('K52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L52', '0');
+            $sheet->setCellValue('L52', $GP1108x1200);
             $sheet->getStyle('L52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M52', '0');
+            $sheet->setCellValue('M52', $GP4409x3200);
             $sheet->getStyle('M52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N52', '0');
+            $sheet->setCellValue('N52', $GP1410x1800);
             $sheet->getStyle('N52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O52', '0');
+            $sheet->setCellValue('O52', $GP4411x3200);
             $sheet->getStyle('O52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P52', '0');
+            $sheet->setCellValue('P52', $GP4412x2400);
             $sheet->getStyle('P52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q52', '0');
+            $sheet->setCellValue('Q52', $GP4413x2400);
             $sheet->getStyle('Q52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R52', '0');
+            $sheet->setCellValue('R52', $GP1414x1200);
             $sheet->getStyle('R52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S52', '0');
+            $sheet->setCellValue('S52', $GP1415x1200);
             $sheet->getStyle('S52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T52', '0');
+            $sheet->setCellValue('T52', $GP2616x100);
             $sheet->getStyle('T52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U52', '0');
+            $sheet->setCellValue('U52', $GP2617x100);
             $sheet->getStyle('U52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V52', '0');
+            $sheet->setCellValue('V52', $GP2618x50);
             $sheet->getStyle('V52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W52', '0');
+            $sheet->setCellValue('W52', $GP2619x800);
             $sheet->getStyle('W52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X52', '0');
+            $sheet->setCellValue('X52', $GP2620x30);
             $sheet->getStyle('X52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y52', '0');
+            $sheet->setCellValue('Y52', $GP2621x800);
             $sheet->getStyle('Y52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z52', '0');
+            $sheet->setCellValue('Z52', $GP2222x200);
             $sheet->getStyle('Z52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA52', '0');
+            $sheet->setCellValue('AA52', $GP2223x800);
             $sheet->getStyle('AA52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB52', '0');
+            $sheet->setCellValue('AB52', $GP2224x400);
             $sheet->getStyle('AB52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC52', '0');
+            $sheet->setCellValue('AC52', $GP2225x400);
             $sheet->getStyle('AC52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD52', '0');
+            $sheet->setCellValue('AD52', $GP2626x600);
             $sheet->getStyle('AD52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE52', '0');
+            $sheet->setCellValue('AE52', $GP2627x600);
             $sheet->getStyle('AE52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF52', '0');
+            $sheet->setCellValue('AF52', $GP2628x800);
             $sheet->getStyle('AF52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG52', '0');
+            $sheet->setCellValue('AG52', $GP2629x50);
             $sheet->getStyle('AG52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH52', '0');
+            $sheet->setCellValue('AH52', $GP2630x800);
             $sheet->getStyle('AH52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI52', '0');
+            $sheet->setCellValue('AI52', $GP2631x10);
             $sheet->getStyle('AI52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ52', '0');
+            $sheet->setCellValue('AJ52', $GP2632x20);
             $sheet->getStyle('AJ52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK52', '0');
+            $sheet->setCellValue('AK52', $GP2633x20);
             $sheet->getStyle('AK52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL52', '0');
+            $sheet->setCellValue('AL52', $GP2634x20);
             $sheet->getStyle('AL52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM52', '0');
+            $sheet->setCellValue('AM52', $GP2241x800);
             $sheet->getStyle('AM52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN52', '0');
+            $sheet->setCellValue('AN52', $GP2242x800);
             $sheet->getStyle('AN52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO52', '0');
+            $sheet->setCellValue('AO52', $GP2343x1200);
             $sheet->getStyle('AO52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP52', '0');
+            $sheet->setCellValue('AP52', $GP3444x600);
             $sheet->getStyle('AP52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ52', '0');
+            $sheet->setCellValue('AQ52', $GP1445x600);
             $sheet->getStyle('AQ52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR52', '0');
+            $sheet->setCellValue('AR52', $GP1446x600);
             $sheet->getStyle('AR52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS52', '0');
+            $sheet->setCellValue('AS52', $GP1447x600);
             $sheet->getStyle('AS52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT52', '0');
+            $sheet->setCellValue('AT52', $GP1448x600);
             $sheet->getStyle('AT52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU52', '0');
+            $sheet->setCellValue('AU52', $GP1449x600);
             $sheet->getStyle('AU52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV52', '0');
+            $sheet->setCellValue('AV52', $GP1450x600);
             $sheet->getStyle('AV52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW52', '0');
+            $sheet->setCellValue('AW52', $GP1451x600);
             $sheet->getStyle('AW52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX52', '0');
+            $sheet->setCellValue('AX52', $GP1452x600);
             $sheet->getStyle('AX52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY52', '0');
+            $sheet->setCellValue('AY52', $GP3453x300);
             $sheet->getStyle('AY52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ52', '0');
+            $sheet->setCellValue('AZ52', $GP1154x300);
             $sheet->getStyle('AZ52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA52', '0');
+            $sheet->setCellValue('BA52', $GP1455x300);
             $sheet->getStyle('BA52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB52', '0');
+            $sheet->setCellValue('BB52', $GP1456x300);
             $sheet->getStyle('BB52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC52', '0');
+            $sheet->setCellValue('BC52', $GP1457x300);
             $sheet->getStyle('BC52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD52', '0');
+            $sheet->setCellValue('BD52', $GP1458x300);
             $sheet->getStyle('BD52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE52', '0');
+            $sheet->setCellValue('BE52', $GP1459x100);
             $sheet->getStyle('BE52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF52', '0');
+            $sheet->setCellValue('BF52', $GP1460x100);
             $sheet->getStyle('BF52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG52', '0');
+            $sheet->setCellValue('BG52', $GP1461x100);
             $sheet->getStyle('BG52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH52', '0');
+            $sheet->setCellValue('BH52', $GP3462x100);
             $sheet->getStyle('BH52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI52', '0');
+            $sheet->setCellValue('BI52', $GP3463x100);
             $sheet->getStyle('BI52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ52', '0');
+            $sheet->setCellValue('BJ52', $GP3464x100);
             $sheet->getStyle('BJ52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK52', '0');
+            $sheet->setCellValue('BK52', $GP1465x50);
             $sheet->getStyle('BK52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL52', '0');
+            $sheet->setCellValue('BL52', $GP1452x50);
             $sheet->getStyle('BL52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM52', '0');
+            $sheet->setCellValue('BM52', $GP1467x50);
             $sheet->getStyle('BM52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN52', '0');
+            $sheet->setCellValue('BN52', $GP3468x30);
             $sheet->getStyle('BN52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO52', '0');
+            $sheet->setCellValue('BO52', $GP3469x30);
             $sheet->getStyle('BO52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP52', '0');
+            $sheet->setCellValue('BP52', $GP3470x50);
             $sheet->getStyle('BP52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ52', '0');
+            $sheet->setCellValue('BQ52', $GP3471x50);
             $sheet->getStyle('BQ52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR52', '0');
+            $sheet->setCellValue('BR52', $GP3472x30);
             $sheet->getStyle('BR52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS52', '0');
+            $sheet->setCellValue('BS52', $GP3473x30);
             $sheet->getStyle('BS52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT52', '0');
+            $sheet->setCellValue('BT52', $GP3474x50);
             $sheet->getStyle('BT52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU52', '0');
+            $sheet->setCellValue('BU52', $GP3475x50);
             $sheet->getStyle('BU52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV52', '0');
+            $sheet->setCellValue('BV52', $GP3476x150);
             $sheet->getStyle('BV52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW52', '0');
+            $sheet->setCellValue('BW52', $GP1477x50);
             $sheet->getStyle('BW52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX52', '0');
+            $sheet->setCellValue('BX52', $GP1478x50);
             $sheet->getStyle('BX52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY52', '0');
+            $sheet->setCellValue('BY52', '=SUM(E50:BZ50)+SUM(FY50:GF50)');
             $sheet->getStyle('BY52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -11121,300 +15975,302 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+
+    // TOLAK BASAH
         $sheet->mergeCells('A53:D53');
-        $sheet->setCellValue('A53', 'CELUP PERBAIKAN TAS');
+        $sheet->setCellValue('A53', 'TOLAK BASAH');
         $sheet->getStyle('A53')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A53:D53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
-            $sheet->setCellValue('E53', '0');
+            $sheet->setCellValue('E53', $TB1401x2400);
             $sheet->getStyle('E53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('E53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('F53', '0');
+            $sheet->setCellValue('F53', $TB1402x1200);
             $sheet->getStyle('F53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('F53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('G53', '0');
+            $sheet->setCellValue('G53', $TB1103x1800);
             $sheet->getStyle('G53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('G53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('H53', '0');
+            $sheet->setCellValue('H53', $TB1104x1200);
             $sheet->getStyle('H53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('H53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('I53', '0');
+            $sheet->setCellValue('I53', $TB3505x750);
             $sheet->getStyle('I53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('I53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('J53', '0');
+            $sheet->setCellValue('J53', $TB1406x2400);
             $sheet->getStyle('J53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('J53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('K53', '0');
+            $sheet->setCellValue('K53', $TB1107x1800);
             $sheet->getStyle('K53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('K53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('L53', '0');
+            $sheet->setCellValue('L53', $TB1108x1200);
             $sheet->getStyle('L53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('L53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('M53', '0');
+            $sheet->setCellValue('M53', $TB4409x3200);
             $sheet->getStyle('M53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('M53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('N53', '0');
+            $sheet->setCellValue('N53', $TB1410x1800);
             $sheet->getStyle('N53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('N53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('O53', '0');
+            $sheet->setCellValue('O53', $TB4411x3200);
             $sheet->getStyle('O53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('O53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('P53', '0');
+            $sheet->setCellValue('P53', $TB4412x2400);
             $sheet->getStyle('P53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('P53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Q53', '0');
+            $sheet->setCellValue('Q53', $TB4413x2400);
             $sheet->getStyle('Q53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Q53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('R53', '0');
+            $sheet->setCellValue('R53', $TB1414x1200);
             $sheet->getStyle('R53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('R53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('S53', '0');
+            $sheet->setCellValue('S53', $TB1415x1200);
             $sheet->getStyle('S53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('S53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('T53', '0');
+            $sheet->setCellValue('T53', $TB2616x100);
             $sheet->getStyle('T53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('T53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('U53', '0');
+            $sheet->setCellValue('U53', $TB2617x100);
             $sheet->getStyle('U53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V53', '0');
+            $sheet->setCellValue('V53', $TB2618x50);
             $sheet->getStyle('V53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('W53', '0');
+            $sheet->setCellValue('W53', $TB2619x800);
             $sheet->getStyle('W53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X53', '0');
+            $sheet->setCellValue('X53', $TB2620x30);
             $sheet->getStyle('X53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Y53', '0');
+            $sheet->setCellValue('Y53', $TB2621x800);
             $sheet->getStyle('Y53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Y53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('Z53', '0');
+            $sheet->setCellValue('Z53', $TB2222x200);
             $sheet->getStyle('Z53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('Z53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AA53', '0');
+            $sheet->setCellValue('AA53', $TB2223x800);
             $sheet->getStyle('AA53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AA53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AB53', '0');
+            $sheet->setCellValue('AB53', $TB2224x400);
             $sheet->getStyle('AB53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AB53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AC53', '0');
+            $sheet->setCellValue('AC53', $TB2225x400);
             $sheet->getStyle('AC53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD53', '0');
+            $sheet->setCellValue('AD53', $TB2626x600);
             $sheet->getStyle('AD53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE53', '0');
+            $sheet->setCellValue('AE53', $TB2627x600);
             $sheet->getStyle('AE53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF53', '0');
+            $sheet->setCellValue('AF53', $TB2628x800);
             $sheet->getStyle('AF53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG53', '0');
+            $sheet->setCellValue('AG53', $TB2629x50);
             $sheet->getStyle('AG53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AH53', '0');
+            $sheet->setCellValue('AH53', $TB2630x800);
             $sheet->getStyle('AH53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AH53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AI53', '0');
+            $sheet->setCellValue('AI53', $TB2631x10);
             $sheet->getStyle('AI53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AI53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AJ53', '0');
+            $sheet->setCellValue('AJ53', $TB2632x20);
             $sheet->getStyle('AJ53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AJ53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AK53', '0');
+            $sheet->setCellValue('AK53', $TB2633x20);
             $sheet->getStyle('AK53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AK53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AL53', '0');
+            $sheet->setCellValue('AL53', $TB2634x20);
             $sheet->getStyle('AL53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AL53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AM53', '0');
+            $sheet->setCellValue('AM53', $TB2241x800);
             $sheet->getStyle('AM53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AM53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AN53', '0');
+            $sheet->setCellValue('AN53', $TB2242x800);
             $sheet->getStyle('AN53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AN53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AO53', '0');
+            $sheet->setCellValue('AO53', $TB2343x1200);
             $sheet->getStyle('AO53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP53', '0');
+            $sheet->setCellValue('AP53', $TB3444x600);
             $sheet->getStyle('AP53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ53', '0');
+            $sheet->setCellValue('AQ53', $TB1445x600);
             $sheet->getStyle('AQ53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR53', '0');
+            $sheet->setCellValue('AR53', $TB1446x600);
             $sheet->getStyle('AR53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS53', '0');
+            $sheet->setCellValue('AS53', $TB1447x600);
             $sheet->getStyle('AS53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT53', '0');
+            $sheet->setCellValue('AT53', $TB1448x600);
             $sheet->getStyle('AT53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU53', '0');
+            $sheet->setCellValue('AU53', $TB1449x600);
             $sheet->getStyle('AU53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV53', '0');
+            $sheet->setCellValue('AV53', $TB1450x600);
             $sheet->getStyle('AV53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW53', '0');
+            $sheet->setCellValue('AW53', $TB1451x600);
             $sheet->getStyle('AW53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX53', '0');
+            $sheet->setCellValue('AX53', $TB1452x600);
             $sheet->getStyle('AX53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AY53', '0');
+            $sheet->setCellValue('AY53', $TB3453x300);
             $sheet->getStyle('AY53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AY53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AZ53', '0');
+            $sheet->setCellValue('AZ53', $TB1154x300);
             $sheet->getStyle('AZ53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AZ53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BA53', '0');
+            $sheet->setCellValue('BA53', $TB1455x300);
             $sheet->getStyle('BA53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BA53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BB53', '0');
+            $sheet->setCellValue('BB53', $TB1456x300);
             $sheet->getStyle('BB53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BB53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BC53', '0');
+            $sheet->setCellValue('BC53', $TB1457x300);
             $sheet->getStyle('BC53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BC53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BD53', '0');
+            $sheet->setCellValue('BD53', $TB1458x300);
             $sheet->getStyle('BD53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BD53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BE53', '0');
+            $sheet->setCellValue('BE53', $TB1459x100);
             $sheet->getStyle('BE53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF53', '0');
+            $sheet->setCellValue('BF53', $TB1460x100);
             $sheet->getStyle('BF53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG53', '0');
+            $sheet->setCellValue('BG53', $TB1461x100);
             $sheet->getStyle('BG53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH53', '0');
+            $sheet->setCellValue('BH53', $TB3462x100);
             $sheet->getStyle('BH53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BI53', '0');
+            $sheet->setCellValue('BI53', $TB3463x100);
             $sheet->getStyle('BI53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BI53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BJ53', '0');
+            $sheet->setCellValue('BJ53', $TB3464x100);
             $sheet->getStyle('BJ53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BJ53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BK53', '0');
+            $sheet->setCellValue('BK53', $TB1465x50);
             $sheet->getStyle('BK53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BL53', '0');
+            $sheet->setCellValue('BL53', $TB1466x50);
             $sheet->getStyle('BL53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BL53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BM53', '0');
+            $sheet->setCellValue('BM53', $TB1467x50);
             $sheet->getStyle('BM53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BN53', '0');
+            $sheet->setCellValue('BN53', $TB3453x30);
             $sheet->getStyle('BN53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BN53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BO53', '0');
+            $sheet->setCellValue('BO53', $TB3469x30);
             $sheet->getStyle('BO53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BO53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BP53', '0');
+            $sheet->setCellValue('BP53', $TB3470x50);
             $sheet->getStyle('BP53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BP53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BQ53', '0');
+            $sheet->setCellValue('BQ53', $TB3471x50);
             $sheet->getStyle('BQ53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BQ53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BR53', '0');
+            $sheet->setCellValue('BR53', $TB3472x30);
             $sheet->getStyle('BR53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BR53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BS53', '0');
+            $sheet->setCellValue('BS53', $TB3473x30);
             $sheet->getStyle('BS53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BS53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BT53', '0');
+            $sheet->setCellValue('BT53', $TB3474x50);
             $sheet->getStyle('BT53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BT53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BU53', '0');
+            $sheet->setCellValue('BU53', $TB3475x50);
             $sheet->getStyle('BU53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BU53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BV53', '0');
+            $sheet->setCellValue('BV53', $TB3476x150);
             $sheet->getStyle('BV53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BV53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BW53', '0');
+            $sheet->setCellValue('BW53', $TB1477x50);
             $sheet->getStyle('BW53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BW53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BX53', '0');
+            $sheet->setCellValue('BX53', $TB1477x50);
             $sheet->getStyle('BX53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BX53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BY53', '0');
+            $sheet->setCellValue('BY53', '=SUM(E53:BZ53)+SUM(FY53:GF53)');
             $sheet->getStyle('BY53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BY53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -11426,314 +16282,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PERBAIKAN RMP
-        $sheet->mergeCells('A54:D54');
-        $sheet->setCellValue('A54', 'CELUP PERBAIKAN RMP');
-        $sheet->getStyle('A54')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A54:D54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E54', '0');
-            $sheet->getStyle('E54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F54', '0');
-            $sheet->getStyle('F54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G54', '0');
-            $sheet->getStyle('G54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H54', '0');
-            $sheet->getStyle('H54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I54', '0');
-            $sheet->getStyle('I54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J54', '0');
-            $sheet->getStyle('J54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K54', '0');
-            $sheet->getStyle('K54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L54', '0');
-            $sheet->getStyle('L54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M54', '0');
-            $sheet->getStyle('M54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N54', '0');
-            $sheet->getStyle('N54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O54', '0');
-            $sheet->getStyle('O54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P54', '0');
-            $sheet->getStyle('P54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q54', '0');
-            $sheet->getStyle('Q54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R54', '0');
-            $sheet->getStyle('R54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S54', '0');
-            $sheet->getStyle('S54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T54', '0');
-            $sheet->getStyle('T54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U54', '0');
-            $sheet->getStyle('U54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V54', '0');
-            $sheet->getStyle('V54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W54', '0');
-            $sheet->getStyle('W54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X54', '0');
-            $sheet->getStyle('X54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y54', '0');
-            $sheet->getStyle('Y54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z54', '0');
-            $sheet->getStyle('Z54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA54', '0');
-            $sheet->getStyle('AA54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB54', '0');
-            $sheet->getStyle('AB54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC54', '0');
-            $sheet->getStyle('AC54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD54', '0');
-            $sheet->getStyle('AD54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE54', '0');
-            $sheet->getStyle('AE54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF54', '0');
-            $sheet->getStyle('AF54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG54', '0');
-            $sheet->getStyle('AG54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH54', '0');
-            $sheet->getStyle('AH54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI54', '0');
-            $sheet->getStyle('AI54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ54', '0');
-            $sheet->getStyle('AJ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK54', '0');
-            $sheet->getStyle('AK54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL54', '0');
-            $sheet->getStyle('AL54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM54', '0');
-            $sheet->getStyle('AM54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN54', '0');
-            $sheet->getStyle('AN54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO54', '0');
-            $sheet->getStyle('AO54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP54', '0');
-            $sheet->getStyle('AP54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ54', '0');
-            $sheet->getStyle('AQ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR54', '0');
-            $sheet->getStyle('AR54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS54', '0');
-            $sheet->getStyle('AS54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT54', '0');
-            $sheet->getStyle('AT54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU54', '0');
-            $sheet->getStyle('AU54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV54', '0');
-            $sheet->getStyle('AV54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW54', '0');
-            $sheet->getStyle('AW54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX54', '0');
-            $sheet->getStyle('AX54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY54', '0');
-            $sheet->getStyle('AY54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ54', '0');
-            $sheet->getStyle('AZ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA54', '0');
-            $sheet->getStyle('BA54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB54', '0');
-            $sheet->getStyle('BB54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC54', '0');
-            $sheet->getStyle('BC54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD54', '0');
-            $sheet->getStyle('BD54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE54', '0');
-            $sheet->getStyle('BE54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF54', '0');
-            $sheet->getStyle('BF54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG54', '0');
-            $sheet->getStyle('BG54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH54', '0');
-            $sheet->getStyle('BH54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI54', '0');
-            $sheet->getStyle('BI54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ54', '0');
-            $sheet->getStyle('BJ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK54', '0');
-            $sheet->getStyle('BK54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL54', '0');
-            $sheet->getStyle('BL54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM54', '0');
-            $sheet->getStyle('BM54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN54', '0');
-            $sheet->getStyle('BN54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO54', '0');
-            $sheet->getStyle('BO54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP54', '0');
-            $sheet->getStyle('BP54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ54', '0');
-            $sheet->getStyle('BQ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR54', '0');
-            $sheet->getStyle('BR54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS54', '0');
-            $sheet->getStyle('BS54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT54', '0');
-            $sheet->getStyle('BT54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU54', '0');
-            $sheet->getStyle('BU54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV54', '0');
-            $sheet->getStyle('BV54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW54', '0');
-            $sheet->getStyle('BW54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX54', '0');
-            $sheet->getStyle('BX54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY54', '0');
-            $sheet->getStyle('BY54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ54', '0');
-            $sheet->getStyle('BZ54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA54', '0');
-            $sheet->getStyle('CA54')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA54')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
+    // TOTAL KELUAR GREIGE
         $sheet->mergeCells('A55:D55');
-        $sheet->setCellValue('A55', 'CELUP PERBAIKAN RMP');
+        $sheet->setCellValue('A55', 'TOTAL KELUAR GREIGE');
         $sheet->getStyle('A55')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A55:D55')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -12037,9 +16588,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA55')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA55')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CELUP PROSES AKW
+    // TOTAL KELUAR PERBAIKAN
         $sheet->mergeCells('A56:D56');
-        $sheet->setCellValue('A56', 'CELUP PROSES AKW');
+        $sheet->setCellValue('A56', 'TOTAL KELUAR PERBAIKAN');
         $sheet->getStyle('A56')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A56:D56')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -12343,8 +16894,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA56')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA56')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // TOTAL KELUAR AKW
         $sheet->mergeCells('A57:D57');
-        $sheet->setCellValue('A57', 'CELUP PROSES AKW');
+        $sheet->setCellValue('A57', 'TOTAL KELUAR AKW');
         $sheet->getStyle('A57')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A57:D57')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -12648,9 +17200,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA57')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA57')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // Celup Poly Dulu (T-Side)
+    // TOTAL KELUAR C.POLY DULU
         $sheet->mergeCells('A58:D58');
-        $sheet->setCellValue('A58', 'Celup Poly Dulu (T-Side)');
+        $sheet->setCellValue('A58', 'TOTAL KELUAR C.POLY DULU');
         $sheet->getStyle('A58')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A58:D58')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -12954,8 +17506,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA58')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA58')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // TOTAL KELUAR C.MISTY
         $sheet->mergeCells('A59:D59');
-        $sheet->setCellValue('A59', 'Celup Poly Dulu (T-Side)');
+        $sheet->setCellValue('A59', 'TOTAL KELUAR C.MISTY');
         $sheet->getStyle('A59')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A59:D59')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -13259,9 +17812,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA59')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA59')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CUCI MISTY
+    // TOTAL KELUAR C. Y/D
         $sheet->mergeCells('A60:D60');
-        $sheet->setCellValue('A60', 'CUCI MISTY');
+        $sheet->setCellValue('A60', 'TOTAL KELUAR C. Y/D');
         $sheet->getStyle('A60')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A60:D60')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -13565,8 +18118,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA60')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA60')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // TOTAL KELUAR SCOURING
         $sheet->mergeCells('A61:D61');
-        $sheet->setCellValue('A61', 'CUCI MISTY');
+        $sheet->setCellValue('A61', 'TOTAL KELUAR SCOURING');
         $sheet->getStyle('A61')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A61:D61')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -13870,9 +18424,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA61')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA61')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // CUCI YARN DYE (Y/D)
+    // TOTAL KELUAR GAGAL PROSES
         $sheet->mergeCells('A62:D62');
-        $sheet->setCellValue('A62', 'CUCI YARN DYE (Y/D)');
+        $sheet->setCellValue('A62', 'TOTAL KELUAR GAGAL PROSES');
         $sheet->getStyle('A62')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A62:D62')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -14176,8 +18730,9 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA62')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA62')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+    // TOTAL KELUAR TOLAK BASAH
         $sheet->mergeCells('A63:D63');
-        $sheet->setCellValue('A63', 'CUCI YARN DYE (Y/D)');
+        $sheet->setCellValue('A63', 'TOTAL KELUAR TOLAK BASAH');
         $sheet->getStyle('A63')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A63:D63')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -14480,10 +19035,10 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->setCellValue('CA63', '0');
             $sheet->getStyle('CA63')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA63')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // SCOURING
+    
+    // SISA PRODUKSI
         $sheet->mergeCells('A64:D64');
-        $sheet->setCellValue('A64', 'SCOURING');
+        $sheet->setCellValue('A64', 'SISA PRODUKSI');
         $sheet->getStyle('A64')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A64:D64')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -14786,9 +19341,10 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->setCellValue('CA64', '0');
             $sheet->getStyle('CA64')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA64')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
+    
+    // LAMA PROSES
         $sheet->mergeCells('A65:D65');
-        $sheet->setCellValue('A65', 'SCOURING');
+        $sheet->setCellValue('A65', 'LAMA PROSES');
         $sheet->getStyle('A65')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('A65:D65')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         // DATA
@@ -15092,4723 +19648,135 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('CA65')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('CA65')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-    // GAGAL PROSES
-        $sheet->mergeCells('A66:D66');
-        $sheet->setCellValue('A66', 'GAGAL PROSES');
-        $sheet->getStyle('A66')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A66:D66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E66', '0');
-            $sheet->getStyle('E66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F66', '0');
-            $sheet->getStyle('F66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G66', '0');
-            $sheet->getStyle('G66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H66', '0');
-            $sheet->getStyle('H66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I66', '0');
-            $sheet->getStyle('I66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J66', '0');
-            $sheet->getStyle('J66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K66', '0');
-            $sheet->getStyle('K66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L66', '0');
-            $sheet->getStyle('L66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M66', '0');
-            $sheet->getStyle('M66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N66', '0');
-            $sheet->getStyle('N66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O66', '0');
-            $sheet->getStyle('O66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P66', '0');
-            $sheet->getStyle('P66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q66', '0');
-            $sheet->getStyle('Q66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R66', '0');
-            $sheet->getStyle('R66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S66', '0');
-            $sheet->getStyle('S66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T66', '0');
-            $sheet->getStyle('T66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U66', '0');
-            $sheet->getStyle('U66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V66', '0');
-            $sheet->getStyle('V66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W66', '0');
-            $sheet->getStyle('W66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X66', '0');
-            $sheet->getStyle('X66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y66', '0');
-            $sheet->getStyle('Y66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z66', '0');
-            $sheet->getStyle('Z66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA66', '0');
-            $sheet->getStyle('AA66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB66', '0');
-            $sheet->getStyle('AB66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC66', '0');
-            $sheet->getStyle('AC66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD66', '0');
-            $sheet->getStyle('AD66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE66', '0');
-            $sheet->getStyle('AE66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF66', '0');
-            $sheet->getStyle('AF66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG66', '0');
-            $sheet->getStyle('AG66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH66', '0');
-            $sheet->getStyle('AH66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI66', '0');
-            $sheet->getStyle('AI66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ66', '0');
-            $sheet->getStyle('AJ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK66', '0');
-            $sheet->getStyle('AK66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL66', '0');
-            $sheet->getStyle('AL66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM66', '0');
-            $sheet->getStyle('AM66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN66', '0');
-            $sheet->getStyle('AN66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO66', '0');
-            $sheet->getStyle('AO66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP66', '0');
-            $sheet->getStyle('AP66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ66', '0');
-            $sheet->getStyle('AQ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR66', '0');
-            $sheet->getStyle('AR66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS66', '0');
-            $sheet->getStyle('AS66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT66', '0');
-            $sheet->getStyle('AT66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU66', '0');
-            $sheet->getStyle('AU66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV66', '0');
-            $sheet->getStyle('AV66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW66', '0');
-            $sheet->getStyle('AW66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX66', '0');
-            $sheet->getStyle('AX66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY66', '0');
-            $sheet->getStyle('AY66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ66', '0');
-            $sheet->getStyle('AZ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA66', '0');
-            $sheet->getStyle('BA66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB66', '0');
-            $sheet->getStyle('BB66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC66', '0');
-            $sheet->getStyle('BC66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD66', '0');
-            $sheet->getStyle('BD66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE66', '0');
-            $sheet->getStyle('BE66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF66', '0');
-            $sheet->getStyle('BF66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG66', '0');
-            $sheet->getStyle('BG66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH66', '0');
-            $sheet->getStyle('BH66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI66', '0');
-            $sheet->getStyle('BI66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ66', '0');
-            $sheet->getStyle('BJ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK66', '0');
-            $sheet->getStyle('BK66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL66', '0');
-            $sheet->getStyle('BL66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM66', '0');
-            $sheet->getStyle('BM66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN66', '0');
-            $sheet->getStyle('BN66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO66', '0');
-            $sheet->getStyle('BO66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP66', '0');
-            $sheet->getStyle('BP66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ66', '0');
-            $sheet->getStyle('BQ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR66', '0');
-            $sheet->getStyle('BR66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS66', '0');
-            $sheet->getStyle('BS66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT66', '0');
-            $sheet->getStyle('BT66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU66', '0');
-            $sheet->getStyle('BU66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV66', '0');
-            $sheet->getStyle('BV66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW66', '0');
-            $sheet->getStyle('BW66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX66', '0');
-            $sheet->getStyle('BX66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY66', '0');
-            $sheet->getStyle('BY66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ66', '0');
-            $sheet->getStyle('BZ66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA66', '0');
-            $sheet->getStyle('CA66')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-        $sheet->mergeCells('A67:D67');
-        $sheet->setCellValue('A67', 'GAGAL PROSES');
-        $sheet->getStyle('A67')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A67:D67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E67', '0');
-            $sheet->getStyle('E67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F67', '0');
-            $sheet->getStyle('F67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G67', '0');
-            $sheet->getStyle('G67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H67', '0');
-            $sheet->getStyle('H67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I67', '0');
-            $sheet->getStyle('I67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J67', '0');
-            $sheet->getStyle('J67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K67', '0');
-            $sheet->getStyle('K67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L67', '0');
-            $sheet->getStyle('L67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M67', '0');
-            $sheet->getStyle('M67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N67', '0');
-            $sheet->getStyle('N67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O67', '0');
-            $sheet->getStyle('O67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P67', '0');
-            $sheet->getStyle('P67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q67', '0');
-            $sheet->getStyle('Q67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R67', '0');
-            $sheet->getStyle('R67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S67', '0');
-            $sheet->getStyle('S67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T67', '0');
-            $sheet->getStyle('T67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U67', '0');
-            $sheet->getStyle('U67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V67', '0');
-            $sheet->getStyle('V67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W67', '0');
-            $sheet->getStyle('W67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X67', '0');
-            $sheet->getStyle('X67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y67', '0');
-            $sheet->getStyle('Y67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z67', '0');
-            $sheet->getStyle('Z67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA67', '0');
-            $sheet->getStyle('AA67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB67', '0');
-            $sheet->getStyle('AB67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC67', '0');
-            $sheet->getStyle('AC67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD67', '0');
-            $sheet->getStyle('AD67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE67', '0');
-            $sheet->getStyle('AE67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF67', '0');
-            $sheet->getStyle('AF67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG67', '0');
-            $sheet->getStyle('AG67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH67', '0');
-            $sheet->getStyle('AH67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI67', '0');
-            $sheet->getStyle('AI67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ67', '0');
-            $sheet->getStyle('AJ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK67', '0');
-            $sheet->getStyle('AK67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL67', '0');
-            $sheet->getStyle('AL67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM67', '0');
-            $sheet->getStyle('AM67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN67', '0');
-            $sheet->getStyle('AN67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO67', '0');
-            $sheet->getStyle('AO67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP67', '0');
-            $sheet->getStyle('AP67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ67', '0');
-            $sheet->getStyle('AQ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR67', '0');
-            $sheet->getStyle('AR67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS67', '0');
-            $sheet->getStyle('AS67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT67', '0');
-            $sheet->getStyle('AT67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU67', '0');
-            $sheet->getStyle('AU67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV67', '0');
-            $sheet->getStyle('AV67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW67', '0');
-            $sheet->getStyle('AW67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX67', '0');
-            $sheet->getStyle('AX67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY67', '0');
-            $sheet->getStyle('AY67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ67', '0');
-            $sheet->getStyle('AZ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA67', '0');
-            $sheet->getStyle('BA67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB67', '0');
-            $sheet->getStyle('BB67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC67', '0');
-            $sheet->getStyle('BC67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD67', '0');
-            $sheet->getStyle('BD67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE67', '0');
-            $sheet->getStyle('BE67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF67', '0');
-            $sheet->getStyle('BF67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG67', '0');
-            $sheet->getStyle('BG67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH67', '0');
-            $sheet->getStyle('BH67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI67', '0');
-            $sheet->getStyle('BI67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ67', '0');
-            $sheet->getStyle('BJ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK67', '0');
-            $sheet->getStyle('BK67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL67', '0');
-            $sheet->getStyle('BL67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM67', '0');
-            $sheet->getStyle('BM67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN67', '0');
-            $sheet->getStyle('BN67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO67', '0');
-            $sheet->getStyle('BO67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP67', '0');
-            $sheet->getStyle('BP67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ67', '0');
-            $sheet->getStyle('BQ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR67', '0');
-            $sheet->getStyle('BR67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS67', '0');
-            $sheet->getStyle('BS67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT67', '0');
-            $sheet->getStyle('BT67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU67', '0');
-            $sheet->getStyle('BU67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV67', '0');
-            $sheet->getStyle('BV67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW67', '0');
-            $sheet->getStyle('BW67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX67', '0');
-            $sheet->getStyle('BX67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY67', '0');
-            $sheet->getStyle('BY67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ67', '0');
-            $sheet->getStyle('BZ67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA67', '0');
-            $sheet->getStyle('CA67')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOLAK BASAH
-        $sheet->mergeCells('A68:D68');
-        $sheet->setCellValue('A68', 'TOLAK BASAH');
-        $sheet->getStyle('A68')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A68:D68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E68', '0');
-            $sheet->getStyle('E68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F68', '0');
-            $sheet->getStyle('F68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G68', '0');
-            $sheet->getStyle('G68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H68', '0');
-            $sheet->getStyle('H68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I68', '0');
-            $sheet->getStyle('I68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J68', '0');
-            $sheet->getStyle('J68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K68', '0');
-            $sheet->getStyle('K68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L68', '0');
-            $sheet->getStyle('L68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M68', '0');
-            $sheet->getStyle('M68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N68', '0');
-            $sheet->getStyle('N68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O68', '0');
-            $sheet->getStyle('O68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P68', '0');
-            $sheet->getStyle('P68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q68', '0');
-            $sheet->getStyle('Q68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R68', '0');
-            $sheet->getStyle('R68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S68', '0');
-            $sheet->getStyle('S68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T68', '0');
-            $sheet->getStyle('T68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U68', '0');
-            $sheet->getStyle('U68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V68', '0');
-            $sheet->getStyle('V68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W68', '0');
-            $sheet->getStyle('W68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X68', '0');
-            $sheet->getStyle('X68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y68', '0');
-            $sheet->getStyle('Y68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z68', '0');
-            $sheet->getStyle('Z68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA68', '0');
-            $sheet->getStyle('AA68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB68', '0');
-            $sheet->getStyle('AB68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC68', '0');
-            $sheet->getStyle('AC68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD68', '0');
-            $sheet->getStyle('AD68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE68', '0');
-            $sheet->getStyle('AE68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF68', '0');
-            $sheet->getStyle('AF68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG68', '0');
-            $sheet->getStyle('AG68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH68', '0');
-            $sheet->getStyle('AH68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI68', '0');
-            $sheet->getStyle('AI68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ68', '0');
-            $sheet->getStyle('AJ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK68', '0');
-            $sheet->getStyle('AK68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL68', '0');
-            $sheet->getStyle('AL68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM68', '0');
-            $sheet->getStyle('AM68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN68', '0');
-            $sheet->getStyle('AN68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO68', '0');
-            $sheet->getStyle('AO68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP68', '0');
-            $sheet->getStyle('AP68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ68', '0');
-            $sheet->getStyle('AQ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR68', '0');
-            $sheet->getStyle('AR68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS68', '0');
-            $sheet->getStyle('AS68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT68', '0');
-            $sheet->getStyle('AT68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU68', '0');
-            $sheet->getStyle('AU68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV68', '0');
-            $sheet->getStyle('AV68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW68', '0');
-            $sheet->getStyle('AW68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX68', '0');
-            $sheet->getStyle('AX68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY68', '0');
-            $sheet->getStyle('AY68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ68', '0');
-            $sheet->getStyle('AZ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA68', '0');
-            $sheet->getStyle('BA68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB68', '0');
-            $sheet->getStyle('BB68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC68', '0');
-            $sheet->getStyle('BC68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD68', '0');
-            $sheet->getStyle('BD68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE68', '0');
-            $sheet->getStyle('BE68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF68', '0');
-            $sheet->getStyle('BF68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG68', '0');
-            $sheet->getStyle('BG68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH68', '0');
-            $sheet->getStyle('BH68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI68', '0');
-            $sheet->getStyle('BI68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ68', '0');
-            $sheet->getStyle('BJ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK68', '0');
-            $sheet->getStyle('BK68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL68', '0');
-            $sheet->getStyle('BL68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM68', '0');
-            $sheet->getStyle('BM68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN68', '0');
-            $sheet->getStyle('BN68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO68', '0');
-            $sheet->getStyle('BO68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP68', '0');
-            $sheet->getStyle('BP68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ68', '0');
-            $sheet->getStyle('BQ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR68', '0');
-            $sheet->getStyle('BR68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS68', '0');
-            $sheet->getStyle('BS68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT68', '0');
-            $sheet->getStyle('BT68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU68', '0');
-            $sheet->getStyle('BU68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV68', '0');
-            $sheet->getStyle('BV68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW68', '0');
-            $sheet->getStyle('BW68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX68', '0');
-            $sheet->getStyle('BX68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY68', '0');
-            $sheet->getStyle('BY68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ68', '0');
-            $sheet->getStyle('BZ68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA68', '0');
-            $sheet->getStyle('CA68')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-        $sheet->mergeCells('A69:D69');
-        $sheet->setCellValue('A69', 'TOLAK BASAH');
-        $sheet->getStyle('A69')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A69:D69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E69', '0');
-            $sheet->getStyle('E69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F69', '0');
-            $sheet->getStyle('F69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G69', '0');
-            $sheet->getStyle('G69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H69', '0');
-            $sheet->getStyle('H69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I69', '0');
-            $sheet->getStyle('I69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J69', '0');
-            $sheet->getStyle('J69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K69', '0');
-            $sheet->getStyle('K69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L69', '0');
-            $sheet->getStyle('L69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M69', '0');
-            $sheet->getStyle('M69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N69', '0');
-            $sheet->getStyle('N69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O69', '0');
-            $sheet->getStyle('O69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P69', '0');
-            $sheet->getStyle('P69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q69', '0');
-            $sheet->getStyle('Q69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R69', '0');
-            $sheet->getStyle('R69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S69', '0');
-            $sheet->getStyle('S69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T69', '0');
-            $sheet->getStyle('T69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U69', '0');
-            $sheet->getStyle('U69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V69', '0');
-            $sheet->getStyle('V69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W69', '0');
-            $sheet->getStyle('W69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X69', '0');
-            $sheet->getStyle('X69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y69', '0');
-            $sheet->getStyle('Y69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z69', '0');
-            $sheet->getStyle('Z69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA69', '0');
-            $sheet->getStyle('AA69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB69', '0');
-            $sheet->getStyle('AB69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC69', '0');
-            $sheet->getStyle('AC69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD69', '0');
-            $sheet->getStyle('AD69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE69', '0');
-            $sheet->getStyle('AE69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF69', '0');
-            $sheet->getStyle('AF69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG69', '0');
-            $sheet->getStyle('AG69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH69', '0');
-            $sheet->getStyle('AH69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI69', '0');
-            $sheet->getStyle('AI69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ69', '0');
-            $sheet->getStyle('AJ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK69', '0');
-            $sheet->getStyle('AK69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL69', '0');
-            $sheet->getStyle('AL69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM69', '0');
-            $sheet->getStyle('AM69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN69', '0');
-            $sheet->getStyle('AN69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO69', '0');
-            $sheet->getStyle('AO69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP69', '0');
-            $sheet->getStyle('AP69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ69', '0');
-            $sheet->getStyle('AQ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR69', '0');
-            $sheet->getStyle('AR69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS69', '0');
-            $sheet->getStyle('AS69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT69', '0');
-            $sheet->getStyle('AT69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU69', '0');
-            $sheet->getStyle('AU69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV69', '0');
-            $sheet->getStyle('AV69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW69', '0');
-            $sheet->getStyle('AW69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX69', '0');
-            $sheet->getStyle('AX69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY69', '0');
-            $sheet->getStyle('AY69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ69', '0');
-            $sheet->getStyle('AZ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA69', '0');
-            $sheet->getStyle('BA69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB69', '0');
-            $sheet->getStyle('BB69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC69', '0');
-            $sheet->getStyle('BC69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD69', '0');
-            $sheet->getStyle('BD69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE69', '0');
-            $sheet->getStyle('BE69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF69', '0');
-            $sheet->getStyle('BF69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG69', '0');
-            $sheet->getStyle('BG69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH69', '0');
-            $sheet->getStyle('BH69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI69', '0');
-            $sheet->getStyle('BI69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ69', '0');
-            $sheet->getStyle('BJ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK69', '0');
-            $sheet->getStyle('BK69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL69', '0');
-            $sheet->getStyle('BL69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM69', '0');
-            $sheet->getStyle('BM69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN69', '0');
-            $sheet->getStyle('BN69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO69', '0');
-            $sheet->getStyle('BO69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP69', '0');
-            $sheet->getStyle('BP69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ69', '0');
-            $sheet->getStyle('BQ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR69', '0');
-            $sheet->getStyle('BR69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS69', '0');
-            $sheet->getStyle('BS69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT69', '0');
-            $sheet->getStyle('BT69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU69', '0');
-            $sheet->getStyle('BU69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV69', '0');
-            $sheet->getStyle('BV69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW69', '0');
-            $sheet->getStyle('BW69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX69', '0');
-            $sheet->getStyle('BX69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY69', '0');
-            $sheet->getStyle('BY69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ69', '0');
-            $sheet->getStyle('BZ69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA69', '0');
-            $sheet->getStyle('CA69')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR GREIGE
-        $sheet->mergeCells('A71:D71');
-        $sheet->setCellValue('A71', 'TOTAL KELUAR GREIGE');
-        $sheet->getStyle('A71')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A71:D71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E71', '0');
-            $sheet->getStyle('E71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F71', '0');
-            $sheet->getStyle('F71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G71', '0');
-            $sheet->getStyle('G71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H71', '0');
-            $sheet->getStyle('H71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I71', '0');
-            $sheet->getStyle('I71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J71', '0');
-            $sheet->getStyle('J71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K71', '0');
-            $sheet->getStyle('K71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L71', '0');
-            $sheet->getStyle('L71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M71', '0');
-            $sheet->getStyle('M71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N71', '0');
-            $sheet->getStyle('N71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O71', '0');
-            $sheet->getStyle('O71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P71', '0');
-            $sheet->getStyle('P71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q71', '0');
-            $sheet->getStyle('Q71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R71', '0');
-            $sheet->getStyle('R71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S71', '0');
-            $sheet->getStyle('S71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T71', '0');
-            $sheet->getStyle('T71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U71', '0');
-            $sheet->getStyle('U71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V71', '0');
-            $sheet->getStyle('V71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W71', '0');
-            $sheet->getStyle('W71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X71', '0');
-            $sheet->getStyle('X71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y71', '0');
-            $sheet->getStyle('Y71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z71', '0');
-            $sheet->getStyle('Z71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA71', '0');
-            $sheet->getStyle('AA71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB71', '0');
-            $sheet->getStyle('AB71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC71', '0');
-            $sheet->getStyle('AC71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD71', '0');
-            $sheet->getStyle('AD71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE71', '0');
-            $sheet->getStyle('AE71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF71', '0');
-            $sheet->getStyle('AF71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG71', '0');
-            $sheet->getStyle('AG71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH71', '0');
-            $sheet->getStyle('AH71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI71', '0');
-            $sheet->getStyle('AI71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ71', '0');
-            $sheet->getStyle('AJ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK71', '0');
-            $sheet->getStyle('AK71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL71', '0');
-            $sheet->getStyle('AL71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM71', '0');
-            $sheet->getStyle('AM71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN71', '0');
-            $sheet->getStyle('AN71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO71', '0');
-            $sheet->getStyle('AO71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP71', '0');
-            $sheet->getStyle('AP71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ71', '0');
-            $sheet->getStyle('AQ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR71', '0');
-            $sheet->getStyle('AR71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS71', '0');
-            $sheet->getStyle('AS71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT71', '0');
-            $sheet->getStyle('AT71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU71', '0');
-            $sheet->getStyle('AU71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV71', '0');
-            $sheet->getStyle('AV71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW71', '0');
-            $sheet->getStyle('AW71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX71', '0');
-            $sheet->getStyle('AX71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY71', '0');
-            $sheet->getStyle('AY71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ71', '0');
-            $sheet->getStyle('AZ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA71', '0');
-            $sheet->getStyle('BA71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB71', '0');
-            $sheet->getStyle('BB71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC71', '0');
-            $sheet->getStyle('BC71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD71', '0');
-            $sheet->getStyle('BD71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE71', '0');
-            $sheet->getStyle('BE71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF71', '0');
-            $sheet->getStyle('BF71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG71', '0');
-            $sheet->getStyle('BG71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH71', '0');
-            $sheet->getStyle('BH71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI71', '0');
-            $sheet->getStyle('BI71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ71', '0');
-            $sheet->getStyle('BJ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK71', '0');
-            $sheet->getStyle('BK71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL71', '0');
-            $sheet->getStyle('BL71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM71', '0');
-            $sheet->getStyle('BM71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN71', '0');
-            $sheet->getStyle('BN71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO71', '0');
-            $sheet->getStyle('BO71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP71', '0');
-            $sheet->getStyle('BP71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ71', '0');
-            $sheet->getStyle('BQ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR71', '0');
-            $sheet->getStyle('BR71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS71', '0');
-            $sheet->getStyle('BS71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT71', '0');
-            $sheet->getStyle('BT71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU71', '0');
-            $sheet->getStyle('BU71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV71', '0');
-            $sheet->getStyle('BV71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW71', '0');
-            $sheet->getStyle('BW71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX71', '0');
-            $sheet->getStyle('BX71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY71', '0');
-            $sheet->getStyle('BY71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ71', '0');
-            $sheet->getStyle('BZ71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA71', '0');
-            $sheet->getStyle('CA71')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA71')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR PERBAIKAN
-        $sheet->mergeCells('A72:D72');
-        $sheet->setCellValue('A72', 'TOTAL KELUAR PERBAIKAN');
-        $sheet->getStyle('A72')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A72:D72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E72', '0');
-            $sheet->getStyle('E72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F72', '0');
-            $sheet->getStyle('F72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G72', '0');
-            $sheet->getStyle('G72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H72', '0');
-            $sheet->getStyle('H72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I72', '0');
-            $sheet->getStyle('I72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J72', '0');
-            $sheet->getStyle('J72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K72', '0');
-            $sheet->getStyle('K72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L72', '0');
-            $sheet->getStyle('L72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M72', '0');
-            $sheet->getStyle('M72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N72', '0');
-            $sheet->getStyle('N72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O72', '0');
-            $sheet->getStyle('O72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P72', '0');
-            $sheet->getStyle('P72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q72', '0');
-            $sheet->getStyle('Q72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R72', '0');
-            $sheet->getStyle('R72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S72', '0');
-            $sheet->getStyle('S72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T72', '0');
-            $sheet->getStyle('T72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U72', '0');
-            $sheet->getStyle('U72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V72', '0');
-            $sheet->getStyle('V72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W72', '0');
-            $sheet->getStyle('W72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X72', '0');
-            $sheet->getStyle('X72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y72', '0');
-            $sheet->getStyle('Y72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z72', '0');
-            $sheet->getStyle('Z72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA72', '0');
-            $sheet->getStyle('AA72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB72', '0');
-            $sheet->getStyle('AB72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC72', '0');
-            $sheet->getStyle('AC72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD72', '0');
-            $sheet->getStyle('AD72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE72', '0');
-            $sheet->getStyle('AE72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF72', '0');
-            $sheet->getStyle('AF72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG72', '0');
-            $sheet->getStyle('AG72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH72', '0');
-            $sheet->getStyle('AH72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI72', '0');
-            $sheet->getStyle('AI72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ72', '0');
-            $sheet->getStyle('AJ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK72', '0');
-            $sheet->getStyle('AK72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL72', '0');
-            $sheet->getStyle('AL72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM72', '0');
-            $sheet->getStyle('AM72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN72', '0');
-            $sheet->getStyle('AN72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO72', '0');
-            $sheet->getStyle('AO72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP72', '0');
-            $sheet->getStyle('AP72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ72', '0');
-            $sheet->getStyle('AQ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR72', '0');
-            $sheet->getStyle('AR72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS72', '0');
-            $sheet->getStyle('AS72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT72', '0');
-            $sheet->getStyle('AT72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU72', '0');
-            $sheet->getStyle('AU72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV72', '0');
-            $sheet->getStyle('AV72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW72', '0');
-            $sheet->getStyle('AW72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX72', '0');
-            $sheet->getStyle('AX72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY72', '0');
-            $sheet->getStyle('AY72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ72', '0');
-            $sheet->getStyle('AZ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA72', '0');
-            $sheet->getStyle('BA72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB72', '0');
-            $sheet->getStyle('BB72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC72', '0');
-            $sheet->getStyle('BC72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD72', '0');
-            $sheet->getStyle('BD72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE72', '0');
-            $sheet->getStyle('BE72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF72', '0');
-            $sheet->getStyle('BF72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG72', '0');
-            $sheet->getStyle('BG72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH72', '0');
-            $sheet->getStyle('BH72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI72', '0');
-            $sheet->getStyle('BI72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ72', '0');
-            $sheet->getStyle('BJ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK72', '0');
-            $sheet->getStyle('BK72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL72', '0');
-            $sheet->getStyle('BL72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM72', '0');
-            $sheet->getStyle('BM72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN72', '0');
-            $sheet->getStyle('BN72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO72', '0');
-            $sheet->getStyle('BO72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP72', '0');
-            $sheet->getStyle('BP72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ72', '0');
-            $sheet->getStyle('BQ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR72', '0');
-            $sheet->getStyle('BR72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS72', '0');
-            $sheet->getStyle('BS72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT72', '0');
-            $sheet->getStyle('BT72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU72', '0');
-            $sheet->getStyle('BU72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV72', '0');
-            $sheet->getStyle('BV72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW72', '0');
-            $sheet->getStyle('BW72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX72', '0');
-            $sheet->getStyle('BX72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY72', '0');
-            $sheet->getStyle('BY72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ72', '0');
-            $sheet->getStyle('BZ72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA72', '0');
-            $sheet->getStyle('CA72')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA72')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR AKW
-        $sheet->mergeCells('A73:D73');
-        $sheet->setCellValue('A73', 'TOTAL KELUAR AKW');
-        $sheet->getStyle('A73')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A73:D73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E73', '0');
-            $sheet->getStyle('E73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F73', '0');
-            $sheet->getStyle('F73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G73', '0');
-            $sheet->getStyle('G73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H73', '0');
-            $sheet->getStyle('H73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I73', '0');
-            $sheet->getStyle('I73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J73', '0');
-            $sheet->getStyle('J73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K73', '0');
-            $sheet->getStyle('K73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L73', '0');
-            $sheet->getStyle('L73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M73', '0');
-            $sheet->getStyle('M73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N73', '0');
-            $sheet->getStyle('N73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O73', '0');
-            $sheet->getStyle('O73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P73', '0');
-            $sheet->getStyle('P73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q73', '0');
-            $sheet->getStyle('Q73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R73', '0');
-            $sheet->getStyle('R73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S73', '0');
-            $sheet->getStyle('S73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T73', '0');
-            $sheet->getStyle('T73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U73', '0');
-            $sheet->getStyle('U73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V73', '0');
-            $sheet->getStyle('V73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W73', '0');
-            $sheet->getStyle('W73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X73', '0');
-            $sheet->getStyle('X73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y73', '0');
-            $sheet->getStyle('Y73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z73', '0');
-            $sheet->getStyle('Z73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA73', '0');
-            $sheet->getStyle('AA73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB73', '0');
-            $sheet->getStyle('AB73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC73', '0');
-            $sheet->getStyle('AC73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD73', '0');
-            $sheet->getStyle('AD73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE73', '0');
-            $sheet->getStyle('AE73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF73', '0');
-            $sheet->getStyle('AF73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG73', '0');
-            $sheet->getStyle('AG73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH73', '0');
-            $sheet->getStyle('AH73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI73', '0');
-            $sheet->getStyle('AI73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ73', '0');
-            $sheet->getStyle('AJ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK73', '0');
-            $sheet->getStyle('AK73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL73', '0');
-            $sheet->getStyle('AL73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM73', '0');
-            $sheet->getStyle('AM73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN73', '0');
-            $sheet->getStyle('AN73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO73', '0');
-            $sheet->getStyle('AO73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP73', '0');
-            $sheet->getStyle('AP73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ73', '0');
-            $sheet->getStyle('AQ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR73', '0');
-            $sheet->getStyle('AR73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS73', '0');
-            $sheet->getStyle('AS73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT73', '0');
-            $sheet->getStyle('AT73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU73', '0');
-            $sheet->getStyle('AU73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV73', '0');
-            $sheet->getStyle('AV73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW73', '0');
-            $sheet->getStyle('AW73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX73', '0');
-            $sheet->getStyle('AX73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY73', '0');
-            $sheet->getStyle('AY73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ73', '0');
-            $sheet->getStyle('AZ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA73', '0');
-            $sheet->getStyle('BA73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB73', '0');
-            $sheet->getStyle('BB73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC73', '0');
-            $sheet->getStyle('BC73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD73', '0');
-            $sheet->getStyle('BD73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE73', '0');
-            $sheet->getStyle('BE73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF73', '0');
-            $sheet->getStyle('BF73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG73', '0');
-            $sheet->getStyle('BG73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH73', '0');
-            $sheet->getStyle('BH73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI73', '0');
-            $sheet->getStyle('BI73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ73', '0');
-            $sheet->getStyle('BJ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK73', '0');
-            $sheet->getStyle('BK73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL73', '0');
-            $sheet->getStyle('BL73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM73', '0');
-            $sheet->getStyle('BM73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN73', '0');
-            $sheet->getStyle('BN73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO73', '0');
-            $sheet->getStyle('BO73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP73', '0');
-            $sheet->getStyle('BP73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ73', '0');
-            $sheet->getStyle('BQ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR73', '0');
-            $sheet->getStyle('BR73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS73', '0');
-            $sheet->getStyle('BS73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT73', '0');
-            $sheet->getStyle('BT73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU73', '0');
-            $sheet->getStyle('BU73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV73', '0');
-            $sheet->getStyle('BV73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW73', '0');
-            $sheet->getStyle('BW73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX73', '0');
-            $sheet->getStyle('BX73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY73', '0');
-            $sheet->getStyle('BY73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ73', '0');
-            $sheet->getStyle('BZ73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA73', '0');
-            $sheet->getStyle('CA73')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA73')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR C.POLY DULU
-        $sheet->mergeCells('A74:D74');
-        $sheet->setCellValue('A74', 'TOTAL KELUAR C.POLY DULU');
-        $sheet->getStyle('A74')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A74:D74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E74', '0');
-            $sheet->getStyle('E74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F74', '0');
-            $sheet->getStyle('F74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G74', '0');
-            $sheet->getStyle('G74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H74', '0');
-            $sheet->getStyle('H74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I74', '0');
-            $sheet->getStyle('I74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J74', '0');
-            $sheet->getStyle('J74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K74', '0');
-            $sheet->getStyle('K74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L74', '0');
-            $sheet->getStyle('L74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M74', '0');
-            $sheet->getStyle('M74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N74', '0');
-            $sheet->getStyle('N74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O74', '0');
-            $sheet->getStyle('O74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P74', '0');
-            $sheet->getStyle('P74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q74', '0');
-            $sheet->getStyle('Q74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R74', '0');
-            $sheet->getStyle('R74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S74', '0');
-            $sheet->getStyle('S74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T74', '0');
-            $sheet->getStyle('T74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U74', '0');
-            $sheet->getStyle('U74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V74', '0');
-            $sheet->getStyle('V74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W74', '0');
-            $sheet->getStyle('W74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X74', '0');
-            $sheet->getStyle('X74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y74', '0');
-            $sheet->getStyle('Y74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z74', '0');
-            $sheet->getStyle('Z74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA74', '0');
-            $sheet->getStyle('AA74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB74', '0');
-            $sheet->getStyle('AB74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC74', '0');
-            $sheet->getStyle('AC74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD74', '0');
-            $sheet->getStyle('AD74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE74', '0');
-            $sheet->getStyle('AE74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF74', '0');
-            $sheet->getStyle('AF74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG74', '0');
-            $sheet->getStyle('AG74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH74', '0');
-            $sheet->getStyle('AH74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI74', '0');
-            $sheet->getStyle('AI74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ74', '0');
-            $sheet->getStyle('AJ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK74', '0');
-            $sheet->getStyle('AK74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL74', '0');
-            $sheet->getStyle('AL74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM74', '0');
-            $sheet->getStyle('AM74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN74', '0');
-            $sheet->getStyle('AN74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO74', '0');
-            $sheet->getStyle('AO74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP74', '0');
-            $sheet->getStyle('AP74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ74', '0');
-            $sheet->getStyle('AQ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR74', '0');
-            $sheet->getStyle('AR74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS74', '0');
-            $sheet->getStyle('AS74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT74', '0');
-            $sheet->getStyle('AT74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU74', '0');
-            $sheet->getStyle('AU74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV74', '0');
-            $sheet->getStyle('AV74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW74', '0');
-            $sheet->getStyle('AW74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX74', '0');
-            $sheet->getStyle('AX74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY74', '0');
-            $sheet->getStyle('AY74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ74', '0');
-            $sheet->getStyle('AZ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA74', '0');
-            $sheet->getStyle('BA74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB74', '0');
-            $sheet->getStyle('BB74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC74', '0');
-            $sheet->getStyle('BC74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD74', '0');
-            $sheet->getStyle('BD74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE74', '0');
-            $sheet->getStyle('BE74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF74', '0');
-            $sheet->getStyle('BF74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG74', '0');
-            $sheet->getStyle('BG74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH74', '0');
-            $sheet->getStyle('BH74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI74', '0');
-            $sheet->getStyle('BI74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ74', '0');
-            $sheet->getStyle('BJ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK74', '0');
-            $sheet->getStyle('BK74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL74', '0');
-            $sheet->getStyle('BL74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM74', '0');
-            $sheet->getStyle('BM74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN74', '0');
-            $sheet->getStyle('BN74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO74', '0');
-            $sheet->getStyle('BO74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP74', '0');
-            $sheet->getStyle('BP74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ74', '0');
-            $sheet->getStyle('BQ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR74', '0');
-            $sheet->getStyle('BR74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS74', '0');
-            $sheet->getStyle('BS74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT74', '0');
-            $sheet->getStyle('BT74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU74', '0');
-            $sheet->getStyle('BU74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV74', '0');
-            $sheet->getStyle('BV74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW74', '0');
-            $sheet->getStyle('BW74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX74', '0');
-            $sheet->getStyle('BX74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY74', '0');
-            $sheet->getStyle('BY74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ74', '0');
-            $sheet->getStyle('BZ74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA74', '0');
-            $sheet->getStyle('CA74')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA74')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR C.MISTY
-        $sheet->mergeCells('A75:D75');
-        $sheet->setCellValue('A75', 'TOTAL KELUAR C.MISTY');
-        $sheet->getStyle('A75')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A75:D75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E75', '0');
-            $sheet->getStyle('E75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F75', '0');
-            $sheet->getStyle('F75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G75', '0');
-            $sheet->getStyle('G75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H75', '0');
-            $sheet->getStyle('H75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I75', '0');
-            $sheet->getStyle('I75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J75', '0');
-            $sheet->getStyle('J75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K75', '0');
-            $sheet->getStyle('K75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L75', '0');
-            $sheet->getStyle('L75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M75', '0');
-            $sheet->getStyle('M75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N75', '0');
-            $sheet->getStyle('N75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O75', '0');
-            $sheet->getStyle('O75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P75', '0');
-            $sheet->getStyle('P75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q75', '0');
-            $sheet->getStyle('Q75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R75', '0');
-            $sheet->getStyle('R75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S75', '0');
-            $sheet->getStyle('S75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T75', '0');
-            $sheet->getStyle('T75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U75', '0');
-            $sheet->getStyle('U75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V75', '0');
-            $sheet->getStyle('V75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W75', '0');
-            $sheet->getStyle('W75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X75', '0');
-            $sheet->getStyle('X75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y75', '0');
-            $sheet->getStyle('Y75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z75', '0');
-            $sheet->getStyle('Z75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA75', '0');
-            $sheet->getStyle('AA75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB75', '0');
-            $sheet->getStyle('AB75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC75', '0');
-            $sheet->getStyle('AC75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD75', '0');
-            $sheet->getStyle('AD75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE75', '0');
-            $sheet->getStyle('AE75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF75', '0');
-            $sheet->getStyle('AF75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG75', '0');
-            $sheet->getStyle('AG75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH75', '0');
-            $sheet->getStyle('AH75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI75', '0');
-            $sheet->getStyle('AI75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ75', '0');
-            $sheet->getStyle('AJ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK75', '0');
-            $sheet->getStyle('AK75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL75', '0');
-            $sheet->getStyle('AL75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM75', '0');
-            $sheet->getStyle('AM75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN75', '0');
-            $sheet->getStyle('AN75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO75', '0');
-            $sheet->getStyle('AO75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP75', '0');
-            $sheet->getStyle('AP75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ75', '0');
-            $sheet->getStyle('AQ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR75', '0');
-            $sheet->getStyle('AR75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS75', '0');
-            $sheet->getStyle('AS75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT75', '0');
-            $sheet->getStyle('AT75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU75', '0');
-            $sheet->getStyle('AU75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV75', '0');
-            $sheet->getStyle('AV75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW75', '0');
-            $sheet->getStyle('AW75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX75', '0');
-            $sheet->getStyle('AX75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY75', '0');
-            $sheet->getStyle('AY75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ75', '0');
-            $sheet->getStyle('AZ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA75', '0');
-            $sheet->getStyle('BA75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB75', '0');
-            $sheet->getStyle('BB75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC75', '0');
-            $sheet->getStyle('BC75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD75', '0');
-            $sheet->getStyle('BD75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE75', '0');
-            $sheet->getStyle('BE75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF75', '0');
-            $sheet->getStyle('BF75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG75', '0');
-            $sheet->getStyle('BG75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH75', '0');
-            $sheet->getStyle('BH75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI75', '0');
-            $sheet->getStyle('BI75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ75', '0');
-            $sheet->getStyle('BJ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK75', '0');
-            $sheet->getStyle('BK75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL75', '0');
-            $sheet->getStyle('BL75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM75', '0');
-            $sheet->getStyle('BM75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN75', '0');
-            $sheet->getStyle('BN75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO75', '0');
-            $sheet->getStyle('BO75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP75', '0');
-            $sheet->getStyle('BP75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ75', '0');
-            $sheet->getStyle('BQ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR75', '0');
-            $sheet->getStyle('BR75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS75', '0');
-            $sheet->getStyle('BS75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT75', '0');
-            $sheet->getStyle('BT75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU75', '0');
-            $sheet->getStyle('BU75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV75', '0');
-            $sheet->getStyle('BV75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW75', '0');
-            $sheet->getStyle('BW75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX75', '0');
-            $sheet->getStyle('BX75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY75', '0');
-            $sheet->getStyle('BY75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ75', '0');
-            $sheet->getStyle('BZ75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA75', '0');
-            $sheet->getStyle('CA75')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA75')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR C. Y/D
-        $sheet->mergeCells('A76:D76');
-        $sheet->setCellValue('A76', 'TOTAL KELUAR C. Y/D');
-        $sheet->getStyle('A76')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A76:D76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E76', '0');
-            $sheet->getStyle('E76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F76', '0');
-            $sheet->getStyle('F76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G76', '0');
-            $sheet->getStyle('G76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H76', '0');
-            $sheet->getStyle('H76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I76', '0');
-            $sheet->getStyle('I76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J76', '0');
-            $sheet->getStyle('J76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K76', '0');
-            $sheet->getStyle('K76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L76', '0');
-            $sheet->getStyle('L76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M76', '0');
-            $sheet->getStyle('M76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N76', '0');
-            $sheet->getStyle('N76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O76', '0');
-            $sheet->getStyle('O76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P76', '0');
-            $sheet->getStyle('P76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q76', '0');
-            $sheet->getStyle('Q76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R76', '0');
-            $sheet->getStyle('R76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S76', '0');
-            $sheet->getStyle('S76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T76', '0');
-            $sheet->getStyle('T76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U76', '0');
-            $sheet->getStyle('U76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V76', '0');
-            $sheet->getStyle('V76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W76', '0');
-            $sheet->getStyle('W76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X76', '0');
-            $sheet->getStyle('X76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y76', '0');
-            $sheet->getStyle('Y76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z76', '0');
-            $sheet->getStyle('Z76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA76', '0');
-            $sheet->getStyle('AA76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB76', '0');
-            $sheet->getStyle('AB76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC76', '0');
-            $sheet->getStyle('AC76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD76', '0');
-            $sheet->getStyle('AD76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE76', '0');
-            $sheet->getStyle('AE76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF76', '0');
-            $sheet->getStyle('AF76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG76', '0');
-            $sheet->getStyle('AG76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH76', '0');
-            $sheet->getStyle('AH76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI76', '0');
-            $sheet->getStyle('AI76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ76', '0');
-            $sheet->getStyle('AJ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK76', '0');
-            $sheet->getStyle('AK76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL76', '0');
-            $sheet->getStyle('AL76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM76', '0');
-            $sheet->getStyle('AM76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN76', '0');
-            $sheet->getStyle('AN76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO76', '0');
-            $sheet->getStyle('AO76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP76', '0');
-            $sheet->getStyle('AP76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ76', '0');
-            $sheet->getStyle('AQ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR76', '0');
-            $sheet->getStyle('AR76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS76', '0');
-            $sheet->getStyle('AS76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT76', '0');
-            $sheet->getStyle('AT76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU76', '0');
-            $sheet->getStyle('AU76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV76', '0');
-            $sheet->getStyle('AV76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW76', '0');
-            $sheet->getStyle('AW76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX76', '0');
-            $sheet->getStyle('AX76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY76', '0');
-            $sheet->getStyle('AY76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ76', '0');
-            $sheet->getStyle('AZ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA76', '0');
-            $sheet->getStyle('BA76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB76', '0');
-            $sheet->getStyle('BB76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC76', '0');
-            $sheet->getStyle('BC76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD76', '0');
-            $sheet->getStyle('BD76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE76', '0');
-            $sheet->getStyle('BE76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF76', '0');
-            $sheet->getStyle('BF76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG76', '0');
-            $sheet->getStyle('BG76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH76', '0');
-            $sheet->getStyle('BH76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI76', '0');
-            $sheet->getStyle('BI76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ76', '0');
-            $sheet->getStyle('BJ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK76', '0');
-            $sheet->getStyle('BK76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL76', '0');
-            $sheet->getStyle('BL76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM76', '0');
-            $sheet->getStyle('BM76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN76', '0');
-            $sheet->getStyle('BN76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO76', '0');
-            $sheet->getStyle('BO76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP76', '0');
-            $sheet->getStyle('BP76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ76', '0');
-            $sheet->getStyle('BQ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR76', '0');
-            $sheet->getStyle('BR76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS76', '0');
-            $sheet->getStyle('BS76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT76', '0');
-            $sheet->getStyle('BT76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU76', '0');
-            $sheet->getStyle('BU76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV76', '0');
-            $sheet->getStyle('BV76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW76', '0');
-            $sheet->getStyle('BW76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX76', '0');
-            $sheet->getStyle('BX76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY76', '0');
-            $sheet->getStyle('BY76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ76', '0');
-            $sheet->getStyle('BZ76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA76', '0');
-            $sheet->getStyle('CA76')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA76')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR SCOURING
-        $sheet->mergeCells('A77:D77');
-        $sheet->setCellValue('A77', 'TOTAL KELUAR SCOURING');
-        $sheet->getStyle('A77')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A77:D77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E77', '0');
-            $sheet->getStyle('E77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F77', '0');
-            $sheet->getStyle('F77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G77', '0');
-            $sheet->getStyle('G77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H77', '0');
-            $sheet->getStyle('H77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I77', '0');
-            $sheet->getStyle('I77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J77', '0');
-            $sheet->getStyle('J77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K77', '0');
-            $sheet->getStyle('K77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L77', '0');
-            $sheet->getStyle('L77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M77', '0');
-            $sheet->getStyle('M77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N77', '0');
-            $sheet->getStyle('N77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O77', '0');
-            $sheet->getStyle('O77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P77', '0');
-            $sheet->getStyle('P77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q77', '0');
-            $sheet->getStyle('Q77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R77', '0');
-            $sheet->getStyle('R77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S77', '0');
-            $sheet->getStyle('S77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T77', '0');
-            $sheet->getStyle('T77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U77', '0');
-            $sheet->getStyle('U77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V77', '0');
-            $sheet->getStyle('V77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W77', '0');
-            $sheet->getStyle('W77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X77', '0');
-            $sheet->getStyle('X77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y77', '0');
-            $sheet->getStyle('Y77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z77', '0');
-            $sheet->getStyle('Z77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA77', '0');
-            $sheet->getStyle('AA77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB77', '0');
-            $sheet->getStyle('AB77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC77', '0');
-            $sheet->getStyle('AC77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD77', '0');
-            $sheet->getStyle('AD77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE77', '0');
-            $sheet->getStyle('AE77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF77', '0');
-            $sheet->getStyle('AF77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG77', '0');
-            $sheet->getStyle('AG77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH77', '0');
-            $sheet->getStyle('AH77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI77', '0');
-            $sheet->getStyle('AI77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ77', '0');
-            $sheet->getStyle('AJ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK77', '0');
-            $sheet->getStyle('AK77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL77', '0');
-            $sheet->getStyle('AL77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM77', '0');
-            $sheet->getStyle('AM77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN77', '0');
-            $sheet->getStyle('AN77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO77', '0');
-            $sheet->getStyle('AO77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP77', '0');
-            $sheet->getStyle('AP77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ77', '0');
-            $sheet->getStyle('AQ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR77', '0');
-            $sheet->getStyle('AR77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS77', '0');
-            $sheet->getStyle('AS77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT77', '0');
-            $sheet->getStyle('AT77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU77', '0');
-            $sheet->getStyle('AU77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV77', '0');
-            $sheet->getStyle('AV77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW77', '0');
-            $sheet->getStyle('AW77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX77', '0');
-            $sheet->getStyle('AX77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY77', '0');
-            $sheet->getStyle('AY77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ77', '0');
-            $sheet->getStyle('AZ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA77', '0');
-            $sheet->getStyle('BA77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB77', '0');
-            $sheet->getStyle('BB77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC77', '0');
-            $sheet->getStyle('BC77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD77', '0');
-            $sheet->getStyle('BD77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE77', '0');
-            $sheet->getStyle('BE77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF77', '0');
-            $sheet->getStyle('BF77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG77', '0');
-            $sheet->getStyle('BG77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH77', '0');
-            $sheet->getStyle('BH77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI77', '0');
-            $sheet->getStyle('BI77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ77', '0');
-            $sheet->getStyle('BJ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK77', '0');
-            $sheet->getStyle('BK77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL77', '0');
-            $sheet->getStyle('BL77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM77', '0');
-            $sheet->getStyle('BM77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN77', '0');
-            $sheet->getStyle('BN77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO77', '0');
-            $sheet->getStyle('BO77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP77', '0');
-            $sheet->getStyle('BP77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ77', '0');
-            $sheet->getStyle('BQ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR77', '0');
-            $sheet->getStyle('BR77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS77', '0');
-            $sheet->getStyle('BS77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT77', '0');
-            $sheet->getStyle('BT77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU77', '0');
-            $sheet->getStyle('BU77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV77', '0');
-            $sheet->getStyle('BV77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW77', '0');
-            $sheet->getStyle('BW77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX77', '0');
-            $sheet->getStyle('BX77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY77', '0');
-            $sheet->getStyle('BY77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ77', '0');
-            $sheet->getStyle('BZ77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA77', '0');
-            $sheet->getStyle('CA77')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA77')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR GAGAL PROSES
-        $sheet->mergeCells('A78:D78');
-        $sheet->setCellValue('A78', 'TOTAL KELUAR GAGAL PROSES');
-        $sheet->getStyle('A78')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A78:D78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E78', '0');
-            $sheet->getStyle('E78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F78', '0');
-            $sheet->getStyle('F78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G78', '0');
-            $sheet->getStyle('G78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H78', '0');
-            $sheet->getStyle('H78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I78', '0');
-            $sheet->getStyle('I78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J78', '0');
-            $sheet->getStyle('J78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K78', '0');
-            $sheet->getStyle('K78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L78', '0');
-            $sheet->getStyle('L78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M78', '0');
-            $sheet->getStyle('M78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N78', '0');
-            $sheet->getStyle('N78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O78', '0');
-            $sheet->getStyle('O78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P78', '0');
-            $sheet->getStyle('P78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q78', '0');
-            $sheet->getStyle('Q78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R78', '0');
-            $sheet->getStyle('R78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S78', '0');
-            $sheet->getStyle('S78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T78', '0');
-            $sheet->getStyle('T78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U78', '0');
-            $sheet->getStyle('U78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V78', '0');
-            $sheet->getStyle('V78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W78', '0');
-            $sheet->getStyle('W78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X78', '0');
-            $sheet->getStyle('X78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y78', '0');
-            $sheet->getStyle('Y78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z78', '0');
-            $sheet->getStyle('Z78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA78', '0');
-            $sheet->getStyle('AA78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB78', '0');
-            $sheet->getStyle('AB78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC78', '0');
-            $sheet->getStyle('AC78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD78', '0');
-            $sheet->getStyle('AD78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE78', '0');
-            $sheet->getStyle('AE78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF78', '0');
-            $sheet->getStyle('AF78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG78', '0');
-            $sheet->getStyle('AG78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH78', '0');
-            $sheet->getStyle('AH78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI78', '0');
-            $sheet->getStyle('AI78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ78', '0');
-            $sheet->getStyle('AJ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK78', '0');
-            $sheet->getStyle('AK78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL78', '0');
-            $sheet->getStyle('AL78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM78', '0');
-            $sheet->getStyle('AM78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN78', '0');
-            $sheet->getStyle('AN78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO78', '0');
-            $sheet->getStyle('AO78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP78', '0');
-            $sheet->getStyle('AP78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ78', '0');
-            $sheet->getStyle('AQ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR78', '0');
-            $sheet->getStyle('AR78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS78', '0');
-            $sheet->getStyle('AS78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT78', '0');
-            $sheet->getStyle('AT78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU78', '0');
-            $sheet->getStyle('AU78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV78', '0');
-            $sheet->getStyle('AV78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW78', '0');
-            $sheet->getStyle('AW78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX78', '0');
-            $sheet->getStyle('AX78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY78', '0');
-            $sheet->getStyle('AY78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ78', '0');
-            $sheet->getStyle('AZ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA78', '0');
-            $sheet->getStyle('BA78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB78', '0');
-            $sheet->getStyle('BB78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC78', '0');
-            $sheet->getStyle('BC78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD78', '0');
-            $sheet->getStyle('BD78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE78', '0');
-            $sheet->getStyle('BE78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF78', '0');
-            $sheet->getStyle('BF78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG78', '0');
-            $sheet->getStyle('BG78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH78', '0');
-            $sheet->getStyle('BH78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI78', '0');
-            $sheet->getStyle('BI78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ78', '0');
-            $sheet->getStyle('BJ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK78', '0');
-            $sheet->getStyle('BK78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL78', '0');
-            $sheet->getStyle('BL78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM78', '0');
-            $sheet->getStyle('BM78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN78', '0');
-            $sheet->getStyle('BN78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO78', '0');
-            $sheet->getStyle('BO78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP78', '0');
-            $sheet->getStyle('BP78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ78', '0');
-            $sheet->getStyle('BQ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR78', '0');
-            $sheet->getStyle('BR78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS78', '0');
-            $sheet->getStyle('BS78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT78', '0');
-            $sheet->getStyle('BT78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU78', '0');
-            $sheet->getStyle('BU78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV78', '0');
-            $sheet->getStyle('BV78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW78', '0');
-            $sheet->getStyle('BW78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX78', '0');
-            $sheet->getStyle('BX78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY78', '0');
-            $sheet->getStyle('BY78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ78', '0');
-            $sheet->getStyle('BZ78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA78', '0');
-            $sheet->getStyle('CA78')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA78')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-    // TOTAL KELUAR TOLAK BASAH
-        $sheet->mergeCells('A79:D79');
-        $sheet->setCellValue('A79', 'TOTAL KELUAR TOLAK BASAH');
-        $sheet->getStyle('A79')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A79:D79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E79', '0');
-            $sheet->getStyle('E79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F79', '0');
-            $sheet->getStyle('F79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G79', '0');
-            $sheet->getStyle('G79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H79', '0');
-            $sheet->getStyle('H79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I79', '0');
-            $sheet->getStyle('I79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J79', '0');
-            $sheet->getStyle('J79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K79', '0');
-            $sheet->getStyle('K79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L79', '0');
-            $sheet->getStyle('L79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M79', '0');
-            $sheet->getStyle('M79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N79', '0');
-            $sheet->getStyle('N79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O79', '0');
-            $sheet->getStyle('O79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P79', '0');
-            $sheet->getStyle('P79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q79', '0');
-            $sheet->getStyle('Q79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R79', '0');
-            $sheet->getStyle('R79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S79', '0');
-            $sheet->getStyle('S79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T79', '0');
-            $sheet->getStyle('T79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U79', '0');
-            $sheet->getStyle('U79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V79', '0');
-            $sheet->getStyle('V79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W79', '0');
-            $sheet->getStyle('W79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X79', '0');
-            $sheet->getStyle('X79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y79', '0');
-            $sheet->getStyle('Y79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z79', '0');
-            $sheet->getStyle('Z79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA79', '0');
-            $sheet->getStyle('AA79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB79', '0');
-            $sheet->getStyle('AB79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC79', '0');
-            $sheet->getStyle('AC79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD79', '0');
-            $sheet->getStyle('AD79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE79', '0');
-            $sheet->getStyle('AE79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF79', '0');
-            $sheet->getStyle('AF79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG79', '0');
-            $sheet->getStyle('AG79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH79', '0');
-            $sheet->getStyle('AH79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI79', '0');
-            $sheet->getStyle('AI79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ79', '0');
-            $sheet->getStyle('AJ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK79', '0');
-            $sheet->getStyle('AK79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL79', '0');
-            $sheet->getStyle('AL79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM79', '0');
-            $sheet->getStyle('AM79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN79', '0');
-            $sheet->getStyle('AN79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO79', '0');
-            $sheet->getStyle('AO79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP79', '0');
-            $sheet->getStyle('AP79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ79', '0');
-            $sheet->getStyle('AQ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR79', '0');
-            $sheet->getStyle('AR79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS79', '0');
-            $sheet->getStyle('AS79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT79', '0');
-            $sheet->getStyle('AT79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU79', '0');
-            $sheet->getStyle('AU79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV79', '0');
-            $sheet->getStyle('AV79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW79', '0');
-            $sheet->getStyle('AW79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX79', '0');
-            $sheet->getStyle('AX79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY79', '0');
-            $sheet->getStyle('AY79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ79', '0');
-            $sheet->getStyle('AZ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA79', '0');
-            $sheet->getStyle('BA79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB79', '0');
-            $sheet->getStyle('BB79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC79', '0');
-            $sheet->getStyle('BC79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD79', '0');
-            $sheet->getStyle('BD79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE79', '0');
-            $sheet->getStyle('BE79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF79', '0');
-            $sheet->getStyle('BF79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG79', '0');
-            $sheet->getStyle('BG79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH79', '0');
-            $sheet->getStyle('BH79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI79', '0');
-            $sheet->getStyle('BI79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ79', '0');
-            $sheet->getStyle('BJ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK79', '0');
-            $sheet->getStyle('BK79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL79', '0');
-            $sheet->getStyle('BL79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM79', '0');
-            $sheet->getStyle('BM79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN79', '0');
-            $sheet->getStyle('BN79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO79', '0');
-            $sheet->getStyle('BO79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP79', '0');
-            $sheet->getStyle('BP79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ79', '0');
-            $sheet->getStyle('BQ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR79', '0');
-            $sheet->getStyle('BR79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS79', '0');
-            $sheet->getStyle('BS79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT79', '0');
-            $sheet->getStyle('BT79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU79', '0');
-            $sheet->getStyle('BU79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV79', '0');
-            $sheet->getStyle('BV79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW79', '0');
-            $sheet->getStyle('BW79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX79', '0');
-            $sheet->getStyle('BX79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY79', '0');
-            $sheet->getStyle('BY79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ79', '0');
-            $sheet->getStyle('BZ79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA79', '0');
-            $sheet->getStyle('CA79')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA79')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-    
-    // SISA PRODUKSI
-        $sheet->mergeCells('A80:D80');
-        $sheet->setCellValue('A80', 'SISA PRODUKSI');
-        $sheet->getStyle('A80')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A80:D80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E80', '0');
-            $sheet->getStyle('E80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F80', '0');
-            $sheet->getStyle('F80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G80', '0');
-            $sheet->getStyle('G80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H80', '0');
-            $sheet->getStyle('H80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I80', '0');
-            $sheet->getStyle('I80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J80', '0');
-            $sheet->getStyle('J80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K80', '0');
-            $sheet->getStyle('K80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L80', '0');
-            $sheet->getStyle('L80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M80', '0');
-            $sheet->getStyle('M80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N80', '0');
-            $sheet->getStyle('N80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O80', '0');
-            $sheet->getStyle('O80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P80', '0');
-            $sheet->getStyle('P80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q80', '0');
-            $sheet->getStyle('Q80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R80', '0');
-            $sheet->getStyle('R80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S80', '0');
-            $sheet->getStyle('S80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T80', '0');
-            $sheet->getStyle('T80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U80', '0');
-            $sheet->getStyle('U80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V80', '0');
-            $sheet->getStyle('V80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W80', '0');
-            $sheet->getStyle('W80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X80', '0');
-            $sheet->getStyle('X80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y80', '0');
-            $sheet->getStyle('Y80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z80', '0');
-            $sheet->getStyle('Z80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA80', '0');
-            $sheet->getStyle('AA80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB80', '0');
-            $sheet->getStyle('AB80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC80', '0');
-            $sheet->getStyle('AC80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD80', '0');
-            $sheet->getStyle('AD80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE80', '0');
-            $sheet->getStyle('AE80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF80', '0');
-            $sheet->getStyle('AF80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG80', '0');
-            $sheet->getStyle('AG80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH80', '0');
-            $sheet->getStyle('AH80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI80', '0');
-            $sheet->getStyle('AI80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ80', '0');
-            $sheet->getStyle('AJ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK80', '0');
-            $sheet->getStyle('AK80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL80', '0');
-            $sheet->getStyle('AL80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM80', '0');
-            $sheet->getStyle('AM80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN80', '0');
-            $sheet->getStyle('AN80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO80', '0');
-            $sheet->getStyle('AO80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP80', '0');
-            $sheet->getStyle('AP80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ80', '0');
-            $sheet->getStyle('AQ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR80', '0');
-            $sheet->getStyle('AR80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS80', '0');
-            $sheet->getStyle('AS80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT80', '0');
-            $sheet->getStyle('AT80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU80', '0');
-            $sheet->getStyle('AU80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV80', '0');
-            $sheet->getStyle('AV80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW80', '0');
-            $sheet->getStyle('AW80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX80', '0');
-            $sheet->getStyle('AX80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY80', '0');
-            $sheet->getStyle('AY80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ80', '0');
-            $sheet->getStyle('AZ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA80', '0');
-            $sheet->getStyle('BA80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB80', '0');
-            $sheet->getStyle('BB80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC80', '0');
-            $sheet->getStyle('BC80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD80', '0');
-            $sheet->getStyle('BD80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE80', '0');
-            $sheet->getStyle('BE80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF80', '0');
-            $sheet->getStyle('BF80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG80', '0');
-            $sheet->getStyle('BG80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH80', '0');
-            $sheet->getStyle('BH80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI80', '0');
-            $sheet->getStyle('BI80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ80', '0');
-            $sheet->getStyle('BJ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK80', '0');
-            $sheet->getStyle('BK80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL80', '0');
-            $sheet->getStyle('BL80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM80', '0');
-            $sheet->getStyle('BM80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN80', '0');
-            $sheet->getStyle('BN80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO80', '0');
-            $sheet->getStyle('BO80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP80', '0');
-            $sheet->getStyle('BP80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ80', '0');
-            $sheet->getStyle('BQ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR80', '0');
-            $sheet->getStyle('BR80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS80', '0');
-            $sheet->getStyle('BS80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT80', '0');
-            $sheet->getStyle('BT80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU80', '0');
-            $sheet->getStyle('BU80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV80', '0');
-            $sheet->getStyle('BV80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW80', '0');
-            $sheet->getStyle('BW80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX80', '0');
-            $sheet->getStyle('BX80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY80', '0');
-            $sheet->getStyle('BY80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ80', '0');
-            $sheet->getStyle('BZ80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA80', '0');
-            $sheet->getStyle('CA80')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA80')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-    
-    // LAMA PROSES
-        $sheet->mergeCells('A81:D81');
-        $sheet->setCellValue('A81', 'LAMA PROSES');
-        $sheet->getStyle('A81')->getAlignment()->setHorizontal('center')->setVertical('center');
-        $sheet->getStyle('A81:D81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // DATA
-            $sheet->setCellValue('E81', '0');
-            $sheet->getStyle('E81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('E81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('F81', '0');
-            $sheet->getStyle('F81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('F81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('G81', '0');
-            $sheet->getStyle('G81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('G81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('H81', '0');
-            $sheet->getStyle('H81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('H81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('I81', '0');
-            $sheet->getStyle('I81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('I81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('J81', '0');
-            $sheet->getStyle('J81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('J81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('K81', '0');
-            $sheet->getStyle('K81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('K81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('L81', '0');
-            $sheet->getStyle('L81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('L81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('M81', '0');
-            $sheet->getStyle('M81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('M81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('N81', '0');
-            $sheet->getStyle('N81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('N81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('O81', '0');
-            $sheet->getStyle('O81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('O81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('P81', '0');
-            $sheet->getStyle('P81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('P81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Q81', '0');
-            $sheet->getStyle('Q81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Q81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('R81', '0');
-            $sheet->getStyle('R81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('S81', '0');
-            $sheet->getStyle('S81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('S81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('T81', '0');
-            $sheet->getStyle('T81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('T81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('U81', '0');
-            $sheet->getStyle('U81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('U81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('V81', '0');
-            $sheet->getStyle('V81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('V81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('W81', '0');
-            $sheet->getStyle('W81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('W81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('X81', '0');
-            $sheet->getStyle('X81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('X81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Y81', '0');
-            $sheet->getStyle('Y81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Y81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('Z81', '0');
-            $sheet->getStyle('Z81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('Z81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AA81', '0');
-            $sheet->getStyle('AA81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AA81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AB81', '0');
-            $sheet->getStyle('AB81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AB81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AC81', '0');
-            $sheet->getStyle('AC81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AC81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AD81', '0');
-            $sheet->getStyle('AD81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AD81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AE81', '0');
-            $sheet->getStyle('AE81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AE81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AF81', '0');
-            $sheet->getStyle('AF81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AF81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AG81', '0');
-            $sheet->getStyle('AG81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AH81', '0');
-            $sheet->getStyle('AH81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AH81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AI81', '0');
-            $sheet->getStyle('AI81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AI81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AJ81', '0');
-            $sheet->getStyle('AJ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AJ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AK81', '0');
-            $sheet->getStyle('AK81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AK81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AL81', '0');
-            $sheet->getStyle('AL81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AL81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AM81', '0');
-            $sheet->getStyle('AM81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AM81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AN81', '0');
-            $sheet->getStyle('AN81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AN81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AO81', '0');
-            $sheet->getStyle('AO81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AO81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AP81', '0');
-            $sheet->getStyle('AP81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AP81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AQ81', '0');
-            $sheet->getStyle('AQ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AQ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AR81', '0');
-            $sheet->getStyle('AR81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AR81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AS81', '0');
-            $sheet->getStyle('AS81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AS81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AT81', '0');
-            $sheet->getStyle('AT81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AT81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AU81', '0');
-            $sheet->getStyle('AU81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AU81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AV81', '0');
-            $sheet->getStyle('AV81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AW81', '0');
-            $sheet->getStyle('AW81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AW81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AX81', '0');
-            $sheet->getStyle('AX81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AX81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AY81', '0');
-            $sheet->getStyle('AY81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AY81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('AZ81', '0');
-            $sheet->getStyle('AZ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AZ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BA81', '0');
-            $sheet->getStyle('BA81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BA81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BB81', '0');
-            $sheet->getStyle('BB81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BB81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BC81', '0');
-            $sheet->getStyle('BC81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BC81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BD81', '0');
-            $sheet->getStyle('BD81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BD81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BE81', '0');
-            $sheet->getStyle('BE81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BE81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BF81', '0');
-            $sheet->getStyle('BF81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BF81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BG81', '0');
-            $sheet->getStyle('BG81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BG81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BH81', '0');
-            $sheet->getStyle('BH81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BH81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BI81', '0');
-            $sheet->getStyle('BI81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BI81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BJ81', '0');
-            $sheet->getStyle('BJ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BJ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BK81', '0');
-            $sheet->getStyle('BK81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BL81', '0');
-            $sheet->getStyle('BL81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BL81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BM81', '0');
-            $sheet->getStyle('BM81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BM81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BN81', '0');
-            $sheet->getStyle('BN81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BN81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BO81', '0');
-            $sheet->getStyle('BO81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BO81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BP81', '0');
-            $sheet->getStyle('BP81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BP81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BQ81', '0');
-            $sheet->getStyle('BQ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BQ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BR81', '0');
-            $sheet->getStyle('BR81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BR81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BS81', '0');
-            $sheet->getStyle('BS81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BS81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BT81', '0');
-            $sheet->getStyle('BT81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BT81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BU81', '0');
-            $sheet->getStyle('BU81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BU81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BV81', '0');
-            $sheet->getStyle('BV81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BV81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BW81', '0');
-            $sheet->getStyle('BW81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BW81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BX81', '0');
-            $sheet->getStyle('BX81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BX81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BY81', '0');
-            $sheet->getStyle('BY81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BY81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('BZ81', '0');
-            $sheet->getStyle('BZ81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BZ81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $sheet->setCellValue('CA81', '0');
-            $sheet->getStyle('CA81')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('CA81')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
     // TANDA TANGAN
         // LAYER 1
-            $sheet->mergeCells('A82:Q82');
-            $sheet->getStyle('A82')->getAlignment()->setHorizontal('left')->setVertical('center');
-            $sheet->getStyle('A82:Q82')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
+            $sheet->mergeCells('A66:Q66');
+            $sheet->getStyle('A66')->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle('A66:Q66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
 
-            $sheet->mergeCells('R82:AF82');
-            $sheet->setCellValue('R82', 'DI ISI OLEH :');
-            $sheet->getStyle('R82')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R82:AF82')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('R66:AF66');
+            $sheet->setCellValue('R66', 'DI ISI OLEH :');
+            $sheet->getStyle('R66')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('R66:AF66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AG82:AU82');
-            $sheet->setCellValue('AG82', 'DI PERIKSA OLEH :');
-            $sheet->getStyle('AG82')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG82:AU82')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AG66:AU66');
+            $sheet->setCellValue('AG66', 'DI PERIKSA OLEH :');
+            $sheet->getStyle('AG66')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AG66:AU66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AV82:BJ82');
-            $sheet->setCellValue('AV82', 'DI SETUJUI OLEH :');
-            $sheet->getStyle('AV82')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV82:BJ82')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AV66:BJ66');
+            $sheet->setCellValue('AV66', 'DI SETUJUI OLEH :');
+            $sheet->getStyle('AV66')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AV66:BJ66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('BK82:CB82');
-            $sheet->setCellValue('BK82', 'DI KETAHUI OLEH :');
-            $sheet->getStyle('BK82')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK82:CB82')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('BK66:CB66');
+            $sheet->setCellValue('BK66', 'DI KETAHUI OLEH :');
+            $sheet->getStyle('BK66')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('BK66:CB66')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         // LAYER 2
-            $sheet->mergeCells('A83:Q83');
-            $sheet->setCellValue('A83', 'NAMA');
-            $sheet->getStyle('A83')->getAlignment()->setHorizontal('left')->setVertical('center');
-            $sheet->getStyle('A83:Q83')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
+            $sheet->mergeCells('A67:Q67');
+            $sheet->setCellValue('A67', 'NAMA');
+            $sheet->getStyle('A67')->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle('A67:Q67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
 
-            $sheet->mergeCells('R83:AF83');
-            $sheet->setCellValue('R83', 'RAFIF ATHALLAH');
-            $sheet->getStyle('R83')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R83:AF83')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('R67:AF67');
+            $sheet->setCellValue('R67', 'RAFIF ATHALLAH');
+            $sheet->getStyle('R67')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('R67:AF67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AG83:AU83');
-            $sheet->setCellValue('AG83', 'I NYOMAN PARTA');
-            $sheet->getStyle('AG83')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG83:AU83')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AG67:AU67');
+            $sheet->setCellValue('AG67', 'I NYOMAN PARTA');
+            $sheet->getStyle('AG67')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AG67:AU67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AV83:BJ83');
-            $sheet->setCellValue('AV83', 'HUANG XIAO MING');
-            $sheet->getStyle('AV83')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV83:BJ83')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AV67:BJ67');
+            $sheet->setCellValue('AV67', 'HUANG XIAO MING');
+            $sheet->getStyle('AV67')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AV67:BJ67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('BK83:CB83');
-            $sheet->setCellValue('BK83', 'AMY HUANG');
-            $sheet->getStyle('BK83')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK83:CB83')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('BK67:CB67');
+            $sheet->setCellValue('BK67', 'AMY HUANG');
+            $sheet->getStyle('BK67')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('BK67:CB67')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         // LAYER 3
-            $sheet->mergeCells('A84:Q84');
-            $sheet->setCellValue('A84', 'JABATAN');
-            $sheet->getStyle('A84')->getAlignment()->setHorizontal('left')->setVertical('center');
-            $sheet->getStyle('A84:Q84')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
+            $sheet->mergeCells('A68:Q68');
+            $sheet->setCellValue('A68', 'JABATAN');
+            $sheet->getStyle('A68')->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle('A68:Q68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
 
-            $sheet->mergeCells('R84:AF84');
-            $sheet->setCellValue('R84', 'OPERATOR');
-            $sheet->getStyle('R84')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R84:AF84')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('R68:AF68');
+            $sheet->setCellValue('R68', 'OPERATOR');
+            $sheet->getStyle('R68')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('R68:AF68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AG84:AU84');
-            $sheet->setCellValue('AG84', 'SENIOR MANAGER');
-            $sheet->getStyle('AG84')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG84:AU84')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AG68:AU68');
+            $sheet->setCellValue('AG68', 'SENIOR MANAGER');
+            $sheet->getStyle('AG68')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AG68:AU68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AV84:BJ84');
-            $sheet->setCellValue('AV84', 'DIREKTUR MANUFAKTUR');
-            $sheet->getStyle('AV84')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV84:BJ84')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AV68:BJ68');
+            $sheet->setCellValue('AV68', 'DIREKTUR MANUFAKTUR');
+            $sheet->getStyle('AV68')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AV68:BJ68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('BK84:CB84');
-            $sheet->setCellValue('BK84', 'VICE PRESIDENT DIRECTOR');
-            $sheet->getStyle('BK84')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK84:CB84')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('BK68:CB68');
+            $sheet->setCellValue('BK68', 'VICE PRESIDENT DIRECTOR');
+            $sheet->getStyle('BK68')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('BK68:CB68')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         // LAYER 4
-            $sheet->mergeCells('A85:Q85');
-            $sheet->setCellValue('A85', 'TANGGAL');
-            $sheet->getStyle('A85')->getAlignment()->setHorizontal('left')->setVertical('center');
-            $sheet->getStyle('A85:Q85')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
+            $sheet->mergeCells('A69:Q69');
+            $sheet->setCellValue('A69', 'TANGGAL');
+            $sheet->getStyle('A69')->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle('A69:Q69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
 
-            $sheet->mergeCells('R85:AF85');
-            $sheet->setCellValue('R85', date('d F Y'));
-            $sheet->getStyle('R85')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R85:AF85')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('R69:AF69');
+            $sheet->setCellValue('R69', date('d F Y'));
+            $sheet->getStyle('R69')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('R69:AF69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AG85:AU85');
-            $sheet->setCellValue('AG85', date('d F Y'));
-            $sheet->getStyle('AG85')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG85:AU85')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AG69:AU69');
+            $sheet->setCellValue('AG69', date('d F Y'));
+            $sheet->getStyle('AG69')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AG69:AU69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AV85:BJ85');
-            $sheet->setCellValue('AV85', date('d F Y'));
-            $sheet->getStyle('AV85')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV85:BJ85')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AV69:BJ69');
+            $sheet->setCellValue('AV69', date('d F Y'));
+            $sheet->getStyle('AV69')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AV69:BJ69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('BK85:CB85');
-            $sheet->setCellValue('BK85', date('d F Y'));
-            $sheet->getStyle('BK85')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK85:CB85')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('BK69:CB69');
+            $sheet->setCellValue('BK69', date('d F Y'));
+            $sheet->getStyle('BK69')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('BK69:CB69')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         // LAYER 5
-            $sheet->mergeCells('A86:Q86');
-            $sheet->setCellValue('A86', '');
-            $sheet->getStyle('A86')->getAlignment()->setHorizontal('left')->setVertical('center');
-            $sheet->getStyle('A86:Q86')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
+            $sheet->mergeCells('A70:Q70');
+            $sheet->setCellValue('A70', '');
+            $sheet->getStyle('A70')->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle('A70:Q70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);        
 
-            $sheet->mergeCells('R86:AF86');
-            $sheet->setCellValue('R86', '');
-            $sheet->getStyle('R86')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('R86:AF86')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('R70:AF70');
+            $sheet->setCellValue('R70', '');
+            $sheet->getStyle('R70')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('R70:AF70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AG86:AU86');
-            $sheet->setCellValue('AG86', '');
-            $sheet->getStyle('AG86')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AG86:AU86')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AG70:AU70');
+            $sheet->setCellValue('AG70', '');
+            $sheet->getStyle('AG70')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AG70:AU70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('AV86:BJ86');
-            $sheet->setCellValue('AV86', '');
-            $sheet->getStyle('AV86')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('AV86:BJ86')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('AV70:BJ70');
+            $sheet->setCellValue('AV70', '');
+            $sheet->getStyle('AV70')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('AV70:BJ70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->mergeCells('BK86:CB86');
-            $sheet->setCellValue('BK86', '');
-            $sheet->getStyle('BK86')->getAlignment()->setHorizontal('center')->setVertical('center');
-            $sheet->getStyle('BK86:CB86')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet->mergeCells('BK70:CB70');
+            $sheet->setCellValue('BK70', '');
+            $sheet->getStyle('BK70')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('BK70:CB70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
 
 // END LAYOUT
@@ -19816,7 +19784,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
 // Atur Tinggi Baris Agar Sejajar dengan Cell
 $sheet->getDefaultRowDimension()->setRowHeight(17);
 $sheet->getDefaultColumnDimension()->setWidth(6);
-$sheet->getRowDimension(86)->setRowHeight(45);
+$sheet->getRowDimension(70)->setRowHeight(50);
 
 // Tambahkan Logo
 $logo = new Drawing();
