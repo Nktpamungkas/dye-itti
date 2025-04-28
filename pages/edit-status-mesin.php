@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        if ($no_mc == "WS" or $no_mc == "CB" or $no_mc == "WS11" or $no_mc == "CB11") {
+                        if ($no_mc == "WS" or $no_mc == "CB" or $no_mc == "WS11" or $no_mc == "CB11" or $no_mc == "BB11") {
                             $where = " ";
                             $where1 = " ";
                         } else {
@@ -60,7 +60,7 @@
                         ?>
                             <tr>
                                 <td>
-                                    <?php if($rowd['no_urut'] == '1' && !($_GET['id'] == 'CB11') && !($_GET['id'] == 'WS11')) : ?>
+                                    <?php if($rowd['no_urut'] == '1' && !($_GET['id'] == 'BB11') && !($_GET['id'] == 'CB11') && !($_GET['id'] == 'WS11')) : ?>
                                         <?= $rowd['no_urut']; ?>
                                         <input type="hidden" class="form-control col-sm-2" value="<?= $rowd['no_urut']; ?>" name="no_urut[<?php echo $rowd['id']; ?>]" readonly>
                                     <?php else : ?>

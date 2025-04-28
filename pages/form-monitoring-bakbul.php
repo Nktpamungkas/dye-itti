@@ -321,26 +321,50 @@
   		singeing_type = '$singeing_type',
   		proses = '$proses'"); 	  
   
-  	if($sqlData){
-  		echo "<script>swal({
-        title: 'Data Tersimpan',   
-        text: 'Klik Ok untuk input data kembali',
-        type: 'success',
-        }).then((result) => {
-        if (result.value) {
-  	      window.location.href='?p=Monitoring-Tempelan'; 
-        }
-      });</script>";
-  	}else{
-      echo "<script>swal({
-        title: 'Data Gagal Tersimpan',   
-        text: 'Klik Ok untuk input data kembali',
-        type: 'warning',
-        }).then((result) => {
-        if (result.value) {
-  	      window.location.href='?p=Monitoring-Tempelan'; 
-        }
-      });</script>";
+    if($sqlData){
+      $sqlData2 = mysqli_query($con,"INSERT INTO tbl_montemp SET
+        id_schedule='$rcek[id]',
+		    nokk='$no_kk',
+        nodemand='$rcek[nodemand]',
+		    operator='$operator',
+		    leader='$leader',
+		    shift='$shift',
+		    gramasi_a='$gmrs',
+		    rol='$rol',
+		    g_shift='$g_shift',
+		    benang='$benang',
+		    std_cok_wrn='$standar_cok_col',
+		    speed='$speed',
+		    tgl_buat=now(),
+		    tgl_target=ADDDATE(now(), INTERVAL '$_POST[target]' HOUR_MINUTE),
+		    tgl_update=now()
+      ");
+      if($sqlData2){
+        $sqlD=mysqli_query($con,"UPDATE tbl_schedule SET 
+		    status='sedang jalan',
+		    tgl_update=now()
+		    WHERE status='antri mesin' and no_mesin='".$rcek['no_mesin']."' and no_urut='1' ");
+
+        echo "<script>swal({
+          title: 'Data Tersimpan',   
+          text: 'Klik Ok untuk input data kembali',
+          type: 'success',
+          }).then((result) => {
+          if (result.value) {
+            window.location.href='?p=Monitoring-Tempelan'; 
+          }
+        });</script>";
+      }else{
+        echo "<script>swal({
+          title: 'Data Gagal Tersimpan',   
+          text: 'Klik Ok untuk input data kembali',
+          type: 'warning',
+          }).then((result) => {
+          if (result.value) {
+            window.location.href='?p=Monitoring-Tempelan'; 
+          }
+        });</script>";
+      }
     }
   }
 ?>
