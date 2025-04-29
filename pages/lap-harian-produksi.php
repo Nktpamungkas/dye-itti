@@ -25,6 +25,40 @@
     }
     exit();
   }
+
+  if (isset($_POST['update_kresep'])) {
+    $nokk = $_POST['nokk'];
+    $kresep = $_POST['kresep'];
+  
+    try {
+      $query = "UPDATE tbl_hasilcelup SET k_resep = ?, tgl_update = NOW() WHERE nokk = ?";
+      $stmt = $con->prepare($query);
+      $stmt->bind_param("si", $kresep, $nokk);
+      $stmt->execute();
+  
+      echo "OK";
+    } catch (mysqli_sql_exception $e) {
+      echo "Gagal: " . $e->getMessage();
+    }
+    exit();
+  }
+
+  if (isset($_POST['update_resep'])) {
+    $nokk = $_POST['nokk'];
+    $resep = $_POST['resep'];
+  
+    try {
+      $query = "UPDATE tbl_schedule SET resep = ?, tgl_update = NOW() WHERE nokk = ?";
+      $stmt = $con->prepare($query);
+      $stmt->bind_param("si", $resep, $nokk);
+      $stmt->execute();
+  
+      echo "OK";
+    } catch (mysqli_sql_exception $e) {
+      echo "Gagal: " . $e->getMessage();
+    }
+    exit();
+  }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -211,10 +245,13 @@
                   <div align="center">Std Target</div>
                 </th>
                 <th width="215">
-                  <div align="center">Keterangan</div>
+                  <div align="center">K.R</div>
                 </th>
                 <th width="215">
-                  <div align="center">Item</div>
+                  <div align="center">R.B/R.L/R.S</div>
+                </th>
+                <th width="215">
+                  <div align="center">Status</div>
                 </th>
                 <th width="215">
                   <div align="center">Rcode</div>
@@ -248,6 +285,9 @@
                                                 b.warna,
                                                 b.proses,
                                                 b.target,
+                                                a.k_resep,
+                                                b.resep,
+                                                a.status,
                                                 if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
                                                 c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
                                                 b.`status` as sts,
@@ -297,6 +337,8 @@
                                                 b.warna,
                                                 b.proses,
                                                 b.target,
+                                                a.k_resep,
+                                                b.resep,
                                                 if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
                                                 c.operator,	if(c.status='selesai',if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),TIME_FORMAT(timediff(now(),c.tgl_buat),'%H:%i')) as lama,
                                                 b.`status` as sts,
@@ -352,34 +394,45 @@
                   <td><?php echo $rowd['warna']; ?></td>
                   <td><?php echo $rowd['qty_order']; ?></td>
                   <td align="left">
-                    <?php if (in_array(strtolower($username), ['dit', 'andri', 'lukman'])) { ?>
-                      <?php
-                      $prosesSekarang = ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
-                      ?>
+                    <?php
+                    $prosesSekarang = ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
 
-                      <select name="proses_update[]" onchange="updateProses(this, '<?php echo $rowd['nokk']; ?>')">
-                        <?php
-                        foreach ($daftarProses as $proses) {
-                          $selected = ($proses == $prosesSekarang) ? 'selected' : '';
-                          echo "<option value=\"$proses\" $selected>$proses</option>";
-                        }
-                        ?>
-                      </select>
-                      
-                      <br />
-                      <i class="label bg-hijau">
-                        <?php echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator']; ?>
-                      </i>
-                      
-                    <?php } else { ?>
+                    if (in_array(strtolower($username), ['dit', 'andri', 'lukman'])) {
+                    ?>
+                        <select name="proses_update[]" onchange="updateProses(this, '<?php echo $rowd['nokk']; ?>')">
+                          <?php
+                          foreach ($daftarProses as $proses) {
+                            $selected = ($proses == $prosesSekarang) ? 'selected' : '';
+                            echo "<option value=\"$proses\" $selected>$proses</option>";
+                          }
+                          ?>
+                        </select>
+                    <?php
+                    } else {
+                      echo $prosesSekarang;
+                    }
+                    ?>
+
+                    <br />
+                    <i class="label bg-hijau">
+                      <?php echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator']; ?>
+                    </i>
+                    <br />
+                    <i class="label bg-abu">
                       <?php
-                      echo ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") ? $rowSM['proses'] : $rowd['proses'];
+                      if ($rowd['no_order'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
+                        echo $rowSM['no_stop'] . "<br>" . $rowSM['keterangan'];
+                      } else {
+                        echo $rowd['nokk'];
+                      }
                       ?>
-                      <br />
-                      <i class="label bg-hijau">
-                        <?php echo $rowd['operator_keluar'] != "" ? $rowd['operator_keluar'] : $rowd['operator']; ?>
-                      </i>
-                    <?php } ?>
+                    </i>
+                    <br />
+                    <i class="label <?php echo ($rowd['stscelup'] == "OK") ? "bg-green" : (($rowd['stscelup'] == "Gagal Proses") ? "bg-red" : ""); ?>">
+                      <?php echo $rowd['stscelup']; ?>
+                    </i>
+                    <br />
+                    <?php echo $rowd['ket']; ?>
                   </td>
                   <td align="center"><?php echo $rowd['proses_aktual']; ?></td>
                   <td align="center"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
@@ -388,17 +441,54 @@
                                         echo $rowd['lama'];
                                       } ?></td>
                   <td align="center"><?php echo $rowd['target']; ?></td>
-                  <td><i class="label bg-abu"><?php if ($rowd['no_order'] == "" and substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
-                                                echo $rowSM['no_stop'] . "<br>" . $rowSM['keterangan'];
-                                              } else {
-                                                echo $rowd['nokk'];
-                                              } ?></i><br />
-                    <i class="label <?php if ($rowd['stscelup'] == "OK") {
-                                      echo "bg-green";
-                                    } else if ($rowd['stscelup'] == "Gagal Proses") {
-                                      echo "bg-red";
-                                    } ?>"> <?php echo $rowd['stscelup']; ?> </i><br /><?php echo $rowd['ket']; ?>
+                  <td>
+                    <?php
+                      $kResepSekarang = $rowd['k_resep'];
+                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'Rica'])) {
+                      ?>
+                      <select name="kresep_update[]" onchange="updateKresep(this, '<?php echo $rowd['nokk']; ?>')">
+                        <option value="-" <?php if($kResepSekarang == '-') echo 'selected'; ?>>-</option>
+                        <option value="0x" <?php if($kResepSekarang == '0x') echo 'selected'; ?>>0x</option>
+                        <option value="1x" <?php if($kResepSekarang == '1x') echo 'selected'; ?>>1x</option>
+                        <option value="2x" <?php if($kResepSekarang == '2x') echo 'selected'; ?>>2x</option>
+                        <option value="3x" <?php if($kResepSekarang == '3x') echo 'selected'; ?>>3x</option>
+                        <option value="4x" <?php if($kResepSekarang == '4x') echo 'selected'; ?>>4x</option>
+                        <option value="5x" <?php if($kResepSekarang == '5x') echo 'selected'; ?>>5x</option>
+                        <option value="6x" <?php if($kResepSekarang == '6x') echo 'selected'; ?>>6x</option>
+                        <option value="7x" <?php if($kResepSekarang == '7x') echo 'selected'; ?>>7x</option>
+                        <option value="8x" <?php if($kResepSekarang == '8x') echo 'selected'; ?>>8x</option>
+                        <option value="9x" <?php if($kResepSekarang == '9x') echo 'selected'; ?>>9x</option>
+                        <option value="10x" <?php if($kResepSekarang == '10x') echo 'selected'; ?>>10x</option>
+                        <option value=">10x" <?php if($kResepSekarang == '>10x') echo 'selected'; ?>>>10x</option>
+                      </select>
+                    <?php
+                      } else {
+                      ?>
+                        <span style="user-select: text;"><?= $kResepSekarang ?></span>
+                      <?php
+                      }
+                    ?>
                   </td>
+                  <td>
+                    <?php
+                      $ResepSekarang = $rowd['resep'];
+                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'Rica'])) {
+                      ?>
+                      <select name="resep_update[]" onchange="updateResep(this, '<?php echo $rowd['nokk']; ?>')">
+                        <option value="-" <?php if($ResepSekarang == '-') echo 'selected'; ?>>-</option>
+                        <option value="Baru" <?php if($ResepSekarang == 'Baru') echo 'selected'; ?>>Baru</option>
+                        <option value="Lama" <?php if($ResepSekarang == 'Lama') echo 'selected'; ?>>Lama</option>
+                        <option value="Setting" <?php if($ResepSekarang == 'Setting') echo 'selected'; ?>>Setting</option>
+                      </select>
+                    <?php
+                      } else {
+                      ?>
+                        <span style="user-select: text;"><?= $ResepSekarang ?></span>
+                      <?php
+                      }
+                    ?>
+                  </td>
+                  <td><?= $rowd['stscelup'] ?></td>
                   <td><?= $rowd['no_hanger'] ?></td>
                   <td><?= $rowd['rcode'] ?></td>
                   <td><?= $rowd['status_resep'] ?></td>
@@ -451,6 +541,68 @@
           .catch(err => {
             console.error("Error:", err);
             Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui proses.', 'error');
+          });
+        }
+      });
+    }
+    function updateKresep(selectEl, nokk) {
+      const kresep = selectEl.value;
+    
+      Swal.fire({
+        title: 'Konfirmasi Perubahan',
+        text: `Apakah Anda yakin ingin mengubah kestabilan resep menjadi "${kresep}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Perbarui!',
+        cancelButtonText: 'Batal',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(window.location.href, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `update_kresep=1&nokk=${nokk}&kresep=${encodeURIComponent(kresep)}`
+          })
+          .then(response => response.text())
+          .then(data => {
+            console.log("Respon:", data);
+            Swal.fire('Sukses!', 'Kestabilan resep berhasil diperbarui.', 'success');
+          })
+          .catch(err => {
+            console.error("Error:", err);
+            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui kestabilan resep.', 'error');
+          });
+        }
+      });
+    }
+    function updateResep(selectEl, nokk) {
+      const resep = selectEl.value;
+    
+      Swal.fire({
+        title: 'Konfirmasi Perubahan',
+        text: `Apakah Anda yakin ingin mengubah Resep menjadi "${resep}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Perbarui!',
+        cancelButtonText: 'Batal',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(window.location.href, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `update_resep=1&nokk=${nokk}&resep=${encodeURIComponent(resep)}`
+          })
+          .then(response => response.text())
+          .then(data => {
+            console.log("Respon:", data);
+            Swal.fire('Sukses!', 'Resep berhasil diperbarui.', 'success');
+          })
+          .catch(err => {
+            console.error("Error:", err);
+            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui resep.', 'error');
           });
         }
       });
