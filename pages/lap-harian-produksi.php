@@ -186,7 +186,7 @@
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
             <div class="btn-group pull-right">
               <a href="pages/cetak/reports-harian-produksi-excel-bakarBulu.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-success " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel Bakar Bulu"><i class="fa fa-file-excel-o"></i> </a>
-              <a href="pages/cetak/NewCetakReportDyeing.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn bg-maroon" target="_blank" data-toggle="tooltip" data-html="true" title="New Format Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>\
+              <a href="pages/cetak/NewCetakReportDyeing.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn bg-maroon" target="_blank" data-toggle="tooltip" data-html="true" title="New Format Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-danger " target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi"><i class="fa fa-print"></i> </a>
               <a href="pages/cetak/reports-panjang-kain.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-warning" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel Panjang Kain"><i class="fa fa-file-excel-o"></i> </a>
               <a href="pages/cetak/reports-harian-produksi-excel-whiteness.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn btn-primary" target="_blank" data-toggle="tooltip" data-html="true" title="Harian Produksi Excel With Whiteness Yellowness Tint"><i class="fa fa-file-excel-o"></i> </a>
@@ -246,12 +246,13 @@
                 </th>
                 <th width="215">
                   <div align="center">K.R</div>
-                </th>
-                <th width="215">
                   <div align="center">R.B/R.L/R.S</div>
                 </th>
                 <th width="215">
                   <div align="center">Status</div>
+                </th>
+                <th width="215">
+                  <div align="center">Item</div>
                 </th>
                 <th width="215">
                   <div align="center">Rcode</div>
@@ -468,8 +469,6 @@
                       <?php
                       }
                     ?>
-                  </td>
-                  <td>
                     <?php
                       $ResepSekarang = $rowd['resep'];
                       if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'Rica'])) {
