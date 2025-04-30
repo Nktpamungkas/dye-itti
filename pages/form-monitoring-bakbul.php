@@ -335,6 +335,7 @@
 		    benang='$benang',
 		    std_cok_wrn='$standar_cok_col',
 		    speed='$speed',
+        bruto='$qty_order',
 		    tgl_buat=now(),
 		    tgl_target=ADDDATE(now(), INTERVAL '$_POST[target]' HOUR_MINUTE),
 		    tgl_update=now()
