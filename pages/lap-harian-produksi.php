@@ -407,6 +407,9 @@
                             echo "<option value=\"$proses\" $selected>$proses</option>";
                           }
                           ?>
+                          <option value="Tolak Basah">Tolak Basah</option>
+                          <option value="Gagal Proses">Gagal Proses</option>
+                          <option value="Tolak Basah Luntur">Tolak Basah Luntur</option>
                         </select>
                     <?php
                     } else {
@@ -445,7 +448,7 @@
                   <td>
                     <?php
                       $kResepSekarang = $rowd['k_resep'];
-                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'Rica'])) {
+                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'rica'])) {
                       ?>
                       <select name="kresep_update[]" onchange="updateKresep(this, '<?php echo $rowd['nokk']; ?>')">
                         <option value="-" <?php if($kResepSekarang == '-') echo 'selected'; ?>>-</option>
@@ -471,7 +474,7 @@
                     ?>
                     <?php
                       $ResepSekarang = $rowd['resep'];
-                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'Rica'])) {
+                      if (in_array(strtolower($username), ['dit', 'andri', 'lukman', 'rica'])) {
                       ?>
                       <select name="resep_update[]" onchange="updateResep(this, '<?php echo $rowd['nokk']; ?>')">
                         <option value="-" <?php if($ResepSekarang == '-') echo 'selected'; ?>>-</option>
