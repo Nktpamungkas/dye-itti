@@ -1,6 +1,6 @@
 <?php
   include "koneksiLAB.php";
-  $con=mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
+  include "koneksi.php";
   $nokk=$_GET['nokk'];
   $sqlCek=mysqli_query($con,"SELECT * FROM tbl_schedule WHERE nokk='$nokk' ORDER BY id DESC LIMIT 1");
   $cek=mysqli_num_rows($sqlCek);
@@ -265,10 +265,130 @@
     </div>
   </div>
   <div class="box-footer">
-    <button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Monitoring-Tempelan'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>    
-    <button id="btnSave" type="submit" name="save" value="save" class="btn btn-primary pull-right">Simpan <i class="fa fa-save"></i></button>
+    <button type="button" class="btn btn-default pull-left" name="back" value="kembali" onClick="window.location='?p=Monitoring-Tempelan'">Kembali <i class="fa fa-arrow-circle-o-left"></i></button>
+    <?php if($cek1>0){ 
+    	echo "<script>swal({
+      title: 'No Kartu Sudah diinput dan belum selesai proses',
+      text: 'Klik Ok untuk input kembali',
+      type: 'warning',
+      }).then((result) => {
+      if (result.value) {
+        window.location='index1.php?p=Form-Monitoring-BakBul';
+      }
+    });</script>";	
+       } else if($rcek['no_urut']!="1" and $nokk!=""){
+    	echo "<script>swal({
+      title: 'Harus No Urut `1` ',
+      text: 'Klik Ok untuk input kembali',
+      type: 'warning',
+      }).then((result) => {
+      if (result.value) {
+        window.location='index1.php?p=Form-Monitoring-BakBul';
+      }
+    });</script>"; }else{ ?>	   
+   <button id="btnSave" type="submit" name="save" value="save" class="btn btn-primary pull-right">Simpan <i class="fa fa-save"></i></button>
+   <?php } ?>
   </div>
 </form>
+
+<?php
+  // if($_POST['save']=="save"){
+  //   $rec_usercreated = $_SESSION['user_id10'];
+  //   $no_kk = mysqli_real_escape_string($con, $_POST['no_kk']);
+  //   $gmrs = mysqli_real_escape_string($con, $_POST['grms']);
+  //   $qty_order = mysqli_real_escape_string($con, $_POST['qty1']);
+  //   $lot = mysqli_real_escape_string($con, $_POST['lot']);
+  //   $rol = mysqli_real_escape_string($con, $_POST['qty3']);
+  //   $qty_rol = mysqli_real_escape_string($con, $_POST['qty_rol']);
+  //   $benang = mysqli_real_escape_string($con, $_POST['benang']);
+  //   $standar_cok_col = mysqli_real_escape_string($con, $_POST['std_cok_wrn']);
+  //   $shift = mysqli_real_escape_string($con, $_POST['shift']);
+  //   $g_shift = mysqli_real_escape_string($con, $_POST['g_shift']);
+  //   $color_code = mysqli_real_escape_string($con, $_POST['colCode']);
+  //   $operator = mysqli_real_escape_string($con, $_POST['operator']);
+  //   $leader = mysqli_real_escape_string($con, $_POST['leader']);
+  //   $speed = mysqli_real_escape_string($con, $_POST['speed']);
+  //   $singeing1 = mysqli_real_escape_string($con, $_POST['singeing1']);
+  //   $presure1 = mysqli_real_escape_string($con, $_POST['presure1']);
+  //   $singeing2 = mysqli_real_escape_string($con, $_POST['singeing2']);
+  //   $presure2 = mysqli_real_escape_string($con, $_POST['presure2']);
+  //   $singeing_type = mysqli_real_escape_string($con, $_POST['singeing_type']);
+  //   $proses = mysqli_real_escape_string($con, $_POST['proses']);
+
+  //   $sqlData = mysqli_query($con,"INSERT INTO tbl_bakbul SET
+  //     rec_usercreated = '$rec_usercreated',
+  //     rec_userupdate = '$rec_usercreated',
+  //     rec_datecreated = now(),
+  //     rec_dateupdate = now(),
+  //     rec_status = '1',
+  //     no_kk = '$no_kk',
+  // 		gmrs = '$gmrs',
+  // 		qty_order = '$qty_order',
+  // 		lot = '$lot',
+  // 		rol = '$rol',
+  // 		qty_rol = '$qty_rol',
+  // 		benang = '$benang',
+  // 		standar_cok_col='$standar_cok_col',
+  // 		shift = '$shift',
+  // 		g_shift = '$g_shift',
+  // 		color_code = '$color_code',
+  // 		operator = '$operator',
+  // 		leader = '$leader',
+  // 		speed = '$speed',
+  // 		singeing1 = '$singeing1',
+  // 		presure1 = '$presure1',
+  // 		singeing2 = '$singeing2',
+  // 		presure2 = '$presure2',
+  // 		singeing_type = '$singeing_type',
+  // 		proses = '$proses'"); 	  
+  
+  //   if($sqlData){
+  //     $sqlData2 = mysqli_query($con,"INSERT INTO tbl_montemp SET
+  //       id_schedule='$rcek[id]',
+	// 	    nokk='$no_kk',
+  //       nodemand='$rcek[nodemand]',
+	// 	    operator='$operator',
+	// 	    leader='$leader',
+	// 	    shift='$shift',
+	// 	    gramasi_a='$gmrs',
+	// 	    rol='$rol',
+	// 	    g_shift='$g_shift',
+	// 	    benang='$benang',
+	// 	    std_cok_wrn='$standar_cok_col',
+	// 	    speed='$speed',
+	// 	    tgl_buat=now(),
+	// 	    tgl_target=ADDDATE(now(), INTERVAL '$_POST[target]' HOUR_MINUTE),
+	// 	    tgl_update=now()
+  //     ");
+  //     if($sqlData2){
+  //       $sqlD=mysqli_query($con,"UPDATE tbl_schedule SET 
+	// 	    status='sedang jalan',
+	// 	    tgl_update=now()
+	// 	    WHERE status='antri mesin' and no_mesin='".$rcek['no_mesin']."' and no_urut='1' ");
+
+  //       echo "<script>swal({
+  //         title: 'Data Tersimpan',   
+  //         text: 'Klik Ok untuk input data kembali',
+  //         type: 'success',
+  //         }).then((result) => {
+  //         if (result.value) {
+  //           window.location.href='?p=Monitoring-Tempelan'; 
+  //         }
+  //       });</script>";
+  //     }else{
+  //       echo "<script>swal({
+  //         title: 'Data Gagal Tersimpan',   
+  //         text: 'Klik Ok untuk input data kembali',
+  //         type: 'warning',
+  //         }).then((result) => {
+  //         if (result.value) {
+  //           window.location.href='?p=Monitoring-Tempelan'; 
+  //         }
+  //       });</script>";
+  //     }
+  //   }
+  // }
+?>
 
 <?php
   if($_POST['save']=="save"){
@@ -294,78 +414,96 @@
     $singeing_type = mysqli_real_escape_string($con, $_POST['singeing_type']);
     $proses = mysqli_real_escape_string($con, $_POST['proses']);
 
-    $sqlData = mysqli_query($con,"INSERT INTO tbl_bakbul SET
-      rec_usercreated = '$rec_usercreated',
-      rec_userupdate = '$rec_usercreated',
-      rec_datecreated = now(),
-      rec_dateupdate = now(),
-      rec_status = '1',
-      no_kk = '$no_kk',
-  		gmrs = '$gmrs',
-  		qty_order = '$qty_order',
-  		lot = '$lot',
-  		rol = '$rol',
-  		qty_rol = '$qty_rol',
-  		benang = '$benang',
-  		standar_cok_col='$standar_cok_col',
-  		shift = '$shift',
-  		g_shift = '$g_shift',
-  		color_code = '$color_code',
-  		operator = '$operator',
-  		leader = '$leader',
-  		speed = '$speed',
-  		singeing1 = '$singeing1',
-  		presure1 = '$presure1',
-  		singeing2 = '$singeing2',
-  		presure2 = '$presure2',
-  		singeing_type = '$singeing_type',
-  		proses = '$proses'"); 	  
-  
-    if($sqlData){
+    mysqli_autocommit($con, false);
+    try{
+      // Query 1: Insert ke tbl_bakbul
+      $sqlData = mysqli_query($con,"INSERT INTO tbl_bakbul SET
+        rec_usercreated = '$rec_usercreated',
+        rec_userupdate = '$rec_usercreated',
+        rec_datecreated = now(),
+        rec_dateupdate = now(),
+        rec_status = '1',
+        no_kk = '$no_kk',
+        gmrs = '$gmrs',
+        qty_order = '$qty_order',
+        lot = '$lot',
+        rol = '$rol',
+        qty_rol = '$qty_rol',
+        benang = '$benang',
+        standar_cok_col='$standar_cok_col',
+        shift = '$shift',
+        g_shift = '$g_shift',
+        color_code = '$color_code',
+        operator = '$operator',
+        leader = '$leader',
+        speed = '$speed',
+        singeing1 = '$singeing1',
+        presure1 = '$presure1',
+        singeing2 = '$singeing2',
+        presure2 = '$presure2',
+        singeing_type = '$singeing_type',
+        proses = '$proses'"
+      );
+      if (!$sqlData) {
+        throw new Exception("Gagal insert ke tbl_bakbul");
+      }
+
+      // Query 2: Insert ke tbl_montemp
       $sqlData2 = mysqli_query($con,"INSERT INTO tbl_montemp SET
         id_schedule='$rcek[id]',
-		    nokk='$no_kk',
+        nokk='$no_kk',
         nodemand='$rcek[nodemand]',
-		    operator='$operator',
-		    leader='$leader',
-		    shift='$shift',
-		    gramasi_a='$gmrs',
-		    rol='$rol',
-		    g_shift='$g_shift',
-		    benang='$benang',
-		    std_cok_wrn='$standar_cok_col',
-		    speed='$speed',
+        operator='$operator',
+        leader='$leader',
+        shift='$shift',
+        gramasi_a='$gmrs',
+        rol='$rol',
+        g_shift='$g_shift',
+        benang='$benang',
+        std_cok_wrn='$standar_cok_col',
+        speed='$speed',
         bruto='$qty_order',
-		    tgl_buat=now(),
-		    tgl_target=ADDDATE(now(), INTERVAL '$_POST[target]' HOUR_MINUTE),
-		    tgl_update=now()
+        jammasukkain=now(),
+        tgl_buat=now(),
+        tgl_target=ADDDATE(now(), INTERVAL '$_POST[target]' HOUR_MINUTE),
+        tgl_update=now()
       ");
-      if($sqlData2){
-        $sqlD=mysqli_query($con,"UPDATE tbl_schedule SET 
-		    status='sedang jalan',
-		    tgl_update=now()
-		    WHERE status='antri mesin' and no_mesin='".$rcek['no_mesin']."' and no_urut='1' ");
-
-        echo "<script>swal({
-          title: 'Data Tersimpan',   
-          text: 'Klik Ok untuk input data kembali',
-          type: 'success',
-          }).then((result) => {
-          if (result.value) {
-            window.location.href='?p=Monitoring-Tempelan'; 
-          }
-        });</script>";
-      }else{
-        echo "<script>swal({
-          title: 'Data Gagal Tersimpan',   
-          text: 'Klik Ok untuk input data kembali',
-          type: 'warning',
-          }).then((result) => {
-          if (result.value) {
-            window.location.href='?p=Monitoring-Tempelan'; 
-          }
-        });</script>";
+      if (!$sqlData2) {
+        throw new Exception("Gagal insert ke tbl_montemp: " . mysqli_error($con));
       }
+      mysqli_commit($con);
+      // Query 3: Update tbl_schedule
+      $sqlD = mysqli_query($con,"UPDATE tbl_schedule SET 
+        status='sedang jalan',
+        tgl_update=now()
+        WHERE status='antri mesin' AND no_mesin='".$rcek['no_mesin']."' AND no_urut='1'"
+      );
+      if (!$sqlD) {
+        throw new Exception("Gagal update tbl_schedule");
+      }
+
+      echo "<script>swal({
+        title: 'Data Tersimpan',   
+        text: 'Klik Ok untuk input data kembali',
+        type: 'success',
+      }).then((result) => {
+        if (result.value) {
+          window.location.href='?p=Monitoring-Tempelan'; 
+        }
+      });</script>";
+    } catch (Exception $e) {
+      mysqli_rollback($con);
+
+      echo "<script>swal({
+        title: 'Gagal Menyimpan Data',   
+        text: 'Kesalahan: " . addslashes($e->getMessage()) . "',
+        type: 'error',
+      }).then((result) => {
+        if (result.value) {
+          window.location.href='?p=Monitoring-Tempelan'; 
+        }
+      });</script>";
     }
   }
+  mysqli_autocommit($con, true);
 ?>

@@ -148,6 +148,19 @@
 			document.form1.tambah_obat6.removeAttribute("required");
 		}
 	}
+
+	window.addEventListener('DOMContentLoaded', function() {
+	  const noMcSelect = document.getElementById('no_mc');
+	  const outToSelect = document.getElementById('out_to');
+		
+	  const selectedNoMc = noMcSelect.value.trim();
+
+	  if (selectedNoMc === 'BB11') {
+	    outToSelect.disabled = false;
+	  } else {
+	    outToSelect.disabled = true;
+	  }
+	});
 </script>
 <?php
 	ini_set("error_reporting", 1);
@@ -260,7 +273,7 @@
 	$cekAir = mysqli_num_rows($sqlCekAir);
 	$rcekAir = mysqli_fetch_array($sqlCekAir);
 	$sqlRcode = mysqli_query($con, "SELECT
-										no_resep 
+										no_resep
 									FROM
 										tbl_schedule 
 									WHERE
@@ -637,16 +650,27 @@
 				<div class="form-group">
 					<label for="no_mc" class="col-sm-3 control-label">No MC</label>
 					<div class="col-sm-2">
-						<select name="no_mc" disabled="disabled" class="form-control">
+						<select id="no_mc" name="no_mc" disabled="disabled" class="form-control">
 							<option value="">Pilih</option>
 							<?php
 								$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]$row_hasilcelup[kapasitas]' ORDER BY no_mesin ASC");
 								while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
-								<option value="<?php echo $rK['no_mesin']; ?>" <?php if ($rcek['no_mesin'] == $rK['no_mesin'] OR $row_hasilcelup['no_mesin'] == $rK['no_mesin']) {
-																					echo "SELECTED";
-																				} ?>><?php echo $rK['no_mesin']; ?></option>
+								<option value="<?php echo $rK['no_mesin']; ?>"
+								<?php if ($rcek['no_mesin'] == $rK['no_mesin'] OR $row_hasilcelup['no_mesin'] == $rK['no_mesin']) {
+									echo "SELECTED";
+									}
+								?>>
+								<?php echo $rK['no_mesin']; ?></option>
 							<?php } ?>
+						</select>
+					</div>
+					<label for="out_to" class="col-sm-2 control-label">Out To</label>
+					<div class="col-sm-2">
+						<select id="out_to" name="out_to" disabled="disabled" class="form-control">
+							<option value="-">Pilih</option>
+							<option value="PPC">PPC</option>
+							<option value="CB">CB</option>
 						</select>
 					</div>
 				</div>
@@ -860,6 +884,7 @@
 							?>
 								<option value="<?php echo $rK['proses']; ?>" <?php if($row_hasilcelup['proses_celup'] == $rK['proses']) { echo "SELECTED"; } ?>><?php echo $rK['proses']; ?></option>
 							<?php } ?>
+							<option value="Bakar Bulu">Bakar Bulu</option>
 						</select>
 					</div>
 				</div>
@@ -1664,6 +1689,27 @@
 											INNER JOIN tbl_hasilcelup c ON b.id=c.id_montemp 
 											WHERE a.nokk='" . $_POST['nokk'] . "' ORDER BY c.id DESC LIMIT 1");
 			$rcekP = mysqli_fetch_array($sqlCekP);
+			$dataSche = mysqli_query(
+				$con, "SELECT
+					no_resep,
+					kapasitas,
+					ket_status,
+					jenis_kain,
+					tgl_delivery,
+					lot,
+					no_rajut,
+					g_shift,
+					ket_kain,
+					kk_kestabilan,
+					kk_normal
+				FROM
+					tbl_schedule 
+				WHERE
+					nokk = '" . $_POST['nokk'] . "'
+				ORDER BY
+					id DESC 
+					LIMIT 1");
+			$rSche = mysqli_fetch_array($dataSche);
 			$sqlDataP = mysqli_query($con, "INSERT INTO tbl_potongcelup SET
 			id_hasilcelup='" . $rcekP['idcelup'] . "',
 			nokk='" . $_POST['nokk'] . "',
@@ -1687,6 +1733,81 @@
 			SET no_urut = no_urut - 1 
 			WHERE no_mesin = '" . $rcek['no_mesin'] . "' 
 			AND `status` = 'antri mesin' AND not no_urut='1' ");
+
+			if($sqlDataP){
+				$out_to = $_POST['out_to'] ?? '';
+				if($out_to == 'CB'){
+					$warna = str_replace("'", "''", $_POST['warna']);
+					$nowarna = str_replace("'", "''", $_POST['no_warna']);
+					$jns = str_replace("'", "''", $_POST['jns_kain']);
+					$po = str_replace("'", "''", $_POST['no_po']);
+					$lot = trim($_POST['lot']);
+					$no_urut = $rcek2['no_urut'];
+					$kapasitas = $rSche['kapasitas'];
+					$ket_status = $rSche['ket_status'];
+					$jenis_kain = $rSche['jenis_kain'];
+					$tgl_delivery = $rSche['tgl_delivery'];
+					$no_rajut = $rSche['no_rajut'];
+					$g_shift = $rSche['g_shift'];
+					$ket_kain = $rSche['ket_kain'];
+					$kk_kestabilan = $rSche['kk_kestabilan'];
+					$kk_normal = $rSche['kk_normal'];
+					if(!empty($_POST['qty4']) && !empty($_POST['kapasitas'])){
+						$loading1 = round($_POST['qty4'] / $_POST['kapasitas'], 4) * 100;
+					}else{
+						$loading1 = '0';
+					}
+					$sqlSchedule = mysqli_query($con, "INSERT INTO tbl_schedule SET
+						nokk='" . $_POST['nokk'] . "',
+						nodemand='" . $_POST['demand'] . "',
+						langganan='" . $_POST['langganan'] . "',
+						buyer='" . $_POST['buyer'] . "',
+						no_order='" . $_POST['no_order'] . "',
+						po='$po',
+						no_hanger='" . $_POST['no_hanger'] . "',
+						no_item='" . $_POST['no_item'] . "',
+						jenis_kain='$jenis_kain',
+						tgl_delivery='$tgl_delivery',
+						lebar='" . $_POST['lebar'] . "',
+						gramasi='" . $_POST['grms'] . "',
+						warna='$warna',
+						no_warna='$nowarna',
+						qty_order='" . $_POST['qty1'] . "',
+						pjng_order='" . $_POST['qty2'] . "',
+						satuan_order='" . $_POST['satuan1'] . "',
+						lot='$lot',
+						rol='" . $_POST['qty3'] . "',
+						bruto='" . $_POST['qty4'] . "',
+						no_rajut='$no_rajut',
+						shift='" . $_POST['shift'] . "',
+						g_shift='" . $_POST['g_shift'] . "'',
+						kapasitas='" . $_POST['kapasitas'] . "'',
+						no_mesin='CB11',
+						no_urut='$no_urut',
+						no_sch='$no_urut',
+						loading='$loading1',
+						resep='" . $_POST['resep'] . "',
+						no_resep='" . $_POST['no_resep'] . "',
+						no_resep2='" . $_POST['no_resep2'] . "',
+						suffix='" . $_POST['suffix1'] . "',
+						suffix2='" . $_POST['suffix2'] . "',
+						energi='',
+						dyestuff='" . $_POST['dyestuff'] . "',
+						proses='Continuous - Bleaching',
+						revisi='',
+						kategori_warna='" . $_POST['kategori_warna'] . "',
+						ket_status='$ket',
+						ket_kain='$ket_kain',
+						tgl_masuk=now(),
+						personil='" . $_POST['operator'] . "',
+						target='" . $_POST['target'] . "',
+						kk_kestabilan='$kk_kestabilan',
+						kk_normal='$kk_normal',
+						tgl_update=now()"
+					);
+				}
+			}
+			
 			echo "<script>swal({
 				title: 'Data Tersimpan',   
 				text: 'Klik Ok untuk input data kembali',
