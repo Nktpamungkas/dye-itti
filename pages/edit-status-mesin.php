@@ -41,7 +41,7 @@
                         } else {
                             // $where = "AND NOT a.no_urut='1'";
                             $where = " ";
-                            $where1 = " WHERE not no_urut='1' ";
+                            $where1 = " ";
                         }
 
                         $qry = mysqli_query($con, "SELECT
@@ -60,21 +60,28 @@
                         ?>
                             <tr>
                                 <td>
-                                    <?php if($rowd['no_urut'] == '1' && !($_GET['id'] == 'BB11') && !($_GET['id'] == 'CB11') && !($_GET['id'] == 'WS11')) : ?>
-                                        <?= $rowd['no_urut']; ?>
-                                        <input type="hidden" class="form-control col-sm-2" value="<?= $rowd['no_urut']; ?>" name="no_urut[<?php echo $rowd['id']; ?>]" readonly>
-                                    <?php else : ?>
-                                        <select name="no_urut[<?php echo $rowd['id']; ?>]" class="form-control" >
+                                    <?php
+                                    $allowed_users = ['dit', 'bayu', 'haryadi', 'jubay', 'ketut'];
+                                    $current_user = strtolower($_SESSION['user_id10']);
+                                    $is_allowed_user = in_array($current_user, $allowed_users);
+                                    $is_operator_for_bb11 = ($current_user === 'operator' && $_GET['id'] === 'BB11');
+                                    $is_editable = $is_allowed_user || $is_operator_for_bb11;
+                                    ?>
+
+                                    <?php if ($is_editable) : ?>
+                                        <select name="no_urut[<?php echo $rowd['id']; ?>]" class="form-control">
                                             <option value="">Pilih</option>
                                             <?php
-                                                $sqlKap = mysqli_query($con, "SELECT no_urut FROM tbl_urut $where1 ORDER BY no_urut ASC");
+                                            $sqlKap = mysqli_query($con, "SELECT no_urut FROM tbl_urut $where1 ORDER BY no_urut ASC");
+                                            while ($rK = mysqli_fetch_array($sqlKap)) {
+                                                $selected = ($rK['no_urut'] == $rowd['no_urut']) ? 'SELECTED' : '';
+                                                echo "<option value='{$rK['no_urut']}' $selected>{$rK['no_urut']}</option>";
+                                            }
                                             ?>
-                                            <?php while ($rK = mysqli_fetch_array($sqlKap)) { ?>
-                                                <option value="<?php echo $rK['no_urut']; ?>" <?php if ($rK['no_urut'] == $rowd['no_urut']) {
-                                                                                                    echo "SELECTED";
-                                                                                                } ?>><?php echo $rK['no_urut']; ?></option>
-                                            <?php } ?>
                                         </select>
+                                    <?php else : ?>
+                                        <?= $rowd['no_urut']; ?>
+                                        <input type="hidden" name="no_urut[<?php echo $rowd['id']; ?>]" value="<?= $rowd['no_urut']; ?>">
                                     <?php endif; ?>
                                 </td>
                                 <td>
