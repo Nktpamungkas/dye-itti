@@ -1433,10 +1433,14 @@
 						<label for="ket" class="col-sm-3 control-label">Status Resep</label>
 						<div class="col-sm-8">
 							<select name="status_resep" style="font-size: 12px;" class="form-control">
-								<option value="Oke" <?php if($row_hasilcelup['status_resep'] == 'Oke'){ echo "SELECTED"; } ?>>Oke</option>
-								<option value="Tidak Oke" <?php if($row_hasilcelup['status_resep'] == 'Tidak Oke'){ echo "SELECTED"; } ?>>TIdak Oke </option>
-								<option value="Test Celup" <?php if($row_hasilcelup['status_resep'] == 'Test Celup'){ echo "SELECTED"; } ?>>Test Celup</option>
 								<option value="Belum Analisa" <?php if($row_hasilcelup['status_resep'] == 'Belum Analisa'){ echo "SELECTED"; } ?>>Belum Analisa</option>
+								<option value="Follow" <?php if($row_hasilcelup['status_resep'] == 'Follow'){ echo "SELECTED"; } ?>>Follow</option>
+								<option value="Test LAB" <?php if($row_hasilcelup['status_resep'] == 'Test LAB'){ echo "SELECTED"; } ?>>Test LAB</option>
+								<option value="Oke" <?php if($row_hasilcelup['status_resep'] == 'Oke'){ echo "SELECTED"; } ?>>Oke</option>
+								<option value="Tidak Oke" <?php if($row_hasilcelup['status_resep'] == 'Tidak Oke'){ echo "SELECTED"; } ?>>Tidak Oke </option>
+								<option value="Review" <?php if($row_hasilcelup['status_resep'] == 'Review'){ echo "SELECTED"; } ?>>Review </option>
+								<option value="Test Celup" <?php if($row_hasilcelup['status_resep'] == 'Test Celup'){ echo "SELECTED"; } ?>>Test Celup</option>
+								<option value="Tidak Analisa" <?php if($row_hasilcelup['status_resep'] == 'Tidak Analisa'){ echo "SELECTED"; } ?>>Tidak Analisa</option>
 							</select>
 						</div>
 					</div>
