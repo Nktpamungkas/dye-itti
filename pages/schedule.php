@@ -75,9 +75,7 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<a href="?p=Form-Schedule" class="btn btn-success <?php if ($_SESSION['lvl_id10'] == "3") {
-																			echo "disabled";
-																		} ?>"><i class="fa fa-plus-circle"></i> Tambah</a>
+					<a href="?p=Form-Schedule" class="btn btn-success <?= ($_SESSION['lvl_schedule'] != "1" ? 'disabled' : '') ?>"><i class="fa fa-plus-circle"></i> Tambah</a>
 					<!--	
 						<a href="?p=Form-Schedule-Manual" class="btn btn-warning"><i class="fa fa-plus-circle"></i> Tambah Manual</a>
 						<a href="pages/cetak/cetak_schedule.php" class="btn btn-danger pull-right" target="_blank"><i class="fa fa-print"></i> Cetak</a>	
@@ -153,9 +151,15 @@
 									$rCEk = mysqli_fetch_array($qCek);
 							?>
 								<tr bgcolor="<?php echo $bgcolor; ?>">
-									<td align="center"><a href="#" id='<?php echo $rowd['no_mesin']; ?>' class="edit_status_mesin <?php if ($_SESSION['lvl_id10'] == "3") {
-																																		echo "disabled";
-																																	} ?>"><?php echo $rowd['no_mesin']; ?></a></td>
+									<td align="center">
+										<?php if($_SESSION['lvl_schedule'] == "1") : ?>
+											<a href="#" id='<?php echo $rowd['no_mesin']; ?>' class="edit_status_mesin">
+												<?php echo $rowd['no_mesin']; ?>
+											</a>
+										<?php else : ?>
+											<?php echo $rowd['no_mesin']; ?>
+										<?php endif; ?>
+									</td>
 									<td align="center"><?php echo $rowd['no_urut']; ?></td>
 									<td align="center"><?php echo $rowd['nodemand']; ?></td>
 									<td><?php echo $rowd['langganan'] . "/" . $rowd['buyer']; ?></td>
