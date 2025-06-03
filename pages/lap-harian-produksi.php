@@ -59,6 +59,23 @@
     }
     exit();
   }
+  
+  if (isset($_POST['update_StatusResep'])) {
+    $nokk         = $_POST['nokk'];
+    $statusresep  = $_POST['statusResep'];
+
+    try {
+      $query = "UPDATE tbl_hasilcelup SET status_resep = ? WHERE nokk = ?";
+      $stmt = $con->prepare($query);
+      $stmt->bind_param("si", $statusresep, $nokk);
+      $stmt->execute();
+  
+      echo "OK";
+    } catch (mysqli_sql_exception $e) {
+      echo "Gagal: " . $e->getMessage();
+    }
+    exit();
+  }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -492,8 +509,21 @@
                   </td>
                   <td><?= $rowd['stscelup'] ?></td>
                   <td><?= $rowd['no_hanger'] ?></td>
-                  <td><?= $rowd['rcode'] ?></td>
-                  <td><?= $rowd['status_resep'] ?></td>
+                  <td>
+                    <?= $rowd['rcode'] ?>
+                  </td>
+                  <td>
+                    <select name="status_resep[]" onchange="updateStatusResep(this, '<?php echo $rowd['nokk']; ?>')">
+                      <option value="Belum Analisa" <?php if($rowd['status_resep'] == 'Belum Analisa'){ echo "SELECTED"; } ?>>Belum Analisa</option>
+                      <option value="Follow" <?php if($rowd['status_resep'] == 'Follow'){ echo "SELECTED"; } ?>>Follow</option>
+                      <option value="Test LAB" <?php if($rowd['status_resep'] == 'Test LAB'){ echo "SELECTED"; } ?>>Test LAB</option>
+                      <option value="Oke" <?php if($rowd['status_resep'] == 'Oke'){ echo "SELECTED"; } ?>>Oke</option>
+                      <option value="Tidak Oke" <?php if($rowd['status_resep'] == 'Tidak Oke'){ echo "SELECTED"; } ?>>Tidak Oke </option>
+                      <option value="Review" <?php if($rowd['status_resep'] == 'Review'){ echo "SELECTED"; } ?>>Review </option>
+                      <option value="Test Celup" <?php if($rowd['status_resep'] == 'Test Celup'){ echo "SELECTED"; } ?>>Test Celup</option>
+                      <option value="Tidak Analisa" <?php if($rowd['status_resep'] == 'Tidak Analisa'){ echo "SELECTED"; } ?>>Tidak Analisa</option>
+                    </select>
+                  </td>
 									<td><?= $rowd['analisa_resep'] ?></td>
                 </tr>
               <?php } ?>
@@ -605,6 +635,38 @@
           .catch(err => {
             console.error("Error:", err);
             Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui resep.', 'error');
+          });
+        }
+      });
+    }
+    
+    function updateStatusResep(selectEl, nokk) {
+      const statusResep = selectEl.value;
+    
+      Swal.fire({
+        title: 'Konfirmasi Perubahan',
+        text: `Apakah Anda yakin ingin mengubah Status Resep menjadi "${statusResep}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Perbarui!',
+        cancelButtonText: 'Batal',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(window.location.href, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `update_StatusResep=1&nokk=${nokk}&statusResep=${encodeURIComponent(statusResep)}`
+          })
+          .then(response => response.text())
+          .then(data => {
+            console.log("Respon:", data);
+            Swal.fire('Sukses!', 'Status Resep berhasil diperbarui.', 'success');
+          })
+          .catch(err => {
+            console.error("Error:", err);
+            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui status resep.', 'error');
           });
         }
       });
