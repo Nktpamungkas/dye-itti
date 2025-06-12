@@ -212,7 +212,7 @@ if ($Awal != "") {
                                             id,
                                             GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
                                             if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
-                                            no_mesin,
+                                            no_mesin,                                            
                                             nodemand,
                                             no_urut,
                                             buyer,
@@ -266,6 +266,7 @@ if ($Awal != "") {
                 <div align="center" style="font-size: 18px;"><strong><?php echo $rowd['no_mesin']; ?></strong>
                 </div>
                 <div align="center" style="font-size: 12px;">(<?php echo $rowd['kode']; ?>)</div>
+                <div align="center" style="font-size: 18px;"><em><?php // echo $rowd['no_mesin_lama']; ?></em></div>
               </td>
               <td valign="top" style="height: 0.27in;">
                 <div align="center">1</div>
@@ -644,12 +645,12 @@ if ($Awal != "") {
           <tr>
             <td>Nama</td>
             <td align="center">Bayu Nugraha</td>
-            <td align="center">Mucharom</td>
+            <td align="center">NOVIA RISA</td>
           </tr>
           <tr>
             <td>Jabatan</td>
-            <td align="center">Ast. Supervisor</td>
-            <td align="center">Dye Ast. Manager</td>
+            <td align="center">Supervisor</td>
+            <td align="center">Ast. Manager</td>
           </tr>
           <tr>
             <td>Tanggal</td>
@@ -697,12 +698,12 @@ if ($Awal != "") {
       </tr>
       <tr>
         <td>
-          <pre>No. Revisi	: 22</pre>
+          <pre>No. Revisi	: 23</pre>
         </td>
       </tr>
       <tr>
         <td>
-          <pre>Tgl. Terbit	: 19 Januari 2024</pre>
+          <pre>Tgl. Terbit	: 21 Juni 2024</pre>
         </td>
       </tr>
       <tr>
