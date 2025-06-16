@@ -266,7 +266,7 @@ $shft = $_GET['shft'];
                                         a.tambah_dyestuff,
                                         a.arah_warna,
                                         a.status_warna,
-                                        a.point2,
+                                        COALESCE(a.point2, b.target) as point2,
                                         c.note_wt,
                                         a.operatorpolyester,
 		                                    a.operatorcotton
@@ -388,9 +388,22 @@ $shft = $_GET['shft'];
         <td><?php echo $rowd['jam_out']; ?></td>
         <td>
           <?php
-            if ($rowd['lama_proses'] != "") {
+            if ($rowd['lama_proses']) {
               echo $rowd['jam'] . ":" . $rowd['menit'];
-            } 
+            }else{
+              $qryLama = mysqli_query($con, "SELECT
+                                                TIME_FORMAT( timediff( now(), b.tgl_buat ), '%H:%i' ) AS lama 
+                                              FROM
+                                                tbl_schedule a
+                                                LEFT JOIN tbl_montemp b ON a.id = b.id_schedule 
+                                              WHERE
+                                                b.nokk = '$rowd[nokk]' 
+                                                AND b.STATUS = 'sedang jalan' 
+                                              ORDER BY
+                                                a.no_urut ASC");
+              $rLama = mysqli_fetch_array($qryLama);
+              echo $rLama['lama'];
+            }
           ?>
         </td>
         <td><?php echo $rowd['point2']; ?></td>
