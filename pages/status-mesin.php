@@ -63,7 +63,7 @@ include "koneksi.php";
 			font-size: 24px;
 			font-style: italic;
 		}
-	</style>
+	</style> 
 </head>
 
 <body>
@@ -361,6 +361,17 @@ include "koneksi.php";
 									} else {
 										echo '';
 									}
+								}
+
+								function InfoMesin($mc) {
+								    include "koneksi.php";
+								    $q = mysqli_query($con, "SELECT a.no_order, a.langganan, a.warna, a.proses FROM tbl_schedule a LEFT JOIN tbl_montemp b ON a.id=b.id_schedule WHERE a.no_mesin='$mc' and b.status='sedang jalan' ORDER BY a.no_urut ASC LIMIT 1");
+								    $d = mysqli_fetch_array($q);
+								    if ($d) {
+								        return htmlspecialchars($d['no_order'] . ' | ' . $d['langganan'] . ' | ' . $d['warna'] . ' | ' . $d['proses']);
+								    } else {
+								        return 'Mesin: ' . $mc;
+								    }
 								}
 
 								/* Total Status Mesin */
@@ -710,7 +721,7 @@ include "koneksi.php";
 
 									echo '<div class="wrap">';
 									foreach ($machines as $machine) {
-										echo '<div class="detail_status_orgatex btn btn-sm ' . NoMesin($machine['no_mesin']) . '" " id="' . $machine['no_mesin'] . '" data-toggle="tooltip" data-html="true">';
+										echo '<div class="detail_status_orgatex btn btn-sm ' . NoMesin($machine['no_mesin']) . '" id="' . $machine['no_mesin'] . '" data-toggle="tooltip" data-html="true" title="' . InfoMesin($machine['no_mesin']) . '">';
 										echo '<span class="machine_number">' . $machine['no_mesin'] . '</span>';
 										echo '<p class="machine_time">' . Waktu($machine['no_mesin']) . '</p>';
 										echo '</div>';
@@ -778,11 +789,30 @@ include "koneksi.php";
 	<div id="CekDetailStatus" class="modal fade modal-3d-slit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </body>
 <!-- Tooltips -->
-<script src="dist/js/tooltips.js"></script>
-<script>
-	$(document).ready(function() {
-		$('[data-toggle="tooltip"]').tooltip();
-	});
-</script>
+ <script src="./../bower_components/toast-master/js/jquery.toast.js"></script>
+	<!-- Tooltips -->
+	<script src="./../../dist/js/tooltips.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('[data-toggle="tooltip"]').tooltip({container: 'body'});
+			// Klik: tampilkan modal detail
+			$(document).on('click', '.detail_status_orgatex', function(e) {
+				var m = $(this).attr('id');
+				$.ajax({
+					url: 'pages/cek-status-mesin.php',
+					type: 'GET',
+					data: { id: m },
+					success: function(ajaxData) {
+						$('#CekDetailStatus').html(ajaxData);
+						$('#CekDetailStatus').modal('show');
+					},
+					error: function() {
+						$('#CekDetailStatus').html('<div class="modal-body">Gagal memuat detail mesin.</div>');
+						$('#CekDetailStatus').modal('show');
+					}
+				});
+			});
+		});
+	</script>
 
 </html>
