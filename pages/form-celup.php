@@ -150,43 +150,43 @@
 	}
 
 	window.addEventListener('DOMContentLoaded', function() {
-	  const noMcSelect = document.getElementById('no_mc');
-	  const outToSelect = document.getElementById('out_to');
-		
-	  const selectedNoMc = noMcSelect.value.trim();
+		const noMcSelect = document.getElementById('no_mc');
+		const outToSelect = document.getElementById('out_to');
 
-	  if (selectedNoMc === 'BB11') {
-	    outToSelect.disabled = false;
-	  } else {
-	    outToSelect.disabled = true;
-	  }
+		const selectedNoMc = noMcSelect.value.trim();
+
+		if (selectedNoMc === 'BB11') {
+			outToSelect.disabled = false;
+		} else {
+			outToSelect.disabled = true;
+		}
 	});
 </script>
 <?php
-	ini_set("error_reporting", 1);
-	session_start();
-	include "koneksi.php";
-	$nokk = $_GET['nokk'];
+ini_set("error_reporting", 1);
+session_start();
+include "koneksi.php";
+$nokk = $_GET['nokk'];
 	function rcode($nokk, $resep){
-		$host = "10.0.4.7\SQLEXPRESS";
-		$username = "sa";
-		$password = "123";
-		$db_name = "TICKET";
-		$connInfo = array("Database" => $db_name, "UID" => $username, "PWD" => $password);
-		$conn1     = sqlsrv_connect($host, $connInfo);
-		if ($resep != '') {
-			$ket .= " AND ID_NO='$resep' ";
-		} else {
-			$ket .= "";
-		}
-		$sqlc = "select USER28 from ticket_title where YARN='$nokk' " . $ket . " order by createtime Desc";
-		//--lot
-		// $qryc = sqlsrv_query($conn1, $sqlc);
-		// $row = sqlsrv_fetch_array($qryc);
-		// $rcode = $row['USER28'];
-		// return $rcode;
+	$host = "10.0.4.7\SQLEXPRESS";
+	$username = "sa";
+	$password = "123";
+	$db_name = "TICKET";
+	$connInfo = array("Database" => $db_name, "UID" => $username, "PWD" => $password);
+	$conn1     = sqlsrv_connect($host, $connInfo);
+	if ($resep != '') {
+		$ket .= " AND ID_NO='$resep' ";
+	} else {
+		$ket .= "";
 	}
-	$sqlCek = mysqli_query($con, "SELECT
+	$sqlc = "select USER28 from ticket_title where YARN='$nokk' " . $ket . " order by createtime Desc";
+	//--lot
+	// $qryc = sqlsrv_query($conn1, $sqlc);
+	// $row = sqlsrv_fetch_array($qryc);
+	// $rcode = $row['USER28'];
+	// return $rcode;
+}
+$sqlCek = mysqli_query($con, "SELECT
 										a.*,b.id as idm 
 									FROM
 										tbl_schedule a
@@ -196,10 +196,10 @@
 									ORDER BY
 										a.id DESC 
 										LIMIT 1");
-	$cek = mysqli_num_rows($sqlCek);
-	$rcek = mysqli_fetch_array($sqlCek);
+$cek = mysqli_num_rows($sqlCek);
+$rcek = mysqli_fetch_array($sqlCek);
 
-	$sqlCek1 = mysqli_query($con, "SELECT
+$sqlCek1 = mysqli_query($con, "SELECT
 										c.*,a.id as ids,b.id as idm 
 									FROM
 										tbl_schedule a
@@ -210,9 +210,9 @@
 									ORDER BY
 										a.id DESC 
 										LIMIT 1");
-	$cek1 = mysqli_num_rows($sqlCek1);
-	$rcek1 = mysqli_fetch_array($sqlCek1);
-	$qryLama = mysqli_query($con, "SELECT
+$cek1 = mysqli_num_rows($sqlCek1);
+$rcek1 = mysqli_fetch_array($sqlCek1);
+$qryLama = mysqli_query($con, "SELECT
 										TIME_FORMAT( timediff( now(), b.tgl_buat ), '%H:%i' ) AS lama 
 									FROM
 										tbl_schedule a
@@ -222,8 +222,8 @@
 										AND b.STATUS = 'sedang jalan' 
 									ORDER BY
 										a.no_urut ASC");
-	$rLama = mysqli_fetch_array($qryLama);
-	$sqlCek2 = mysqli_query($con, "SELECT
+$rLama = mysqli_fetch_array($qryLama);
+$sqlCek2 = mysqli_query($con, "SELECT
 										id,
 										if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
 										if(COUNT(lot)>1,CONCAT('(',COUNT(lot),'kk',')'),'') as kk,
@@ -241,14 +241,14 @@
 										no_urut 
 									ORDER BY
 										id ASC");
-	$cek2 = mysqli_num_rows($sqlCek2);
-	$rcek2 = mysqli_fetch_array($sqlCek2);
-	if ($rcek2['ket_kartu'] != "") {
-		$ketsts = $rcek2['ket_kartu'] . "\n(" . $rcek2['g_kk'] . ")";
-	} else {
-		$ketsts = "";
-	}
-	$sqlCek3 = mysqli_query($con, "SELECT
+$cek2 = mysqli_num_rows($sqlCek2);
+$rcek2 = mysqli_fetch_array($sqlCek2);
+if ($rcek2['ket_kartu'] != "") {
+	$ketsts = $rcek2['ket_kartu'] . "\n(" . $rcek2['g_kk'] . ")";
+} else {
+	$ketsts = "";
+}
+$sqlCek3 = mysqli_query($con, "SELECT
 										* 
 									FROM
 										tbl_montemp 
@@ -258,9 +258,9 @@
 									ORDER BY
 										id DESC 
 										LIMIT 1");
-	$cek3 = mysqli_num_rows($sqlCek3);
-	$rcek3 = mysqli_fetch_array($sqlCek3);
-	$sqlCekAir = mysqli_query($con, "SELECT
+$cek3 = mysqli_num_rows($sqlCek3);
+$rcek3 = mysqli_fetch_array($sqlCek3);
+$sqlCekAir = mysqli_query($con, "SELECT
 										air_awal,
 										waktu_tunggu 
 									FROM
@@ -270,9 +270,9 @@
 									ORDER BY
 										id DESC 
 										LIMIT 1");
-	$cekAir = mysqli_num_rows($sqlCekAir);
-	$rcekAir = mysqli_fetch_array($sqlCekAir);
-	$sqlRcode = mysqli_query($con, "SELECT
+$cekAir = mysqli_num_rows($sqlCekAir);
+$rcekAir = mysqli_fetch_array($sqlCekAir);
+$sqlRcode = mysqli_query($con, "SELECT
 										no_resep
 									FROM
 										tbl_schedule 
@@ -281,8 +281,8 @@
 									ORDER BY
 										id DESC 
 										LIMIT 1");
-	$rRcode = mysqli_fetch_array($sqlRcode);
-	$sqlTopping = mysqli_query($con, "SELECT
+$rRcode = mysqli_fetch_array($sqlRcode);
+$sqlTopping = mysqli_query($con, "SELECT
 											jml_topping 
 										FROM
 											tbl_hasilcelup 
@@ -291,8 +291,8 @@
 										ORDER BY
 											id DESC 
 											LIMIT 1");
-	$rTopping = mysqli_fetch_array($sqlTopping);
-	$sqltarget = mysqli_query($con, "SELECT
+$rTopping = mysqli_fetch_array($sqlTopping);
+$sqltarget = mysqli_query($con, "SELECT
 										IF( b.tgl_target <= now(), 'melebihi target', 'sedang berjalan' ) AS cek_delay,
 											a.target,(round( LEFT ( c.lama_proses, 2 ))+ round( RIGHT ( c.lama_proses, 2 )/ 60, 2 )) AS lama_proses,
 										IF(isnull( c.lama_proses ),'jalan',IF(a.target >=(round(LEFT ( c.lama_proses, 2 ))+ round( RIGHT ( c.lama_proses, 2 )/ 60, 2 )),'sesuai target','melebihi target')) AS sts 
@@ -305,10 +305,10 @@
 										ORDER BY
 											b.id DESC 
 											LIMIT 1");
-	$cktarget = mysqli_fetch_array($sqltarget);
+$cktarget = mysqli_fetch_array($sqltarget);
 
-	// UPDATE NILO
-		$q_hasilcelup	= mysqli_query($con, "SELECT 
+// UPDATE NILO
+$q_hasilcelup	= mysqli_query($con, "SELECT 
 													*,
 													a.`status` AS sts_celup,
 													a.shift AS shift_celup,
@@ -324,10 +324,10 @@
 													LEFT JOIN tbl_schedule b ON c.id_schedule = b.id
 												WHERE
 													a.id = '$_GET[id]'");
-		$row_hasilcelup	= mysqli_fetch_assoc($q_hasilcelup);
+$row_hasilcelup	= mysqli_fetch_assoc($q_hasilcelup);
 
-		$nokk = $_GET['nokk'];
-		$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
+$nokk = $_GET['nokk'];
+$sql_ITXVIEWKK  = db2_exec($conn2, "SELECT
 											TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
 											TRIM(DEAMAND) AS DEMAND,
 											ORIGDLVSALORDERLINEORDERLINE,
@@ -346,9 +346,9 @@
 											ITXVIEWKK 
 										WHERE 
 											PRODUCTIONORDERCODE = '$nokk'");
-			$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
+$dt_ITXVIEWKK	= db2_fetch_assoc($sql_ITXVIEWKK);
 
-			$sql_kode_kategori_warna	= db2_exec($conn2, "SELECT
+$sql_kode_kategori_warna	= db2_exec($conn2, "SELECT
 														u.CODE,
 														a.VALUESTRING,
 														CASE
@@ -367,15 +367,15 @@
 														u.USERGENERICGROUPTYPECODE = 'CL1'
 														AND NOT u.SHORTDESCRIPTION LIKE '%delete%'
 														AND u.CODE = '$dt_ITXVIEWKK[NO_WARNA]'");
-			$dt_kode_kategori_warna	= db2_fetch_assoc($sql_kode_kategori_warna);
-	// UPDATE NILO
+$dt_kode_kategori_warna	= db2_fetch_assoc($sql_kode_kategori_warna);
+// UPDATE NILO
 ?>
 <?php
-	$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
-	$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
-	$Item		= isset($_POST['item']) ? $_POST['item'] : '';
-	$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
-	$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
+$Kapasitas	= isset($_POST['kapasitas']) ? $_POST['kapasitas'] : '';
+$TglMasuk	= isset($_POST['tglmsk']) ? $_POST['tglmsk'] : '';
+$Item		= isset($_POST['item']) ? $_POST['item'] : '';
+$Warna		= isset($_POST['warna']) ? $_POST['warna'] : '';
+$Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 ?>
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" name="form1">
 	<div class="box box-info">
@@ -402,19 +402,19 @@
 					</div>
 					<div class="col-sm-4">
 						<input name="id" type="hidden" class="form-control" id="id" value="<?php if(!empty($_GET['id'])){ 
-																									echo $row_hasilcelup['id_montemp']; 
+																								echo $row_hasilcelup['id_montemp'];
 																								}else { 
-																									echo $rcek['idm']; 
-																								} ?>" placeholder="ID">
+																								echo $rcek['idm'];
+																							} ?>" placeholder="ID">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="langganan" class="col-sm-3 control-label">Production Demand</label>
 					<div class="col-sm-8">
-						<input name="demand" type="text" class="form-control" id="demand" value="<?php if (!empty($_GET['id'])) { 
-																										echo $row_hasilcelup['nodemand']; 
+						<input name="demand" type="text" class="form-control" id="demand" value="<?php if (!empty($_GET['id'])) {
+																										echo $row_hasilcelup['nodemand'];
 																									}else{ 
-																										echo $rcek['nodemand']; 
+																										echo $rcek['nodemand'];
 																									} ?>" placeholder="Production Demand" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 					</div>
 				</div>
@@ -422,7 +422,7 @@
 					<label for="langganan" class="col-sm-3 control-label">Langganan</label>
 					<div class="col-sm-8">
 						<input name="langganan" type="text" class="form-control" id="langganan" placeholder="Langganan" value="<?php if (!empty($_GET['id'])) {
-																																	echo $row_hasilcelup['langganan']; 
+																																	echo $row_hasilcelup['langganan'];
 																																} else {
 																																	echo $rcek['langganan'];
 																																} ?>" readonly="readonly">
@@ -432,7 +432,7 @@
 					<label for="buyer" class="col-sm-3 control-label">Buyer</label>
 					<div class="col-sm-8">
 						<input name="buyer" type="text" class="form-control" id="buyer" placeholder="Buyer" value="<?php if (!empty($_GET['id'])) {
-																														echo $row_hasilcelup['buyer']; 
+																														echo $row_hasilcelup['buyer'];
 																													} else {
 																														echo $rcek['buyer'];
 																													} ?>" readonly="readonly">
@@ -442,7 +442,7 @@
 					<label for="no_order" class="col-sm-3 control-label">No Order</label>
 					<div class="col-sm-4">
 						<input name="no_order" type="text" required class="form-control" id="no_order" placeholder="No Order" value="<?php if (!empty($_GET['id'])) {
-																																			echo $row_hasilcelup['no_order']; 
+																																			echo $row_hasilcelup['no_order'];
 																																		} else {
 																																			echo $rcek['no_order'];
 																																		} ?>" readonly="readonly">
@@ -452,7 +452,7 @@
 					<label for="no_po" class="col-sm-3 control-label">PO</label>
 					<div class="col-sm-5">
 						<input name="no_po" type="text" class="form-control" id="no_po" placeholder="PO" value="<?php if (!empty($_GET['id'])) {
-																													echo $row_hasilcelup['po']; 
+																													echo $row_hasilcelup['po'];
 																												} else {
 																													echo $rcek['po'];
 																												} ?>" readonly="readonly">
@@ -462,7 +462,7 @@
 					<label for="no_hanger" class="col-sm-3 control-label">No Hanger / No Item</label>
 					<div class="col-sm-3">
 						<input name="no_hanger" type="text" class="form-control" id="no_hanger" placeholder="No Hanger" value="<?php if (!empty($_GET['id'])) {
-																																	echo $row_hasilcelup['no_hanger']; 
+																																	echo $row_hasilcelup['no_hanger'];
 																																} else {
 																																	echo $rcek['no_hanger'];
 																																} ?>" readonly="readonly">
@@ -584,40 +584,40 @@
 					<label for="jml_bruto" class="col-sm-3 control-label">Rol &amp; Qty</label>
 					<div class="col-sm-2">
 						<input name="qty3" type="text" required class="form-control" id="qty3" placeholder="0.00" value="<?= $row_hasilcelup['rol']; ?><?php if ($cek2 > 0) {
-																																echo $rcek2['rol'] . $rcek2['kk'];
-																															} else {
-																																if ($r['RollCount'] != "") {
-																																	echo round($r['RollCount']);
-																																} else if ($nokk != "") {
-																																	echo $cekM['jml_roll'];
-																																}
-																															} ?>" readonly="readonly">
+																																							echo $rcek2['rol'] . $rcek2['kk'];
+																																						} else {
+																																							if ($r['RollCount'] != "") {
+																																								echo round($r['RollCount']);
+																																							} else if ($nokk != "") {
+																																								echo $cekM['jml_roll'];
+																																							}
+																																						} ?>" readonly="readonly">
 					</div>
 					<div class="col-sm-3">
 						<div class="input-group">
 							<input name="qty4" type="text" required class="form-control" id="qty4" placeholder="0.00" style="text-align: right;" value="<?= $row_hasilcelup['bruto']; ?><?php if ($cek2 > 0) {
-																																							echo $rcek2['bruto'];
-																																						} else {
-																																							if ($r['Weight'] != "") {
-																																								echo round($r['Weight'], 2);
-																																							} else if ($nokk != "") {
-																																								echo $cekM['bruto'];
-																																							}
-																																						} ?>" readonly="readonly">
+																																															echo $rcek2['bruto'];
+																																														} else {
+																																															if ($r['Weight'] != "") {
+																																																echo round($r['Weight'], 2);
+																																															} else if ($nokk != "") {
+																																																echo $cekM['bruto'];
+																																															}
+																																														} ?>" readonly="readonly">
 							<span class="input-group-addon">KGs</span>
 						</div>
 					</div>
 				</div>
-				<?php 
-					if ($cek > 0 and $_GET['kap'] != "") {
-						$loading = round($rcek['bruto'] / $_GET['kap'], 4) * 100;
-					} else {
-						if ($r['Weight'] != "" and $_GET['kap'] != "") {
-							$loading = round($r['Weight'] / $_GET['kap'], 4) * 100;
-						} else if ($nokk != "" and $_GET['kap'] != "") {
-							$loading = round($cekM['bruto'] / $_GET['kap'], 4) * 100;
-						}
-					} 
+				<?php
+				if ($cek > 0 and $_GET['kap'] != "") {
+					$loading = round($rcek['bruto'] / $_GET['kap'], 4) * 100;
+				} else {
+					if ($r['Weight'] != "" and $_GET['kap'] != "") {
+						$loading = round($r['Weight'] / $_GET['kap'], 4) * 100;
+					} else if ($nokk != "" and $_GET['kap'] != "") {
+						$loading = round($cekM['bruto'] / $_GET['kap'], 4) * 100;
+					}
+				}
 				?>
 				<div class="form-group">
 					<label for="kapasitas" class="col-sm-3 control-label">Kapasitas Mesin</label>
@@ -636,16 +636,16 @@
 					</div>
 
 				</div>
-				<?php 
-					if ($cek > 0 and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-						$loading = round($rcek['bruto'] / $rcek['kapasitas'], 4) * 100;
-					} else {
-						if ($r['Weight'] != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-							$loading = round($r['Weight'] / $rcek['kapasitas'], 4) * 100;
-						} else if ($nokk != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
-							$loading = round($cekM['bruto'] / $rcek['kapasitas'], 4) * 100;
-						}
-					} 
+				<?php
+				if ($cek > 0 and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+					$loading = round($rcek['bruto'] / $rcek['kapasitas'], 4) * 100;
+				} else {
+					if ($r['Weight'] != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+						$loading = round($r['Weight'] / $rcek['kapasitas'], 4) * 100;
+					} else if ($nokk != "" and ($rcek['kapasitas'] != "" and $rcek['kapasitas'] != "0")) {
+						$loading = round($cekM['bruto'] / $rcek['kapasitas'], 4) * 100;
+					}
+				}
 				?>
 				<div class="form-group">
 					<label for="no_mc" class="col-sm-3 control-label">No MC</label>
@@ -653,15 +653,15 @@
 						<select id="no_mc" name="no_mc" disabled="disabled" class="form-control">
 							<option value="">Pilih</option>
 							<?php
-								$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]$row_hasilcelup[kapasitas]' ORDER BY no_mesin ASC");
-								while ($rK = mysqli_fetch_array($sqlKap)) {
+							$sqlKap = mysqli_query($con, "SELECT no_mesin FROM tbl_mesin WHERE kapasitas='$rcek[kapasitas]$row_hasilcelup[kapasitas]' ORDER BY no_mesin ASC");
+							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['no_mesin']; ?>"
 								<?php if ($rcek['no_mesin'] == $rK['no_mesin'] OR $row_hasilcelup['no_mesin'] == $rK['no_mesin']) {
-									echo "SELECTED";
+										echo "SELECTED";
 									}
-								?>>
-								<?php echo $rK['no_mesin']; ?></option>
+									?>>
+									<?php echo $rK['no_mesin']; ?></option>
 							<?php } ?>
 						</select>
 					</div>
@@ -680,22 +680,22 @@
 						<!-- <input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= trim(rcode($nokk, $rRcode['no_resep'])); ?>"> -->
 						<?php
 							if($_GET['nokk']){
-								$nokk = $_GET['nokk'];
+							$nokk = $_GET['nokk'];
 							}else{
-								$nokk = $row_hasilcelup['nokk'];
-							}
-							$cari_dari_greige	 = mysqli_query($con, "SELECT * FROM `tbl_schedule` WHERE nokk = '$nokk' AND ket_status = 'Greige'");
-							$row_schedule_greige = mysqli_fetch_assoc($cari_dari_greige);
+							$nokk = $row_hasilcelup['nokk'];
+						}
+						$cari_dari_greige	 = mysqli_query($con, "SELECT * FROM `tbl_schedule` WHERE nokk = '$nokk' AND ket_status = 'Greige'");
+						$row_schedule_greige = mysqli_fetch_assoc($cari_dari_greige);
 
 							if($row_schedule_greige['suffix'] == 001){
 								$_noprod    = substr($row_schedule_greige['no_resep2'], 0,8);
-								$_groupline	= substr($row_schedule_greige['no_resep2'], 9);
+							$_groupline	= substr($row_schedule_greige['no_resep2'], 9);
 							}else{
 								$_noprod    = substr($row_schedule_greige['no_resep'], 0,8);
-								$_groupline	= substr($row_schedule_greige['no_resep'], 9);
-							}
+							$_groupline	= substr($row_schedule_greige['no_resep'], 9);
+						}
 
-							$db2_rcode			= db2_exec($conn2, "SELECT 
+						$db2_rcode			= db2_exec($conn2, "SELECT 
 																		a.VALUESTRING AS RCODE
 																	FROM
 																		PRODUCTIONRESERVATION p
@@ -703,12 +703,12 @@
 																	LEFT JOIN ADSTORAGE a ON a.UNIQUEID = r.ABSUNIQUEID AND a.FIELDNAME = 'RCode'
 																	WHERE 
 																		p.PRODUCTIONORDERCODE = '$_noprod' AND GROUPLINE = '$_groupline'");
-							$dt_rcode    		= db2_fetch_assoc($db2_rcode);
+						$dt_rcode    		= db2_fetch_assoc($db2_rcode);
 
-							$data_rcode = $dt_rcode['RCODE'];	
+						$data_rcode = $dt_rcode['RCODE'];
 						?>
 						<input name="rcode1" type="text" class="form-control" id="rcode1" value="<?= $data_rcode; ?>" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
-						
+
 					</div>
 				</div>
 				<div class="form-group">
@@ -792,9 +792,13 @@
 						</select>
 
 					</div>
-					<div class="col-sm-1">
-						<a href="#" data-toggle="modal" data-target="#DataAnalisa" class="btn btn-primary">...</a>
-					</div>
+					<?php 
+						$allowed_users = ['andri', 'luqman', 'aris.miyanta', 'rohman','dit'];
+						if (isset($_SESSION['user_id10']) && in_array(strtolower($_SESSION['user_id10']), $allowed_users)) { ?>
+							<div class="col-sm-1">
+								<a href="#" data-toggle="modal" data-target="#DataAnalisa" class="btn btn-primary">...</a>
+							</div>
+					<?php } ?>
 
 				</div>
 				<div class="form-group">
@@ -879,8 +883,8 @@
 						<select name="proses" class="form-control" id="proses" onChange="aktif3();" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
 							<?php
-								$sqlKap = mysqli_query($con, "SELECT proses FROM tbl_proses ORDER BY proses ASC");
-								while ($rK = mysqli_fetch_array($sqlKap)) {
+							$sqlKap = mysqli_query($con, "SELECT proses FROM tbl_proses ORDER BY proses ASC");
+							while ($rK = mysqli_fetch_array($sqlKap)) {
 							?>
 								<option value="<?php echo $rK['proses']; ?>" <?php if($row_hasilcelup['proses_celup'] == $rK['proses']) { echo "SELECTED"; } ?>><?php echo $rK['proses']; ?></option>
 							<?php } ?>
@@ -899,9 +903,9 @@
 					</div>
 					<div class="col-sm-3">
 						<input name="suffix1" type="text" class="form-control" id="suffix1" value="<?php if (!empty($_GET['id'])) {
-																											echo $row_hasilcelup['suffix'];
+																										echo $row_hasilcelup['suffix'];
 																										}else{
-																											echo $rcek['suffix'];
+																										echo $rcek['suffix'];
 																										} ?>" placeholder="Suffix"  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 					</div>
 				</div>
@@ -916,9 +920,9 @@
 					</div>
 					<div class="col-sm-3">
 						<input name="suffix2" type="text" class="form-control" id="suffix2" value="<?php if (!empty($_GET['id'])) {
-																											echo $row_hasilcelup['suffix2'];
+																										echo $row_hasilcelup['suffix2'];
 																										}else{
-																											echo $rcek['suffix2'];
+																										echo $rcek['suffix2'];
 																										} ?>" placeholder="Suffix2"  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 					</div>
 				</div>
@@ -940,8 +944,8 @@
 					</div>
 					<label for="resep" class="col-sm-2 control-label">Arah Warna</label>
 					<div class="col-sm-3">
-						<?php 
-							$q_arah_warna = db2_exec($conn2, "SELECT
+						<?php
+						$q_arah_warna = db2_exec($conn2, "SELECT
 																a.VALUESTRING,
 																SUBSTRING(a2.OPTIONS, 
 																			POSITION(';' || a.VALUESTRING || '=' IN a2.OPTIONS) + LENGTH(a.VALUESTRING) + 2,
@@ -953,7 +957,7 @@
 															LEFT JOIN ADADDITIONALDATA a2 ON a2.NAME = a.FIELDNAME 
 															WHERE
 																r.SUFFIXCODE = '$rcek[suffix]'");
-							$dt_arah_warna = db2_fetch_assoc($q_arah_warna);
+						$dt_arah_warna = db2_fetch_assoc($q_arah_warna);
 						?>
 						<input name="arah_warna" class="form-control" value="<?= $dt_arah_warna['ARAH_WARNA'] ?>" readonly>
 					</div>
@@ -964,7 +968,7 @@
 						<select name="kategori_warna" class="form-control" id="kategori_warna"  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
 							<?php
-								$q_kategori_warna	= db2_exec($conn2, "SELECT
+							$q_kategori_warna	= db2_exec($conn2, "SELECT
 																		TRIM(u.CODE) AS CODE,
 																		u.LONGDESCRIPTION,
 																		u.SHORTDESCRIPTION,
@@ -996,11 +1000,11 @@
 						<select name="status_warna" class="form-control" id="status_warna" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
 							<option value="Warna Baru" <?php if ($row_hasilcelup['resep'] == 'Warna Baru') {
-														echo "SELECTED";
-													} ?>>Warna Baru</option>
+															echo "SELECTED";
+														} ?>>Warna Baru</option>
 							<option value="Warna Lama" <?php if ($row_hasilcelup['resep'] == 'Warna Lama') {
-														echo "SELECTED";
-													} ?>>Warna Lama</option>
+															echo "SELECTED";
+														} ?>>Warna Lama</option>
 						</select>
 					</div>
 
@@ -1090,10 +1094,10 @@
 							<?php } ?>
 						</select>
 					</div>
-				
+
 				</div>
 				<div class="form-group">
-				<label for="operatorpolyester" class="col-sm-3 control-label">Operator Polyester </label>
+					<label for="operatorpolyester" class="col-sm-3 control-label">Operator Polyester </label>
 					<div class="col-sm-4">
 						<select name="operatorpolyester" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
@@ -1108,7 +1112,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-				<label for="operatorcotton" class="col-sm-3 control-label">Operator Cotton </label>
+					<label for="operatorcotton" class="col-sm-3 control-label">Operator Cotton </label>
 					<div class="col-sm-4">
 						<select name="operatorcotton" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
@@ -1169,18 +1173,18 @@
 					<label for="a_dingin" class="col-sm-3 control-label">pH &amp; Suhu Tes Cuci Bulu</label>
 					<div class="col-sm-2">
 						<input name="ph_cb" type="text" class="form-control" id="ph_cb" value="<?= $row_hasilcelup['ph_cb']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																			} else if ($rcek['dyestuff'] == "R" or $rcek['dyestuff'] == "OBA") {
-																																			} else {
-																																				echo "readonly";
-																																			} ?>>
+																																											} else if ($rcek['dyestuff'] == "R" or $rcek['dyestuff'] == "OBA") {
+																																											} else {
+																																												echo "readonly";
+																																											} ?>>
 					</div>
 					<div class="col-sm-2">
 						<div class="input-group">
 							<input name="suhu_cb" type="text" class="form-control" id="suhu_cb" value="<?= $row_hasilcelup['suhu_cb']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																					} else if ($rcek['dyestuff'] == "R" or $rcek['dyestuff'] == "OBA") {
-																																					} else {
-																																						echo "readonly";
-																																					} ?>>
+																																														} else if ($rcek['dyestuff'] == "R" or $rcek['dyestuff'] == "OBA") {
+																																														} else {
+																																															echo "readonly";
+																																														} ?>>
 							<span class="input-group-addon">&deg;</span>
 						</div>
 					</div>
@@ -1203,18 +1207,18 @@
 					<label for="a_dingin" class="col-sm-3 control-label">pH &amp; Suhu Tes Poly</label>
 					<div class="col-sm-2">
 						<input name="ph_poly" type="text" class="form-control" id="ph_poly" value="<?= $row_hasilcelup['ph_poly']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																				} else if ($rcek['dyestuff'] == "D") {
-																																				} else {
-																																					echo "readonly";
-																																				} ?>>
+																																													} else if ($rcek['dyestuff'] == "D") {
+																																													} else {
+																																														echo "readonly";
+																																													} ?>>
 					</div>
 					<div class="col-sm-2">
 						<div class="input-group">
 							<input name="suhu_poly" type="text" class="form-control" id="suhu_poly" value="<?= $row_hasilcelup['suhu_poly']; ?>" placeholder="0" style="text-align: right" <?php if ($rcek['dyestuff'] == "D+R") {
-																																						} else if ($rcek['dyestuff'] == "D") {
-																																						} else {
-																																							echo "readonly";
-																																						} ?>>
+																																															} else if ($rcek['dyestuff'] == "D") {
+																																															} else {
+																																																echo "readonly";
+																																															} ?>>
 							<span class="input-group-addon">&deg;</span>
 						</div>
 					</div>
@@ -1236,18 +1240,18 @@
 					<label for="a_dingin" class="col-sm-3 control-label">pH &amp; Suhu Tes Cotton</label>
 					<div class="col-sm-2">
 						<input name="ph_cott" type="text" class="form-control" id="ph_cott" value="<?= $row_hasilcelup['ph_cott']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																				} else if ($rcek['dyestuff'] == "R") {
-																																				} else {
-																																					echo "readonly";
-																																				} ?>>
+																																													} else if ($rcek['dyestuff'] == "R") {
+																																													} else {
+																																														echo "readonly";
+																																													} ?>>
 					</div>
 					<div class="col-sm-2">
 						<div class="input-group">
 							<input name="suhu_cott" type="text" class="form-control" id="suhu_cott" value="<?= $row_hasilcelup['suhu_cott']; ?>" placeholder="0" style="text-align: right" <?php if ($rcek['dyestuff'] == "D+R") {
-																																						} else if ($rcek['dyestuff'] == "R") {
-																																						} else {
-																																							echo "readonly";
-																																						} ?>>
+																																															} else if ($rcek['dyestuff'] == "R") {
+																																															} else {
+																																																echo "readonly";
+																																															} ?>>
 							<span class="input-group-addon">&deg;</span>
 						</div>
 					</div>
@@ -1269,10 +1273,10 @@
 					<label for="a_dingin" class="col-sm-3 control-label">Berat Jenis</label>
 					<div class="col-sm-2">
 						<input name="berat_jns" type="text" class="form-control" id="berat_jns" value="<?= $row_hasilcelup['berat_jns']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																					} else if ($rcek['dyestuff'] == "R") {
-																																					} else {
-																																						echo "readonly";
-																																					} ?>>
+																																														} else if ($rcek['dyestuff'] == "R") {
+																																														} else {
+																																															echo "readonly";
+																																														} ?>>
 					</div>
 					<label for="tambah_obat5" class="col-sm-4 control-label">Tambah Obat 5x </label>
 					<div class="col-sm-3">
@@ -1292,10 +1296,10 @@
 					<label for="a_dingin" class="col-sm-3 control-label">pH Na<sub>2</sub>CO<sub>3</sub></label>
 					<div class="col-sm-2">
 						<input name="ph_naco" type="text" class="form-control" id="ph_naco" value="<?= $row_hasilcelup['ph_naco']; ?>" placeholder="0" style="text-align: right;" <?php if ($rcek['dyestuff'] == "D+R") {
-																																				} else if ($rcek['dyestuff'] == "R") {
-																																				} else {
-																																					echo "readonly";
-																																				} ?>>
+																																													} else if ($rcek['dyestuff'] == "R") {
+																																													} else {
+																																														echo "readonly";
+																																													} ?>>
 					</div>
 					<label for="tambah_obat6" class="col-sm-4 control-label">Tambah Obat 6x </label>
 					<div class="col-sm-3">
@@ -1340,9 +1344,9 @@
 					</div>
 					<div class="col-sm-3">
 						<input name="air_awal" type="text" class="form-control" id="air_awal" value="<?php if(!empty($_GET['id'])){ 
-																										 		echo $row_hasilcelup['air_awal']; 
+																											echo $row_hasilcelup['air_awal'];
 																											}else{
-																												 echo $rcekAir['air_awal']; 
+																											echo $rcekAir['air_awal'];
 																											}?>" placeholder="Air Awal" style="text-align: right;" readonly>
 					</div>
 					<div class="col-sm-3">
@@ -1407,8 +1411,8 @@
 						<select name="leader" class="form-control" id="leader" >
 							<option value="">Pilih</option>
 							<?php
-								$q_leader = mysqli_query($con, "SELECT * FROM tbl_leader ORDER BY id ASC");
-								while ($row_leader = mysqli_fetch_array($q_leader)) {
+							$q_leader = mysqli_query($con, "SELECT * FROM tbl_leader ORDER BY id ASC");
+							while ($row_leader = mysqli_fetch_array($q_leader)) {
 							?>
 								<option value="<?php echo $row_leader['leader']; ?>" <?php if($row_leader['leader'] == $row_hasilcelup['leader']) { echo "SELECTED"; } ?>><?php echo $row_leader['leader']; ?></option>
 							<?php } ?>
@@ -1489,7 +1493,7 @@
 						</thead>
 						<tbody>
 							<?php
-								$q_qa 		= db2_exec($conn2, "SELECT DISTINCT 
+							$q_qa 		= db2_exec($conn2, "SELECT DISTINCT 
 																		p.GROUPLINE,
 																		p.GROUPSTEPNUMBER,
 																		p.PRODRESERVATIONLINKGROUPCODE,
@@ -1543,19 +1547,19 @@
 																		AND NOT t.TINT IS NULL
 																	ORDER BY
 																		p.GROUPLINE ASC");
-								$col = 0;
-								while ($row_qa   = db2_fetch_assoc($q_qa)) {
+							$col = 0;
+							while ($row_qa   = db2_fetch_assoc($q_qa)) {
 								$bgcolor = ($col++ & 1) ? 'gainsboro' : 'antiquewhite';
 							?>
-							<tr bgcolor="<?php echo $bgcolor; ?>">
-								<td><?= $row_qa['PRODRESERVATIONLINKGROUPCODE']; ?></td>
-								<td><?= number_format($row_qa['WHITENESS'], 2); ?></td>
-								<td><?= number_format($row_qa['YELLOWNESS'], 2); ?></td>
-								<td><?= number_format($row_qa['TINT'], 2); ?></td>
-								<td><?= number_format($row_qa['LR'], 2); ?></td>
-								<td><?= $row_qa['SUFFIX']; ?></td>
-								<td><?= $row_qa['DESKRIPSI']; ?></td>
-							</tr>
+								<tr bgcolor="<?php echo $bgcolor; ?>">
+									<td><?= $row_qa['PRODRESERVATIONLINKGROUPCODE']; ?></td>
+									<td><?= number_format($row_qa['WHITENESS'], 2); ?></td>
+									<td><?= number_format($row_qa['YELLOWNESS'], 2); ?></td>
+									<td><?= number_format($row_qa['TINT'], 2); ?></td>
+									<td><?= number_format($row_qa['LR'], 2); ?></td>
+									<td><?= $row_qa['SUFFIX']; ?></td>
+									<td><?= $row_qa['DESKRIPSI']; ?></td>
+								</tr>
 							<?php } ?>
 						</tbody>
 					</table>
@@ -1616,20 +1620,40 @@
 		</div>
 	</div>
 </div>
-<?php
-	if ($_POST['save'] == "save") {
-		$ket = str_replace("'", "''", $_POST['ket']);
-		$analisa =	str_replace("'", "''", $_POST['analisa']);
-		$point = substr($_POST['point_proses'], (strpos($_POST['point_proses'], "#") + 1), 2);
-		$propoint = substr($_POST['point_proses'], 0, (strpos($_POST['point_proses'], "#") - 1));
-		$mulai = $_POST['mulaism'] . " " . $_POST['waktu_mulai'];
-		$selesai = $_POST['selesaism'] . " " . $_POST['waktu_stop'];
-		if ($_POST['kodesm'] != "") {
-			$jam_stop = " mulai_stop='$mulai', selesai_stop='$selesai', ";
-		} else {
-			$jam_stop = " ";
+<script>
+	function hapusAnalisa(id) {
+		if (confirm('Yakin ingin menghapus data analisa ini?')) {
+			$.ajax({
+				url: 'pages/hapus-celup.php',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				success: function(res) {
+					alert('Data analisa berhasil dihapus!');
+					location.reload();
+				},
+				error: function(xhr) {
+					alert('Gagal menghapus data analisa! ' + xhr.responseText);
+				}
+			});
 		}
-		$sqlData = mysqli_query($con, "INSERT INTO tbl_hasilcelup SET
+	}
+</script>
+<?php
+if ($_POST['save'] == "save") {
+	$ket = str_replace("'", "''", $_POST['ket']);
+	$analisa =	str_replace("'", "''", $_POST['analisa']);
+	$point = substr($_POST['point_proses'], (strpos($_POST['point_proses'], "#") + 1), 2);
+	$propoint = substr($_POST['point_proses'], 0, (strpos($_POST['point_proses'], "#") - 1));
+	$mulai = $_POST['mulaism'] . " " . $_POST['waktu_mulai'];
+	$selesai = $_POST['selesaism'] . " " . $_POST['waktu_stop'];
+	if ($_POST['kodesm'] != "") {
+		$jam_stop = " mulai_stop='$mulai', selesai_stop='$selesai', ";
+	} else {
+		$jam_stop = " ";
+	}
+	$sqlData = mysqli_query($con, "INSERT INTO tbl_hasilcelup SET
 								id_montemp='" . $_POST['id'] . "',
 								nokk='" . $_POST['nokk'] . "',
 								nodemand='" . $_POST['demand'] . "',
@@ -1686,15 +1710,16 @@
 								leader='" . $_POST['leader'] . "',
 								point2='" . $_POST['point2'] . "'") or die(mysqli_error($con));
 
-		if ($sqlData) {
-			/* awal form potong */
-			$sqlCekP = mysqli_query($con, "SELECT a.*,c.k_resep,c.acc_keluar,c.operator_keluar,c.shift as shift_keluar,c.g_shift as g_shift_keluar,c.id as idcelup from tbl_schedule a
+	if ($sqlData) {
+		/* awal form potong */
+		$sqlCekP = mysqli_query($con, "SELECT a.*,c.k_resep,c.acc_keluar,c.operator_keluar,c.shift as shift_keluar,c.g_shift as g_shift_keluar,c.id as idcelup from tbl_schedule a
 											INNER JOIN tbl_montemp b ON a.id=b.id_schedule
 											INNER JOIN tbl_hasilcelup c ON b.id=c.id_montemp 
 											WHERE a.nokk='" . $_POST['nokk'] . "' ORDER BY c.id DESC LIMIT 1");
-			$rcekP = mysqli_fetch_array($sqlCekP);
-			$dataSche = mysqli_query(
-				$con, "SELECT
+		$rcekP = mysqli_fetch_array($sqlCekP);
+		$dataSche = mysqli_query(
+			$con,
+			"SELECT
 					no_resep,
 					kapasitas,
 					ket_status,
@@ -1712,9 +1737,10 @@
 					nokk = '" . $_POST['nokk'] . "'
 				ORDER BY
 					id DESC 
-					LIMIT 1");
-			$rSche = mysqli_fetch_array($dataSche);
-			$sqlDataP = mysqli_query($con, "INSERT INTO tbl_potongcelup SET
+					LIMIT 1"
+		);
+		$rSche = mysqli_fetch_array($dataSche);
+		$sqlDataP = mysqli_query($con, "INSERT INTO tbl_potongcelup SET
 			id_hasilcelup='" . $rcekP['idcelup'] . "',
 			nokk='" . $_POST['nokk'] . "',
 			shift='" . $_POST['shift'] . "',
@@ -1722,46 +1748,48 @@
 			operator='" . $_POST['operator_potong'] . "',
 			tgl_buat=now(),
 			tgl_update=now()");
-			/* akhir form potong */
-			$sqlMonT = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id='" . $_POST['id'] . "'");
-			$rMonT = mysqli_fetch_array($sqlMonT);
-			$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
+		/* akhir form potong */
+		$sqlMonT = mysqli_query($con, "SELECT * FROM tbl_montemp WHERE id='" . $_POST['id'] . "'");
+		$rMonT = mysqli_fetch_array($sqlMonT);
+		$sqlD = mysqli_query($con, "UPDATE tbl_schedule SET 
 			`status`='selesai',
 			tgl_update=now()
 			WHERE no_mesin = '" . $rcek['no_mesin'] . "' and no_urut='1' and `status`='sedang jalan' ");
-			$sqlDT = mysqli_query($con, "UPDATE tbl_montemp SET 
+		$sqlDT = mysqli_query($con, "UPDATE tbl_montemp SET 
 			`status`='selesai',
 			tgl_update=now()
 			WHERE id='" . $_POST['id'] . "'");
-			$sqlUrut = mysqli_query($con, "UPDATE tbl_schedule 
+		$sqlUrut = mysqli_query($con, "UPDATE tbl_schedule 
 			SET no_urut = no_urut - 1 
 			WHERE no_mesin = '" . $rcek['no_mesin'] . "' 
 			AND `status` = 'antri mesin' AND not no_urut='1' ");
 
-			if($sqlDataP){
-				$out_to = $_POST['out_to'] ?? '';
-				if($out_to == 'CB'){
-					$warna = str_replace("'", "''", $_POST['warna']);
-					$nowarna = str_replace("'", "''", $_POST['no_warna']);
-					$jns = str_replace("'", "''", $_POST['jns_kain']);
-					$po = str_replace("'", "''", $_POST['no_po']);
-					$lot = trim($_POST['lot']);
-					$no_urut = $rcek2['no_urut'];
-					$kapasitas = $rSche['kapasitas'];
-					$ket_status = $rSche['ket_status'];
-					$jenis_kain = $rSche['jenis_kain'];
-					$tgl_delivery = $rSche['tgl_delivery'];
-					$no_rajut = $rSche['no_rajut'];
-					$g_shift = $rSche['g_shift'];
-					$ket_kain = $rSche['ket_kain'];
-					$kk_kestabilan = $rSche['kk_kestabilan'];
-					$kk_normal = $rSche['kk_normal'];
-					if(!empty($_POST['qty4']) && !empty($_POST['kapasitas'])){
-						$loading1 = round($_POST['qty4'] / $_POST['kapasitas'], 4) * 100;
-					}else{
-						$loading1 = '0';
-					}
-					$sqlSchedule = mysqli_query($con, "INSERT INTO tbl_schedule SET
+		if ($sqlDataP) {
+			$out_to = $_POST['out_to'] ?? '';
+			if ($out_to == 'CB') {
+				$warna = str_replace("'", "''", $_POST['warna']);
+				$nowarna = str_replace("'", "''", $_POST['no_warna']);
+				$jns = str_replace("'", "''", $_POST['jns_kain']);
+				$po = str_replace("'", "''", $_POST['no_po']);
+				$lot = trim($_POST['lot']);
+				$no_urut = $rcek2['no_urut'];
+				$kapasitas = $rSche['kapasitas'];
+				$ket_status = $rSche['ket_status'];
+				$jenis_kain = $rSche['jenis_kain'];
+				$tgl_delivery = $rSche['tgl_delivery'];
+				$no_rajut = $rSche['no_rajut'];
+				$g_shift = $rSche['g_shift'];
+				$ket_kain = $rSche['ket_kain'];
+				$kk_kestabilan = $rSche['kk_kestabilan'];
+				$kk_normal = $rSche['kk_normal'];
+				if (!empty($_POST['qty4']) && !empty($_POST['kapasitas'])) {
+					$loading1 = round($_POST['qty4'] / $_POST['kapasitas'], 4) * 100;
+				} else {
+					$loading1 = '0';
+				}
+				$sqlSchedule = mysqli_query(
+					$con,
+					"INSERT INTO tbl_schedule SET
 						nokk='" . $_POST['nokk'] . "',
 						nodemand='" . $_POST['demand'] . "',
 						langganan='" . $_POST['langganan'] . "',
@@ -1808,11 +1836,11 @@
 						kk_kestabilan='$kk_kestabilan',
 						kk_normal='$kk_normal',
 						tgl_update=now()"
-					);
-				}
+				);
 			}
-			
-			echo "<script>swal({
+		}
+
+		echo "<script>swal({
 				title: 'Data Tersimpan',   
 				text: 'Klik Ok untuk input data kembali',
 				type: 'success',
@@ -1822,17 +1850,17 @@
 					window.location.href='?p=Hasil-Celup'; 
 				}
 				});</script>";
-		}
 	}
-	if ($_POST['update'] == "update") {
-		$analisaresep		= addslashes($_POST['analisa_resep']);
-		$sqlData = mysqli_query($con, "UPDATE tbl_hasilcelup SET 
+}
+if ($_POST['update'] == "update") {
+	$analisaresep		= addslashes($_POST['analisa_resep']);
+	$sqlData = mysqli_query($con, "UPDATE tbl_hasilcelup SET 
 											analisa_resep = '$analisaresep',
 											status_resep = '$_POST[status_resep]'
 											WHERE nokk='" . $_POST['nokk'] . "'");
 
-		if ($sqlData) {
-			echo "<script>swal({
+	if ($sqlData) {
+		echo "<script>swal({
 				title: 'Data Telah DiUbah',   
 				text: 'Klik Ok untuk input data kembali',
 				type: 'success',
@@ -1842,6 +1870,6 @@
 					window.location.href='?p=Hasil-Celup'; 
 				}
 				});</script>";
-		}
 	}
+}
 ?>
