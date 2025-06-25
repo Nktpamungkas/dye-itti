@@ -1116,7 +1116,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					<div class="col-sm-4">
 						<select name="operatorcotton" class="form-control" required  <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
-							<option value="-" > - </option>
+													<option value="-" > - </option>
 							<?php
 							$sqlKap = mysqli_query($con, "SELECT nama FROM tbl_staff WHERE jabatan='Operator' ORDER BY nama ASC");
 							while ($rK = mysqli_fetch_array($sqlKap)) {
@@ -1579,7 +1579,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="nama" class="col-md-3 control-label">Nama Analisa</label>
+						<label for="nama" class="col-md-3 control-label">Input Analisa</label>
 						<div class="col-md-8">
 							<input type="text" class="form-control" id="nama" name="nama" required>
 							<span class="help-block with-errors"></span>
@@ -1590,6 +1590,9 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<tr>
 								<th width="144">
 									<div align="center">Analisa</div>
+								</th>
+								<th width="144">
+									<div align="center">Action</div>
 								</th>
 							</tr>
 						</thead>
@@ -1603,6 +1606,9 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 								<tr bgcolor="<?php echo $bgcolor; ?>">
 									<td align="center">
 										<?php echo $rAn1['nama']; ?>
+									</td>
+									<td align="center">
+										<a href="#" class="btn btn-danger btn-xs" onClick="hapusAnalisa('<?php echo $rAn1['id']; ?>');" title="Hapus Analisa"><i class="fa fa-trash"></i></a>
 									</td>
 								</tr>
 							<?php
