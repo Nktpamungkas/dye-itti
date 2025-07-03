@@ -1432,6 +1432,15 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 						<textarea name="ket" class="form-control" <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>><?php echo $ketsts; ?><?= $row_hasilcelup['ket']; ?></textarea>
 					</div>
 				</div>
+				<label for="gerobak" class="col-sm-3 control-label">Penanggung Jawab Buyer</label>
+					<div class="col-sm-2">
+						<select name="penanggungjawabbuyer" class="form-control">
+							<option value="" disabled selected>Pilih</option>
+							<option value="Mr. Jiang" <?php if($row_hasilcelup['gerobak'] == 'Mr. Jiang'){ echo "SELECTED"; } ?>>Mr. Jiang</option>
+							<option value="M. Subihadi" <?php if($row_hasilcelup['gerobak'] == 'M. Subihadi'){ echo "SELECTED"; } ?>>M. Subihadi</option>
+							<option value="Dwijo Maulana" <?php if($row_hasilcelup['gerobak'] == 'Dwijo Maulana'){ echo "SELECTED"; } ?>>Dwijo Maulana</option>
+						</select>
+					</div>
 				<?php if(!empty($_GET['id'])) : ?>
 					<div class="form-group">
 						<label for="ket" class="col-sm-3 control-label">Status Resep</label>
@@ -1714,7 +1723,8 @@ if ($_POST['save'] == "save") {
 								arah_warna='" . $_POST['arah_warna'] . "',
 								status_warna='" . $_POST['status_warna'] . "',
 								leader='" . $_POST['leader'] . "',
-								point2='" . $_POST['point2'] . "'") or die(mysqli_error($con));
+								point2='" . $_POST['point2'] . "',
+								penanggungjawabbuyer='" . $_POST['penanggungjawabbuyer'] . "'") or die(mysqli_error($con));
 
 	if ($sqlData) {
 		/* awal form potong */
