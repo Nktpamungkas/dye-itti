@@ -1436,9 +1436,9 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					<div class="col-sm-2">
 						<select name="penanggungjawabbuyer" class="form-control">
 							<option value="" disabled selected>Pilih</option>
-							<option value="Mr. Jiang" <?php if($row_hasilcelup['gerobak'] == 'Mr. Jiang'){ echo "SELECTED"; } ?>>Mr. Jiang</option>
-							<option value="M. Subihadi" <?php if($row_hasilcelup['gerobak'] == 'M. Subihadi'){ echo "SELECTED"; } ?>>M. Subihadi</option>
-							<option value="Dwijo Maulana" <?php if($row_hasilcelup['gerobak'] == 'Dwijo Maulana'){ echo "SELECTED"; } ?>>Dwijo Maulana</option>
+							<option value="Mr. Jiang" <?php if($row_hasilcelup['penanggungjawabbuyer'] == 'Mr. Jiang'){ echo "SELECTED"; } ?>>Mr. Jiang</option>
+							<option value="M. Subihadi" <?php if($row_hasilcelup['penanggungjawabbuyer'] == 'M. Subihadi'){ echo "SELECTED"; } ?>>M. Subihadi</option>
+							<option value="Dwijo Maulana" <?php if($row_hasilcelup['penanggungjawabbuyer'] == 'Dwijo Maulana'){ echo "SELECTED"; } ?>>Dwijo Maulana</option>
 						</select>
 					</div>
 				<?php if(!empty($_GET['id'])) : ?>
