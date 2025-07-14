@@ -66,8 +66,30 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<a href="?p=Form-Buka-Resep" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
-				</div>
+                    <div class="row" style="padding: 10px;">
+                        <div class="col-md-12">
+                            <form method="post" enctype="multipart/form-data" name="form1" class="form-inline">
+                                <div class="form-group" style="margin-right: 15px;">
+                                    <label for="start_date">Start Date</label>
+                                    <input type="date" name="start_date" class="form-control" 
+                                        value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
+                                </div>
+                                <div class="form-group" style="margin-right: 15px;">
+                                    <label for="end_date">End Date</label>
+                                    <input type="date" name="end_date" class="form-control" 
+                                        value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
+                                </div>
+                                <button type="submit" class="btn btn-info" name="submit" style="margin-top: -5px;"><i class="fa fa-search"></i> Cari</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="?p=Form-Buka-Resep" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
+                        </div>
+                    </div>
+                </div>
 				<div class="box-body">
 					<table id="example1" class="table table-bordered table-hover table-striped" width="100%">
 						<thead class="bg-blue">
@@ -89,7 +111,15 @@
 						</thead>
 						<tbody>
                             <?php
-                                $q_bukaresep    = mysqli_query($con, "SELECT * FROM tbl_bukaresep WHERE cek_resep is null");
+                                if(!empty($_POST['start_date']) && !empty($_POST['end_date'])) {
+                                    $start_date = $_POST['start_date'];
+                                    $end_date = $_POST['end_date'];
+                                    $q_bukaresep = mysqli_query($con, "SELECT * FROM tbl_bukaresep WHERE cek_resep is null AND date(createdatetime) BETWEEN '$start_date' AND '$end_date'");
+                                } else {
+                                    $start_date = date('Y-m-d');
+                                    $q_bukaresep = mysqli_query($con, "SELECT * FROM tbl_bukaresep WHERE cek_resep is null AND date(createdatetime) = '$start_date'");
+                                }
+                                // $q_bukaresep    = mysqli_query($con, "SELECT * FROM tbl_bukaresep WHERE cek_resep is null Limit 150");
                                 $no = 1;
                             ?>
                             <?php while ($row_bukaresep = mysqli_fetch_array($q_bukaresep)) { ?>
