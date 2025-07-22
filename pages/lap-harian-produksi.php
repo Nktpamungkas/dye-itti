@@ -191,35 +191,9 @@
         <div class="col-sm-2">
           <button type="submit" class="btn btn-block btn-social btn-linkedin btn-sm" name="save" style="width: 60%">Search <i class="fa fa-search"></i></button>
         </div>
-        <div class="col-sm-2">
-          <button type="button" class="btn btn-block btn-default btn-sm" onclick="redirect_new()" name="laporan_new" id="laporan_new">Laporan Baru <i class="fa fa-external-link" aria-hidden="true"></i></button>
-        </div>
-        
       </div>
       <!-- /.box-footer -->
     </form>
-    <!-- Start Form Upload laporan produksi ke format baru -->
-    <!-- <div class="row">
-      <div class="col-xs-12">
-        <div>
-          </br>
-          </br>
-          <form class="form-horizontal" action="pages/cetak/konversi_lap_harian_to_new_format.php" method="post" enctype="multipart/form-data" name="formUploadExcel">
-            <div class="form-group"> 
-              <label for="excelFile" class="col-sm-3 control-label"> Pilih Excel Untuk di Upload:</label>
-              <div class="col-sm-4">
-				        <input type="hidden" name="uploadExcel" value="true" readonly>
-                <input type="file" class="form-control" name="excelFile" id="excelFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-		          </div>
-              <div class="col-sm-4">
-                <input type="submit" value="Upload Excel" class="btn btn-primary" name="submit">
-              </div>
-		        </div>
-          </form>
-        </div>
-      </div>
-    </div> -->
-    <!-- End Form -->
   </div>
   <div class="row">
     <div class="col-xs-12">
@@ -564,7 +538,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="text/javascript" src="dist/js/jquery.redirect.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -697,24 +670,6 @@
           });
         }
       });
-    }
-
-    function redirect_new(){
-      let dataPost={
-        awal : $('[name="awal"]').val(),
-        akhir : $('[name="akhir"]').val(),
-        gshift : $('[name="gshift"]').val(),
-        fasilitas : $('[name="fasilitas"]').val(),
-        jam_awal : $('[name="jam_awal"]').val(),
-        jam_akhir : $('[name="jam_akhir"]').val(),
-        rcode : $('[name="rcode"]').val(),
-      }
-      const uri = "<?=$_SERVER['REQUEST_URI'];?>";
-      const uriSplit = uri.split("?");
-      const baseUrl= "<?=$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];?>"+uriSplit[0];
-      $.redirect(baseUrl+"?p=lap-harian-produksi-baru", dataPost, "POST")
-      // window.location.replace(baseUrl+"?p=lap-harian-produksi-baru");
-
     }
   </script>
 
