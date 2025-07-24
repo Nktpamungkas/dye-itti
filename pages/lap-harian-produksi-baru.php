@@ -207,7 +207,6 @@
                                       -- a.proses_point,
                                       -- a.analisa,
                                       b.nokk,
-                                      a.id,
                                       -- b.no_warna,
                                       b.lebar,
                                       -- b.gramasi,
@@ -239,6 +238,7 @@
                                       -- c.lebar_a,
                                       -- c.gramasi_a,
                                       c.operator,
+                                      a.id as idhslclp,
                                       -- a.tambah_dyestuff,
                                       -- a.arah_warna,
                                       -- a.status_warna,
@@ -442,13 +442,13 @@
                 <th width="38">
                   <div >NO.</div>
                 </th>
-                <th width="38">SHIFT</th>
                 <th width="224">
                   <div >NO MC</div>
                 </th>
                 <th width="215">
                   <div align="center">KAPASITAS</div>
                 </th>
+                <th width="38">SHIFT</th>
                 <th width="314">
                   <div align="center">BUYER</div>
                 </th>
@@ -468,7 +468,7 @@
                   <div align="center">PROSES</div>
                 </th>
                 <th width="215">
-                  <div align="center">% LOADING</div>
+                  <div align="center">LOADING</div>
                 </th>
                 <th width="215">
                   <div align="center">L:R</div>
@@ -484,6 +484,9 @@
                 </th>
                 <th width="215">
                   <div align="center">STATUS</div>
+                </th>
+                <th width="215">
+                  <div align="center">REMARKS</div>
                 </th>
                 <th width="215">
                   <div align="center">DYESTUFF</div>
@@ -541,27 +544,28 @@
                               data-pake_air="<?= $rowd['air_awal'] != "" && $rowd['air_akhir'] != "" 
                                               ? $rowd['air_akhir'] - $rowd['air_awal']
                                               : ''; ?>"
-                              data-nokk="<?$rowd['nokk'] ?>"
-                              data-id="<?$rowd['id'] ?>"
+                              data-nokk="<?= $rowd['nokk'] ?>"
+                              data-idhslclp="<?= $rowd['idhslclp'] ?>"
 
                       >Edit
                       </button>
                     </td>
                     <td><?=$no?></td>
-                    <td><?=$rowd['shft']?></td>
                     <td><?=$rowd['mc']?></td>
                     <td><?=$rowd['kapasitas']?></td>
+                    <td><?=$rowd['shft']?></td>
                     <td><?=$rowd['buyer']?></td>
                     <td><?=$rowd['no_order']?></td>
                     <td><?=$rowd['nodemand']?></td>
                     <td><?=$subcode_all[$rowd['nokk']]['SUBCODE01'] ?? ''?></td>
                     <td><?=$rowd['kategori_warna']?></td>
                     <td><?=$rowd['proses']?></td>
-                    <td><?=$rowd['loading']?></td>
+                    <td><?=$rowd['loading']?> %</td>
                     <td><?=$rowd['l_r']?></td>
                     <td><?=$rowd['ket']?></td>
                     <td><?=$rowd['k_resep']?></td>
                     <td><?=$rowd['resep']?></td>
+                    <td><?=$rowd['sts']?></td>
                     <td><?=$rowd['sts']?></td>
                     <td><?=$rowd['dyestuff']?></td>
                     <td><?=$rowd['lama_proses']?></td>
@@ -685,7 +689,22 @@
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputSts" class="form-label">Status</label>
-                        <input type="text" class="form-control readonly" id="inputSts" autocomplete="off">
+                        <select class="form-control" id="inputSts" autocomplete="off" required>
+						            	<option value="">Pilih</option>
+						            	<option value="OK">OK</option>
+						            	<option value="Celup Poly Dulu-Matching">Celup Poly Dulu-Matching</option>
+						            	<option value="Gagal Proses">Gagal Proses</option>
+						            	<option value="Levelling-Matching">Levelling-Matching</option>
+						            	<option value="Pelunturan-Matching">Pelunturan-Matching</option>
+						            	<option value="Scouring Turun">Scouring Turun</option>
+						            	<option value="Continuous - Bleaching">Continuous - Bleaching</option>
+						            	<option value="Relaxing - Priset">Relaxing - Priset</option>
+						            	<option value="Tunggu Review">Tunggu Review</option>
+						            </select>
+                      </div>
+                      <div class="col-xl-3 col-md-6 mb-3">
+                        <label for="inputRemarks" class="form-label">Remarks</label>
+                        <input type="text" class="form-control" id="inputRemarks" autocomplete="off" readonly>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputDyestuff" class="form-label">Dye Stuff</label>
@@ -763,7 +782,6 @@
           })
           .then(response => response.text())
           .then(data => {
-            // console.log("Respon:", data);
             Swal.fire('Sukses!', 'Proses berhasil diperbarui.', 'success');
           })
           .catch(err => {
@@ -794,7 +812,6 @@
           })
           .then(response => response.text())
           .then(data => {
-            // console.log("Respon:", data);
             Swal.fire('Sukses!', 'Kestabilan resep berhasil diperbarui.', 'success');
           })
           .catch(err => {
@@ -825,7 +842,6 @@
           })
           .then(response => response.text())
           .then(data => {
-            // console.log("Respon:", data);
             Swal.fire('Sukses!', 'Resep berhasil diperbarui.', 'success');
           })
           .catch(err => {
@@ -857,7 +873,6 @@
           })
           .then(response => response.text())
           .then(data => {
-            // console.log("Respon:", data);
             Swal.fire('Sukses!', 'Status Resep berhasil diperbarui.', 'success');
           })
           .catch(err => {
@@ -953,10 +968,15 @@
 
   <script>
     let originalData = {};
+    let no_kk = "NONE"
+    let idhasilcelup = "NONE"
 
     $(document).ready(function () {
       $('.btn-edit').click(function () {
         const btn = $(this);
+
+        no_kk = btn.data('nokk')
+        idhasilcelup = btn.data('idhslclp')
 
         // Simpan data awal
         originalData = {
@@ -981,8 +1001,11 @@
           carry_over: btn.data('carry_over'),
           air_awal: btn.data('air_awal'),
           air_akhir: btn.data('air_akhir'),
-          pake_air: btn.data('pake_air')
+          nokk: btn.data('nokk'),
+          idhslclp: btn.data('idhslclp')
         };
+
+        // console.log(originalData);
 
         for (const key in originalData) {
           $('#input' + toCamelCase(key)).val(originalData[key]);
@@ -1006,7 +1029,7 @@
       });
       $('#btnModalSave').click(function () {
         const nokk = $(this).data('nokk');
-        const id = $(this).data('id');
+        const id = $(this).data('idhslclp');
 
         if (!isFormChanged()) {
           alert("Tidak ada perubahan data untuk disimpan.");
@@ -1015,8 +1038,8 @@
 
         const dataToSend = {
           update_multi: true,
-          nokk: nokk,
-          id: id,
+          nokk: no_kk,
+          id: idhasilcelup,
           shift: $('#inputShift').val(),
           mc: $('#inputMc').val(),
           kapasitas: $('#inputKapasitas').val(),
@@ -1042,7 +1065,7 @@
         };
 
         console.log(dataToSend);
-      
+
         $.post('', dataToSend, function(response) {
           if (response.trim() === 'OK') {
             alert("Data berhasil disimpan.");
@@ -1088,6 +1111,10 @@
       }
       function isFormChanged() {
         const currentData = getCurrentFormData();
+
+        console.log(currentData);
+        console.log(originalData);
+        
         for (const key in originalData) {
           if (originalData[key] != currentData[key]) {
             return true;
@@ -1096,7 +1123,7 @@
         return false;
       }
       function toCamelCase(str) {
-        console.log(str);
+        // console.log(str);
         return str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); }).replace(/^([a-z])/,
           function (g) { return g.toUpperCase(); });
       }
