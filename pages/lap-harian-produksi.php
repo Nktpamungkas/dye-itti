@@ -709,12 +709,20 @@
         jam_akhir : $('[name="jam_akhir"]').val(),
         rcode : $('[name="rcode"]').val(),
       }
+
       const uri = "<?=$_SERVER['REQUEST_URI'];?>";
       const uriSplit = uri.split("?");
-      const baseUrl= "<?=$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];?>"+uriSplit[0];
-      $.redirect(baseUrl+"?p=lap-harian-produksi-baru", dataPost, "POST")
-      // window.location.replace(baseUrl+"?p=lap-harian-produksi-baru");
+      const scheme = "<?=$_SERVER['REQUEST_SCHEME'];?>";
+      const host = "<?=$_SERVER['HTTP_HOST'];?>";
+      const basePath = uriSplit[0];
+      let baseUrl = ""
 
+      if(scheme == ""){
+        baseUrl = scheme + basePath;
+      }else{
+        baseUrl = host + basePath;
+      }
+      $.redirect(baseUrl + "?p=lap-harian-produksi-baru", dataPost, "POST", "_blank");
     }
   </script>
 
