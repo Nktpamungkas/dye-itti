@@ -7,109 +7,17 @@
 ?>
 
 <?php
-  include "koneksi.php";
   mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-  if (isset($_POST['status'])) {
-    
-    $id = intval($_POST['id_dt']);
-    $row = $_POST['row'];
-    $val = $_POST['val'];
-  }
-  if (isset($_POST['update_kresep'])) {
-    $nokk = $_POST['nokk'];
-    $kresep = $_POST['kresep'];
-  
-    try {
-      $query = "UPDATE tbl_hasilcelup SET k_resep = ?, tgl_update = NOW() WHERE nokk = ?";
-      $stmt = $con->prepare($query);
-      $stmt->bind_param("si", $kresep, $nokk);
-      $stmt->execute();
-  
-      echo "OK";
-    } catch (mysqli_sql_exception $e) {
-      echo "Gagal: " . $e->getMessage();
-    }
-    exit();
-  }
-  if (isset($_POST['update_resep'])) {
-    $nokk = $_POST['nokk'];
-    $resep = $_POST['resep'];
-  
-    try {
-      $query = "UPDATE tbl_schedule SET resep = ?, tgl_update = NOW() WHERE nokk = ?";
-      $stmt = $con->prepare($query);
-      $stmt->bind_param("si", $resep, $nokk);
-      $stmt->execute();
-  
-      echo "OK";
-    } catch (mysqli_sql_exception $e) {
-      echo "Gagal: " . $e->getMessage();
-    }
-    exit();
-  }
-  if (isset($_POST['update_StatusResep'])) {
-    $nokk         = $_POST['nokk'];
-    $statusresep  = $_POST['statusResep'];
-
-    try {
-      $query = "UPDATE tbl_hasilcelup SET status_resep = ? WHERE nokk = ?";
-      $stmt = $con->prepare($query);
-      $stmt->bind_param("si", $statusresep, $nokk);
-      $stmt->execute();
-  
-      echo "OK";
-    } catch (mysqli_sql_exception $e) {
-      echo "Gagal: " . $e->getMessage();
-    }
-    exit();
-  }
-  if (isset($_POST['update_multi'])) {
-
-    $shift          = $_POST['shift'];
-    $mc             = $_POST['mc'];
-    $kapasitas      = $_POST['kapasitas'];
-    $buyer          = $_POST['buyer'];
-    $no_order       = $_POST['no_order'];
-    $nodemand       = $_POST['nodemand'];
-    $subcode01      = $_POST['subcode01'];
-    $kategori_warna = $_POST['kategori_warna'];
-    $proses         = $_POST['proses'];
-    $loading        = $_POST['loading'];
-    $l_r            = $_POST['l_r'];
-    $ket            = $_POST['ket'];
-    $k_resep        = $_POST['k_resep'];
-    $resep          = $_POST['resep'];
-    $sts            = $_POST['sts'];
-    $dyestuff       = $_POST['dyestuff'];
-    $lama_proses    = $_POST['lama_proses'];
-    $point2         = $_POST['point2'];
-    $carry_over     = $_POST['carry_over'];
-    $air_awal       = $_POST['air_awal'];
-    $air_akhir      = $_POST['air_akhir'];
-    $pake_air       = $_POST['pake_air'];
-
-    // try {
-    //   $query1 = "UPDATE tbl_hasilcelup SET keterangan = ?, tgl_update = NOW() WHERE nokk = ?";
-    //   $stmt1 = $con->prepare($query1);
-    //   $stmt1->bind_param("si", $keterangan, $nokk);
-    //   $stmt1->execute();
-
-    //   $query2 = "UPDATE tbl_schedule SET status = ?, tgl_update = NOW() WHERE nokk = ?";
-    //   $stmt2 = $con->prepare($query2);
-    //   $stmt2->bind_param("si", $status, $nokk);
-    //   $stmt2->execute();
-
-    //   echo "OK";
-    // } catch (mysqli_sql_exception $e) {
-    //   echo "Gagal: " . $e->getMessage();
-    // }
-    // exit();
-  }
 
   $daftarProses = [];
   $queryProses = mysqli_query($con, "SELECT DISTINCT proses FROM tbl_proses ORDER BY proses ASC");
   while ($rowProses = mysqli_fetch_assoc($queryProses)) {
     $daftarProses[] = $rowProses['proses'];
+  }
+  $statusProses = [];
+  $queryStatusProses = mysqli_query($con, "SELECT * FROM tbl_status_proses ORDER BY nama ASC");
+  while ($rowStatusProses = mysqli_fetch_assoc($queryStatusProses)) {
+    $statusProses[] = $rowStatusProses['nama'];
   }
 ?>
 <?php
@@ -175,14 +83,15 @@
                                       b.kapasitas,
                                       b.loading,
                                       b.resep,
-                                      CASE
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
-                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
-                                      END AS kategori_warna,
+                                      -- CASE
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
+                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
+                                      -- END AS kategori_warna,
+                                      b.kategori_warna,
                                       -- b.target,
                                       c.l_r,
                                       c.rol,
@@ -238,10 +147,13 @@
                                       -- c.lebar_a,
                                       -- c.gramasi_a,
                                       c.operator,
-                                      a.id as idhslclp,
+                                      a.id as idhslclp,   
+                                      b.id as idshedule,
+                                      c.id as idmontemp,
                                       -- a.tambah_dyestuff,
                                       -- a.arah_warna,
                                       -- a.status_warna,
+		                                  a.status_proses,
                                       COALESCE(a.point2, b.target) as point2
                                       -- c.note_wt,
                                       -- a.operatorpolyester,
@@ -332,7 +244,12 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Laporan Harian Produksi (Baru)</title>
-
+  <Style>
+    #editModal{
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+  </Style>
 </head>
 
 <body>
@@ -528,7 +445,8 @@
                               data-nodemand="<?= $rowd['nodemand'] ?>"
                               data-SUBCODE01="<?=$subcode_all[$rowd['nokk']]['SUBCODE01'] ?? ''?>"
                               data-kategori_warna="<?= $rowd['kategori_warna'] ?>"
-                              data-proses="<?= $rowd['proses'] ?>"
+                              data-proses="<?= $rowd['proses'] ?>",
+                              data-status_proses="<?= $rowd['status_proses'] ?>",
                               data-loading="<?= $rowd['loading'] ?>"
                               data-l_r="<?= $rowd['l_r'] ?>"
                               data-ket="<?= $rowd['ket'] ?>"
@@ -546,6 +464,8 @@
                                               : ''; ?>"
                               data-nokk="<?= $rowd['nokk'] ?>"
                               data-idhslclp="<?= $rowd['idhslclp'] ?>"
+                              data-idshedule="<?= $rowd['idshedule'] ?>"
+                              data-idmontemp="<?= $rowd['idmontemp'] ?>"
 
                       >Edit
                       </button>
@@ -553,26 +473,26 @@
                     <td><?=$no?></td>
                     <td><?=$rowd['mc']?></td>
                     <td><?=$rowd['kapasitas']?></td>
-                    <td><?=$rowd['shft']?></td>
-                    <td><?=$rowd['buyer']?></td>
+                    <td id="shift<?= $rowd['idhslclp'] ?>"><?=$rowd['shft']?></td>
+                    <td id="buyer<?= $rowd['idhslclp'] ?>"><?=$rowd['buyer']?></td>
                     <td><?=$rowd['no_order']?></td>
                     <td><?=$rowd['nodemand']?></td>
                     <td><?=$subcode_all[$rowd['nokk']]['SUBCODE01'] ?? ''?></td>
-                    <td><?=$rowd['kategori_warna']?></td>
-                    <td><?=$rowd['proses']?></td>
+                    <td id="kategori_warna<?= $rowd['idhslclp'] ?>"><?=$rowd['kategori_warna']?></td>
+                    <td id="proses<?= $rowd['idhslclp'] ?>"><?=$rowd['proses']?></td>
                     <td><?=$rowd['loading']?> %</td>
                     <td><?=$rowd['l_r']?></td>
                     <td><?=$rowd['ket']?></td>
-                    <td><?=$rowd['k_resep']?></td>
-                    <td><?=$rowd['resep']?></td>
-                    <td><?=$rowd['sts']?></td>
-                    <td><?=$rowd['sts']?></td>
+                    <td id="k_resep<?= $rowd['idhslclp'] ?>"><?=$rowd['k_resep']?></td>
+                    <td id="resep<?= $rowd['idhslclp'] ?>"><?=$rowd['resep']?></td>
+                    <td id="sts<?= $rowd['idhslclp'] ?>"><?=$rowd['sts']?></td>
+                    <td><?=$rowd['status_proses']?></td>
                     <td><?=$rowd['dyestuff']?></td>
                     <td><?=$rowd['lama_proses']?></td>
                     <td><?=$rowd['point2']?></td>
                     <td><?=$rowd['carry_over']?></td>
-                    <td><?=$rowd['air_awal']?></td>
-                    <td><?=$rowd['air_akhir']?></td>
+                    <td id="air_awal<?= $rowd['idhslclp'] ?>"><?=$rowd['air_awal']?></td>
+                    <td id="air_akhir<?= $rowd['idhslclp'] ?>"><?=$rowd['air_akhir']?></td>
                     <td >
                       <?= $rowd['air_awal'] != "" && $rowd['air_akhir'] != "" 
                         ? $rowd['air_akhir'] - $rowd['air_awal']
@@ -612,15 +532,15 @@
                         </select>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
-                        <label for="txQty" class="form-label">Mesin</label>
+                        <label for="inputMc" class="form-label">Mesin</label>
                         <input type="text" class="form-control" id="inputMc" placeholder="0" readonly>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
-                        <label for="tsDate" class="form-label">Kapasitas</label>
+                        <label for="inputKapasitas" class="form-label">Kapasitas</label>
                         <input type="text" class="form-control readonly" id="inputKapasitas" autocomplete="off" readonly>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
-                        <label for="txDate" class="form-label">Buyer</label>
+                        <label for="inputBuyer" class="form-label">Buyer</label>
                         <input type="text" class="form-control readonly" id="inputBuyer" autocomplete="off">
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
@@ -640,13 +560,14 @@
                         <input type="text" class="form-control readonly" id="inputKategoriWarna" autocomplete="off">
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
-                        <label for="inputProses" class="form-label">Proses</label>
-                        <select class="form-control" id="inputProses" name="proses" required>
-                          <option value="">-- Pilih Proses --</option>
-                          <?php foreach ($daftarProses as $proses): ?>
-                            <option value="<?= htmlspecialchars($proses) ?>"><?= htmlspecialchars($proses) ?></option>
-                          <?php endforeach; ?>
+                        <label for="inputProses" class="form-label" style="display: block;">Proses</label>
+                        <select class="form-control" id="inputProses" name="proses" style="display: inline;width: 85%;" required>
+                            <option value="">-- Pilih Proses --</option>
+                            <?php foreach ($daftarProses as $proses): ?>
+                              <option value="<?= htmlspecialchars($proses) ?>"><?= htmlspecialchars($proses) ?></option>
+                            <?php endforeach; ?>
                         </select>
+                        <button href="#" data-toggle="modal" data-target="#DataLogProses" class="btn btn-primary" style="display: inline;width: 13%;height: 28px;">...</button>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputLoading" class="form-label">Loading</label>
@@ -663,7 +584,7 @@
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputKResep" class="form-label">K Resep</label>
                         <select class="form-control" id="inputKResep" name="KResep" required>
-                          <option value="-" >-</option>
+                          <option value="" >-</option>
                           <option value="0x">0x</option>
                           <option value="1x">1x</option>
                           <option value="2x">2x</option>
@@ -681,7 +602,7 @@
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputResep" class="form-label">Resep</label>
                         <select class="form-control" id="inputResep" name="Resep" required>
-                          <option value="-">-</option>
+                          <option value="">-</option>
                           <option value="Baru">Baru</option>
                           <option value="Lama">Lama</option>
                           <option value="Setting">Setting</option>
@@ -704,7 +625,13 @@
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputRemarks" class="form-label">Remarks</label>
-                        <input type="text" class="form-control" id="inputRemarks" autocomplete="off" readonly>
+                        <!-- <input type="text" class="form-control" id="inputRemarks" autocomplete="off" readonly> -->
+                        <select class="form-control" id="inputRemarks" name="Remarks" disabled >
+                          <option value=""></option>
+                          <?php foreach ($statusProses as $sts): ?>
+                            <option value="<?= htmlspecialchars($sts) ?>"><?= htmlspecialchars($sts) ?></option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputDyestuff" class="form-label">Dye Stuff</label>
@@ -750,6 +677,36 @@
       </div>
     </div>
   </div>
+  <div class="modal fade modal-super-scaled" id="DataLogProses" >
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Data Log Proses</h4>
+          </div>
+          <div class="modal-body">
+            <table id="log_proses" class="table table-bordered table-hover table-striped" width="100%">
+              <thead class="bg-green">
+                <tr>
+                  <th width="144">
+                    <div align="center">Waktu</div>
+                  </th>
+                  <th width="144">
+                    <div align="center">Data Awal</div>
+                  </th><th width="144">
+                    <div align="center">Data Akhir</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="log_body">
+            
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="text/javascript" src="dist/js/jquery.redirect.js"></script>
@@ -757,226 +714,52 @@
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
-    });
-  </script>
-
-  <script>
-    function updateProses(selectEl, nokk) {
-      const proses = selectEl.value;
-    
-      Swal.fire({
-        title: 'Konfirmasi Perubahan',
-        text: `Apakah Anda yakin ingin mengubah proses menjadi "${proses}"?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Perbarui!',
-        cancelButtonText: 'Batal',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(window.location.href, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `update_proses=1&nokk=${nokk}&proses=${encodeURIComponent(proses)}`
-          })
-          .then(response => response.text())
-          .then(data => {
-            Swal.fire('Sukses!', 'Proses berhasil diperbarui.', 'success');
-          })
-          .catch(err => {
-            console.error("Error:", err);
-            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui proses.', 'error');
-          });
-        }
+      $('#DataLogProses').on('show.bs.modal', function() {
+        let dataPost={status:"get_log",id_dt: idhasilcelup};
+        $("#log_body").html("");
+        $.ajax({
+          url: "pages/ajax/simpan_harian_produksi_baru.php",
+          type: "POST",
+          data: dataPost,
+          dataType: "JSON",
+          success: function(response){
+            if(response.success){  
+              let row="";
+              $.each( response.data, function( key, value ) {
+                row+=`
+                <tr>
+                  <td>`+value.update_at+`</td>
+                  <td>`+value.proses_lama+`</td>
+                  <td>`+value.proses_baru+`</td>
+                </tr>
+                `;
+              });
+              $("#log_body").append(row);
+            }
+          }
+        });
       });
-    }
-    function updateKresep(selectEl, nokk) {
-      const kresep = selectEl.value;
-    
-      Swal.fire({
-        title: 'Konfirmasi Perubahan',
-        text: `Apakah Anda yakin ingin mengubah kestabilan resep menjadi "${kresep}"?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Perbarui!',
-        cancelButtonText: 'Batal',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(window.location.href, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `update_kresep=1&nokk=${nokk}&kresep=${encodeURIComponent(kresep)}`
-          })
-          .then(response => response.text())
-          .then(data => {
-            Swal.fire('Sukses!', 'Kestabilan resep berhasil diperbarui.', 'success');
-          })
-          .catch(err => {
-            console.error("Error:", err);
-            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui kestabilan resep.', 'error');
-          });
-        }
-      });
-    }
-    function updateResep(selectEl, nokk) {
-      const resep = selectEl.value;
-    
-      Swal.fire({
-        title: 'Konfirmasi Perubahan',
-        text: `Apakah Anda yakin ingin mengubah Resep menjadi "${resep}"?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Perbarui!',
-        cancelButtonText: 'Batal',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(window.location.href, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `update_resep=1&nokk=${nokk}&resep=${encodeURIComponent(resep)}`
-          })
-          .then(response => response.text())
-          .then(data => {
-            Swal.fire('Sukses!', 'Resep berhasil diperbarui.', 'success');
-          })
-          .catch(err => {
-            console.error("Error:", err);
-            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui resep.', 'error');
-          });
-        }
-      });
-    }
-    
-    function updateStatusResep(selectEl, nokk) {
-      const statusResep = selectEl.value;
-    
-      Swal.fire({
-        title: 'Konfirmasi Perubahan',
-        text: `Apakah Anda yakin ingin mengubah Status Resep menjadi "${statusResep}"?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Perbarui!',
-        cancelButtonText: 'Batal',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(window.location.href, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `update_StatusResep=1&nokk=${nokk}&statusResep=${encodeURIComponent(statusResep)}`
-          })
-          .then(response => response.text())
-          .then(data => {
-            Swal.fire('Sukses!', 'Status Resep berhasil diperbarui.', 'success');
-          })
-          .catch(err => {
-            console.error("Error:", err);
-            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui status resep.', 'error');
-          });
-        }
-      });
-    }
-
-    var tmp_val="";
-    $('td').click(function(){
-      if($(this).data("sts")=="open"){
-
-      }else if($(this).data("sts")=="close"){
-        $(this).data("sts", "open")
-        let id=$(this).parent().data("id");
-        let row=$(this).data("row");
-        tmp_val=$(this).html();
-        let type=$(this).data("type");
-        let cls=id+'-'+row;
-
-        if(type=="text"){
-          $(this).html("<input class='"+cls+" newInput' type='text' value='"+tmp_val+"'>");
-          $('.'+cls).focus();
-        }
-      }
-      
     });
-
-    $('table').on('focusout', '.newInput', function() {
-      save($(this));
-    });
-
-    $('table').on('keyup', '.newInput', function(e) {
-      //if enter
-      if (e.keyCode === 13) {
-        // $(this).parent().data("sts", "close");
-        // let val= $(this).val();
-        // $(this).parent().html(val);
-
-        save($(this));
-      }
-      //if esc
-      else if (e.keyCode === 27) {
-        $(this).parent().data("sts", "close");
-        $(this).parent().html(tmp_val);
-        tmp_val="";
-        Swal.fire({
-            title: 'Not Saved',
-            text: 'Tidak Menyimpan data.',
-            icon: 'error',
-            timer: 1000,
-            topLayer: false,
-            position : 'top-end',
-            showConfirmButton: false
-        })
-      }
-    });
-
-    function save(input){
-      let id_dt=input.parent().parent().data("id");
-      let row=input.parent().data('row');
-      let val= input.val();
-
-      input.parent().data("sts", "close");
-      input.parent().html(val);
-      Swal.fire({
-            title: 'Saved',
-            text: 'Berhasil Menyimpan data.',
-            icon: 'success',
-            timer: 1000,
-            topLayer: false,
-            position : 'top-end',
-            showConfirmButton: false
-        })
-
-      // const uri = "<?=$_SERVER['REQUEST_URI'];?>";
-      // const uriSplit = uri.split("?");
-      // const baseUrl= "<?=$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];?>"+uriSplit[0];
-      let dataPost={status:"update_row", id_dt : id_dt, row : row, val:val};
-      // console.log(dataPost);
-      // $.ajax({
-      //   url: baseUrl+"?p=lap-harian-produksi-baru",
-      //   type: "POST",
-      //   data: {status:"update_row" id : id_row, row : row, data:data_row},
-      //   success: function(response){
-      //     console.log(response);
-      //   }
-      // });
-    }
   </script>
 
   <script>
     let originalData = {};
     let no_kk = "NONE"
-    let idhasilcelup = "NONE"
+    let idhasilcelup = 0
+    let idshedule = 0    
+    let idmontemp = 0
+    //tabel a,b,b,a,a,b,a,c,a
+    const editable=["shift","buyer","kategori_warna","proses","k_resep","resep","sts","air_awal","air_akhir"];   
+    var btn=null;
 
     $(document).ready(function () {
       $('.btn-edit').click(function () {
-        const btn = $(this);
+        btn = $(this);
 
         no_kk = btn.data('nokk')
         idhasilcelup = btn.data('idhslclp')
+        idshedule = btn.data('idshedule')
+        idmontemp = btn.data('idmontemp')
 
         // Simpan data awal
         originalData = {
@@ -989,6 +772,7 @@
           subcode01: btn.data('subcode01'),
           kategori_warna: btn.data('kategori_warna'),
           proses: btn.data('proses'),
+          remarks: btn.data('status_proses'),
           loading: btn.data('loading'),
           l_r: btn.data('l_r'),
           ket: btn.data('ket'),
@@ -1004,8 +788,6 @@
           nokk: btn.data('nokk'),
           idhslclp: btn.data('idhslclp')
         };
-
-        // console.log(originalData);
 
         for (const key in originalData) {
           $('#input' + toCamelCase(key)).val(originalData[key]);
@@ -1036,10 +818,64 @@
           return;
         }
 
-        const dataToSend = {
-          update_multi: true,
-          nokk: no_kk,
-          id: idhasilcelup,
+        let dataPost={status:"insert_log", id_dt : idhasilcelup, proses_lama:originalData['proses'],proses_baru:$('#inputProses').val()};
+        $.ajax({
+          url: "pages/ajax/simpan_harian_produksi_baru.php",
+          type: "POST",
+          data: dataPost,
+          dataType: "JSON",
+          success: function(response){
+            if(response.success){  
+              console.log("Log Proses Saved");
+            }else{
+              console.log("Log Proses NOT SAVED : "+response.messages.join(" , "));
+            }
+          }
+        });
+
+        let dataPostUpdate={
+          status:"update_laporan", 
+          id_dt : idhasilcelup,
+          idshedule : idshedule,
+          idmontemp : idmontemp,
+          nokk: no_kk
+        };
+        for (let i = 0; i < editable.length; i++) {
+          let key =editable[i];
+          dataPostUpdate[key]= $('#input' + toCamelCase(key)).val();
+        }
+        
+        $.ajax({
+          url: "pages/ajax/simpan_harian_produksi_baru.php",
+          type: "POST",
+          data: dataPostUpdate,
+          dataType: "JSON",
+          success: function(response){
+            if(response.success){  
+              console.log("Data Updated");
+              
+              for (let i = 0; i < editable.length; i++) {
+                let key =editable[i];
+                $('#'+key+idhasilcelup).html(dataPostUpdate[key]);
+                btn.data(key,dataPostUpdate[key])
+              }
+              $('#editModal').modal("hide");
+            }else{
+              console.log("Data Not Updated : "+response.messages.join(" , "));
+            }
+          }
+        });
+      });
+
+      window.addEventListener('beforeunload', function (e) {
+        if ($('#editModal').hasClass('show') && isFormChanged()) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+
+      function getCurrentFormData() {
+        return {
           shift: $('#inputShift').val(),
           mc: $('#inputMc').val(),
           kapasitas: $('#inputKapasitas').val(),
@@ -1063,64 +899,18 @@
           air_akhir: $('#inputAirAkhir').val(),
           pake_air: $('#inputPakeAir').val()
         };
-
-        console.log(dataToSend);
-
-        $.post('', dataToSend, function(response) {
-          if (response.trim() === 'OK') {
-            alert("Data berhasil disimpan.");
-            $('#editModal').modal('hide');
-          } else {
-            alert("Gagal menyimpan: " + response);
-          }
-        });
-      });
-
-      window.addEventListener('beforeunload', function (e) {
-        if ($('#editModal').hasClass('show') && isFormChanged()) {
-          e.preventDefault();
-          e.returnValue = '';
-        }
-      });
-
-      function getCurrentFormData() {
-        return {
-          shift: $('#inputShift').val(),
-          mc: $('#inputMc').val(),
-          kapasitas: $('#inputKapasitas').val(),
-          buyer: $('#inputBuyer').val(),
-          no_order: $('#inputNoOrder').val(),
-          nodemand: $('#inputNoDemand').val(),
-          subcode01: $('#inputSubcode01').val(),
-          kategori_warna: $('#inputKategoriWarna').val(),
-          proses: $('#inputProses').val(),
-          loading: $('#inputLoading').val(),
-          l_r: $('#inputLR').val(),
-          ket: $('#inputKet').val(),
-          k_resep: $('#inputKResep').val(),
-          resep: $('#inputResep').val(),
-          sts: $('#inputSts').val(),
-          dyestuff: $('#inputDyestuff').val(),
-          lama_proses: $('#inputLamaProses').val(),
-          point2: $('#inputPoint2').val(),
-          carry_over: $('#inputCarryOver').val(),
-          air_awal: $('#inputAirAwal').val(),
-          air_akhir: $('#inputAirAkhir').val(),
-          pake_air: $('#inputPakeAir').val()
-        };
       }
       function isFormChanged() {
         const currentData = getCurrentFormData();
-
-        console.log(currentData);
-        console.log(originalData);
-        
-        for (const key in originalData) {
+         
+        let changed = false;
+        for (let i = 0; i < editable.length; i++) {
+          let key =editable[i];
           if (originalData[key] != currentData[key]) {
-            return true;
+            changed = true;
           }
         }
-        return false;
+        return changed;
       }
       function toCamelCase(str) {
         // console.log(str);
