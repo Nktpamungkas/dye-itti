@@ -83,6 +83,13 @@
 			document.form1.point_proses.removeAttribute("disabled");
 			document.form1.point_proses.setAttribute("required", true);
 		}
+		if (str.substr(0, 15) != "Celup Perbaikan") {
+			document.form1.status_proses.setAttribute("disabled", true);
+			document.form1.status_proses.removeAttribute("required");
+		} else {
+			document.form1.status_proses.removeAttribute("disabled");
+			document.form1.status_proses.setAttribute("required", true);
+		}
 	}
 
 	function aktif4() {
@@ -893,6 +900,32 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="shift" class="col-sm-3 control-label">Status Proses</label>
+					<div class="col-sm-5">
+						<select name="status_proses" class="form-control" id="status_proses" disabled="disabled" required>
+							<option value="">Pilih</option>
+							<?php
+							$sqlAn = mysqli_query($con, "SELECT * FROM tbl_status_proses ORDER BY nama ASC");
+							while ($rAn = mysqli_fetch_array($sqlAn)) {
+							?>
+								<option value="<?php echo $rAn['nama']; ?>" <?php if ($rcek['status_proses'] == $rAn['nama'] OR $row_hasilcelup['status_proses'] == $rAn['nama']) {
+																				echo "SELECTED";
+																			} ?>><?php echo $rAn['nama']; ?></option>
+							<?php } ?>
+
+						</select>
+
+					</div>
+					<?php 
+						$allowed_users = ['andri', 'luqman', 'aris.miyanta', 'rohman','dit'];
+						if (isset($_SESSION['user_id10']) && in_array(strtolower($_SESSION['user_id10']), $allowed_users)) { ?>
+							<div class="col-sm-1">
+								<a href="#" data-toggle="modal" data-target="#DataStatusProses" class="btn btn-primary">...</a>
+							</div>
+					<?php } ?>
+
+				</div>
+				<div class="form-group">
 					<label for="no_resep" class="col-sm-3 control-label">No Bon Resep 1</label>
 					<div class="col-sm-3">
 						<input name="no_resep" type="text" class="form-control" id="no_resep" value="<?php if (!empty($_GET['id'])) {
@@ -1642,9 +1675,85 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 		</div>
 	</div>
 </div>
+<div class="modal fade modal-super-scaled" id="DataStatusProses">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<form class="form-horizontal" name="modal_popup" data-toggle="validator" method="post" action="?p=simpan_status_proses" enctype="multipart/form-data">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Data Status Proses</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="nama" class="col-md-3 control-label">Input Status Proses</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="nama" name="nama" required>
+							<span class="help-block with-errors"></span>
+						</div>
+					</div>
+					<table id="example2" class="table table-bordered table-hover table-striped" width="100%">
+						<thead class="bg-green">
+							<tr>
+								<th width="144">
+									<div align="center">Status Proses</div>
+								</th>
+								<th width="144">
+									<div align="center">Action</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$c = 1;
+							$sqlAn1 = mysqli_query($con, "SELECT * FROM tbl_status_proses ORDER BY nama ASC");
+							while ($rAn1 = mysqli_fetch_array($sqlAn1)) {
+								$bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
+							?>
+								<tr bgcolor="<?php echo $bgcolor; ?>">
+									<td align="center">
+										<?php echo $rAn1['nama']; ?>
+									</td>
+									<td align="center">
+										<a href="#" class="btn btn-danger btn-xs" onClick="hapusStatusProses('<?php echo $rAn1['id']; ?>');" title="Hapus Status Proses"><i class="fa fa-trash"></i></a>
+									</td>
+								</tr>
+							<?php
+							} ?>
+						</tbody>
+
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 <script>
 	function hapusAnalisa(id) {
 		if (confirm('Yakin ingin menghapus data analisa ini?')) {
+			$.ajax({
+				url: 'pages/hapus-celup.php',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				success: function(res) {
+					alert('Data analisa berhasil dihapus!');
+					location.reload();
+				},
+				error: function(xhr) {
+					alert('Gagal menghapus data analisa! ' + xhr.responseText);
+				}
+			});
+		}
+	}
+	function hapusStatusProses(id) {
+		if (confirm('Yakin ingin menghapus Data Status Proses ini?')) {
 			$.ajax({
 				url: 'pages/hapus-celup.php',
 				type: 'POST',
@@ -1696,6 +1805,7 @@ if ($_POST['save'] == "save") {
 								`point`='$point', 
 								proses_point='$propoint',
 								proses='" . $_POST['proses'] . "',
+								status_proses='" . $_POST['status_proses'] . "',
 								k_resep='" . $_POST['k_resep'] . "',
 								jml_topping='" . $_POST['jml_topping'] . "',
 								analisa='$analisa',
@@ -1895,4 +2005,5 @@ if ($_POST['update'] == "update") {
 				});</script>";
 	}
 }
+
 ?>
