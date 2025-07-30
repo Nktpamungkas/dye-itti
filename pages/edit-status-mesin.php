@@ -100,7 +100,7 @@
                                 </td>
                                 <td>
                                     <?php echo $rowd['nokk']; ?>
-                                    <br><input type="hidden" id="personil" name="personil" value="<?php echo $_SESSION['nama10']; ?>" readonly>
+                                    <br><input type="hidden" id="personil" name="personil[<?php echo $rowd['id']; ?>]" value="<?php echo $_SESSION['nama10']; ?>" readonly>
                                 </td>
                                 <td><?= $rowd['buyer']; ?></td>
                                 <td><?= $rowd['langganan']; ?></td>
