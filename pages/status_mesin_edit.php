@@ -21,40 +21,39 @@ if(isset($_POST['ubah'])){
             $query = "UPDATE `tbl_schedule` 
                         SET `no_urut` =  '$urut_value',
                             `personil`=  '$nama_personil'
-                        WHERE `id` = '$urut_key' LIMIT 1 ;";
+                        WHERE `id` = '$urut_key' LIMIT 1;";
             $result = mysqli_query($con, $query);
 
             if (!$result) {
                 die('Gagal update: ' . mysqli_error($con));
+            }else{
+                echo " <script>window.location='?p=Schedule';</script>";
             }
+        } else {
+            echo " <script>window.location='?p=Schedule';</script>";
         }
     }
-    
-    if (!$result) {
-        die ('cant update:' .mysqli_error());
-    }else{
-		echo " <script>window.location='?p=Schedule';</script>";
-	}
 }elseif(isset($_POST['ubah_stdtarget'])){
     extract($_POST);
     //tangkap data array dari form
     $urut               = $_POST['no_urut'];
-    $personil           = mysqli_real_escape_string($con, $_POST['personil']);
+    $personil           = $_POST['personil'];
     $creationdatetime	= date('Y-m-d H:i:s');
     //foreach
     foreach ($urut as $urut_key => $urut_value) {
         $target = $_POST['target'][$urut_key];
+        $nama_personil = mysqli_real_escape_string($con, $personil[$urut_key]);
 
         $query = "UPDATE `tbl_schedule` 
                     SET `target`  = '$target',
-                        personil_stdtarget = '$personil',
+                        personil_stdtarget = '$nama_personil',
                         lastupdatetime_stdtarget = '$creationdatetime' 
                     WHERE `id` = '$urut_key' LIMIT 1 ;";
         $result = mysqli_query($con, $query);
     }
     
     if (!$result) {
-        die ('cant update:' .mysqli_error());
+        die ('cant update:' .mysqli_error($con));
     }else{
         echo " <script>window.location='?p=Schedule';</script>";
     }
