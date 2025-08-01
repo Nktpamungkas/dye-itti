@@ -339,7 +339,7 @@
         <pre>Tgl. Terbit</pre>
       </td>
       <td style="border-left:0px #000000 solid;">
-        <pre>: 08 April 2025</pre>
+        <pre>: 01 Oktober 2023</pre>
       </td>
     </tr>
   </table>

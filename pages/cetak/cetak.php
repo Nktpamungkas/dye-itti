@@ -317,12 +317,12 @@ $rowbg = mysqli_fetch_array($sqlbg);
     </tr>
     <tr>
       <td>
-        <pre>No. Revisi	: 10</pre>
+        <pre>No. Revisi	: 11</pre>
       </td>
     </tr>
     <tr>
       <td>
-        <pre>Tgl. Terbit	: 02 Agustus 2022</pre>
+        <pre>Tgl. Terbit	: 01 Oktober 2023</pre>
       </td>
     </tr>
   </table>
