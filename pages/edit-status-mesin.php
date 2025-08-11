@@ -61,7 +61,7 @@
                             <tr>
                                 <td>
                                     <?php
-                                    $allowed_users = ['dit', 'bayu', 'haryadi', 'jubay', 'ketut', 'lukman'];
+                                    $allowed_users = ['dit', 'bayu', 'haryadi', 'jubay', 'ketut', 'lukman', 'husni.juniar'];
                                     $current_user = strtolower($_SESSION['user_id10']);
                                     $is_allowed_user = in_array($current_user, $allowed_users);
                                     $is_operator_for_bb11 = ($current_user === 'operator' && $_GET['id'] === 'BB11');
