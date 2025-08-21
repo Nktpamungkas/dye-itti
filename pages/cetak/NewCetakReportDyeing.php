@@ -12,6756 +12,2550 @@ include "../../koneksi.php";
 include "../../koneksiLAB.php";
 include "../../tgl_indo.php";
 
-
+$idkk = $_REQUEST['idkk'];
+$act = $_GET['g'];
 $Awal = $_GET['awal'];
+$formattedDate = date('d F Y', strtotime($Awal));
 $Akhir = $_GET['akhir'];
+$shft = $_GET['shft'];
+$Tgl = substr($Awal, 0, 10);
 
-$startDate = substr($Awal, 0, 10);
-$endDate = substr($Akhir, 0, 10);
+$qTgl = mysqli_query($con, "SELECT DATE_FORMAT(now(),'%Y-%m-%d') as tgl_skrg, DATE_FORMAT(now(),'%Y-%m-%d')+ INTERVAL 1 DAY as tgl_besok");
+$rTgl = mysqli_fetch_array($qTgl);
 
-// $conn = new mysqli("localhost", "username", "password", "db_dying");
-
-// $startDate = '2025-03-13';
-// $endDate = '2025-03-14';
-
-if ($con->connect_error) {
-    die("Connection failed: " . $con->connect_error);
+// Penyesuaian tanggal
+if ($Awal == $Akhir) {
+  $TglPAl = substr($Awal, 0, 10);
+  $TglPAr = substr($Akhir, 0, 10);
+  $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d')='$Tgl' ";
+} else {
+  $TglPAl = $Awal;
+  $TglPAr = $Akhir;
+  $Where = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d %H:%i') BETWEEN '$Awal' AND '$Akhir' ";
 }
 
-$sql = "
-    select
-    ts.shift_code,
-    tjk.jenis_kain as kain,
-    IFNULL((select SUM(ts2.qty_order) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		AND hsl2.proses = 'Celup Greige'
-    		AND hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ), 0) AS qty_order,
-    (select COUNT(*)
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		AND hsl2.proses = 'Celup Greige'
-    		AND hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ) AS order_lot,
-    IFNULL((select SUM(ts2.qty_order) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	where DATE_FORMAT(hsl2.tgl_update, '%Y-%m-%d')
-            BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-    		AND hsl2.proses = 'Celup Greige'
-    		AND hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ), 0) AS total_order,
-    (select COUNT(*)
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) 
-            BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-    		AND hsl2.proses = 'Celup Greige'
-    		AND hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ) AS total_lot,
-    IFNULL((SELECT SUM(ts3.qty_order)
-         FROM tbl_hasilcelup hsl3
-         LEFT JOIN tbl_montemp tm3 ON tm3.id = hsl3.id_montemp
-         LEFT JOIN tbl_schedule ts3 ON tm3.id_schedule = ts3.id
-         WHERE DATE(hsl3.tgl_update) BETWEEN '$startDate' AND '$endDate'
-           AND hsl3.proses = 'Celup Greige'
-           AND (
-                (hsl3.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                (hsl3.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                (hsl3.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                (hsl3.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                (hsl3.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-            )
-    ), 0) AS qty_netto,
-    (SELECT COUNT(*)
-         FROM tbl_hasilcelup hsl3
-         LEFT JOIN tbl_montemp tm3 ON tm3.id = hsl3.id_montemp
-         LEFT JOIN tbl_schedule ts3 ON tm3.id_schedule = ts3.id
-         WHERE DATE(hsl3.tgl_update) BETWEEN '$startDate' AND '$endDate'
-           AND hsl3.proses = 'Celup Greige'
-           AND (
-                (hsl3.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                (hsl3.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                (hsl3.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                (hsl3.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                (hsl3.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-            )
-    ) AS lot_netto,
-    IFNULL((SELECT SUM(ts3.qty_order)
-         FROM tbl_hasilcelup hsl3
-         LEFT JOIN tbl_montemp tm3 ON tm3.id = hsl3.id_montemp
-         LEFT JOIN tbl_schedule ts3 ON tm3.id_schedule = ts3.id
-         WHERE DATE(hsl3.tgl_update) BETWEEN '$startDate' AND '$endDate'
-           AND hsl3.proses = 'Celup Greige'
-           AND (
-                (hsl3.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                (hsl3.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                (hsl3.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                (hsl3.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                (hsl3.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-            )
-    ), 0) AS tot_qty_netto,
-    (SELECT COUNT(*)
-         FROM tbl_hasilcelup hsl3
-         LEFT JOIN tbl_montemp tm3 ON tm3.id = hsl3.id_montemp
-         LEFT JOIN tbl_schedule ts3 ON tm3.id_schedule = ts3.id
-         WHERE DATE(hsl3.tgl_update) BETWEEN '$startDate' AND '$endDate'
-           AND hsl3.proses = 'Celup Greige'
-           AND (
-                (hsl3.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                (hsl3.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                (hsl3.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                (hsl3.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                (hsl3.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-            )
-    ) AS tot_lot_netto,
-    IFNULL((select SUM(ts2.qty_order) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		and ts2.ket_status  LIKE '%Perbaikan%'
-    		and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ), 0) AS qty_perbaikan,
-    (SELECT COUNT(*) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		and ts2.ket_status  LIKE '%Perbaikan%'
-    		and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ) AS lot_perbaikan,
-    IFNULL((select SUM(ts2.qty_order) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) 
-            BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-    		and ts2.ket_status  LIKE '%Perbaikan%'
-    		and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ), 0) AS total_perbaikan,
-    (SELECT COUNT(*) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) 
-            BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-    		and ts2.ket_status  LIKE '%Perbaikan%'
-    		and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ) AS total_lot_perbaikan,
-    IFNULL((select SUM(ts2.qty_order) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		and ts2.ket_status  LIKE '%Tolak Basah%'
-            and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ), 0) AS qty_tolak,
-    (SELECT COUNT(*) 
-    	from tbl_hasilcelup hsl2
-    	left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-    	left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-    	WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-    		and ts2.ket_status  LIKE '%Tolak Basah%'
-            and hsl2.g_shift = ts.shift_code
-    		AND (
-                  (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                  (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                  (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                  (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                  (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-              )
-    ) AS lot_tolak
-    from tbl_shift ts 
-    left join tbl_hasilcelup th on ts.shift_code = th.g_shift
-    left join tbl_jenis_kain tjk on th.proses_point like CONCAT('%', tjk.jenis_kain, '%')
-    left join tbl_montemp tm on tm.id = th.id_montemp
-    left join tbl_schedule ts2 on tm.id_schedule = ts2.id
-    where tjk.jenis_kain IS NOT NULL
-    group by ts.shift_code, kain
-";
+$shftWhere = ($shft == "ALL") ? "" : " if(ISNULL(a.g_shift),c.g_shift,a.g_shift)='$shft' AND ";
 
-$sql2="
-    select
-        tjk.jenis_kain as kain,
+$sql = mysqli_query(
+  $con,
+  "SELECT x.*, a.no_mesin as mc 
+    FROM tbl_mesin a
+    LEFT JOIN
+    (
+      SELECT
+        a.status as sts,
+        a.proses as proses,
+        b.no_mesin,
+        b.kapasitas,
+        b.resep,
+        c.bruto,
+        b.langganan,
         CASE
-            WHEN SUBSTR(ts.kategori_warna, 1,1) = 'D' THEN 'Dark'
-            WHEN SUBSTR(ts.kategori_warna, 1,1) = 'H' THEN 'Heater'
-            WHEN SUBSTR(ts.kategori_warna, 1,1) = 'L' THEN 'Light'
-            WHEN SUBSTR(ts.kategori_warna, 1,1) = 'M' THEN 'Medium'
-            WHEN SUBSTR(ts.kategori_warna, 1,1) = 'S' THEN 'Dark'
-	        WHEN SUBSTR(ts.kategori_warna, 1,1) = 'W' THEN 'White'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
+          WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
         END AS kategori_warna,
-        IFNULL((select SUM(ts2.qty_order) 
-	        from tbl_hasilcelup hsl2
-	        left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-	        left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-	        WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-		        and hsl2.proses = 'Celup Greige'
-		        AND (
-                    (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                    (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                    (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                    (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                    (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-                )
-                AND CASE
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'D' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'H' THEN 'Heater'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'L' THEN 'Light'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'M' THEN 'Medium'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'S' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'W' THEN 'White'
-                END = ts.kategori_warna
-        ), 0) AS qty_order_col,
-        IFNULL((select SUM(ts2.qty_order) 
-	        from tbl_hasilcelup hsl2
-	        left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-	        left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-	        WHERE DATE_FORMAT(hsl2.tgl_update, '%Y-%m-%d') BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-		        and hsl2.proses = 'Celup Greige'
-		        AND (
-                    (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                    (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                    (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC') OR
-                    (hsl2.proses_point LIKE '%MISTY%' AND kain = 'MISTY') OR
-                    (hsl2.proses_point LIKE '%CUCI%' AND kain = 'CUCI')
-                )
-                AND CASE
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'D' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'H' THEN 'Heater'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'L' THEN 'Light'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'M' THEN 'Medium'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'S' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'W' THEN 'White'
-                END = ts.kategori_warna
-        ), 0) AS qty_tot,
-        IFNULL((select SUM(ts2.qty_order) 
-	        from tbl_hasilcelup hsl2
-	        left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-	        left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-	        WHERE DATE(hsl2.tgl_update) BETWEEN '$startDate' AND '$endDate'
-		        and ts2.ket_status  LIKE '%Perbaikan%'
-		        AND (
-                    (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                    (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                    (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC')
-                )
-                AND CASE
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'D' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'H' THEN 'Heater'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'L' THEN 'Light'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'M' THEN 'Medium'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'S' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'W' THEN 'White'
-                    else ts2.kategori_warna 
-                END = ts.kategori_warna
-            ), 0) AS qty_perbaikan,
-        IFNULL((select SUM(ts2.qty_order) 
-	        from tbl_hasilcelup hsl2
-	        left join tbl_montemp tm2 ON tm2.id = hsl2.id_montemp
-	        left join tbl_schedule ts2 on tm2.id_schedule = ts2.id
-	        WHERE DATE_FORMAT(hsl2.tgl_update, '%Y-%m-%d') BETWEEN DATE_FORMAT('$startDate', '%Y-%m-01') AND '$endDate'
-		        and ts2.ket_status  LIKE '%Perbaikan%'
-		        AND (
-                    (hsl2.proses_point LIKE '%COTTON%' AND kain = 'COTTON') OR
-                    (hsl2.proses_point LIKE '%POLYESTER%' AND kain = 'POLYESTER') OR
-                    (hsl2.proses_point LIKE '%TC / CVC%' AND kain = 'TC / CVC')
-                )
-                AND CASE
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'D' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'H' THEN 'Heater'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'L' THEN 'Light'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'M' THEN 'Medium'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'S' THEN 'Dark'
-                    WHEN SUBSTR(ts2.kategori_warna, 1, 1) = 'W' THEN 'White'
-                    else ts2.kategori_warna 
-                END = ts.kategori_warna
-            ), 0) AS qty_totPer
-    from tbl_jenis_kain tjk
-    left join tbl_hasilcelup th on th.proses_point like CONCAT('%', tjk.jenis_kain, '%')
-    left join tbl_montemp tm on tm.id = th.id_montemp
-    left join tbl_schedule ts on tm.id_schedule = ts.id
-    group by kain, kategori_warna
-    order by kain desc
-";
+        a.g_shift as shft,
+        DATE_FORMAT(a.tgl_buat,'%Y-%m-%d') as tgl_out,
+        a.k_resep,
+        b.nokk
+      FROM
+        tbl_schedule b
+        LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
+        LEFT JOIN tbl_hasilcelup a ON a.id_montemp=c.id	
+      WHERE
+        $shftWhere
+        $Where
+    )x ON (a.no_mesin=x.no_mesin or a.no_mc_lama=x.no_mesin) ORDER BY a.no_mesin
+  "
+);
 
-$sql3="
-    Select
-    th.k_resep,
-    ts2.kapasitas,
-    ts2.resep,
-    ts2.qty_order
-    from tbl_hasilcelup th
-    left join tbl_montemp tm on tm.id = th.id_montemp
-    left join tbl_schedule ts2 on tm.id_schedule = ts2.id
-    WHERE DATE(th.tgl_update) BETWEEN '$startDate' AND '$endDate'
-";
+$tanggalInput = substr($Awal, 0, 10);
+$tanggalAwalBulan = date('Y-m-01', strtotime($tanggalInput));
+$Where2 = " DATE_FORMAT(c.tgl_update, '%Y-%m-%d') BETWEEN '$tanggalAwalBulan' AND '$tanggalInput' ";
 
-$sql4="
-    Select
-    th.proses,
-    ts2.qty_order
-    from tbl_hasilcelup th
-    left join tbl_montemp tm on tm.id = th.id_montemp
-    left join tbl_schedule ts2 on tm.id_schedule = ts2.id
-    WHERE DATE(th.tgl_update) BETWEEN '$startDate' AND '$endDate'
-";
+$sqlTot = mysqli_query(
+    $con,
+    "SELECT x.*, a.no_mesin as mc 
+      FROM tbl_mesin a
+      LEFT JOIN
+      (
+        SELECT
+          a.status as sts,
+          a.proses AS proses,
+          b.no_mesin,
+          b.kapasitas,
+          b.resep,
+          c.bruto,
+          b.langganan,
+          CASE
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
+            WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
+          END AS kategori_warna,
+          a.g_shift AS shft,
+          DATE_FORMAT(a.tgl_buat,'%Y-%m-%d') AS tgl_out,
+          a.k_resep,
+          b.nokk
+        FROM
+          tbl_schedule b
+          LEFT JOIN tbl_montemp c ON c.id_schedule = b.id
+          LEFT JOIN tbl_hasilcelup a ON a.id_montemp = c.id
+        WHERE
+          $shftWhere
+          $Where2
+      ) x ON (a.no_mesin = x.no_mesin OR a.no_mc_lama = x.no_mesin)
+    ORDER BY a.no_mesin"
+);
 
-$sql5="
-    Select
-    tm.no_mesin,
-    tm.kapasitas,
-    th.nokk,
-    th.proses
-    from tbl_mesin tm
-    left join tbl_schedule ts2 on tm.no_mesin = ts2.no_mesin
-    left join tbl_montemp tm2 on tm2.id_schedule =ts2.id
-    left join tbl_hasilcelup th on th.id_montemp = tm2.id
-    WHERE DATE(th.tgl_update) BETWEEN '$startDate' AND '$endDate'
-";
+$nokkList = [];
 
-// Eksekusi query pertama
-$stmt = $con->prepare($sql);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Eksekusi query kedua
-$stmt2 = $con->prepare($sql2);
-$stmt2->execute();
-$result2 = $stmt2->get_result();
-
-// Eksekusi query ketiga
-$stmt3 = $con->prepare($sql3);
-$stmt3->execute();
-$result3 = $stmt3->get_result();
-
-// Eksekusi query keempat
-$stmt4 = $con->prepare($sql4);
-$stmt4->execute();
-$result4 = $stmt4->get_result();
-
-// Eksekusi query kelima
-$stmt5 = $con->prepare($sql5);
-$stmt5->execute();
-$result5 = $stmt5->get_result();
-
-$data = [];
-while ($row = $result->fetch_assoc()) {
-    $data[] = [
-        'shift' => $row['shift_code'],
-        'jenis_kain' => $row['kain'],
-        'jumlah_order' => $row['qty_order'],
-        'jumlah_lot_order' => $row['order_lot'],
-        'total_qty_order' => $row['total_order'],
-        'total_lot_order' => $row['total_lot'],
-        'total_netto_qty' => $row['qty_netto'],
-        'total_netto_lot' => $row['lot_netto'],
-        'qty_perbaikan' => $row['qty_perbaikan'],
-        'lot_perbaikan' => $row['lot_perbaikan'],
-        'total_perbaikan' => $row['total_perbaikan'],
-        'total_lot_perbaikan' => $row['total_lot_perbaikan'],
-        'qty_tolak' => $row['qty_tolak'],
-        'lot_tolak' => $row['lot_tolak'],
-        'obat' => $row['k_resep'],
-        'kap' => $row['kapasitas'],
-    ];
+mysqli_data_seek($sql, 0);
+while ($rowd = mysqli_fetch_array($sql)) {
+    if (!empty($rowd['nokk'])) {
+        $nokkList[] = $rowd['nokk'];
+    }
 }
 
-$data2 = [];
-while ($row2 = $result2->fetch_assoc()){
-    $data2[] = [
-        'jkain' => $row2['kain'],
-        'warna' => $row2['kategori_warna'],
-        'qty' => $row2['qty_order_col'],
-        'qty_tot' => $row2['qty_tot'],
-        'qty_fix' => $row2['qty_perbaikan'],
-        'qty_totPer' => $row2['qty_totPer'],
-    ];
+mysqli_data_seek($sqlTot, 0);
+while ($rowd = mysqli_fetch_array($sqlTot)) {
+    if (!empty($rowd['nokk'])) {
+        $nokkList[] = $rowd['nokk'];
+    }
 }
 
-$data3 = [];
-while ($row3 = $result3->fetch_assoc()){
-    $data3[] = [
-        'k_resep' => $row3['k_resep'],
-        'kap' => $row3['kapasitas'],
-        'qty' => $row3['qty_order'],
-        'resep' => $row3['resep'],
-    ];
+$nokkList = array_unique($nokkList);
+if (empty($nokkList)) {
+  $nokkList = [''];
 }
 
-$data4 = [];
-while ($row4 = $result4->fetch_assoc()){
-    $data4[] = [
-        'proses' => $row4['proses'],
-        'qty' => $row4['qty_order'],
-    ];
+function db2_escape($conn2, $str) {
+    return str_replace("'", "''", $str);
 }
 
-$data5 = [];
-while ($row5 = $result5->fetch_assoc()){
-    $data5[] = [
-        'no_mesin' => $row5['no_mesin'],
-        'kapasitas' => $row5['kapasitas'],
-        'proses' => $row5['proses'],
-    ];
+$escapedNokk = array_map(fn($n) => "'" . db2_escape($conn2, $n) . "'", $nokkList);
+$inClause = implode(",", $escapedNokk);
+
+$q_itxviewkk_all = db2_exec(
+    $conn2,
+    "SELECT 
+        TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+        LISTAGG(DISTINCT TRIM(LOT), ', ') AS LOT,
+        LISTAGG(DISTINCT TRIM(SUBCODE01), ', ') AS SUBCODE01 
+     FROM ITXVIEWKK 
+     WHERE PRODUCTIONORDERCODE IN ($inClause)
+     GROUP BY PRODUCTIONORDERCODE"
+);
+
+$db2Data = [];
+while ($rowDB2 = db2_fetch_assoc($q_itxviewkk_all)) {
+    $db2Data[$rowDB2['PRODUCTIONORDERCODE']] = $rowDB2;
 }
 
-// Data Sort
-    // Cotton
-        // Shift A
-            $CottonA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonA = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $CottonLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonLotA = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $CottonPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanA = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $CottonPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanLotA = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanA = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanLotA = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotOrderA = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $CottonTotLotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotLotOrderA = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $CottonTolakA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakA = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $CottonTolakLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakLotA = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift A
-        // Shift B
-            $CottonB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonB = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $CottonLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonLotB = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $CottonPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanB = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $CottonPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanLotB = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanB = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanLotB = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotOrderB = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $CottonTotLotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotLotOrderB = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $CottonTolakB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakB = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $CottonTolakLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakLotB = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift B
-        // Shift C
-            $CottonC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonC = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $CottonLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonLotC = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $CottonPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanC = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $CottonPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonPerbaikanLotC = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanC = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotPerbaikanLotC = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $CottonTotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotOrderC = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $CottonTotLotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotLotOrderC = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $CottonTolakC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakC = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $CottonTolakLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTolakLotC = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift C
-        //Total Netto
-            $CottonTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonTotal = $row['total_netto_qty'];
-                    break;
-                }
-            }
-            $CottonLotTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'COTTON') {
-                    $CottonLotTotal = $row['total_netto_lot'];
-                    break;
-                }
-            }
-        // End Total Netto
-    //End Cotton
+function parseRowData($rowd, $con, $db2Data, $Awal, $Akhir, $shftParam) {
+    $no_mesin = $rowd['mc'];
+    $nokk = $rowd['nokk'];
+    $sts = $rowd['sts'];
+    $kategori_warna = $rowd['kategori_warna'];
+    $k_resep = $rowd['k_resep'];
+    $resep = $rowd['resep'];
 
-    // TC / VC
-        // Shift A
-            $TCA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCA = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $TCLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCLotA = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $TCPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanA = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $TCPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanLotA = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanA = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanLotA = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotOrderA = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $TCTotLotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotLotOrderA = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $TCTolakA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakA = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $TCTolakLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakLotA = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift A
-        // Shift B
-            $TCB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCB = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $TCLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCLotB = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $TCPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanB = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $TCPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanLotB = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanB = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanLotB = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotOrderB = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $TCTotLotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotLotOrderB = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $TCTolakB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakA = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $TCTolakLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakLotA = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift B
-        // Shift C
-            $TCC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCC = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $TCLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCLotC = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $TCPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanC = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $TCPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCPerbaikanLotC = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanC = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotPerbaikanLotC = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $TCTotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotOrderC = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $TCTotLotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotLotOrderC = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $TCTolakC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakC = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $TCTolakLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTolakLotC = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift C
-        //Total Netto
-            $TCTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCTotal = $row['total_netto_qty'];
-                    break;
-                }
-            }
-            $TCLotTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'TC / CVC') {
-                    $TCLotTotal = $row['total_netto_lot'];
-                    break;
-                }
-            }
-        // End Total Netto
-    // End
+    $shftSM = ($shftParam == "ALL") ? "" : " g_shift='$shftParam' AND ";
+    $sqlSM = mysqli_query(
+        $con,
+        "SELECT *, kapasitas as kapSM, g_shift as shiftSM, proses, no_stop, keterangan
+         FROM tbl_stopmesin
+         WHERE $shftSM tgl_update BETWEEN '$Awal' AND '$Akhir' AND no_mesin='$no_mesin'"
+    );
 
-    // POLYESTER
-        // Shift A
-            $PolyA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyA = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $PolyLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyLotA = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $PolyPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanA = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $PolyPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanLotA = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanA = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanLotA = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotOrderA = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $PolyTotLotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotLotOrderA = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $PolyTolakA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakA = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $PolyTolakLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakLotA = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift A
-        // Shift B
-            $PolyB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyB = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $PolyLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyLotB = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $PolyPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanB = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $PolyPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanLotB = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanB = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanLotB = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotOrderB = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $PolyTotLotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotLotOrderB = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $PolyTolakB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakB = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $PolyTolakLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakLotB = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift B
-        // Shift C
-            $PolyC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyC = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $PolyLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyLotC = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $PolyPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanC = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $PolyPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyPerbaikanLotC = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanC = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotPerbaikanLotC = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $PolyTotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotOrderC = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $PolyTotLotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotLotOrderC = $row['total_lot_order'];
-                    break;
-                }
-            }
-            $PolyTolakC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakC = $row['qty_tolak'];
-                    break;
-                }
-            }
-            $PolyTolakLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTolakLotC = $row['lot_tolak'];
-                    break;
-                }
-            }
-        // End Shift C
-        //Total Netto
-            $PolyTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyTotal = $row['total_netto_qty'];
-                    break;
-                }
-            }
-            $PolyLotTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'POLYESTER') {
-                    $PolyLotTotal = $row['total_netto_lot'];
-                    break;
-                }
-            }
-        // End Total Netto
-    // End POLYESTER
+    $shiftSM = null;
+    $shiftProses = null;
+    $shiftNostop = null;
+    $shiftKeterangan = null;
+    $kapSM = null;
 
-    // Misty
-        // Shift A
-            $MistyA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyA = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $MistyLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyLotA = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $MistyPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanA = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $MistyPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanLotA = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanA = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanLotA = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotOrderA = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $MistyTotLotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotLotOrderA = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift A
-        // Shift B
-            $MistyB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyB = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $MistyLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyLotB = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $MistyPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanB = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $MistyPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanLotB = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanB = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanLotB = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotOrderB = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $MistyTotLotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotLotOrderB = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift B
-        // Shift C
-            $MistyC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyC = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $MistyLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyLotC = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $MistyPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanC = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $MistyPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyPerbaikanLotC = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanC = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotPerbaikanLotC = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $MistyTotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotOrderC = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $MistyTotLotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotLotOrderC = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift C
-        //Total Netto
-            $MistyTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyTotal = $row['total_netto_qty'];
-                    break;
-                }
-            }
-            $MistyLotTotal = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'MISTY') {
-                    $MistyLotTotal = $row['total_netto_lot'];
-                    break;
-                }
-            }
-        // End Total Netto
-    // End Misty
+    if ($rowSM = mysqli_fetch_array($sqlSM)) {
+        $shiftSM = $rowSM['shiftSM'];
+        $shiftProses = $rowSM['proses'];
+        $shiftNostop = $rowSM['no_stop'];
+        $shiftKeterangan = $rowSM['keterangan'];
+        $kapSM = $rowSM['kapSM'];
+    }
 
-    // Yarn
-        // Shift A
-            $YarnA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnA = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $YarnLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnLotA = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $YarnPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanA = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $YarnPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanLotA = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanA = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanLotA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanLotA = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotOrderA = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $YarnTotLotOrderA = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'A' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotLotOrderA = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift A
-        // Shift B
-            $YarnB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnB = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $YarnLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnLotB = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $YarnPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanB = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $YarnPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanLotB = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanB = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanLotB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanLotB = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotOrderB = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $YarnTotLotOrderB = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'B' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotLotOrderB = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift B
-        // Shift C
-            $YarnC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnC = $row['jumlah_order'];
-                    break;
-                }
-            }
-            $YarnLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnLotC = $row['jumlah_lot_order'];
-                    break;
-                }
-            }
-            $YarnPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanC = $row['qty_perbaikan'];
-                    break;
-                }
-            }
-            $YarnPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnPerbaikanLotC = $row['lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanC = $row['total_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotPerbaikanLotC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotPerbaikanLotC = $row['total_lot_perbaikan'];
-                    break;
-                }
-            }
-            $YarnTotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotOrderC = $row['total_qty_order'];
-                    break;
-                }
-            }
-            $YarnTotLotOrderC = 0;
-            foreach ($data as $row) {
-                if ($row['shift'] === 'C' && $row['jenis_kain'] === 'CUCI') {
-                    $YarnTotLotOrderC = $row['total_lot_order'];
-                    break;
-                }
-            }
-        // End Shift C
-    // End Yarn
-// End Data Sort
+    $subcode01 = null;
+    if (isset($db2Data[$nokk])) {
+        $subcode01 = $db2Data[$nokk]['SUBCODE01'];
+    }
 
-// Data Kain
-    // Produksi Greige
-        // Cotton
-            $CottonD = 0;
-            $CottonTotD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Dark') {
-                    $CottonD = $row2['qty'];
-                    $CottonTotD = $row2['qty_tot'];
-                    break;
-                }
-            }
-            $CottonM = 0;
-            $CottonTotM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Medium') {
-                    $CottonM = $row2['qty'];
-                    $CottonTotM = $row2['qty_tot'];
-                    break;
-                }
-            }
-            $CottonL = 0;
-            $CottonTotL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Light') {
-                    $CottonL = $row2['qty'];
-                    $CottonTotL = $row2['qty_tot'];
-                    break;
-                }
-            }
-            $CottonW = 0;
-            $CottonTotW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'White') {
-                    $CottonW = $row2['qty'];
-                    $CottonTotW = $row2['qty_tot'];
-                    break;
-                }
-            }
-        // End Cotton
-        // TC / CVC
-            $TcD = 0;
-            $TcTotD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Dark') {
-                    $TcD = $row2['qty'];
-                    $TcTotD = $row2['qty_tot'];
-                    break;
-                }
-            }
-            $TcM = 0;
-            $TcTotM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Medium') {
-                    $TcM = $row2['qty'];
-                    $TcTotM = $row2['qty'];
-                    break;
-                }
-            }
-            $TcL = 0;
-            $TcTotL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Light') {
-                    $TcL = $row2['qty'];
-                    $TcTotL = $row2['qty'];
-                    break;
-                }
-            }
-            $TcW = 0;
-            $TcTotW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'White') {
-                    $TcW = $row2['qty'];
-                    $TcTotW = $row2['qty'];
-                    break;
-                }
-            }
-        // End TC / CVC
-        // Poly
-            $PolyD = 0;
-            $PolyTotD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Dark') {
-                    $PolyD = $row2['qty'];
-                    $PolyTotD = $row2['qty'];
-                    break;
-                }
-            }
-            $PolyM = 0;
-            $PolyTotM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Medium') {
-                    $PolyM = $row2['qty'];
-                    $PolyTotM = $row2['qty'];
-                    break;
-                }
-            }
-            $PolyL = 0;
-            $PolyTotL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Light') {
-                    $PolyL = $row2['qty'];
-                    $PolyTotL = $row2['qty'];
-                    break;
-                }
-            }
-            $PolyW = 0;
-            $PolyTotW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'White') {
-                    $PolyW = $row2['qty'];
-                    $PolyTotW = $row2['qty'];
-                    break;
-                }
-            }
-        // End Poly
-    // End Produksi Greige
-
-    // Perbaikan Greige
-        // Cotton
-            $CottonFixD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Dark') {
-                    $CottonFixD = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $CottonFixM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Medium') {
-                    $CottonFixM = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $CottonFixL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'Light') {
-                    $CottonFixL = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $CottonFixW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'COTTON' && $row2['warna'] === 'White') {
-                    $CottonFixW = $row2['qty_fix'];
-                    break;
-                }
-            }
-        // End Cotton
-        // TC / CVC
-            $TcFixD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Dark') {
-                    $TcFixD = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $TcFixM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Medium') {
-                    $TcFixM = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $TcFixL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'Light') {
-                    $TcFixL = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $TcFixW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'TC / CVC' && $row2['warna'] === 'White') {
-                    $TcFixW = $row2['qty_fix'];
-                    break;
-                }
-            }
-        // End TC / CVC
-        // Poly
-            $PolyFixD = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Dark') {
-                    $PolyFixD = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $PolyFixM = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Medium') {
-                    $PolyFixM = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $PolyFixL = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'Light') {
-                    $PolyFixL = $row2['qty_fix'];
-                    break;
-                }
-            }
-            $PolyFixW = 0;
-            foreach ($data2 as $row2) {
-                if ($row2['jkain'] === 'POLYESTER' && $row2['warna'] === 'White') {
-                    $PolyFixW = $row2['qty_fix'];
-                    break;
-                }
-            }
-        // End Poly
-    // End Produksi Greige
-
-    // Obat R.L
-        // QTY >200 kg
-            $Qty0x = 0;
-            $Qty1x = 0;
-            $Qty2x = 0;
-            $Qty3x = 0;
-            $Qty4x = 0;
-
-            $Row0x = 0;
-            $Row1x = 0;
-            $Row2x = 0;
-            $Row3x = 0;
-            $Row4x = 0;
-
-            foreach ($data3 as $row3) {
-                $kap = (float) $row3['kap'];
-                $qty = (float) $row3['qty'];
-                $k_resep = $row3['k_resep'];
-                $resep = $row3['k_resep'];
-            
-                if ($resep = 'R.L'){
-                    if ($kap >= 300) {
-                        if ($k_resep === '0x') {
-                            $Qty0x += $qty;
-                            $Row0x++;
-                        } elseif ($k_resep === '1x') {
-                            $Qty1x += $qty;
-                            $Row1x++;
-                        } elseif ($k_resep === '2x') {
-                            $Qty2x += $qty;
-                            $Row2x++;
-                        } elseif ($k_resep === '3x') {
-                            $Qty3x += $qty;
-                            $Row3x++;
-                        } elseif ($k_resep === '4x') {
-                            $Qty4x += $qty;
-                            $Row4x++;
-                        }
-                    }
-                }
-            }
-        // End QTY >200 kg
-        // QTY <200 kg
-            $Qty0xUp = 0;
-            $Qty1xUp = 0;
-            $Qty2xUp = 0;
-            $Qty3xUp = 0;
-            $Qty4xUp = 0;
-
-            $Row0xUp = 0;
-            $Row1xUp = 0;
-            $Row2xUp = 0;
-            $Row3xUp = 0;
-            $Row4xUp = 0;
-
-            foreach ($data3 as $row3) {
-                $kap = (float) $row3['kap'];
-                $qty = (float) $row3['qty'];
-                $k_resep = $row3['k_resep'];
-                $resep = $row3['k_resep'];
-            
-                if ($resep = 'R.L'){
-                    if ($kap < 300) {
-                        if ($k_resep === '0x') {
-                            $Qty0xUp += $qty;
-                            $Row0xUp++;
-                        } elseif ($k_resep === '1x') {
-                            $Qty1xUp += $qty;
-                            $Row1xUp++;
-                        } elseif ($k_resep === '2x') {
-                            $Qty2xUp += $qty;
-                            $Row2xUp++;
-                        } elseif ($k_resep === '3x') {
-                            $Qty3xUp += $qty;
-                            $Row3xUp++;
-                        } elseif ($k_resep === '4x') {
-                            $Qty4xUp += $qty;
-                            $Row4xUp++;
-                        }
-                    }
-                }
-            }
-        // End QTY >200 kg
-    // End Obat R.L
-
-    // Obat R.B
-        // QTY >200 kg
-            $Qty0x2 = 0;
-            $Qty1x2 = 0;
-            $Qty2x2 = 0;
-            $Qty3x2 = 0;
-            $Qty4x2 = 0;
-
-            $Row0x2 = 0;
-            $Row1x2 = 0;
-            $Row2x2 = 0;
-            $Row3x2 = 0;
-            $Row4x2 = 0;
-
-            foreach ($data3 as $row3) {
-                $kap = (float) $row3['kap'];
-                $qty = (float) $row3['qty'];
-                $k_resep = $row3['k_resep'];
-                $resep = $row3['k_resep'];
-            
-                if ($resep = 'R.B'){
-                    if ($kap >= 300) {
-                        if ($k_resep === '0x') {
-                            $Qty0x2 += $qty;
-                            $Row0x2++;
-                        } elseif ($k_resep === '1x') {
-                            $Qty1x2 += $qty;
-                            $Row1x2++;
-                        } elseif ($k_resep === '2x') {
-                            $Qty2x2 += $qty;
-                            $Row2x2++;
-                        } elseif ($k_resep === '3x') {
-                            $Qty3x2 += $qty;
-                            $Row3x2++;
-                        } elseif ($k_resep === '4x') {
-                            $Qty4x2 += $qty;
-                            $Row4x2++;
-                        }
-                    }
-                }
-            }
-        // End QTY >200 kg
-    // End Obat R.B
-// End Data Kain
-
-// Data Proses
-    $CPD = 0;
-    $CPDL = 0;
-    $TotSco = 0;
-
-    $TSide = 0;
-    $CuciL = 0;
-    $GaPros = 0;
-    $TolBas = 0;
-    $SRLP = 0;
-
-    $ConBle = 0;
-    $RePri = 0;
-    $AKW = 0;
-    $TR = 0;
-
-    foreach ($data4 as $row4) {
-        $qty = (float) $row4['qty'];
-        $proses = $row4['proses'];
-        $proses_lc = strtolower($proses);
-    
-        if ($proses === 'Celup Poly Dulu (T-Side)') {
-            $TSide += $qty;
-        } elseif (strpos($proses_lc, 'cuci') !== false) {
-            $CuciL += $qty;
-        } elseif ($proses === 'Gagal Proses') {
-            $GaPros += $qty;
-        } elseif ($proses === 'Tolak Basah') {
-            $TolBas += $qty;
-        } elseif ($proses === 'Soaping' || $proses === 'Reduction Clear (R/C)' || $proses === 'Levelling' || $proses === 'Pelunturan') {
-            $SRLP += $qty;
-        }elseif ($proses === 'Celup Perbaikan DYE') {
-            $CPD += $qty;
-        }elseif ($proses === 'Celup Perbaikan Dept.Lain') {
-            $CPDL += $qty;
-        }elseif ($proses === 'Scouring - Priset' || $proses === 'Scouring - Bleaching') {
-            $TotSco += $qty;
-        }elseif ($proses === 'Continuous - Bleaching') {
-            $ConBle += $qty;
-        }elseif ($proses === 'Relaxing - Priset') {
-            $RePri += $qty;
-        }elseif ($proses === 'Celup Proses AKW') {
-            $AKW += $qty;
-        }elseif ($proses === 'Tunggu Review') {
-            $TR += $qty;
+    // Ambil deskripsi kain
+    $desc = null;
+    if ($subcode01) {
+        $q_desc = mysqli_query($con, "SELECT `desc` FROM tbl_type_kain WHERE subcode = '$subcode01' LIMIT 1");
+        if ($rowDesc = mysqli_fetch_assoc($q_desc)) {
+            $desc = $rowDesc['desc'];
         }
     }
-// End Data Proses
 
-//Data Mesin MCxKap
-    // Celup Greige
-        $CG1401x2400 = 0;
-        $CG1402x1200 = 0;
-        $CG1103x1800 = 0;
-        $CG1104x1200 = 0;
-        $CG3505x750 = 0;
-        $CG1406x2400 = 0;
-        $CG1107x1800 = 0;
-        $CG1108x1200 = 0;
-        $CG4409x3200 = 0;
-        $CG1410x1800 = 0;
-        $CG4411x3200 = 0;
-        $CG4412x2400 = 0;
-        $CG4413x2400 = 0;
-        $CG1414x1200 = 0;
-        $CG1415x1200 = 0;
-        $CG2616x100 = 0;
-        $CG2617x100 = 0;
-        $CG2618x50 = 0;
-        $CG2619x800 = 0;
-        $CG2620x30 = 0;
-        $CG2621x800 = 0;
-        $CG2222x200 = 0;
-        $CG2223x800 = 0;
-        $CG2224x400 = 0;
-        $CG2225x400 = 0;
-        $CG2626x600 = 0;
-        $CG2627x600 = 0;
-        $CG2628x800 = 0;
-        $CG2629x50 = 0;
-        $CG2630x800 = 0;
-        $CG2631x10 = 0;
-        $CG2632x20 = 0;
-        $CG2633x20 = 0;
-        $CG2634x20 = 0;
-        $CG2241x800 = 0;
-        $CG2242x800 = 0;
-        $CG2343x1200 = 0;
-        $CG3444x600 = 0;
-        $CG1445x600 = 0;
-        $CG1446x600 = 0;
-        $CG1447x600 = 0;
-        $CG1448x600 = 0;
-        $CG1449x600 = 0;
-        $CG1450x600 = 0;
-        $CG1451x600 = 0;
-        $CG1452x600 = 0;
-        $CG3453x300 = 0;
-        $CG1154x300 = 0;
-        $CG1455x300 = 0;
-        $CG1456x300 = 0;
-        $CG1457x300 = 0;
-        $CG1458x300 = 0;
-        $CG1459x100 = 0;
-        $CG1460x100 = 0;
-        $CG1461x100 = 0;
-        $CG3462x100 = 0;
-        $CG3463x100 = 0;
-        $CG3464x100 = 0;
-        $CG1465x50 = 0;
-        $CG1466x50 = 0;
-        $CG1467x50 = 0;
-        $CG3468x30 = 0;
-        $CG3469x30 = 0;
-        $CG3470x50 = 0;
-        $CG3471x50 = 0;
-        $CG3472x30 = 0;
-        $CG3473x30 = 0;
-        $CG3474x50 = 0;
-        $CG3475x50 = 0;
-        $CG3476x150 = 0;
-        $CG1477x50 = 0;
-        $CG1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'celup greige') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CG1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CG1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CG1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CG1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CG3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CG1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CG1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CG1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CG4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CG1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CG4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CG4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CG4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CG1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CG1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CG2616x100++;
-                        break;
-                    case '2617x100':
-                        $CG2617x100++;
-                        break;
-                    case '2618x50':
-                        $CG2618x50++;
-                        break;
-                    case '2619x800':
-                        $CG2619x800++;
-                        break;
-                    case '2620x30':
-                        $CG2620x30++;
-                        break;
-                    case '2621x800':
-                        $CG2621x800++;
-                        break;
-                    case '2222x200':
-                        $CG2222x200++;
-                        break;
-                    case '2223x800':
-                        $CG2223x800++;
-                        break;
-                    case '2224x400':
-                        $CG2224x400++;
-                        break;
-                    case '2225x400':
-                        $CG2225x400++;
-                        break;
-                    case '2626x600':
-                        $CG2626x600++;
-                        break;
-                    case '2627x600':
-                        $CG2627x600++;
-                        break;
-                    case '2628x800':
-                        $CG2628x800++;
-                        break;
-                    case '2629x50':
-                        $CG2629x50++;
-                        break;
-                    case '2630x800':
-                        $CG2630x800++;
-                        break;
-                    case '2631x10':
-                        $CG2631x10++;
-                        break;
-                    case '2632x20':
-                        $CG2632x20++;
-                        break;
-                    case '2633x20':
-                        $CG2633x20++;
-                        break;
-                    case '2634x20':
-                        $CG2634x20++;
-                        break;
-                    case '2241x800':
-                        $CG2241x800++;
-                        break;
-                    case '2242x800':
-                        $CG2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CG2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CG3444x600++;
-                        break;
-                    case '1445x600':
-                        $CG1445x600++;
-                        break;
-                    case '1446x600':
-                        $CG1446x600++;
-                        break;
-                    case '1447x600':
-                        $CG1447x600++;
-                        break;
-                    case '1448x600':
-                        $CG1448x600++;
-                        break;
-                    case '1449x600':
-                        $CG1449x600++;
-                        break;
-                    case '1450x900':
-                        $CG1450x600++;
-                        break;
-                    case '1451x150':
-                        $CG1451x600++;
-                        break;
-                    case '1452x150':
-                        $CG1452x600++;
-                        break;
-                    case '3453x300':
-                        $CG3453x300++;
-                        break;
-                    case '1154x300':
-                        $CG1154x300++;
-                        break;
-                    case '1455x300':
-                        $CG1455x300++;
-                        break;
-                    case '1456x300':
-                        $CG1456x300++;
-                        break;
-                    case '1457x300':
-                        $CG1457x300++;
-                        break;
-                    case '1458x300':
-                        $CG1458x300++;
-                        break;
-                    case '1459x100':
-                        $CG1459x100++;
-                        break;
-                    case '1460x100':
-                        $CG1460x100++;
-                        break;
-                    case '1461x100':
-                        $CG1461x100++;
-                        break;
-                    case '3462x100':
-                        $CG3462x100++;
-                        break;
-                    case '3463x100':
-                        $CG3463x100++;
-                        break;
-                    case '3464x100':
-                        $CG3464x100++;
-                        break;
-                    case '1465x50':
-                        $CG1465x50++;
-                        break;
-                    case '1466x50':
-                        $CG1466x50++;
-                        break;
-                    case '1467x50':
-                        $CG1467x50++;
-                        break;
-                    case '3468x30':
-                        $CG3468x30++;
-                        break;
-                    case '3469x30':
-                        $CG3469x30++;
-                        break;
-                    case '3470x50':
-                        $CG3470x50++;
-                        break;
-                    case '3471x50':
-                        $CG3471x50++;
-                        break;
-                    case '3472x30':
-                        $CG3472x30++;
-                        break;
-                    case '3473x30':
-                        $CG3473x30++;
-                        break;
-                    case '3474x50':
-                        $CG3474x50++;
-                        break;
-                    case '3475x50':
-                        $CG3475x50++;
-                        break;
-                    case '3476x150':
-                        $CG3476x150++;
-                        break;
-                    case '1477x50':
-                        $CG1477x50++;
-                        break;
-                    case '1478x50':
-                        $CG1478x50++;
-                        break;
+    // Logic shift
+    if ($rowd['langganan'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
+        $shift = $shiftSM;
+    } else {
+        $shift = $rowd['shft'];
+    }
+
+    // Logic kapasitas
+    if ($rowd['langganan'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
+        $kapasitas = $kapSM;
+    } else {
+        $kapasitas = $rowd['kapasitas'];
+    }
+
+    // Logic qty bruto
+    $brt = ($rowd['tgl_out'] != "") ? $rowd['bruto'] : 0;
+
+    // Logic proses
+    if ($rowd['langganan'] == "" && substr($rowd['proses'], 0, 10) != "Cuci Mesin") {
+        if($sts == "Gagal Proses"){
+            $proses = "Gagal Proses";
+        }else{
+            $proses = $rowd['proses'];
+        }
+    } else {
+        if($sts == "Gagal Proses"){
+            $proses = "Gagal Proses";
+        }else{
+            $proses = $rowd['proses'];
+        }
+    }
+
+    return [
+        'shift' => $shift,
+        'mc' => $no_mesin,
+        'kapasitas' => $kapasitas,
+        'nokk' => $nokk,
+        'kapSM' => $kapSM,
+        'SUBCODE01' => $subcode01,
+        'jenis_kain' => $desc,
+        'jumlah_order' => $brt,
+        'proses' => $proses,
+        'sts' => $sts,
+        'warna' => $kategori_warna,
+        'k_resep' => $k_resep,
+        'resep' => $resep
+    ];
+}
+
+$dataNow = [];
+mysqli_data_seek($sql, 0);
+while ($rowd = mysqli_fetch_array($sql)) {
+    $dataNow[] = parseRowData($rowd, $con, $db2Data, $Awal, $Akhir, $shft);
+}
+
+$dataTotal = [];
+mysqli_data_seek($sqlTot, 0);
+while ($rowd = mysqli_fetch_array($sqlTot)) {
+    $dataTotal[] = parseRowData($rowd, $con, $db2Data, $tanggalAwalBulan, $tanggalInput, $shft);
+}
+
+// Inisialisasi struktur data
+$categories = ['Cotton', 'TCCvc', 'Polyester'];
+$shifts = ['A', 'B', 'C'];
+$statusTypes = ['Normal', 'Perbaikan', 'TolakBasah', 'Cuci Misty'];
+$colors = ['Dark', 'Medium', 'Light', 'White'];
+$colorsFix = ['Dark', 'Medium', 'Light', 'White'];
+$k_reseps = ['0x', '1x', '2x', '3x', '4x'];
+$reseps = ['R.L', 'R.B'];
+
+function initData() {
+    global $categories, $shifts, $statusTypes;
+    $result = [];
+    foreach ($statusTypes as $status) {
+        if ($status === 'TolakBasah') {
+            foreach ($categories as $cat) {
+                $result[$status][$cat] = ['jumlah' => 0, 'count' => 0];
+            }
+        } elseif ($status === 'Cuci Misty') {
+            foreach ($shifts as $shift) {
+                $result[$status][$shift] = ['jumlah' => 0, 'count' => 0];
+            }
+        } else {
+            foreach ($categories as $cat) {
+                foreach ($shifts as $shift) {
+                    $result[$status][$cat][$shift] = ['jumlah' => 0, 'count' => 0];
                 }
             }
         }
-    // End Celup Greige
-    // Celup Perbaikan Dye
-        $CPD1401x2400 = 0;
-        $CPD1402x1200 = 0;
-        $CPD1103x1800 = 0;
-        $CPD1104x1200 = 0;
-        $CPD3505x750 = 0;
-        $CPD1406x2400 = 0;
-        $CPD1107x1800 = 0;
-        $CPD1108x1200 = 0;
-        $CPD4409x3200 = 0;
-        $CPD1410x1800 = 0;
-        $CPD4411x3200 = 0;
-        $CPD4412x2400 = 0;
-        $CPD4413x2400 = 0;
-        $CPD1414x1200 = 0;
-        $CPD1415x1200 = 0;
-        $CPD2616x100 = 0;
-        $CPD2617x100 = 0;
-        $CPD2618x50 = 0;
-        $CPD2619x800 = 0;
-        $CPD2620x30 = 0;
-        $CPD2621x800 = 0;
-        $CPD2222x200 = 0;
-        $CPD2223x800 = 0;
-        $CPD2224x400 = 0;
-        $CPD2225x400 = 0;
-        $CPD2626x600 = 0;
-        $CPD2627x600 = 0;
-        $CPD2628x800 = 0;
-        $CPD2629x50 = 0;
-        $CPD2630x800 = 0;
-        $CPD2631x10 = 0;
-        $CPD2632x20 = 0;
-        $CPD2633x20 = 0;
-        $CPD2634x20 = 0;
-        $CPD2241x800 = 0;
-        $CPD2242x800 = 0;
-        $CPD2343x1200 = 0;
-        $CPD3444x600 = 0;
-        $CPD1445x600 = 0;
-        $CPD1446x600 = 0;
-        $CPD1447x600 = 0;
-        $CPD1448x600 = 0;
-        $CPD1449x600 = 0;
-        $CPD1450x600 = 0;
-        $CPD1451x600 = 0;
-        $CPD1452x600 = 0;
-        $CPD3453x300 = 0;
-        $CPD1154x300 = 0;
-        $CPD1455x300 = 0;
-        $CPD1456x300 = 0;
-        $CPD1457x300 = 0;
-        $CPD1458x300 = 0;
-        $CPD1459x100 = 0;
-        $CPD1460x100 = 0;
-        $CPD1461x100 = 0;
-        $CPD3462x100 = 0;
-        $CPD3463x100 = 0;
-        $CPD3464x100 = 0;
-        $CPD1465x50 = 0;
-        $CPD1466x50 = 0;
-        $CPD1467x50 = 0;
-        $CPD3468x30 = 0;
-        $CPD3469x30 = 0;
-        $CPD3470x50 = 0;
-        $CPD3471x50 = 0;
-        $CPD3472x30 = 0;
-        $CPD3473x30 = 0;
-        $CPD3474x50 = 0;
-        $CPD3475x50 = 0;
-        $CPD3476x150 = 0;
-        $CPD1477x50 = 0;
-        $CPD1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan DYE') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPD1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPD1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPD1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPD1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPD3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPD1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPD1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPD1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPD4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPD1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPD4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPD4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPD4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPD1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPD1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPD2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPD2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPD2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPD2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPD2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPD2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPD2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPD2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPD2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPD2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPD2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPD2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPD2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPD2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPD2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPD2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPD2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPD2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPD2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPD2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPD2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPD2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPD3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPD1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPD1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPD1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPD1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPD1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPD1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPD1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPD1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPD3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPD1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPD1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPD1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPD1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPD1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPD1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPD1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPD1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPD3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPD3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPD3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPD1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPD1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPD1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPD3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPD3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPD3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPD3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPD3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPD3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPD3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPD3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPD3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPD1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPD1478x50++;
-                        break;
+    }
+    return $result;
+}
+
+function mapJenisKain($jenis_kain) {
+    if (str_contains($jenis_kain, 'COTTON')) return 'Cotton';
+    if (str_contains($jenis_kain, 'TC/CVC')) return 'TCCvc';
+    if (str_contains($jenis_kain, 'POLYESTER')) return 'Polyester';
+    return null;
+}
+
+function mapStatus($sts, $proses) {
+    if (stripos($proses, 'Cuci Misty') !== false) {
+        return 'Cuci Misty';
+    }
+
+    if (stripos($proses, 'Cuci Yarn Dye (Y/D)') !== false) {
+        return 'Cuci Yarn Dye (Y/D)';
+    }
+
+    if (stripos($proses, 'Gagal Proses') !== false) {
+        return 'Gagal Proses';
+    }
+
+    $keywords = ['Perbaikan', 'Soaping', 'Pelunturan', 'Levelling', 'Reduction Clear (R/C)', 'Mudain-LAB'];
+    foreach ($keywords as $keyword) {
+        if (stripos($proses, $keyword) !== false) {
+            return 'Perbaikan';
+        }
+    }
+
+    if (stripos($sts, 'TOLAK BASAH') !== false) {
+        return 'TolakBasah';
+    }
+
+    if (stripos($proses, 'CELUP GREIGE') !== false) {
+        return 'Normal';
+    }
+
+    return null;
+}
+
+$dataNowStats = initData();
+$dataTotalStats = initData();
+
+// Fungsi untuk mengisi data
+function processData(&$target, &$colorCategory, &$colorCategoryFix, $data, $colors, $k_reseps) {
+    foreach ($data as $row) {
+        $shift = strtoupper(trim($row['shift']));
+        $jenis_kain = strtoupper(trim($row['jenis_kain']));
+        $jumlah = floatval($row['jumlah_order']);
+        $proses = strtoupper(trim($row['proses']));
+        $sts = strtoupper(trim($row['sts']));
+        $warna = trim($row['warna']);
+        $resep = trim($row['resep']);
+        $k_resep = trim($row['k_resep']);
+        $kap = trim($row['kapasitas']);
+
+        $kategori = mapJenisKain($jenis_kain);
+        $status = mapStatus($sts, $proses);
+
+        // Cuci Misty khusus by shift
+        if ($status === 'Cuci Misty' && in_array($shift, ['A', 'B', 'C'])) {
+            $target[$status][$shift]['jumlah'] += $jumlah;
+            $target[$status][$shift]['count'] += 1;
+        }
+
+        // Cuci Yarn Dye (Y/D)
+        if ($status === 'Cuci Yarn Dye (Y/D)' && in_array($shift, ['A', 'B', 'C'])) {
+            $target[$status][$shift]['jumlah'] += $jumlah;
+            $target[$status][$shift]['count'] += 1;
+        }
+
+        // Gagal Proses
+        if ($status === 'Gagal Proses') {
+            $target[$status]['jumlah'] += $jumlah;
+            $target[$status]['count'] += 1;
+        }
+
+        // Tolak Basah
+        if (stripos($status, 'Tolak Basah') !== false) {
+            $target[$status]['jumlah'] += $jumlah;
+            $target[$status]['count'] += 1;
+        }
+
+        // Normal & Perbaikan by kategori + shift
+        if ($kategori && $status && $status !== 'Cuci Misty' && in_array($shift, ['A', 'B', 'C'])) {
+            $target[$status][$kategori][$shift]['jumlah'] += $jumlah;
+            $target[$status][$kategori][$shift]['count'] += 1;
+        }
+
+        // Tolak Basah by kategori saja
+        if ($kategori && $status === 'TolakBasah') {
+            $target[$status][$kategori]['jumlah'] += $jumlah;
+            $target[$status][$kategori]['count'] += 1;
+        }
+
+        // Warna Celup Greige
+        if ($kategori && $proses === 'CELUP GREIGE' && in_array($warna, $colors)) {
+          $colorCategory[$warna][$kategori]['jumlah'] += $jumlah;
+          $colorCategory[$warna][$kategori]['count'] += 1;
+        }
+
+        // Perbaikan by warna
+        if ($kategori && $status === 'Perbaikan' && in_array($warna, $colors)) {
+            $colorCategoryFix[$warna][$kategori]['jumlah'] += $jumlah;
+            $colorCategoryFix[$warna][$kategori]['count'] += 1;
+        }
+
+        // Ke Stabilan Resep
+        if ($resep === 'Baru' && $kap >= 200 && in_array($k_resep, $k_reseps)) {
+            if (!isset($colorCategoryFix[$k_resep])) {
+                $colorCategoryFix[$k_resep] = ['jumlah' => 0];
+            }
+            $colorCategoryFix[$k_resep]['jumlah'] += $jumlah;
+        }
+    }
+}
+
+$colorCategoryStatsNow = [];
+$colorCategoryStatsTotal = [];
+foreach ($colors as $color) {
+    foreach ($categories as $cat) {
+      $colorCategoryStatsNow[$color][$cat] = ['jumlah' => 0, 'count' => 0];
+      $colorCategoryStatsTotal[$color][$cat] = ['jumlah' => 0, 'count' => 0];
+    }
+}
+
+$colorCategoryStatsNowFix = [];
+$colorCategoryStatsTotalFix = [];
+foreach ($colors as $color) {
+    foreach ($categories as $cat) {
+      $colorCategoryStatsNowFix[$color][$cat] = ['jumlah' => 0, 'count' => 0];
+      $colorCategoryStatsTotalFix[$color][$cat] = ['jumlah' => 0, 'count' => 0];
+    }
+}
+
+// Proses data
+processData($dataNowStats, $colorCategoryStatsNow, $colorCategoryStatsNowFix, $dataNow, $colors, $k_reseps);
+processData($dataTotalStats, $colorCategoryStatsTotal, $colorCategoryStatsTotalFix, $dataTotal, $colors, $k_reseps);
+
+// Data list to place
+
+    // Data Sort
+        // Cotton
+            // Shift A
+                $CottonA = $dataNowStats['Normal']['Cotton']['A']['jumlah'] ?? 0;
+                $CottonLotA = $dataNowStats['Normal']['Cotton']['A']['count'] ?? 0;
+                $CottonPerbaikanA = $dataNowStats['Perbaikan']['Cotton']['A']['jumlah'] ?? 0;
+                $CottonPerbaikanLotA = $dataNowStats['Perbaikan']['Cotton']['A']['count'] ?? 0;
+                $CottonTotPerbaikanA = $dataTotalStats['Perbaikan']['Cotton']['A']['jumlah'] ?? 0;
+                $CottonTotPerbaikanLotA = $dataTotalStats['Perbaikan']['Cotton']['A']['count'] ?? 0;
+                $CottonTotOrderA = $dataTotalStats['Normal']['Cotton']['A']['jumlah'] ?? 0;
+                $CottonTotLotOrderA = $dataTotalStats['Normal']['Cotton']['A']['count'] ?? 0;
+                $CottonTolakA = $dataNowStats['TolakBasah']['Cotton']['A']['jumlah'] ?? 0;
+                $CottonTolakLotA = $dataNowStats['TolakBasah']['Cotton']['A']['count'] ?? 0;
+            // End Shift A
+            // Shift B
+                $CottonB = $dataNowStats['Normal']['Cotton']['B']['jumlah'] ?? 0;
+                $CottonLotB = $dataNowStats['Normal']['Cotton']['B']['count'] ?? 0;
+                $CottonPerbaikanB = $dataNowStats['Perbaikan']['Cotton']['B']['jumlah'] ?? 0;
+                $CottonPerbaikanLotB = $dataNowStats['Perbaikan']['Cotton']['B']['count'] ?? 0;
+                $CottonTotPerbaikanB = $dataTotalStats['Perbaikan']['Cotton']['B']['jumlah'] ?? 0;
+                $CottonTotPerbaikanLotB = $dataTotalStats['Perbaikan']['Cotton']['B']['count'] ?? 0;
+                $CottonTotOrderB = $dataTotalStats['Normal']['Cotton']['B']['jumlah'] ?? 0;
+                $CottonTotLotOrderB = $dataTotalStats['Normal']['Cotton']['B']['count'] ?? 0;
+                $CottonTolakB = $dataNowStats['TolakBasah']['Cotton']['B']['jumlah'] ?? 0;
+                $CottonTolakLotB = $dataNowStats['TolakBasah']['Cotton']['B']['count'] ?? 0;
+            // End Shift B
+            // Shift C
+                $CottonC = $dataNowStats['Normal']['Cotton']['C']['jumlah'] ?? 0;
+                $CottonLotC = $dataNowStats['Normal']['Cotton']['C']['count'] ?? 0;
+                $CottonPerbaikanC = $dataNowStats['Perbaikan']['Cotton']['C']['jumlah'] ?? 0;
+                $CottonPerbaikanLotC = $dataNowStats['Perbaikan']['Cotton']['C']['count'] ?? 0;
+                $CottonTotPerbaikanC = $dataTotalStats['Perbaikan']['Cotton']['C']['jumlah'] ?? 0;
+                $CottonTotPerbaikanLotC = $dataTotalStats['Perbaikan']['Cotton']['C']['count'] ?? 0;
+                $CottonTotOrderC = $dataTotalStats['Normal']['Cotton']['C']['jumlah'] ?? 0;
+                $CottonTotLotOrderC = $dataTotalStats['Normal']['Cotton']['C']['count'] ?? 0;
+                $CottonTolakC = $dataNowStats['TolakBasah']['Cotton']['C']['jumlah'] ?? 0;
+                $CottonTolakLotC = $dataNowStats['TolakBasah']['Cotton']['C']['count'] ?? 0;
+            // End Shift C
+            //Total Netto
+                $CottonTotal = 0;
+                $CottonLotTotal = 0;
+            // End Total Netto
+        //End Cotton
+
+        // TC / CVC
+          // Shift A
+            $TCA = $dataNowStats['Normal']['TCCvc']['A']['jumlah'] ?? 0;
+            $TCLotA = $dataNowStats['Normal']['TCCvc']['A']['count'] ?? 0;
+            $TCPerbaikanA = $dataNowStats['Perbaikan']['TCCvc']['A']['jumlah'] ?? 0;
+            $TCPerbaikanLotA = $dataNowStats['Perbaikan']['TCCvc']['A']['count'] ?? 0;
+            $TCTotPerbaikanA = $dataTotalStats['Perbaikan']['TCCvc']['A']['jumlah'] ?? 0;
+            $TCTotPerbaikanLotA = $dataTotalStats['Perbaikan']['TCCvc']['A']['count'] ?? 0;
+            $TCTotOrderA = $dataTotalStats['Normal']['TCCvc']['A']['jumlah'] ?? 0;
+            $TCTotLotOrderA = $dataTotalStats['Normal']['TCCvc']['A']['count'] ?? 0;
+            $TCTolakA = $dataNowStats['TolakBasah']['TCCvc']['A']['jumlah'] ?? 0;
+            $TCTolakLotA = $dataNowStats['TolakBasah']['TCCvc']['A']['count'] ?? 0;
+          // End Shift A
+          // Shift B
+            $TCB = $dataNowStats['Normal']['TCCvc']['B']['jumlah'] ?? 0;
+            $TCLotB = $dataNowStats['Normal']['TCCvc']['B']['count'] ?? 0;
+            $TCPerbaikanB = $dataNowStats['Perbaikan']['TCCvc']['B']['jumlah'] ?? 0;
+            $TCPerbaikanLotB = $dataNowStats['Perbaikan']['TCCvc']['B']['count'] ?? 0;
+            $TCTotPerbaikanB = $dataTotalStats['Perbaikan']['TCCvc']['B']['jumlah'] ?? 0;
+            $TCTotPerbaikanLotB = $dataTotalStats['Perbaikan']['TCCvc']['B']['count'] ?? 0;
+            $TCTotOrderB = $dataTotalStats['Normal']['TCCvc']['B']['jumlah'] ?? 0;
+            $TCTotLotOrderB = $dataTotalStats['Normal']['TCCvc']['B']['count'] ?? 0;
+            $TCTolakB = $dataNowStats['TolakBasah']['TCCvc']['B']['jumlah'] ?? 0;
+            $TCTolakLotB = $dataNowStats['TolakBasah']['TCCvc']['B']['count'] ?? 0;
+          // End Shift B
+          // Shift C
+            $TCC = $dataNowStats['Normal']['TCCvc']['C']['jumlah'] ?? 0;
+            $TCLotC = $dataNowStats['Normal']['TCCvc']['C']['count'] ?? 0;
+            $TCPerbaikanC = $dataNowStats['Perbaikan']['TCCvc']['C']['jumlah'] ?? 0;
+            $TCPerbaikanLotC = $dataNowStats['Perbaikan']['TCCvc']['C']['count'] ?? 0;
+            $TCTotPerbaikanC = $dataTotalStats['Perbaikan']['TCCvc']['C']['jumlah'] ?? 0;
+            $TCTotPerbaikanLotC = $dataTotalStats['Perbaikan']['TCCvc']['C']['count'] ?? 0;
+            $TCTotOrderC = $dataTotalStats['Normal']['TCCvc']['C']['jumlah'] ?? 0;
+            $TCTotLotOrderC = $dataTotalStats['Normal']['TCCvc']['C']['count'] ?? 0;
+            $TCTolakC = $dataNowStats['TolakBasah']['TCCvc']['C']['jumlah'] ?? 0;
+            $TCTolakLotC = $dataNowStats['TolakBasah']['TCCvc']['C']['count'] ?? 0;
+          // End Shift C
+            //Total Netto
+                $TCTotal = 0;
+                $TCLotTotal = 0;
+            // End Total Netto
+        // End
+
+        // POLYESTER
+          // Shift A
+            $PolyA = $dataNowStats['Normal']['Polyester']['A']['jumlah'] ?? 0;
+            $PolyLotA = $dataNowStats['Normal']['Polyester']['A']['count'] ?? 0;
+            $PolyPerbaikanA = $dataNowStats['Perbaikan']['Polyester']['A']['jumlah'] ?? 0;
+            $PolyPerbaikanLotA = $dataNowStats['Perbaikan']['Polyester']['A']['count'] ?? 0;
+            $PolyTotPerbaikanA = $dataTotalStats['Perbaikan']['Polyester']['A']['jumlah'] ?? 0;
+            $PolyTotPerbaikanLotA = $dataTotalStats['Perbaikan']['Polyester']['A']['count'] ?? 0;
+            $PolyTotOrderA = $dataTotalStats['Normal']['Polyester']['A']['jumlah'] ?? 0;
+            $PolyTotLotOrderA = $dataTotalStats['Normal']['Polyester']['A']['count'] ?? 0;
+            $PolyTolakA = $dataNowStats['TolakBasah']['Polyester']['A']['jumlah'] ?? 0;
+            $PolyTolakLotA = $dataNowStats['TolakBasah']['Polyester']['A']['count'] ?? 0;
+          // End Shift A
+          // Shift B
+            $PolyB = $dataNowStats['Normal']['Polyester']['B']['jumlah'] ?? 0;
+            $PolyLotB = $dataNowStats['Normal']['Polyester']['B']['count'] ?? 0;
+            $PolyPerbaikanB = $dataNowStats['Perbaikan']['Polyester']['B']['jumlah'] ?? 0;
+            $PolyPerbaikanLotB = $dataNowStats['Perbaikan']['Polyester']['B']['count'] ?? 0;
+            $PolyTotPerbaikanB = $dataTotalStats['Perbaikan']['Polyester']['B']['jumlah'] ?? 0;
+            $PolyTotPerbaikanLotB = $dataTotalStats['Perbaikan']['Polyester']['B']['count'] ?? 0;
+            $PolyTotOrderB = $dataTotalStats['Normal']['Polyester']['B']['jumlah'] ?? 0;
+            $PolyTotLotOrderB = $dataTotalStats['Normal']['Polyester']['B']['count'] ?? 0;
+            $PolyTolakB = $dataNowStats['TolakBasah']['Polyester']['B']['jumlah'] ?? 0;
+            $PolyTolakLotB = $dataNowStats['TolakBasah']['Polyester']['B']['count'] ?? 0;
+          // End Shift B
+          // Shift C
+            $PolyC = $dataNowStats['Normal']['Polyester']['C']['jumlah'] ?? 0;
+            $PolyLotC = $dataNowStats['Normal']['Polyester']['C']['count'] ?? 0;
+            $PolyPerbaikanC = $dataNowStats['Perbaikan']['Polyester']['C']['jumlah'] ?? 0;
+            $PolyPerbaikanLotC = $dataNowStats['Perbaikan']['Polyester']['C']['count'] ?? 0;
+            $PolyTotPerbaikanC = $dataTotalStats['Perbaikan']['Polyester']['C']['jumlah'] ?? 0;
+            $PolyTotPerbaikanLotC = $dataTotalStats['Perbaikan']['Polyester']['C']['count'] ?? 0;
+            $PolyTotOrderC = $dataTotalStats['Normal']['Polyester']['C']['jumlah'] ?? 0;
+            $PolyTotLotOrderC = $dataTotalStats['Normal']['Polyester']['C']['count'] ?? 0;
+            $PolyTolakC = $dataNowStats['TolakBasah']['Polyester']['C']['jumlah'] ?? 0;
+            $PolyTolakLotC = $dataNowStats['TolakBasah']['Polyester']['C']['count'] ?? 0;
+          // End Shift C
+            //Total Netto
+                $PolyTotal = 0;
+                $PolyLotTotal = 0;
+            // End Total Netto
+        // End POLYESTER
+
+        // Misty
+            // Shift A
+                $MistyA = $dataNowStats['Cuci Misty']['A']['jumlah'] ?? 0;
+                $MistyLotA = $dataNowStats['Cuci Misty']['A']['count'] ?? 0;
+                $MistyPerbaikanA = 0;
+                $MistyPerbaikanLotA = 0;
+                $MistyTotPerbaikanA = 0;
+                $MistyTotPerbaikanLotA = 0;
+                $MistyTotOrderA = $dataTotalStats['Cuci Misty']['A']['jumlah'] ?? 0;
+                $MistyTotLotOrderA = $dataTotalStats['Cuci Misty']['A']['count'] ?? 0;
+            // End Shift A
+            // Shift B
+                $MistyB = $dataNowStats['Cuci Misty']['B']['jumlah'] ?? 0;
+                $MistyLotB = $dataNowStats['Cuci Misty']['B']['count'] ?? 0;
+                $MistyPerbaikanB = 0;
+                $MistyPerbaikanLotB = 0;
+                $MistyTotPerbaikanB = 0;
+                $MistyTotPerbaikanLotB = 0;
+                $MistyTotOrderB = $dataTotalStats['Cuci Misty']['B']['jumlah'] ?? 0;
+                $MistyTotLotOrderB = $dataTotalStats['Cuci Misty']['B']['count'] ?? 0;
+            // End Shift B
+            // Shift C
+                $MistyC = $dataNowStats['Cuci Misty']['C']['jumlah'] ?? 0;
+                $MistyLotC = $dataNowStats['Cuci Misty']['C']['count'] ?? 0;
+                $MistyPerbaikanC = 0;
+                $MistyPerbaikanLotC = 0;
+                $MistyTotPerbaikanC = 0;
+                $MistyTotPerbaikanLotC = 0;
+                $MistyTotOrderC = $dataTotalStats['Cuci Misty']['C']['jumlah'] ?? 0;
+                $MistyTotLotOrderC = $dataTotalStats['Cuci Misty']['C']['count'] ?? 0;
+            // End Shift C
+            //Total Netto
+                $MistyTotal = 0;
+                $MistyLotTotal = 0;
+            // End Total Netto
+        // End Misty
+
+        // Yarn
+            // Shift A
+                $YarnA = $dataNowStats['Cuci Yarn Dye (Y/D)']['A']['jumlah'] ?? 0;;
+                $YarnLotA = $dataNowStats['Cuci Yarn Dye (Y/D)']['A']['count'] ?? 0;;
+                $YarnPerbaikanA = 0;
+                $YarnPerbaikanLotA = 0;
+                $YarnTotPerbaikanA = 0;
+                $YarnTotPerbaikanLotA = 0;
+                $YarnTotOrderA = $dataTotalStats['Cuci Yarn Dye (Y/D)']['A']['jumlah'] ?? 0;;
+                $YarnTotLotOrderA = $dataTotalStats['Cuci Yarn Dye (Y/D)']['A']['count'] ?? 0;;
+            // End Shift A
+            // Shift B
+                $YarnB = $dataNowStats['Cuci Yarn Dye (Y/D)']['B']['jumlah'] ?? 0;;
+                $YarnLotB = $dataNowStats['Cuci Yarn Dye (Y/D)']['B']['count'] ?? 0;;
+                $YarnPerbaikanB = 0;
+                $YarnPerbaikanLotB = 0;
+                $YarnTotPerbaikanB = 0;
+                $YarnTotPerbaikanLotB = 0;
+                $YarnTotOrderB = $dataTotalStats['Cuci Yarn Dye (Y/D)']['B']['jumlah'] ?? 0;;
+                $YarnTotLotOrderB = $dataTotalStats['Cuci Yarn Dye (Y/D)']['B']['count'] ?? 0;;
+            // End Shift B
+            // Shift C
+                $YarnC = $dataNowStats['Cuci Yarn Dye (Y/D)']['C']['jumlah'] ?? 0;;
+                $YarnLotC = $dataNowStats['Cuci Yarn Dye (Y/D)']['C']['count'] ?? 0;;
+                $YarnPerbaikanC = 0;
+                $YarnPerbaikanLotC = 0;
+                $YarnTotPerbaikanC = 0;
+                $YarnTotPerbaikanLotC = 0;
+                $YarnTotOrderC = $dataTotalStats['Cuci Yarn Dye (Y/D)']['C']['jumlah'] ?? 0;;
+                $YarnTotLotOrderC = $dataTotalStats['Cuci Yarn Dye (Y/D)']['C']['count'] ?? 0;;
+            // End Shift C
+        // End Yarn
+    // End Data Sort
+
+    // Data Kain
+        // Produksi Greige
+            // Cotton
+                $CottonD = $colorCategoryStatsNow['Dark']['Cotton']['jumlah'] ?? 0;
+                $CottonTotD = $colorCategoryStatsTotal['Dark']['Cotton']['jumlah'] ?? 0;
+                $CottonM = $colorCategoryStatsNow['Medium']['Cotton']['jumlah'] ?? 0;
+                $CottonTotM = $colorCategoryStatsTotal['Medium']['Cotton']['jumlah'] ?? 0;
+                $CottonL = $colorCategoryStatsNow['Light']['Cotton']['jumlah'] ?? 0;
+                $CottonTotL = $colorCategoryStatsTotal['Light']['Cotton']['jumlah'] ?? 0;
+                $CottonW = $colorCategoryStatsNow['White']['Cotton']['jumlah'] ?? 0;
+                $CottonTotW = $colorCategoryStatsTotal['White']['Cotton']['jumlah'] ?? 0;
+            // End Cotton
+            // TC / CVC
+                $TcD = $colorCategoryStatsNow['Dark']['TCCvc']['jumlah'] ?? 0;
+                $TcTotD = $colorCategoryStatsTotal['Dark']['TCCvc']['jumlah'] ?? 0;
+                $TcM = $colorCategoryStatsNow['Medium']['TCCvc']['jumlah'] ?? 0;
+                $TcTotM = $colorCategoryStatsTotal['Medium']['TCCvc']['jumlah'] ?? 0;
+                $TcL = $colorCategoryStatsNow['Light']['TCCvc']['jumlah'] ?? 0;
+                $TcTotL = $colorCategoryStatsTotal['Light']['TCCvc']['jumlah'] ?? 00;
+                $TcW = $colorCategoryStatsNow['White']['TCCvc']['jumlah'] ?? 0;
+                $TcTotW = $colorCategoryStatsTotal['White']['TCCvc']['jumlah'] ?? 0;
+            // End TC / CVC
+            // Poly
+                $PolyD = $colorCategoryStatsNow['Dark']['Polyester']['jumlah'] ?? 0;
+                $PolyTotD = $colorCategoryStatsTotal['Dark']['Polyester']['jumlah'] ?? 0;
+                $PolyM = $colorCategoryStatsNow['Medium']['Polyester']['jumlah'] ?? 0;
+                $PolyTotM = $colorCategoryStatsTotal['Medium']['Polyester']['jumlah'] ?? 0;
+                $PolyL = $colorCategoryStatsNow['Light']['Polyester']['jumlah'] ?? 0;
+                $PolyTotL = $colorCategoryStatsTotal['Light']['Polyester']['jumlah'] ?? 0;
+                $PolyW = $colorCategoryStatsNow['White']['Polyester']['jumlah'] ?? 0;
+                $PolyTotW = $colorCategoryStatsTotal['White']['Polyester']['jumlah'] ?? 0;
+            // End Poly
+        // End Produksi Greige
+
+        // Perbaikan Greige
+            // Cotton
+                $CottonFixD = $colorCategoryStatsNowFix['Dark']['Cotton']['jumlah'] ?? 0;
+                $CottonTotFixD = $colorCategoryStatsTotalFix['Dark']['Cotton']['jumlah'] ?? 0;
+                $CottonFixM = $colorCategoryStatsNowFix['Medium']['Cotton']['jumlah'] ?? 0;
+                $CottonTotFixM = $colorCategoryStatsTotalFix['Medium']['Cotton']['jumlah'] ?? 0;
+                $CottonFixL = $colorCategoryStatsNowFix['Light']['Cotton']['jumlah'] ?? 0;
+                $CottonTotFixL = $colorCategoryStatsTotalFix['Light']['Cotton']['jumlah'] ?? 0;
+                $CottonFixW = $colorCategoryStatsNowFix['White']['Cotton']['jumlah'] ?? 0;
+                $CottonTotFixW = $colorCategoryStatsTotalFix['White']['Cotton']['jumlah'] ?? 0;
+            // End Cotton
+            // TC / CVC
+                $TcFixD = $colorCategoryStatsNowFix['Dark']['TCCvc']['jumlah'] ?? 0;
+                $TcTotFixD = $colorCategoryStatsTotalFix['Dark']['TCCvc']['jumlah'] ?? 0;
+                $TcFixM = $colorCategoryStatsNowFix['Medium']['TCCvc']['jumlah'] ?? 0;
+                $TcTotFixM = $colorCategoryStatsTotalFix['Medium']['TCCvc']['jumlah'] ?? 0;
+                $TcFixL = $colorCategoryStatsNowFix['Light']['TCCvc']['jumlah'] ?? 0;
+                $TcTotFixL = $colorCategoryStatsTotalFix['Light']['TCCvc']['jumlah'] ?? 0;
+                $TcFixW = $colorCategoryStatsNowFix['White']['TCCvc']['jumlah'] ?? 0;
+                $TcTotFixW = $colorCategoryStatsTotalFix['White']['TCCvc']['jumlah'] ?? 0;
+            // End TC / CVC
+            // Poly
+                $PolyFixD = $colorCategoryStatsNowFix['Dark']['Polyester']['jumlah'] ?? 0;
+                $PolyTotFixD = $colorCategoryStatsTotalFix['Dark']['Polyester']['jumlah'] ?? 0;
+                $PolyFixM = $colorCategoryStatsNowFix['Medium']['Polyester']['jumlah'] ?? 0;
+                $PolyTotFixM = $colorCategoryStatsTotalFix['Medium']['Polyester']['jumlah'] ?? 0;
+                $PolyFixL = $colorCategoryStatsNowFix['Light']['Polyester']['jumlah'] ?? 0;
+                $PolyTotFixL = $colorCategoryStatsTotalFix['Light']['Polyester']['jumlah'] ?? 0;
+                $PolyFixW = $colorCategoryStatsNowFix['White']['Polyester']['jumlah'] ?? 0;
+                $PolyTotFixW = $colorCategoryStatsTotalFix['White']['Polyester']['jumlah'] ?? 0;
+            // End Poly
+        // End Produksi Greige
+
+        // Obat R.L
+            $Qty0x = 0; $Qty1x = 0; $Qty2x = 0; $Qty3x = 0; $Qty4x = 0;
+            $Row0x = 0; $Row1x = 0; $Row2x = 0; $Row3x = 0; $Row4x = 0;
+
+            $Qty0xUp = 0; $Qty1xUp = 0; $Qty2xUp = 0; $Qty3xUp = 0; $Qty4xUp = 0;
+            $Row0xUp = 0; $Row1xUp = 0; $Row2xUp = 0; $Row3xUp = 0; $Row4xUp = 0;
+            // QTY >200 kg
+                foreach ($dataNow  as $row3) {
+                    $kap = (float) $row3['kapasitas'];
+                    $qty = (float) $row3['jumlah_order'];
+                    $k_resep = $row3['k_resep'];
+                    $resep = $row3['resep'];
+                    $proses = $row3['proses'];
+
+                    if($proses == "Celup Greige"){
+                        if ($resep === 'Lama') {
+                            if ($kap > 200) {
+                                if ($k_resep === '0x') {
+                                    $Qty0x += $qty;
+                                    $Row0x++;
+                                } elseif ($k_resep === '1x') {
+                                    $Qty1x += $qty;
+                                    $Row1x++;
+                                } elseif ($k_resep === '2x') {
+                                    $Qty2x += $qty;
+                                    $Row2x++;
+                                } elseif ($k_resep === '3x') {
+                                    $Qty3x += $qty;
+                                    $Row3x++;
+                                } elseif ($k_resep >= '4x') {
+                                    $Qty4x += $qty;
+                                    $Row4x++;
+                                }
+                            }
+                        }
+                    }
                 }
+            // End QTY >200 kg
+            // QTY <200 kg
+                foreach ($dataNow as $row3) {
+                    $kap = (float) $row3['kapasitas'];
+                    $qty = (float) $row3['jumlah_order'];
+                    $k_resep = $row3['k_resep'];
+                    $resep = $row3['resep'];
+                    $proses = $row3['proses'];
+
+                    if($proses == "Celup Greige"){
+                        if ($resep === 'Lama'){
+                            if ($kap <= 200) {
+                                if ($k_resep === '0x') {
+                                    $Qty0xUp += $qty;
+                                    $Row0xUp++;
+                                } elseif ($k_resep === '1x') {
+                                    $Qty1xUp += $qty;
+                                    $Row1xUp++;
+                                } elseif ($k_resep === '2x') {
+                                    $Qty2xUp += $qty;
+                                    $Row2xUp++;
+                                } elseif ($k_resep === '3x') {
+                                    $Qty3xUp += $qty;
+                                    $Row3xUp++;
+                                } elseif ($k_resep >= '4x') {
+                                    $Qty4xUp += $qty;
+                                    $Row4xUp++;
+                                }
+                            }
+                        }
+                    }
+                }
+            // End QTY >200 kg
+        // End Obat R.L
+
+        // Obat R.B
+            $Qty0x2 = 0; $Qty1x2 = 0; $Qty2x2 = 0; $Qty3x2 = 0; $Qty4x2 = 0;
+            $Row0x2 = 0; $Row1x2 = 0; $Row2x2 = 0; $Row3x2 = 0; $Row4x2 = 0;
+
+            $Qty0x2Up = 0; $Qty1x2Up = 0; $Qty2x2Up = 0; $Qty3x2Up = 0; $Qty4x2Up = 0;
+            $Row0x2Up = 0; $Row1x2Up = 0; $Row2x2Up = 0; $Row3x2Up = 0; $Row4x2Up = 0;
+            // QTY >200 kg
+                foreach ($dataNow as $row3) {
+                    $kap = (float) $row3['kapasitas'];
+                    $qty = (float) $row3['jumlah_order'];
+                    $k_resep = $row3['k_resep'];
+                    $resep = $row3['resep'];
+                    $proses = $row3['proses'];
+
+                    if($proses == "Celup Greige"){
+                        if ($resep = 'Baru'){
+                            if ($kap > 200) {
+                                if ($k_resep === '0x') {
+                                    $Qty0x2 += $qty;
+                                    $Row0x2++;
+                                } elseif ($k_resep === '1x') {
+                                    $Qty1x2 += $qty;
+                                    $Row1x2++;
+                                } elseif ($k_resep === '2x') {
+                                    $Qty2x2 += $qty;
+                                    $Row2x2++;
+                                } elseif ($k_resep === '3x') {
+                                    $Qty3x2 += $qty;
+                                    $Row3x2++;
+                                } elseif ($k_resep >= '4x') {
+                                    $Qty4x2 += $qty;
+                                    $Row4x2++;
+                                }
+                            }
+                        }
+                    }
+                }   
+            // End QTY >200 kg
+            // QTY <200 kg
+                foreach ($dataNow as $row3) {
+                    $kap = (float) $row3['kapasitas'];
+                    $qty = (float) $row3['jumlah_order'];
+                    $k_resep = $row3['k_resep'];
+                    $resep = $row3['resep'];
+                    $proses = $row3['proses'];
+
+                    if($proses == "Celup Greige"){
+                        if ($resep === 'Baru'){
+                            if ($kap <= 200) {
+                                if ($k_resep === '0x') {
+                                    $Qty0x2Up += $qty;
+                                    $Row0x2Up++;
+                                } elseif ($k_resep === '1x') {
+                                    $Qty1x2Up += $qty;
+                                    $Row1x2Up++;
+                                } elseif ($k_resep === '2x') {
+                                    $Qty2x2Up += $qty;
+                                    $Row2x2Up++;
+                                } elseif ($k_resep === '3x') {
+                                    $Qty3x2Up += $qty;
+                                    $Row3x2Up++;
+                                } elseif ($k_resep >= '4x') {
+                                    $Qty4x2Up += $qty;
+                                    $Row4x2Up++;
+                                }
+                            }
+                        }
+                    }
+                }
+            // End QTY >200 kg
+        // End Obat R.B
+    // End Data Kain
+
+    // Data Proses
+        $CPD = 0;
+        $CPDL = 0;
+        $TotSco = 0;
+
+        $TSide = 0;
+        $CuciL = 0;
+        $GaPros = 0;
+        $TolBas = 0;
+        $SRLP = 0;
+
+        $ConBle = 0;
+        $RePri = 0;
+        $AKW = 0;
+        $TR = 0;
+
+        foreach ($dataNow as $row) {
+            $jumlah = floatval($row['jumlah_order']);
+            $proses = strtoupper(trim($row['proses']));
+            $sts    = strtoupper(trim($row['sts']));
+
+            if (stripos($proses, 'Celup Perbaikan Dye') !== false) {
+                $CPD += $jumlah;
+            }
+            if (stripos($proses, 'Celup Perbaikan') !== false) {
+                $CPDL += $jumlah;
+            }
+            if (stripos($sts, 'Scouring') !== false) {
+                $TotSco += $jumlah;
+            }
+        
+            if (stripos($sts, 'Celup Poly Dulu (T-Side)') !== false) {
+                $TSide += $jumlah;
+            }
+            if (stripos($proses, 'Cuci Mesin') !== false) {
+                $CuciL += $jumlah;
+            }
+            if (stripos($proses, 'Gagal Proses') !== false) {
+                $GaPros += $jumlah;
+            }
+            if (stripos($proses, 'Tolak Basah') !== false) {
+                $TolBas += $jumlah;
+            }
+            if (stripos($proses, 'SOAPING') !== false ||
+                stripos($proses, 'R.C') !== false ||
+                stripos($proses, 'LEVELLING') !== false ||
+                stripos($proses, 'PELUNTURAN') !== false ||
+                stripos($proses, 'MUDAIN - LAB') !== false) {
+                $SRLP += $jumlah;
+            }
+
+            if (stripos($proses, 'Continuous - Bleaching') !== false) {
+                $ConBle += $jumlah;
+            }
+            if (stripos($proses, 'Relaxing - Priset') !== false) {
+                $RePri += $jumlah;
+            }
+            if (stripos($proses, 'Celup Proses AKW') !== false || stripos($proses, 'AUTO KILO WARNA') !== false) {
+                $AKW += $jumlah;
+            }
+            if (stripos($proses, 'Tunggu Review') !== false) {
+                $TR += $jumlah;
             }
         }
-    // End Celup Perbaikan Dye
-    // Celup Perbaikan Dept.Lain
-        $CPDL1401x2400 = 0;
-        $CPDL1402x1200 = 0;
-        $CPDL1103x1800 = 0;
-        $CPDL1104x1200 = 0;
-        $CPDL3505x750 = 0;
-        $CPDL1406x2400 = 0;
-        $CPDL1107x1800 = 0;
-        $CPDL1108x1200 = 0;
-        $CPDL4409x3200 = 0;
-        $CPDL1410x1800 = 0;
-        $CPDL4411x3200 = 0;
-        $CPDL4412x2400 = 0;
-        $CPDL4413x2400 = 0;
-        $CPDL1414x1200 = 0;
-        $CPDL1415x1200 = 0;
-        $CPDL2616x100 = 0;
-        $CPDL2617x100 = 0;
-        $CPDL2618x50 = 0;
-        $CPDL2619x800 = 0;
-        $CPDL2620x30 = 0;
-        $CPDL2621x800 = 0;
-        $CPDL2222x200 = 0;
-        $CPDL2223x800 = 0;
-        $CPDL2224x400 = 0;
-        $CPDL2225x400 = 0;
-        $CPDL2626x600 = 0;
-        $CPDL2627x600 = 0;
-        $CPDL2628x800 = 0;
-        $CPDL2629x50 = 0;
-        $CPDL2630x800 = 0;
-        $CPDL2631x10 = 0;
-        $CPDL2632x20 = 0;
-        $CPDL2633x20 = 0;
-        $CPDL2634x20 = 0;
-        $CPDL2241x800 = 0;
-        $CPDL2242x800 = 0;
-        $CPDL2343x1200 = 0;
-        $CPDL3444x600 = 0;
-        $CPDL1445x600 = 0;
-        $CPDL1446x600 = 0;
-        $CPDL1447x600 = 0;
-        $CPDL1448x600 = 0;
-        $CPDL1449x600 = 0;
-        $CPDL1450x600 = 0;
-        $CPDL1451x600 = 0;
-        $CPDL1452x600 = 0;
-        $CPDL3453x300 = 0;
-        $CPDL1154x300 = 0;
-        $CPDL1455x300 = 0;
-        $CPDL1456x300 = 0;
-        $CPDL1457x300 = 0;
-        $CPDL1458x300 = 0;
-        $CPDL1459x100 = 0;
-        $CPDL1460x100 = 0;
-        $CPDL1461x100 = 0;
-        $CPDL3462x100 = 0;
-        $CPDL3463x100 = 0;
-        $CPDL3464x100 = 0;
-        $CPDL1465x50 = 0;
-        $CPDL1466x50 = 0;
-        $CPDL1467x50 = 0;
-        $CPDL3468x30 = 0;
-        $CPDL3469x30 = 0;
-        $CPDL3470x50 = 0;
-        $CPDL3471x50 = 0;
-        $CPDL3472x30 = 0;
-        $CPDL3473x30 = 0;
-        $CPDL3474x50 = 0;
-        $CPDL3475x50 = 0;
-        $CPDL3476x150 = 0;
-        $CPDL1477x50 = 0;
-        $CPDL1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan Dept.Lain') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPDL1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPDL1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPDL1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPDL1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPDL3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPDL1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPDL1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPDL1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPDL4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPDL1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPDL4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPDL4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPDL4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPDL1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPDL1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPDL2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPDL2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPDL2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPDL2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPDL2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPDL2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPDL2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPDL2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPDL2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPDL2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPDL2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPDL2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPDL2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPDL2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPDL2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPDL2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPDL2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPDL2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPDL2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPDL2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPDL2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPDL2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPDL3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPDL1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPDL1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPDL1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPDL1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPDL1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPDL1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPDL1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPDL1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPDL3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPDL1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPDL1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPDL1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPDL1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPDL1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPDL1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPDL1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPDL1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPDL3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPDL3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPDL3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPDL1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPDL1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPDL1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPDL3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPDL3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPDL3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPDL3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPDL3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPDL3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPDL3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPDL3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPDL3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPDL1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPDL1478x50++;
-                        break;
+
+    // End Data Proses
+
+    //Data Mesin MCxKap
+        // Celup Greige
+            $CG1401x2400 = 0; $CG1402x1200 = 0; $CG1103x1800 = 0; $CG1104x1200 = 0; $CG3505x750  = 0; 
+            $CG1406x2400 = 0; $CG1107x1800 = 0; $CG1108x1200 = 0; $CG4409x3200 = 0; $CG1410x1800 = 0; 
+            $CG4411x3200 = 0; $CG4412x2400 = 0; $CG4413x2400 = 0; $CG1414x1200 = 0; $CG1415x1200 = 0; 
+            $CG2616x100  = 0; $CG2617x100  = 0; $CG2618x50   = 0; $CG2619x800  = 0; $CG2620x30   = 0; 
+            $CG2621x800  = 0; $CG2222x200  = 0; $CG2223x800  = 0; $CG2224x400  = 0; $CG2225x400  = 0; 
+            $CG2626x600  = 0; $CG2627x600  = 0; $CG2628x800  = 0; $CG2629x50   = 0; $CG2630x800  = 0; 
+            $CG2631x10   = 0; $CG2632x20   = 0; $CG2633x20   = 0; $CG2634x20   = 0; $CG2241x800  = 0; 
+            $CG2242x800  = 0; $CG2343x1200 = 0; $CG3444x600  = 0; $CG1445x600  = 0; $CG1446x600  = 0; 
+            $CG1447x600  = 0; $CG1448x600  = 0; $CG1149x600  = 0; $CG1450x600  = 0; $CG1451x600  = 0; 
+            $CG1452x600  = 0; $CG3453x300  = 0; $CG1154x300  = 0; $CG1455x300  = 0; $CG1456x300  = 0; 
+            $CG1457x300  = 0; $CG1458x300  = 0; $CG1459x100  = 0; $CG1460x100  = 0; $CG1461x100  = 0; 
+            $CG3462x100  = 0; $CG3463x100  = 0; $CG3464x100  = 0; $CG1465x50   = 0; $CG1466x50   = 0; 
+            $CG1467x50   = 0; $CG3468x30   = 0; $CG3469x30   = 0; $CG3470x50   = 0; $CG3471x50   = 0; 
+            $CG3472x30   = 0; $CG3473x30   = 0; $CG3474x50   = 0; $CG3475x50   = 0; $CG3476x150  = 0; 
+            $CG1477x50   = 0; $CG1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses    = strtolower(trim($row5['proses']));
+                $no_mesin  = trim($row5['mc']);
+                $kapasitas = str_replace(',', '', trim($row5['kapasitas']));
+
+                if ($proses === 'celup greige') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CG1401x2400++; break;
+                        case '1402x1200': $CG1402x1200++; break;
+                        case '1103x1800': $CG1103x1800++; break;
+                        case '1104x1200': $CG1104x1200++; break;
+                        case '3505x750' : $CG3505x750++;  break;
+                        case '1406x2400': $CG1406x2400++; break;
+                        case '1107x1800': $CG1107x1800++; break;
+                        case '1108x1200': $CG1108x1200++; break;
+                        case '4409x3200': $CG4409x3200++; break;
+                        case '1410x1800': $CG1410x1800++; break;
+                        case '4411x3200': $CG4411x3200++; break;
+                        case '4412x2400': $CG4412x2400++; break;
+                        case '4413x2400': $CG4413x2400++; break;
+                        case '1414x1200': $CG1414x1200++; break;
+                        case '1415x1200': $CG1415x1200++; break;
+                        case '2616x100' : $CG2616x100++;  break;
+                        case '2617x100' : $CG2617x100++;  break;
+                        case '2618x50'  : $CG2618x50++;   break;
+                        case '2619x800' : $CG2619x800++;  break;
+                        case '2620x30'  : $CG2620x30++;   break;
+                        case '2621x800' : $CG2621x800++;  break;
+                        case '2222x200' : $CG2222x200++;  break;
+                        case '2223x800' : $CG2223x800++;  break;
+                        case '2224x400' : $CG2224x400++;  break;
+                        case '2225x400' : $CG2225x400++;  break;
+                        case '2626x600' : $CG2626x600++;  break;
+                        case '2627x600' : $CG2627x600++;  break;
+                        case '2628x800' : $CG2628x800++;  break;
+                        case '2629x50'  : $CG2629x50++;   break;
+                        case '2630x800' : $CG2630x800++;  break;
+                        case '2631x10'  : $CG2631x10++;   break;
+                        case '2632x20'  : $CG2632x20++;   break;
+                        case '2633x20'  : $CG2633x20++;   break;
+                        case '2634x20'  : $CG2634x20++;   break;
+                        case '2241x800' : $CG2241x800++;  break;
+                        case '2242x800' : $CG2242x800++;  break;
+                        case '2343x1200': $CG2343x1200++; break;
+                        case '3444x600' : $CG3444x600++;  break;
+                        case '1445x600' : $CG1445x600++;  break;
+                        case '1446x600' : $CG1446x600++;  break;
+                        case '1447x600' : $CG1447x600++;  break;
+                        case '1448x600' : $CG1448x600++;  break;
+                        case '1149x600' : $CG1149x600++;  break;
+                        case '1450x600' : $CG1450x600++;  break;
+                        case '1451x600' : $CG1451x600++;  break;
+                        case '1452x600' : $CG1452x600++;  break;
+                        case '3453x300' : $CG3453x300++;  break;
+                        case '1154x300' : $CG1154x300++;  break;
+                        case '1455x300' : $CG1455x300++;  break;
+                        case '1456x300' : $CG1456x300++;  break;
+                        case '1457x300' : $CG1457x300++;  break;
+                        case '1458x300' : $CG1458x300++;  break;
+                        case '1459x100' : $CG1459x100++;  break;
+                        case '1460x100' : $CG1460x100++;  break;
+                        case '1461x100' : $CG1461x100++;  break;
+                        case '3462x100' : $CG3462x100++;  break;
+                        case '3463x100' : $CG3463x100++;  break;
+                        case '3464x100' : $CG3464x100++;  break;
+                        case '1465x50'  : $CG1465x50++;   break;
+                        case '1466x50'  : $CG1466x50++;   break;
+                        case '1467x50'  : $CG1467x50++;   break;
+                        case '3468x30'  : $CG3468x30++;   break;
+                        case '3469x30'  : $CG3469x30++;   break;
+                        case '3470x50'  : $CG3470x50++;   break;
+                        case '3471x50'  : $CG3471x50++;   break;
+                        case '3472x30'  : $CG3472x30++;   break;
+                        case '3473x30'  : $CG3473x30++;   break;
+                        case '3474x50'  : $CG3474x50++;   break;
+                        case '3475x50'  : $CG3475x50++;   break;
+                        case '3476x150' : $CG3476x150++;  break;
+                        case '1477x50'  : $CG1477x50++;   break;
+                        case '1478x50'  : $CG1478x50++;   break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Dept.Lain
-    // Celup Perbaikan Brs
-        $CPB1401x2400 = 0;
-        $CPB1402x1200 = 0;
-        $CPB1103x1800 = 0;
-        $CPB1104x1200 = 0;
-        $CPB3505x750 = 0;
-        $CPB1406x2400 = 0;
-        $CPB1107x1800 = 0;
-        $CPB1108x1200 = 0;
-        $CPB4409x3200 = 0;
-        $CPB1410x1800 = 0;
-        $CPB4411x3200 = 0;
-        $CPB4412x2400 = 0;
-        $CPB4413x2400 = 0;
-        $CPB1414x1200 = 0;
-        $CPB1415x1200 = 0;
-        $CPB2616x100 = 0;
-        $CPB2617x100 = 0;
-        $CPB2618x50 = 0;
-        $CPB2619x800 = 0;
-        $CPB2620x30 = 0;
-        $CPB2621x800 = 0;
-        $CPB2222x200 = 0;
-        $CPB2223x800 = 0;
-        $CPB2224x400 = 0;
-        $CPB2225x400 = 0;
-        $CPB2626x600 = 0;
-        $CPB2627x600 = 0;
-        $CPB2628x800 = 0;
-        $CPB2629x50 = 0;
-        $CPB2630x800 = 0;
-        $CPB2631x10 = 0;
-        $CPB2632x20 = 0;
-        $CPB2633x20 = 0;
-        $CPB2634x20 = 0;
-        $CPB2241x800 = 0;
-        $CPB2242x800 = 0;
-        $CPB2343x1200 = 0;
-        $CPB3444x600 = 0;
-        $CPB1445x600 = 0;
-        $CPB1446x600 = 0;
-        $CPB1447x600 = 0;
-        $CPB1448x600 = 0;
-        $CPB1449x600 = 0;
-        $CPB1450x600 = 0;
-        $CPB1451x600 = 0;
-        $CPB1452x600 = 0;
-        $CPB3453x300 = 0;
-        $CPB1154x300 = 0;
-        $CPB1455x300 = 0;
-        $CPB1456x300 = 0;
-        $CPB1457x300 = 0;
-        $CPB1458x300 = 0;
-        $CPB1459x100 = 0;
-        $CPB1460x100 = 0;
-        $CPB1461x100 = 0;
-        $CPB3462x100 = 0;
-        $CPB3463x100 = 0;
-        $CPB3464x100 = 0;
-        $CPB1465x50 = 0;
-        $CPB1466x50 = 0;
-        $CPB1467x50 = 0;
-        $CPB3468x30 = 0;
-        $CPB3469x30 = 0;
-        $CPB3470x50 = 0;
-        $CPB3471x50 = 0;
-        $CPB3472x30 = 0;
-        $CPB3473x30 = 0;
-        $CPB3474x50 = 0;
-        $CPB3475x50 = 0;
-        $CPB3476x150 = 0;
-        $CPB1477x50 = 0;
-        $CPB1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan BRS') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPB1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPB1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPB1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPB1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPB3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPB1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPB1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPB1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPB4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPB1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPB4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPB4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPB4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPB1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPB1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPB2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPB2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPB2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPB2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPB2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPB2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPB2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPB2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPB2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPB2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPB2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPB2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPB2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPB2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPB2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPB2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPB2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPB2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPB2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPB2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPB2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPB2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPB3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPB1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPB1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPB1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPB1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPB1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPB1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPB1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPB1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPB3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPB1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPB1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPB1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPB1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPB1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPB1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPB1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPB1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPB3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPB3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPB3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPB1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPB1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPB1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPB3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPB3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPB3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPB3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPB3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPB3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPB3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPB3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPB3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPB1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPB1478x50++;
-                        break;
+        // End Celup Greige
+        // Celup Perbaikan Dye
+            $CPD1401x2400 = 0; $CPD1402x1200 = 0; $CPD1103x1800 = 0; $CPD1104x1200 = 0; $CPD3505x750  = 0;
+            $CPD1406x2400 = 0; $CPD1107x1800 = 0; $CPD1108x1200 = 0; $CPD4409x3200 = 0; $CPD1410x1800 = 0;
+            $CPD4411x3200 = 0; $CPD4412x2400 = 0; $CPD4413x2400 = 0; $CPD1414x1200 = 0; $CPD1415x1200 = 0;
+            $CPD2616x100  = 0; $CPD2617x100  = 0; $CPD2618x50   = 0; $CPD2619x800  = 0; $CPD2620x30   = 0;
+            $CPD2621x800  = 0; $CPD2222x200  = 0; $CPD2223x800  = 0; $CPD2224x400  = 0; $CPD2225x400  = 0;
+            $CPD2626x600  = 0; $CPD2627x600  = 0; $CPD2628x800  = 0; $CPD2629x50   = 0; $CPD2630x800  = 0;
+            $CPD2631x10   = 0; $CPD2632x20   = 0; $CPD2633x20   = 0; $CPD2634x20   = 0; $CPD2241x800  = 0;
+            $CPD2242x800  = 0; $CPD2343x1200 = 0; $CPD3444x600  = 0; $CPD1445x600  = 0; $CPD1446x600  = 0;
+            $CPD1447x600  = 0; $CPD1448x600  = 0; $CPD1149x600  = 0; $CPD1450x600  = 0; $CPD1451x600  = 0;
+            $CPD1452x600  = 0; $CPD3453x300  = 0; $CPD1154x300  = 0; $CPD1455x300  = 0; $CPD1456x300  = 0;
+            $CPD1457x300  = 0; $CPD1458x300  = 0; $CPD1459x100  = 0; $CPD1460x100  = 0; $CPD1461x100  = 0;
+            $CPD3462x100  = 0; $CPD3463x100  = 0; $CPD3464x100  = 0; $CPD1465x50   = 0; $CPD1466x50   = 0;
+            $CPD1467x50   = 0; $CPD3468x30   = 0; $CPD3469x30   = 0; $CPD3470x50   = 0; $CPD3471x50   = 0;
+            $CPD3472x30   = 0; $CPD3473x30   = 0; $CPD3474x50   = 0; $CPD3475x50   = 0; $CPD3476x150  = 0;
+            $CPD1477x50   = 0; $CPD1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan DYE') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPD1401x2400++; break;
+                        case '1402x1200': $CPD1402x1200++; break;
+                        case '1103x1800': $CPD1103x1800++; break;
+                        case '1104x1200': $CPD1104x1200++; break;
+                        case '3505x750' : $CPD3505x750++; break;
+                        case '1406x2400': $CPD1406x2400++; break;
+                        case '1107x1800': $CPD1107x1800++; break;
+                        case '1108x1200': $CPD1108x1200++; break;
+                        case '4409x3200': $CPD4409x3200++; break;
+                        case '1410x1800': $CPD1410x1800++; break;
+                        case '4411x3200': $CPD4411x3200++; break;
+                        case '4412x2400': $CPD4412x2400++; break;
+                        case '4413x2400': $CPD4413x2400++; break;
+                        case '1414x1200': $CPD1414x1200++; break;
+                        case '1415x1200': $CPD1415x1200++; break;
+                        case '2616x100' : $CPD2616x100++; break;
+                        case '2617x100' : $CPD2617x100++; break;
+                        case '2618x50'  : $CPD2618x50++; break;
+                        case '2619x800' : $CPD2619x800++; break;
+                        case '2620x30'  : $CPD2620x30++; break;
+                        case '2621x800' : $CPD2621x800++; break;
+                        case '2222x200' : $CPD2222x200++; break;
+                        case '2223x800' : $CPD2223x800++; break;
+                        case '2224x400' : $CPD2224x400++; break;
+                        case '2225x400' : $CPD2225x400++; break;
+                        case '2626x600' : $CPD2626x600++; break;
+                        case '2627x600' : $CPD2627x600++; break;
+                        case '2628x800' : $CPD2628x800++; break;
+                        case '2629x50'  : $CPD2629x50++; break;
+                        case '2630x800' : $CPD2630x800++; break;
+                        case '2631x10'  : $CPD2631x10++; break;
+                        case '2632x20'  : $CPD2632x20++; break;
+                        case '2633x20'  : $CPD2633x20++; break;
+                        case '2634x20'  : $CPD2634x20++; break;
+                        case '2241x800' : $CPD2241x800++; break;
+                        case '2242x800' : $CPD2242x800++; break;
+                        case '2343x1200': $CPD2343x1200++; break;
+                        case '3444x600' : $CPD3444x600++; break;
+                        case '1445x600' : $CPD1445x600++; break;
+                        case '1446x600' : $CPD1446x600++; break;
+                        case '1447x600' : $CPD1447x600++; break;
+                        case '1448x600' : $CPD1448x600++; break;
+                        case '1149x600' : $CPD1149x600++; break;
+                        case '1450x900' : $CPD1450x600++; break;
+                        case '1451x150' : $CPD1451x600++; break;
+                        case '1452x150' : $CPD1452x600++; break;
+                        case '3453x300' : $CPD3453x300++; break;
+                        case '1154x300' : $CPD1154x300++; break;
+                        case '1455x300' : $CPD1455x300++; break;
+                        case '1456x300' : $CPD1456x300++; break;
+                        case '1457x300' : $CPD1457x300++; break;
+                        case '1458x300' : $CPD1458x300++; break;
+                        case '1459x100' : $CPD1459x100++; break;
+                        case '1460x100' : $CPD1460x100++; break;
+                        case '1461x100' : $CPD1461x100++; break;
+                        case '3462x100' : $CPD3462x100++; break;
+                        case '3463x100' : $CPD3463x100++; break;
+                        case '3464x100' : $CPD3464x100++; break;
+                        case '1465x50'  : $CPD1465x50++; break;
+                        case '1466x50'  : $CPD1466x50++; break;
+                        case '1467x50'  : $CPD1467x50++; break;
+                        case '3468x30'  : $CPD3468x30++; break;
+                        case '3469x30'  : $CPD3469x30++; break;
+                        case '3470x50'  : $CPD3470x50++; break;
+                        case '3471x50'  : $CPD3471x50++; break;
+                        case '3472x30'  : $CPD3472x30++; break;
+                        case '3473x30'  : $CPD3473x30++; break;
+                        case '3474x50'  : $CPD3474x50++; break;
+                        case '3475x50'  : $CPD3475x50++; break;
+                        case '3476x150' : $CPD3476x150++; break;
+                        case '1477x50'  : $CPD1477x50++; break;
+                        case '1478x50'  : $CPD1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Brs
-    // Celup Perbaikan Fin
-        $CPF1401x2400 = 0;
-        $CPF1402x1200 = 0;
-        $CPF1103x1800 = 0;
-        $CPF1104x1200 = 0;
-        $CPF3505x750 = 0;
-        $CPF1406x2400 = 0;
-        $CPF1107x1800 = 0;
-        $CPF1108x1200 = 0;
-        $CPF4409x3200 = 0;
-        $CPF1410x1800 = 0;
-        $CPF4411x3200 = 0;
-        $CPF4412x2400 = 0;
-        $CPF4413x2400 = 0;
-        $CPF1414x1200 = 0;
-        $CPF1415x1200 = 0;
-        $CPF2616x100 = 0;
-        $CPF2617x100 = 0;
-        $CPF2618x50 = 0;
-        $CPF2619x800 = 0;
-        $CPF2620x30 = 0;
-        $CPF2621x800 = 0;
-        $CPF2222x200 = 0;
-        $CPF2223x800 = 0;
-        $CPF2224x400 = 0;
-        $CPF2225x400 = 0;
-        $CPF2626x600 = 0;
-        $CPF2627x600 = 0;
-        $CPF2628x800 = 0;
-        $CPF2629x50 = 0;
-        $CPF2630x800 = 0;
-        $CPF2631x10 = 0;
-        $CPF2632x20 = 0;
-        $CPF2633x20 = 0;
-        $CPF2634x20 = 0;
-        $CPF2241x800 = 0;
-        $CPF2242x800 = 0;
-        $CPF2343x1200 = 0;
-        $CPF3444x600 = 0;
-        $CPF1445x600 = 0;
-        $CPF1446x600 = 0;
-        $CPF1447x600 = 0;
-        $CPF1448x600 = 0;
-        $CPF1449x600 = 0;
-        $CPF1450x600 = 0;
-        $CPF1451x600 = 0;
-        $CPF1452x600 = 0;
-        $CPF3453x300 = 0;
-        $CPF1154x300 = 0;
-        $CPF1455x300 = 0;
-        $CPF1456x300 = 0;
-        $CPF1457x300 = 0;
-        $CPF1458x300 = 0;
-        $CPF1459x100 = 0;
-        $CPF1460x100 = 0;
-        $CPF1461x100 = 0;
-        $CPF3462x100 = 0;
-        $CPF3463x100 = 0;
-        $CPF3464x100 = 0;
-        $CPF1465x50 = 0;
-        $CPF1466x50 = 0;
-        $CPF1467x50 = 0;
-        $CPF3468x30 = 0;
-        $CPF3469x30 = 0;
-        $CPF3470x50 = 0;
-        $CPF3471x50 = 0;
-        $CPF3472x30 = 0;
-        $CPF3473x30 = 0;
-        $CPF3474x50 = 0;
-        $CPF3475x50 = 0;
-        $CPF3476x150 = 0;
-        $CPF1477x50 = 0;
-        $CPF1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan FIN') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPF1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPF1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPF1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPF1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPF3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPF1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPF1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPF1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPF4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPF1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPF4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPF4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPF4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPF1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPF1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPF2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPF2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPF2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPF2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPF2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPF2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPF2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPF2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPF2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPF2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPF2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPF2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPF2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPF2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPF2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPF2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPF2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPF2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPF2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPF2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPF2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPF2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPF3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPF1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPF1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPF1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPF1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPF1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPF1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPF1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPF1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPF3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPF1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPF1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPF1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPF1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPF1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPF1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPF1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPF1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPF3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPF3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPF3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPF1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPF1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPF1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPF3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPF3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPF3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPF3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPF3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPF3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPF3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPF3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPF3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPF1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPF1478x50++;
-                        break;
+                
+        // End Celup Perbaikan Dye
+        // Celup Perbaikan Dept.Lain
+            $CPDL1401x2400 = 0; $CPDL1402x1200 = 0; $CPDL1103x1800 = 0; $CPDL1104x1200 = 0; $CPDL3505x750  = 0;
+            $CPDL1406x2400 = 0; $CPDL1107x1800 = 0; $CPDL1108x1200 = 0; $CPDL4409x3200 = 0; $CPDL1410x1800 = 0;
+            $CPDL4411x3200 = 0; $CPDL4412x2400 = 0; $CPDL4413x2400 = 0; $CPDL1414x1200 = 0; $CPDL1415x1200 = 0;
+            $CPDL2616x100  = 0; $CPDL2617x100  = 0; $CPDL2618x50   = 0; $CPDL2619x800  = 0; $CPDL2620x30   = 0;
+            $CPDL2621x800  = 0; $CPDL2222x200  = 0; $CPDL2223x800  = 0; $CPDL2224x400  = 0; $CPDL2225x400  = 0;
+            $CPDL2626x600  = 0; $CPDL2627x600  = 0; $CPDL2628x800  = 0; $CPDL2629x50   = 0; $CPDL2630x800  = 0;
+            $CPDL2631x10   = 0; $CPDL2632x20   = 0; $CPDL2633x20   = 0; $CPDL2634x20   = 0; $CPDL2241x800  = 0;
+            $CPDL2242x800  = 0; $CPDL2343x1200 = 0; $CPDL3444x600  = 0; $CPDL1445x600  = 0; $CPDL1446x600  = 0;
+            $CPDL1447x600  = 0; $CPDL1448x600  = 0; $CPDL1149x600  = 0; $CPDL1450x600  = 0; $CPDL1451x600  = 0;
+            $CPDL1452x600  = 0; $CPDL3453x300  = 0; $CPDL1154x300  = 0; $CPDL1455x300  = 0; $CPDL1456x300  = 0;
+            $CPDL1457x300  = 0; $CPDL1458x300  = 0; $CPDL1459x100  = 0; $CPDL1460x100  = 0; $CPDL1461x100  = 0;
+            $CPDL3462x100  = 0; $CPDL3463x100  = 0; $CPDL3464x100  = 0; $CPDL1465x50   = 0; $CPDL1466x50   = 0;
+            $CPDL1467x50   = 0; $CPDL3468x30   = 0; $CPDL3469x30   = 0; $CPDL3470x50   = 0; $CPDL3471x50   = 0;
+            $CPDL3472x30   = 0; $CPDL3473x30   = 0; $CPDL3474x50   = 0; $CPDL3475x50   = 0; $CPDL3476x150  = 0;
+            $CPDL1477x50   = 0; $CPDL1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+
+                if (stripos($proses, 'celup perbaikan') !== false && stripos($proses, 'dye') === false) {
+                    $key = "{$no_mesin}x{$kapasitas}";
+                    switch ($key) {
+                        case '1401x2400': $CPDL1401x2400++; break;
+                        case '1402x1200': $CPDL1402x1200++; break;
+                        case '1103x1800': $CPDL1103x1800++; break;
+                        case '1104x1200': $CPDL1104x1200++; break;
+                        case '3505x750':  $CPDL3505x750++; break;
+                        case '1406x2400': $CPDL1406x2400++; break;
+                        case '1107x1800': $CPDL1107x1800++; break;
+                        case '1108x1200': $CPDL1108x1200++; break;
+                        case '4409x3200': $CPDL4409x3200++; break;
+                        case '1410x1800': $CPDL1410x1800++; break;
+                        case '4411x3200': $CPDL4411x3200++; break;
+                        case '4412x2400': $CPDL4412x2400++; break;
+                        case '4413x2400': $CPDL4413x2400++; break;
+                        case '1414x1200': $CPDL1414x1200++; break;
+                        case '1415x1200': $CPDL1415x1200++; break;
+                        case '2616x100':  $CPDL2616x100++; break;
+                        case '2617x100':  $CPDL2617x100++; break;
+                        case '2618x50':   $CPDL2618x50++; break;
+                        case '2619x800':  $CPDL2619x800++; break;
+                        case '2620x30':   $CPDL2620x30++; break;
+                        case '2621x800':  $CPDL2621x800++; break;
+                        case '2222x200':  $CPDL2222x200++; break;
+                        case '2223x800':  $CPDL2223x800++; break;
+                        case '2224x400':  $CPDL2224x400++; break;
+                        case '2225x400':  $CPDL2225x400++; break;
+                        case '2626x600':  $CPDL2626x600++; break;
+                        case '2627x600':  $CPDL2627x600++; break;
+                        case '2628x800':  $CPDL2628x800++; break;
+                        case '2629x50':   $CPDL2629x50++; break;
+                        case '2630x800':  $CPDL2630x800++; break;
+                        case '2631x10':   $CPDL2631x10++; break;
+                        case '2632x20':   $CPDL2632x20++; break;
+                        case '2633x20':   $CPDL2633x20++; break;
+                        case '2634x20':   $CPDL2634x20++; break;
+                        case '2241x800':  $CPDL2241x800++; break;
+                        case '2242x800':  $CPDL2242x800++; break;
+                        case '2343x1200': $CPDL2343x1200++; break;
+                        case '3444x600':  $CPDL3444x600++; break;
+                        case '1445x600':  $CPDL1445x600++; break;
+                        case '1446x600':  $CPDL1446x600++; break;
+                        case '1447x600':  $CPDL1447x600++; break;
+                        case '1448x600':  $CPDL1448x600++; break;
+                        case '1149x600':  $CPDL1149x600++; break;
+                        case '1450x600':  $CPDL1450x600++; break;
+                        case '1451x600':  $CPDL1451x600++; break;
+                        case '1452x600':  $CPDL1452x600++; break;
+                        case '3453x300':  $CPDL3453x300++; break;
+                        case '1154x300':  $CPDL1154x300++; break;
+                        case '1455x300':  $CPDL1455x300++; break;
+                        case '1456x300':  $CPDL1456x300++; break;
+                        case '1457x300':  $CPDL1457x300++; break;
+                        case '1458x300':  $CPDL1458x300++; break;
+                        case '1459x100':  $CPDL1459x100++; break;
+                        case '1460x100':  $CPDL1460x100++; break;
+                        case '1461x100':  $CPDL1461x100++; break;
+                        case '3462x100':  $CPDL3462x100++; break;
+                        case '3463x100':  $CPDL3463x100++; break;
+                        case '3464x100':  $CPDL3464x100++; break;
+                        case '1465x50':   $CPDL1465x50++; break;
+                        case '1466x50':   $CPDL1466x50++; break;
+                        case '1467x50':   $CPDL1467x50++; break;
+                        case '3468x30':   $CPDL3468x30++; break;
+                        case '3469x30':   $CPDL3469x30++; break;
+                        case '3470x50':   $CPDL3470x50++; break;
+                        case '3471x50':   $CPDL3471x50++; break;
+                        case '3472x30':   $CPDL3472x30++; break;
+                        case '3473x30':   $CPDL3473x30++; break;
+                        case '3474x50':   $CPDL3474x50++; break;
+                        case '3475x50':   $CPDL3475x50++; break;
+                        case '3476x150':  $CPDL3476x150++; break;
+                        case '1477x50':   $CPDL1477x50++; break;
+                        case '1478x50':   $CPDL1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Fin
-    // Celup Perbaikan Lab
-        $CPL1401x2400 = 0;
-        $CPL1402x1200 = 0;
-        $CPL1103x1800 = 0;
-        $CPL1104x1200 = 0;
-        $CPL3505x750 = 0;
-        $CPL1406x2400 = 0;
-        $CPL1107x1800 = 0;
-        $CPL1108x1200 = 0;
-        $CPL4409x3200 = 0;
-        $CPL1410x1800 = 0;
-        $CPL4411x3200 = 0;
-        $CPL4412x2400 = 0;
-        $CPL4413x2400 = 0;
-        $CPL1414x1200 = 0;
-        $CPL1415x1200 = 0;
-        $CPL2616x100 = 0;
-        $CPL2617x100 = 0;
-        $CPL2618x50 = 0;
-        $CPL2619x800 = 0;
-        $CPL2620x30 = 0;
-        $CPL2621x800 = 0;
-        $CPL2222x200 = 0;
-        $CPL2223x800 = 0;
-        $CPL2224x400 = 0;
-        $CPL2225x400 = 0;
-        $CPL2626x600 = 0;
-        $CPL2627x600 = 0;
-        $CPL2628x800 = 0;
-        $CPL2629x50 = 0;
-        $CPL2630x800 = 0;
-        $CPL2631x10 = 0;
-        $CPL2632x20 = 0;
-        $CPL2633x20 = 0;
-        $CPL2634x20 = 0;
-        $CPL2241x800 = 0;
-        $CPL2242x800 = 0;
-        $CPL2343x1200 = 0;
-        $CPL3444x600 = 0;
-        $CPL1445x600 = 0;
-        $CPL1446x600 = 0;
-        $CPL1447x600 = 0;
-        $CPL1448x600 = 0;
-        $CPL1449x600 = 0;
-        $CPL1450x600 = 0;
-        $CPL1451x600 = 0;
-        $CPL1452x600 = 0;
-        $CPL3453x300 = 0;
-        $CPL1154x300 = 0;
-        $CPL1455x300 = 0;
-        $CPL1456x300 = 0;
-        $CPL1457x300 = 0;
-        $CPL1458x300 = 0;
-        $CPL1459x100 = 0;
-        $CPL1460x100 = 0;
-        $CPL1461x100 = 0;
-        $CPL3462x100 = 0;
-        $CPL3463x100 = 0;
-        $CPL3464x100 = 0;
-        $CPL1465x50 = 0;
-        $CPL1466x50 = 0;
-        $CPL1467x50 = 0;
-        $CPL3468x30 = 0;
-        $CPL3469x30 = 0;
-        $CPL3470x50 = 0;
-        $CPL3471x50 = 0;
-        $CPL3472x30 = 0;
-        $CPL3473x30 = 0;
-        $CPL3474x50 = 0;
-        $CPL3475x50 = 0;
-        $CPL3476x150 = 0;
-        $CPL1477x50 = 0;
-        $CPL1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan LAB') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPL1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPL1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPL1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPL1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPL3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPL1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPL1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPL1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPL4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPL1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPL4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPL4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPL4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPL1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPL1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPL2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPL2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPL2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPL2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPL2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPL2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPL2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPL2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPL2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPL2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPL2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPL2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPL2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPL2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPL2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPL2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPL2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPL2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPL2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPL2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPL2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPL2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPL3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPL1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPL1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPL1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPL1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPL1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPL1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPL1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPL1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPL3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPL1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPL1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPL1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPL1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPL1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPL1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPL1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPL1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPL3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPL3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPL3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPL1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPL1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPL1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPL3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPL3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPL3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPL3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPL3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPL3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPL3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPL3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPL3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPL1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPL1478x50++;
-                        break;
+        // End Celup Perbaikan Dept.Lain
+        // Celup Perbaikan Brs
+            $CPB1401x2400 = 0; $CPB1402x1200 = 0; $CPB1103x1800 = 0; $CPB1104x1200 = 0; $CPB3505x750  = 0;
+            $CPB1406x2400 = 0; $CPB1107x1800 = 0; $CPB1108x1200 = 0; $CPB4409x3200 = 0; $CPB1410x1800 = 0;
+            $CPB4411x3200 = 0; $CPB4412x2400 = 0; $CPB4413x2400 = 0; $CPB1414x1200 = 0; $CPB1415x1200 = 0;
+            $CPB2616x100  = 0; $CPB2617x100  = 0; $CPB2618x50   = 0; $CPB2619x800  = 0; $CPB2620x30   = 0;
+            $CPB2621x800  = 0; $CPB2222x200  = 0; $CPB2223x800  = 0; $CPB2224x400  = 0; $CPB2225x400  = 0;
+            $CPB2626x600  = 0; $CPB2627x600  = 0; $CPB2628x800  = 0; $CPB2629x50   = 0; $CPB2630x800  = 0;
+            $CPB2631x10   = 0; $CPB2632x20   = 0; $CPB2633x20   = 0; $CPB2634x20   = 0; $CPB2241x800  = 0;
+            $CPB2242x800  = 0; $CPB2343x1200 = 0; $CPB3444x600  = 0; $CPB1445x600  = 0; $CPB1446x600  = 0;
+            $CPB1447x600  = 0; $CPB1448x600  = 0; $CPB1149x600  = 0; $CPB1450x600  = 0; $CPB1451x600  = 0;
+            $CPB1452x600  = 0; $CPB3453x300  = 0; $CPB1154x300  = 0; $CPB1455x300  = 0; $CPB1456x300  = 0;
+            $CPB1457x300  = 0; $CPB1458x300  = 0; $CPB1459x100  = 0; $CPB1460x100  = 0; $CPB1461x100  = 0;
+            $CPB3462x100  = 0; $CPB3463x100  = 0; $CPB3464x100  = 0; $CPB1465x50   = 0; $CPB1466x50   = 0;
+            $CPB1467x50   = 0; $CPB3468x30   = 0; $CPB3469x30   = 0; $CPB3470x50   = 0; $CPB3471x50   = 0;
+            $CPB3472x30   = 0; $CPB3473x30   = 0; $CPB3474x50   = 0; $CPB3475x50   = 0; $CPB3476x150  = 0;
+            $CPB1477x50   = 0; $CPB1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan BRS') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPB1401x2400++; break;
+                        case '1402x1200': $CPB1402x1200++; break;
+                        case '1103x1800': $CPB1103x1800++; break;
+                        case '1104x1200': $CPB1104x1200++; break;
+                        case '3505x750' : $CPB3505x750++; break;
+                        case '1406x2400': $CPB1406x2400++; break;
+                        case '1107x1800': $CPB1107x1800++; break;
+                        case '1108x1200': $CPB1108x1200++; break;
+                        case '4409x3200': $CPB4409x3200++; break;
+                        case '1410x1800': $CPB1410x1800++; break;
+                        case '4411x3200': $CPB4411x3200++; break;
+                        case '4412x2400': $CPB4412x2400++; break;
+                        case '4413x2400': $CPB4413x2400++; break;
+                        case '1414x1200': $CPB1414x1200++; break;
+                        case '1415x1200': $CPB1415x1200++; break;
+                        case '2616x100' : $CPB2616x100++; break;
+                        case '2617x100' : $CPB2617x100++; break;
+                        case '2618x50'  : $CPB2618x50++; break;
+                        case '2619x800' : $CPB2619x800++; break;
+                        case '2620x30'  : $CPB2620x30++; break;
+                        case '2621x800' : $CPB2621x800++; break;
+                        case '2222x200' : $CPB2222x200++; break;
+                        case '2223x800' : $CPB2223x800++; break;
+                        case '2224x400' : $CPB2224x400++; break;
+                        case '2225x400' : $CPB2225x400++; break;
+                        case '2626x600' : $CPB2626x600++; break;
+                        case '2627x600' : $CPB2627x600++; break;
+                        case '2628x800' : $CPB2628x800++; break;
+                        case '2629x50'  : $CPB2629x50++; break;
+                        case '2630x800' : $CPB2630x800++; break;
+                        case '2631x10'  : $CPB2631x10++; break;
+                        case '2632x20'  : $CPB2632x20++; break;
+                        case '2633x20'  : $CPB2633x20++; break;
+                        case '2634x20'  : $CPB2634x20++; break;
+                        case '2241x800' : $CPB2241x800++; break;
+                        case '2242x800' : $CPB2242x800++; break;
+                        case '2343x1200': $CPB2343x1200++; break;
+                        case '3444x600' : $CPB3444x600++; break;
+                        case '1445x600' : $CPB1445x600++; break;
+                        case '1446x600' : $CPB1446x600++; break;
+                        case '1447x600' : $CPB1447x600++; break;
+                        case '1448x600' : $CPB1448x600++; break;
+                        case '1149x600' : $CPB1149x600++; break;
+                        case '1450x900' : $CPB1450x600++; break;
+                        case '1451x150' : $CPB1451x600++; break;
+                        case '1452x150' : $CPB1452x600++; break;
+                        case '3453x300' : $CPB3453x300++; break;
+                        case '1154x300' : $CPB1154x300++; break;
+                        case '1455x300' : $CPB1455x300++; break;
+                        case '1456x300' : $CPB1456x300++; break;
+                        case '1457x300' : $CPB1457x300++; break;
+                        case '1458x300' : $CPB1458x300++; break;
+                        case '1459x100' : $CPB1459x100++; break;
+                        case '1460x100' : $CPB1460x100++; break;
+                        case '1461x100' : $CPB1461x100++; break;
+                        case '3462x100' : $CPB3462x100++; break;
+                        case '3463x100' : $CPB3463x100++; break;
+                        case '3464x100' : $CPB3464x100++; break;
+                        case '1465x50'  : $CPB1465x50++; break;
+                        case '1466x50'  : $CPB1466x50++; break;
+                        case '1467x50'  : $CPB1467x50++; break;
+                        case '3468x30'  : $CPB3468x30++; break;
+                        case '3469x30'  : $CPB3469x30++; break;
+                        case '3470x50'  : $CPB3470x50++; break;
+                        case '3471x50'  : $CPB3471x50++; break;
+                        case '3472x30'  : $CPB3472x30++; break;
+                        case '3473x30'  : $CPB3473x30++; break;
+                        case '3474x50'  : $CPB3474x50++; break;
+                        case '3475x50'  : $CPB3475x50++; break;
+                        case '3476x150' : $CPB3476x150++; break;
+                        case '1477x50'  : $CPB1477x50++; break;
+                        case '1478x50'  : $CPB1478x50++; break;
+                    }
+                }
+            } 
+        // End Celup Perbaikan Brs
+        // Celup Perbaikan Fin
+            $CPF1401x2400 = 0;  $CPF1402x1200 = 0;  $CPF1103x1800 = 0;  $CPF1104x1200 = 0;
+            $CPF3505x750  = 0;  $CPF1406x2400 = 0;  $CPF1107x1800 = 0;  $CPF1108x1200 = 0;
+            $CPF4409x3200 = 0;  $CPF1410x1800 = 0;  $CPF4411x3200 = 0;  $CPF4412x2400 = 0;
+            $CPF4413x2400 = 0;  $CPF1414x1200 = 0;  $CPF1415x1200 = 0;  $CPF2616x100  = 0;
+            $CPF2617x100  = 0;  $CPF2618x50   = 0;  $CPF2619x800  = 0;  $CPF2620x30   = 0;
+            $CPF2621x800  = 0;  $CPF2222x200  = 0;  $CPF2223x800  = 0;  $CPF2224x400  = 0;
+            $CPF2225x400  = 0;  $CPF2626x600  = 0;  $CPF2627x600  = 0;  $CPF2628x800  = 0;
+            $CPF2629x50   = 0;  $CPF2630x800  = 0;  $CPF2631x10   = 0;  $CPF2632x20   = 0;
+            $CPF2633x20   = 0;  $CPF2634x20   = 0;  $CPF2241x800  = 0;  $CPF2242x800  = 0;
+            $CPF2343x1200 = 0;  $CPF3444x600  = 0;  $CPF1445x600  = 0;  $CPF1446x600  = 0;
+            $CPF1447x600  = 0;  $CPF1448x600  = 0;  $CPF1149x600  = 0;  $CPF1450x600  = 0;
+            $CPF1451x600  = 0;  $CPF1452x600  = 0;  $CPF3453x300  = 0;  $CPF1154x300  = 0;
+            $CPF1455x300  = 0;  $CPF1456x300  = 0;  $CPF1457x300  = 0;  $CPF1458x300  = 0;
+            $CPF1459x100  = 0;  $CPF1460x100  = 0;  $CPF1461x100  = 0;  $CPF3462x100  = 0;
+            $CPF3463x100  = 0;  $CPF3464x100  = 0;  $CPF1465x50   = 0;  $CPF1466x50   = 0;
+            $CPF1467x50   = 0;  $CPF3468x30   = 0;  $CPF3469x30   = 0;  $CPF3470x50   = 0;
+            $CPF3471x50   = 0;  $CPF3472x30   = 0;  $CPF3473x30   = 0;  $CPF3474x50   = 0;
+            $CPF3475x50   = 0;  $CPF3476x150  = 0;  $CPF1477x50   = 0;  $CPF1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan FIN') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPF1401x2400++; break;
+                        case '1402x1200': $CPF1402x1200++; break;
+                        case '1103x1800': $CPF1103x1800++; break;
+                        case '1104x1200': $CPF1104x1200++; break;
+                        case '3505x750' : $CPF3505x750++; break;
+                        case '1406x2400': $CPF1406x2400++; break;
+                        case '1107x1800': $CPF1107x1800++; break;
+                        case '1108x1200': $CPF1108x1200++; break;
+                        case '4409x3200': $CPF4409x3200++; break;
+                        case '1410x1800': $CPF1410x1800++; break;
+                        case '4411x3200': $CPF4411x3200++; break;
+                        case '4412x2400': $CPF4412x2400++; break;
+                        case '4413x2400': $CPF4413x2400++; break;
+                        case '1414x1200': $CPF1414x1200++; break;
+                        case '1415x1200': $CPF1415x1200++; break;
+                        case '2616x100' : $CPF2616x100++; break;
+                        case '2617x100' : $CPF2617x100++; break;
+                        case '2618x50'  : $CPF2618x50++; break;
+                        case '2619x800' : $CPF2619x800++; break;
+                        case '2620x30'  : $CPF2620x30++; break;
+                        case '2621x800' : $CPF2621x800++; break;
+                        case '2222x200' : $CPF2222x200++; break;
+                        case '2223x800' : $CPF2223x800++; break;
+                        case '2224x400' : $CPF2224x400++; break;
+                        case '2225x400' : $CPF2225x400++; break;
+                        case '2626x600' : $CPF2626x600++; break;
+                        case '2627x600' : $CPF2627x600++; break;
+                        case '2628x800' : $CPF2628x800++; break;
+                        case '2629x50'  : $CPF2629x50++; break;
+                        case '2630x800' : $CPF2630x800++; break;
+                        case '2631x10'  : $CPF2631x10++; break;
+                        case '2632x20'  : $CPF2632x20++; break;
+                        case '2633x20'  : $CPF2633x20++; break;
+                        case '2634x20'  : $CPF2634x20++; break;
+                        case '2241x800' : $CPF2241x800++; break;
+                        case '2242x800' : $CPF2242x800++; break;
+                        case '2343x1200': $CPF2343x1200++; break;
+                        case '3444x600' : $CPF3444x600++; break;
+                        case '1445x600' : $CPF1445x600++; break;
+                        case '1446x600' : $CPF1446x600++; break;
+                        case '1447x600' : $CPF1447x600++; break;
+                        case '1448x600' : $CPF1448x600++; break;
+                        case '1149x600' : $CPF1149x600++; break;
+                        case '1450x900' : $CPF1450x600++; break;
+                        case '1451x150' : $CPF1451x600++; break;
+                        case '1452x150' : $CPF1452x600++; break;
+                        case '3453x300' : $CPF3453x300++; break;
+                        case '1154x300' : $CPF1154x300++; break;
+                        case '1455x300' : $CPF1455x300++; break;
+                        case '1456x300' : $CPF1456x300++; break;
+                        case '1457x300' : $CPF1457x300++; break;
+                        case '1458x300' : $CPF1458x300++; break;
+                        case '1459x100' : $CPF1459x100++; break;
+                        case '1460x100' : $CPF1460x100++; break;
+                        case '1461x100' : $CPF1461x100++; break;
+                        case '3462x100' : $CPF3462x100++; break;
+                        case '3463x100' : $CPF3463x100++; break;
+                        case '3464x100' : $CPF3464x100++; break;
+                        case '1465x50'  : $CPF1465x50++; break;
+                        case '1466x50'  : $CPF1466x50++; break;
+                        case '1467x50'  : $CPF1467x50++; break;
+                        case '3468x30'  : $CPF3468x30++; break;
+                        case '3469x30'  : $CPF3469x30++; break;
+                        case '3470x50'  : $CPF3470x50++; break;
+                        case '3471x50'  : $CPF3471x50++; break;
+                        case '3472x30'  : $CPF3472x30++; break;
+                        case '3473x30'  : $CPF3473x30++; break;
+                        case '3474x50'  : $CPF3474x50++; break;
+                        case '3475x50'  : $CPF3475x50++; break;
+                        case '3476x150' : $CPF3476x150++; break;
+                        case '1477x50'  : $CPF1477x50++; break;
+                        case '1478x50'  : $CPF1478x50++; break;
+                    }
+                }
+            }  
+        // End Celup Perbaikan Fin
+        // Celup Perbaikan Lab
+            $CPL1401x2400 = 0;  $CPL1402x1200 = 0;  $CPL1103x1800 = 0;  $CPL1104x1200 = 0;
+            $CPL3505x750  = 0;  $CPL1406x2400 = 0;  $CPL1107x1800 = 0;  $CPL1108x1200 = 0;
+            $CPL4409x3200 = 0;  $CPL1410x1800 = 0;  $CPL4411x3200 = 0;  $CPL4412x2400 = 0;
+            $CPL4413x2400 = 0;  $CPL1414x1200 = 0;  $CPL1415x1200 = 0;  $CPL2616x100  = 0;
+            $CPL2617x100  = 0;  $CPL2618x50   = 0;  $CPL2619x800  = 0;  $CPL2620x30   = 0;
+            $CPL2621x800  = 0;  $CPL2222x200  = 0;  $CPL2223x800  = 0;  $CPL2224x400  = 0;
+            $CPL2225x400  = 0;  $CPL2626x600  = 0;  $CPL2627x600  = 0;  $CPL2628x800  = 0;
+            $CPL2629x50   = 0;  $CPL2630x800  = 0;  $CPL2631x10   = 0;  $CPL2632x20   = 0;
+            $CPL2633x20   = 0;  $CPL2634x20   = 0;  $CPL2241x800  = 0;  $CPL2242x800  = 0;
+            $CPL2343x1200 = 0;  $CPL3444x600  = 0;  $CPL1445x600  = 0;  $CPL1446x600  = 0;
+            $CPL1447x600  = 0;  $CPL1448x600  = 0;  $CPL1149x600  = 0;  $CPL1450x600  = 0;
+            $CPL1451x600  = 0;  $CPL1452x600  = 0;  $CPL3453x300  = 0;  $CPL1154x300  = 0;
+            $CPL1455x300  = 0;  $CPL1456x300  = 0;  $CPL1457x300  = 0;  $CPL1458x300  = 0;
+            $CPL1459x100  = 0;  $CPL1460x100  = 0;  $CPL1461x100  = 0;  $CPL3462x100  = 0;
+            $CPL3463x100  = 0;  $CPL3464x100  = 0;  $CPL1465x50   = 0;  $CPL1466x50   = 0;
+            $CPL1467x50   = 0;  $CPL3468x30   = 0;  $CPL3469x30   = 0;  $CPL3470x50   = 0;
+            $CPL3471x50   = 0;  $CPL3472x30   = 0;  $CPL3473x30   = 0;  $CPL3474x50   = 0;
+            $CPL3475x50   = 0;  $CPL3476x150  = 0;  $CPL1477x50   = 0;  $CPL1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan LAB') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPL1401x2400++; break;
+                        case '1402x1200': $CPL1402x1200++; break;
+                        case '1103x1800': $CPL1103x1800++; break;
+                        case '1104x1200': $CPL1104x1200++; break;
+                        case '3505x750' : $CPL3505x750++; break;
+                        case '1406x2400': $CPL1406x2400++; break;
+                        case '1107x1800': $CPL1107x1800++; break;
+                        case '1108x1200': $CPL1108x1200++; break;
+                        case '4409x3200': $CPL4409x3200++; break;
+                        case '1410x1800': $CPL1410x1800++; break;
+                        case '4411x3200': $CPL4411x3200++; break;
+                        case '4412x2400': $CPL4412x2400++; break;
+                        case '4413x2400': $CPL4413x2400++; break;
+                        case '1414x1200': $CPL1414x1200++; break;
+                        case '1415x1200': $CPL1415x1200++; break;
+                        case '2616x100' : $CPL2616x100++; break;
+                        case '2617x100' : $CPL2617x100++; break;
+                        case '2618x50'  : $CPL2618x50++; break;
+                        case '2619x800' : $CPL2619x800++; break;
+                        case '2620x30'  : $CPL2620x30++; break;
+                        case '2621x800' : $CPL2621x800++; break;
+                        case '2222x200' : $CPL2222x200++; break;
+                        case '2223x800' : $CPL2223x800++; break;
+                        case '2224x400' : $CPL2224x400++; break;
+                        case '2225x400' : $CPL2225x400++; break;
+                        case '2626x600' : $CPL2626x600++; break;
+                        case '2627x600' : $CPL2627x600++; break;
+                        case '2628x800' : $CPL2628x800++; break;
+                        case '2629x50'  : $CPL2629x50++; break;
+                        case '2630x800' : $CPL2630x800++; break;
+                        case '2631x10'  : $CPL2631x10++; break;
+                        case '2632x20'  : $CPL2632x20++; break;
+                        case '2633x20'  : $CPL2633x20++; break;
+                        case '2634x20'  : $CPL2634x20++; break;
+                        case '2241x800' : $CPL2241x800++; break;
+                        case '2242x800' : $CPL2242x800++; break;
+                        case '2343x1200': $CPL2343x1200++; break;
+                        case '3444x600' : $CPL3444x600++; break;
+                        case '1445x600' : $CPL1445x600++; break;
+                        case '1446x600' : $CPL1446x600++; break;
+                        case '1447x600' : $CPL1447x600++; break;
+                        case '1448x600' : $CPL1448x600++; break;
+                        case '1149x600' : $CPL1149x600++; break;
+                        case '1450x900' : $CPL1450x600++; break;
+                        case '1451x150' : $CPL1451x600++; break;
+                        case '1452x150' : $CPL1452x600++; break;
+                        case '3453x300' : $CPL3453x300++; break;
+                        case '1154x300' : $CPL1154x300++; break;
+                        case '1455x300' : $CPL1455x300++; break;
+                        case '1456x300' : $CPL1456x300++; break;
+                        case '1457x300' : $CPL1457x300++; break;
+                        case '1458x300' : $CPL1458x300++; break;
+                        case '1459x100' : $CPL1459x100++; break;
+                        case '1460x100' : $CPL1460x100++; break;
+                        case '1461x100' : $CPL1461x100++; break;
+                        case '3462x100' : $CPL3462x100++; break;
+                        case '3463x100' : $CPL3463x100++; break;
+                        case '3464x100' : $CPL3464x100++; break;
+                        case '1465x50'  : $CPL1465x50++; break;
+                        case '1466x50'  : $CPL1466x50++; break;
+                        case '1467x50'  : $CPL1467x50++; break;
+                        case '3468x30'  : $CPL3468x30++; break;
+                        case '3469x30'  : $CPL3469x30++; break;
+                        case '3470x50'  : $CPL3470x50++; break;
+                        case '3471x50'  : $CPL3471x50++; break;
+                        case '3472x30'  : $CPL3472x30++; break;
+                        case '3473x30'  : $CPL3473x30++; break;
+                        case '3474x50'  : $CPL3474x50++; break;
+                        case '3475x50'  : $CPL3475x50++; break;
+                        case '3476x150' : $CPL3476x150++; break;
+                        case '1477x50'  : $CPL1477x50++; break;
+                        case '1478x50'  : $CPL1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Lab
-    // Celup Perbaikan Prt
-        $CPP1401x2400 = 0;
-        $CPP1402x1200 = 0;
-        $CPP1103x1800 = 0;
-        $CPP1104x1200 = 0;
-        $CPP3505x750 = 0;
-        $CPP1406x2400 = 0;
-        $CPP1107x1800 = 0;
-        $CPP1108x1200 = 0;
-        $CPP4409x3200 = 0;
-        $CPP1410x1800 = 0;
-        $CPP4411x3200 = 0;
-        $CPP4412x2400 = 0;
-        $CPP4413x2400 = 0;
-        $CPP1414x1200 = 0;
-        $CPP1415x1200 = 0;
-        $CPP2616x100 = 0;
-        $CPP2617x100 = 0;
-        $CPP2618x50 = 0;
-        $CPP2619x800 = 0;
-        $CPP2620x30 = 0;
-        $CPP2621x800 = 0;
-        $CPP2222x200 = 0;
-        $CPP2223x800 = 0;
-        $CPP2224x400 = 0;
-        $CPP2225x400 = 0;
-        $CPP2626x600 = 0;
-        $CPP2627x600 = 0;
-        $CPP2628x800 = 0;
-        $CPP2629x50 = 0;
-        $CPP2630x800 = 0;
-        $CPP2631x10 = 0;
-        $CPP2632x20 = 0;
-        $CPP2633x20 = 0;
-        $CPP2634x20 = 0;
-        $CPP2241x800 = 0;
-        $CPP2242x800 = 0;
-        $CPP2343x1200 = 0;
-        $CPP3444x600 = 0;
-        $CPP1445x600 = 0;
-        $CPP1446x600 = 0;
-        $CPP1447x600 = 0;
-        $CPP1448x600 = 0;
-        $CPP1449x600 = 0;
-        $CPP1450x600 = 0;
-        $CPP1451x600 = 0;
-        $CPP1452x600 = 0;
-        $CPP3453x300 = 0;
-        $CPP1154x300 = 0;
-        $CPP1455x300 = 0;
-        $CPP1456x300 = 0;
-        $CPP1457x300 = 0;
-        $CPP1458x300 = 0;
-        $CPP1459x100 = 0;
-        $CPP1460x100 = 0;
-        $CPP1461x100 = 0;
-        $CPP3462x100 = 0;
-        $CPP3463x100 = 0;
-        $CPP3464x100 = 0;
-        $CPP1465x50 = 0;
-        $CPP1466x50 = 0;
-        $CPP1467x50 = 0;
-        $CPP3468x30 = 0;
-        $CPP3469x30 = 0;
-        $CPP3470x50 = 0;
-        $CPP3471x50 = 0;
-        $CPP3472x30 = 0;
-        $CPP3473x30 = 0;
-        $CPP3474x50 = 0;
-        $CPP3475x50 = 0;
-        $CPP3476x150 = 0;
-        $CPP1477x50 = 0;
-        $CPP1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan PRT') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPP1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPP1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPP1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPP1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPP3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPP1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPP1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPP1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPP4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPP1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPP4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPP4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPP4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPP1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPP1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPP2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPP2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPP2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPP2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPP2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPP2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPP2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPP2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPP2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPP2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPP2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPP2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPP2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPP2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPP2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPP2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPP2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPP2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPP2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPP2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPP2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPP2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPP3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPP1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPP1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPP1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPP1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPP1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPP1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPP1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPP1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPP3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPP1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPP1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPP1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPP1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPP1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPP1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPP1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPP1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPP3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPP3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPP3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPP1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPP1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPP1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPP3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPP3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPP3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPP3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPP3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPP3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPP3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPP3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPP3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPP1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPP1478x50++;
-                        break;
+        // End Celup Perbaikan Lab
+        // Celup Perbaikan Prt
+            $CPP1401x2400 = 0;  $CPP1402x1200 = 0;  $CPP1103x1800 = 0;  $CPP1104x1200 = 0;
+            $CPP3505x750  = 0;  $CPP1406x2400 = 0;  $CPP1107x1800 = 0;  $CPP1108x1200 = 0;
+            $CPP4409x3200 = 0;  $CPP1410x1800 = 0;  $CPP4411x3200 = 0;  $CPP4412x2400 = 0;
+            $CPP4413x2400 = 0;  $CPP1414x1200 = 0;  $CPP1415x1200 = 0;  $CPP2616x100  = 0;
+            $CPP2617x100  = 0;  $CPP2618x50   = 0;  $CPP2619x800  = 0;  $CPP2620x30   = 0;
+            $CPP2621x800  = 0;  $CPP2222x200  = 0;  $CPP2223x800  = 0;  $CPP2224x400  = 0;
+            $CPP2225x400  = 0;  $CPP2626x600  = 0;  $CPP2627x600  = 0;  $CPP2628x800  = 0;
+            $CPP2629x44   = 0;  $CPP2629x50   = 0;  $CPP2630x800  = 0;  $CPP2632x20   = 0;
+            $CPP2633x20   = 0;  $CPP2634x20   = 0;  $CPP2241x800  = 0;  $CPP2242x800  = 0;
+            $CPP2343x1200 = 0;  $CPP3444x600  = 0;  $CPP1445x600  = 0;  $CPP1446x600  = 0;
+            $CPP1447x600  = 0;  $CPP1448x600  = 0;  $CPP1149x600  = 0;  $CPP1450x600  = 0;
+            $CPP1451x600  = 0;  $CPP1452x600  = 0;  $CPP3453x300  = 0;  $CPP1154x300  = 0;
+            $CPP1455x300  = 0;  $CPP1456x300  = 0;  $CPP1457x300  = 0;  $CPP1458x300  = 0;
+            $CPP1459x100  = 0;  $CPP1460x100  = 0;  $CPP1461x100  = 0;  $CPP3462x100  = 0;
+            $CPP3463x100  = 0;  $CPP3464x100  = 0;  $CPP1465x50   = 0;  $CPP1466x50   = 0;
+            $CPP1467x50   = 0;  $CPP3468x30   = 0;  $CPP3469x30   = 0;  $CPP3470x50   = 0;
+            $CPP3471x50   = 0;  $CPP3472x30   = 0;  $CPP3473x30   = 0;  $CPP3474x50   = 0;
+            $CPP3475x50   = 0;  $CPP3476x150  = 0;  $CPP1477x50   = 0;  $CPP1478x50   = 0;
+                
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan PRT') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPP1401x2400++; break;
+                        case '1402x1200': $CPP1402x1200++; break;
+                        case '1103x1800': $CPP1103x1800++; break;
+                        case '1104x1200': $CPP1104x1200++; break;
+                        case '3505x750' : $CPP3505x750++; break;
+                        case '1406x2400': $CPP1406x2400++; break;
+                        case '1107x1800': $CPP1107x1800++; break;
+                        case '1108x1200': $CPP1108x1200++; break;
+                        case '4409x3200': $CPP4409x3200++; break;
+                        case '1410x1800': $CPP1410x1800++; break;
+                        case '4411x3200': $CPP4411x3200++; break;
+                        case '4412x2400': $CPP4412x2400++; break;
+                        case '4413x2400': $CPP4413x2400++; break;
+                        case '1414x1200': $CPP1414x1200++; break;
+                        case '1415x1200': $CPP1415x1200++; break;
+                        case '2616x100' : $CPP2616x100++; break;
+                        case '2617x100' : $CPP2617x100++; break;
+                        case '2618x50'  : $CPP2618x50++; break;
+                        case '2619x800' : $CPP2619x800++; break;
+                        case '2620x30'  : $CPP2620x30++; break;
+                        case '2621x800' : $CPP2621x800++; break;
+                        case '2222x200' : $CPP2222x200++; break;
+                        case '2223x800' : $CPP2223x800++; break;
+                        case '2224x400' : $CPP2224x400++; break;
+                        case '2225x400' : $CPP2225x400++; break;
+                        case '2626x600' : $CPP2626x600++; break;
+                        case '2627x600' : $CPP2627x600++; break;
+                        case '2628x800' : $CPP2628x800++; break;
+                        case '2629x50'  : $CPP2629x50++; break;
+                        case '2630x800' : $CPP2630x800++; break;
+                        case '2631x10'  : $CPP2631x10++; break;
+                        case '2632x20'  : $CPP2632x20++; break;
+                        case '2633x20'  : $CPP2633x20++; break;
+                        case '2634x20'  : $CPP2634x20++; break;
+                        case '2241x800' : $CPP2241x800++; break;
+                        case '2242x800' : $CPP2242x800++; break;
+                        case '2343x1200': $CPP2343x1200++; break;
+                        case '3444x600' : $CPP3444x600++; break;
+                        case '1445x600' : $CPP1445x600++; break;
+                        case '1446x600' : $CPP1446x600++; break;
+                        case '1447x600' : $CPP1447x600++; break;
+                        case '1448x600' : $CPP1448x600++; break;
+                        case '1149x600' : $CPP1149x600++; break;
+                        case '1450x900' : $CPP1450x600++; break;
+                        case '1451x150' : $CPP1451x600++; break;
+                        case '1452x150' : $CPP1452x600++; break;
+                        case '3453x300' : $CPP3453x300++; break;
+                        case '1154x300' : $CPP1154x300++; break;
+                        case '1455x300' : $CPP1455x300++; break;
+                        case '1456x300' : $CPP1456x300++; break;
+                        case '1457x300' : $CPP1457x300++; break;
+                        case '1458x300' : $CPP1458x300++; break;
+                        case '1459x100' : $CPP1459x100++; break;
+                        case '1460x100' : $CPP1460x100++; break;
+                        case '1461x100' : $CPP1461x100++; break;
+                        case '3462x100' : $CPP3462x100++; break;
+                        case '3463x100' : $CPP3463x100++; break;
+                        case '3464x100' : $CPP3464x100++; break;
+                        case '1465x50'  : $CPP1465x50++; break;
+                        case '1466x50'  : $CPP1466x50++; break;
+                        case '1467x50'  : $CPP1467x50++; break;
+                        case '3468x30'  : $CPP3468x30++; break;
+                        case '3469x30'  : $CPP3469x30++; break;
+                        case '3470x50'  : $CPP3470x50++; break;
+                        case '3471x50'  : $CPP3471x50++; break;
+                        case '3472x30'  : $CPP3472x30++; break;
+                        case '3473x30'  : $CPP3473x30++; break;
+                        case '3474x50'  : $CPP3474x50++; break;
+                        case '3475x50'  : $CPP3475x50++; break;
+                        case '3476x150' : $CPP3476x150++; break;
+                        case '1477x50'  : $CPP1477x50++; break;
+                        case '1478x50'  : $CPP1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Prt
-    // Celup Perbaikan Tas
-        $CPT1401x2400 = 0;
-        $CPT1402x1200 = 0;
-        $CPT1103x1800 = 0;
-        $CPT1104x1200 = 0;
-        $CPT3505x750 = 0;
-        $CPT1406x2400 = 0;
-        $CPT1107x1800 = 0;
-        $CPT1108x1200 = 0;
-        $CPT4409x3200 = 0;
-        $CPT1410x1800 = 0;
-        $CPT4411x3200 = 0;
-        $CPT4412x2400 = 0;
-        $CPT4413x2400 = 0;
-        $CPT1414x1200 = 0;
-        $CPT1415x1200 = 0;
-        $CPT2616x100 = 0;
-        $CPT2617x100 = 0;
-        $CPT2618x50 = 0;
-        $CPT2619x800 = 0;
-        $CPT2620x30 = 0;
-        $CPT2621x800 = 0;
-        $CPT2222x200 = 0;
-        $CPT2223x800 = 0;
-        $CPT2224x400 = 0;
-        $CPT2225x400 = 0;
-        $CPT2626x600 = 0;
-        $CPT2627x600 = 0;
-        $CPT2628x800 = 0;
-        $CPT2629x50 = 0;
-        $CPT2630x800 = 0;
-        $CPT2631x10 = 0;
-        $CPT2632x20 = 0;
-        $CPT2633x20 = 0;
-        $CPT2634x20 = 0;
-        $CPT2241x800 = 0;
-        $CPT2242x800 = 0;
-        $CPT2343x1200 = 0;
-        $CPT3444x600 = 0;
-        $CPT1445x600 = 0;
-        $CPT1446x600 = 0;
-        $CPT1447x600 = 0;
-        $CPT1448x600 = 0;
-        $CPT1449x600 = 0;
-        $CPT1450x600 = 0;
-        $CPT1451x600 = 0;
-        $CPT1452x600 = 0;
-        $CPT3453x300 = 0;
-        $CPT1154x300 = 0;
-        $CPT1455x300 = 0;
-        $CPT1456x300 = 0;
-        $CPT1457x300 = 0;
-        $CPT1458x300 = 0;
-        $CPT1459x100 = 0;
-        $CPT1460x100 = 0;
-        $CPT1461x100 = 0;
-        $CPT3462x100 = 0;
-        $CPT3463x100 = 0;
-        $CPT3464x100 = 0;
-        $CPT1465x50 = 0;
-        $CPT1466x50 = 0;
-        $CPT1467x50 = 0;
-        $CPT3468x30 = 0;
-        $CPT3469x30 = 0;
-        $CPT3470x50 = 0;
-        $CPT3471x50 = 0;
-        $CPT3472x30 = 0;
-        $CPT3473x30 = 0;
-        $CPT3474x50 = 0;
-        $CPT3475x50 = 0;
-        $CPT3476x150 = 0;
-        $CPT1477x50 = 0;
-        $CPT1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan TAS') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPT1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPT1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPT1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPT1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPT3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPT1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPT1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPT1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPT4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPT1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPT4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPT4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPT4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPT1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPT1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPT2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPT2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPT2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPT2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPT2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPT2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPT2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPT2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPT2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPT2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPT2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPT2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPT2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPT2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPT2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPT2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPT2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPT2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPT2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPT2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPT2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPT2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPT3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPT1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPT1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPT1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPT1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPT1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPT1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPT1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPT1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPT3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPT1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPT1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPT1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPT1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPT1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPT1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPT1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPT1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPT3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPT3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPT3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPT1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPT1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPT1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPT3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPT3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPT3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPT3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPT3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPT3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPT3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPT3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPT3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPT1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPT1478x50++;
-                        break;
+        // End Celup Perbaikan Prt
+        // Celup Perbaikan Tas
+            $CPT1401x2400 = 0;   $CPT1402x1200 = 0;   $CPT1103x1800 = 0;   $CPT1104x1200 = 0;
+            $CPT3505x750  = 0;   $CPT1406x2400 = 0;   $CPT1107x1800 = 0;   $CPT1108x1200 = 0;
+            $CPT4409x3200 = 0;   $CPT1410x1800 = 0;   $CPT4411x3200 = 0;   $CPT4412x2400 = 0;
+            $CPT4413x2400 = 0;   $CPT1414x1200 = 0;   $CPT1415x1200 = 0;   $CPT2616x100  = 0;
+            $CPT2617x100  = 0;   $CPT2618x50   = 0;   $CPT2619x800  = 0;   $CPT2620x30   = 0;
+            $CPT2621x800  = 0;   $CPT2222x200  = 0;   $CPT2223x800  = 0;   $CPT2224x400  = 0;
+            $CPT2225x400  = 0;   $CPT2626x600  = 0;   $CPT2627x600  = 0;   $CPT2628x800  = 0;
+            $CPT2629x50   = 0;   $CPT2630x800  = 0;   $CPT2631x10   = 0;   $CPT2632x20   = 0;
+            $CPT2633x20   = 0;   $CPT2634x20   = 0;   $CPT2241x800  = 0;   $CPT2242x800  = 0;
+            $CPT2343x1200 = 0;   $CPT3444x600  = 0;   $CPT1445x600  = 0;   $CPT1446x600  = 0;
+            $CPT1447x600  = 0;   $CPT1448x600  = 0;   $CPT1149x600  = 0;   $CPT1450x600  = 0;
+            $CPT1451x600  = 0;   $CPT1452x600  = 0;   $CPT3453x300  = 0;   $CPT1154x300  = 0;
+            $CPT1455x300  = 0;   $CPT1456x300  = 0;   $CPT1457x300  = 0;   $CPT1458x300  = 0;
+            $CPT1459x100  = 0;   $CPT1460x100  = 0;   $CPT1461x100  = 0;   $CPT3462x100  = 0;
+            $CPT3463x100  = 0;   $CPT3464x100  = 0;   $CPT1465x50   = 0;   $CPT1466x50   = 0;
+            $CPT1467x50   = 0;   $CPT3468x30   = 0;   $CPT3469x30   = 0;   $CPT3470x50   = 0;
+            $CPT3471x50   = 0;   $CPT3472x30   = 0;   $CPT3473x30   = 0;   $CPT3474x50   = 0;
+            $CPT3475x50   = 0;   $CPT3476x150  = 0;   $CPT1477x50   = 0;   $CPT1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan TAS') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPT1401x2400++; break;
+                        case '1402x1200': $CPT1402x1200++; break;
+                        case '1103x1800': $CPT1103x1800++; break;
+                        case '1104x1200': $CPT1104x1200++; break;
+                        case '3505x750' : $CPT3505x750++; break;
+                        case '1406x2400': $CPT1406x2400++; break;
+                        case '1107x1800': $CPT1107x1800++; break;
+                        case '1108x1200': $CPT1108x1200++; break;
+                        case '4409x3200': $CPT4409x3200++; break;
+                        case '1410x1800': $CPT1410x1800++; break;
+                        case '4411x3200': $CPT4411x3200++; break;
+                        case '4412x2400': $CPT4412x2400++; break;
+                        case '4413x2400': $CPT4413x2400++; break;
+                        case '1414x1200': $CPT1414x1200++; break;
+                        case '1415x1200': $CPT1415x1200++; break;
+                        case '2616x100' : $CPT2616x100++; break;
+                        case '2617x100' : $CPT2617x100++; break;
+                        case '2618x50'  : $CPT2618x50++; break;
+                        case '2619x800' : $CPT2619x800++; break;
+                        case '2620x30'  : $CPT2620x30++; break;
+                        case '2621x800' : $CPT2621x800++; break;
+                        case '2222x200' : $CPT2222x200++; break;
+                        case '2223x800' : $CPT2223x800++; break;
+                        case '2224x400' : $CPT2224x400++; break;
+                        case '2225x400' : $CPT2225x400++; break;
+                        case '2626x600' : $CPT2626x600++; break;
+                        case '2627x600' : $CPT2627x600++; break;
+                        case '2628x800' : $CPT2628x800++; break;
+                        case '2629x50'  : $CPT2629x50++; break;
+                        case '2630x800' : $CPT2630x800++; break;
+                        case '2631x10'  : $CPT2631x10++; break;
+                        case '2632x20'  : $CPT2632x20++; break;
+                        case '2633x20'  : $CPT2633x20++; break;
+                        case '2634x20'  : $CPT2634x20++; break;
+                        case '2241x800' : $CPT2241x800++; break;
+                        case '2242x800' : $CPT2242x800++; break;
+                        case '2343x1200': $CPT2343x1200++; break;
+                        case '3444x600' : $CPT3444x600++; break;
+                        case '1445x600' : $CPT1445x600++; break;
+                        case '1446x600' : $CPT1446x600++; break;
+                        case '1447x600' : $CPT1447x600++; break;
+                        case '1448x600' : $CPT1448x600++; break;
+                        case '1149x600' : $CPT1149x600++; break;
+                        case '1450x900' : $CPT1450x600++; break;
+                        case '1451x150' : $CPT1451x600++; break;
+                        case '1452x150' : $CPT1452x600++; break;
+                        case '3453x300' : $CPT3453x300++; break;
+                        case '1154x300' : $CPT1154x300++; break;
+                        case '1455x300' : $CPT1455x300++; break;
+                        case '1456x300' : $CPT1456x300++; break;
+                        case '1457x300' : $CPT1457x300++; break;
+                        case '1458x300' : $CPT1458x300++; break;
+                        case '1459x100' : $CPT1459x100++; break;
+                        case '1460x100' : $CPT1460x100++; break;
+                        case '1461x100' : $CPT1461x100++; break;
+                        case '3462x100' : $CPT3462x100++; break;
+                        case '3463x100' : $CPT3463x100++; break;
+                        case '3464x100' : $CPT3464x100++; break;
+                        case '1465x50'  : $CPT1465x50++; break;
+                        case '1466x50'  : $CPT1466x50++; break;
+                        case '1467x50'  : $CPT1467x50++; break;
+                        case '3468x30'  : $CPT3468x30++; break;
+                        case '3469x30'  : $CPT3469x30++; break;
+                        case '3470x50'  : $CPT3470x50++; break;
+                        case '3471x50'  : $CPT3471x50++; break;
+                        case '3472x30'  : $CPT3472x30++; break;
+                        case '3473x30'  : $CPT3473x30++; break;
+                        case '3474x50'  : $CPT3474x50++; break;
+                        case '3475x50'  : $CPT3475x50++; break;
+                        case '3476x150' : $CPT3476x150++; break;
+                        case '1477x50'  : $CPT1477x50++; break;
+                        case '1478x50'  : $CPT1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Tas
-    // Celup Perbaikan Rmp
-        $CPR1401x2400 = 0;
-        $CPR1402x1200 = 0;
-        $CPR1103x1800 = 0;
-        $CPR1104x1200 = 0;
-        $CPR3505x750 = 0;
-        $CPR1406x2400 = 0;
-        $CPR1107x1800 = 0;
-        $CPR1108x1200 = 0;
-        $CPR4409x3200 = 0;
-        $CPR1410x1800 = 0;
-        $CPR4411x3200 = 0;
-        $CPR4412x2400 = 0;
-        $CPR4413x2400 = 0;
-        $CPR1414x1200 = 0;
-        $CPR1415x1200 = 0;
-        $CPR2616x100 = 0;
-        $CPR2617x100 = 0;
-        $CPR2618x50 = 0;
-        $CPR2619x800 = 0;
-        $CPR2620x30 = 0;
-        $CPR2621x800 = 0;
-        $CPR2222x200 = 0;
-        $CPR2223x800 = 0;
-        $CPR2224x400 = 0;
-        $CPR2225x400 = 0;
-        $CPR2626x600 = 0;
-        $CPR2627x600 = 0;
-        $CPR2628x800 = 0;
-        $CPR2629x50 = 0;
-        $CPR2630x800 = 0;
-        $CPR2631x10 = 0;
-        $CPR2632x20 = 0;
-        $CPR2633x20 = 0;
-        $CPR2634x20 = 0;
-        $CPR2241x800 = 0;
-        $CPR2242x800 = 0;
-        $CPR2343x1200 = 0;
-        $CPR3444x600 = 0;
-        $CPR1445x600 = 0;
-        $CPR1446x600 = 0;
-        $CPR1447x600 = 0;
-        $CPR1448x600 = 0;
-        $CPR1449x600 = 0;
-        $CPR1450x600 = 0;
-        $CPR1451x600 = 0;
-        $CPR1452x600 = 0;
-        $CPR3453x300 = 0;
-        $CPR1154x300 = 0;
-        $CPR1455x300 = 0;
-        $CPR1456x300 = 0;
-        $CPR1457x300 = 0;
-        $CPR1458x300 = 0;
-        $CPR1459x100 = 0;
-        $CPR1460x100 = 0;
-        $CPR1461x100 = 0;
-        $CPR3462x100 = 0;
-        $CPR3463x100 = 0;
-        $CPR3464x100 = 0;
-        $CPR1465x50 = 0;
-        $CPR1466x50 = 0;
-        $CPR1467x50 = 0;
-        $CPR3468x30 = 0;
-        $CPR3469x30 = 0;
-        $CPR3470x50 = 0;
-        $CPR3471x50 = 0;
-        $CPR3472x30 = 0;
-        $CPR3473x30 = 0;
-        $CPR3474x50 = 0;
-        $CPR3475x50 = 0;
-        $CPR3476x150 = 0;
-        $CPR1477x50 = 0;
-        $CPR1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Perbaikan RMP') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPR1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPR1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPR1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPR1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPR3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPR1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPR1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPR1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPR4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPR1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPR4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPR4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPR4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPR1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPR1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPR2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPR2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPR2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPR2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPR2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPR2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPR2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPR2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPR2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPR2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPR2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPR2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPR2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPR2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPR2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPR2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPR2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPR2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPR2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPR2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPR2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPR2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPR3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPR1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPR1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPR1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPR1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPR1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPR1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPR1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPR1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPR3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPR1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPR1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPR1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPR1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPR1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPR1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPR1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPR1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPR3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPR3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPR3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPR1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPR1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPR1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPR3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPR3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPR3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPR3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPR3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPR3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPR3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPR3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPR3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPR1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPR1478x50++;
-                        break;
+        // End Celup Perbaikan Tas
+        // Celup Perbaikan Rmp
+            $CPR1401x2400 = 0;   $CPR1402x1200 = 0;   $CPR1103x1800 = 0;   $CPR1104x1200 = 0;
+            $CPR3505x750  = 0;   $CPR1406x2400 = 0;   $CPR1107x1800 = 0;   $CPR1108x1200 = 0;
+            $CPR4409x3200 = 0;   $CPR1410x1800 = 0;   $CPR4411x3200 = 0;   $CPR4412x2400 = 0;
+            $CPR4413x2400 = 0;   $CPR1414x1200 = 0;   $CPR1415x1200 = 0;   $CPR2616x100  = 0;
+            $CPR2617x100  = 0;   $CPR2618x50   = 0;   $CPR2619x800  = 0;   $CPR2620x30   = 0;
+            $CPR2621x800  = 0;   $CPR2222x200  = 0;   $CPR2223x800  = 0;   $CPR2224x400  = 0;
+            $CPR2225x400  = 0;   $CPR2626x600  = 0;   $CPR2627x600  = 0;   $CPR2628x800  = 0;
+            $CPR2629x50   = 0;   $CPR2630x800  = 0;   $CPR2631x10   = 0;   $CPR2632x20   = 0;
+            $CPR2633x20   = 0;   $CPR2634x20   = 0;   $CPR2241x800  = 0;   $CPR2242x800  = 0;
+            $CPR2343x1200 = 0;   $CPR3444x600  = 0;   $CPR1445x600  = 0;   $CPR1446x600  = 0;
+            $CPR1447x600  = 0;   $CPR1448x600  = 0;   $CPR1149x600  = 0;   $CPR1450x600  = 0;
+            $CPR1451x600  = 0;   $CPR1452x600  = 0;   $CPR3453x300  = 0;   $CPR1154x300  = 0;
+            $CPR1455x300  = 0;   $CPR1456x300  = 0;   $CPR1457x300  = 0;   $CPR1458x300  = 0;
+            $CPR1459x100  = 0;   $CPR1460x100  = 0;   $CPR1461x100  = 0;   $CPR3462x100  = 0;
+            $CPR3463x100  = 0;   $CPR3464x100  = 0;   $CPR1465x50   = 0;   $CPR1466x50   = 0;
+            $CPR1467x50   = 0;   $CPR3468x30   = 0;   $CPR3469x30   = 0;   $CPR3470x50   = 0;
+            $CPR3471x50   = 0;   $CPR3472x30   = 0;   $CPR3473x30   = 0;   $CPR3474x50   = 0;
+            $CPR3475x50   = 0;   $CPR3476x150  = 0;   $CPR1477x50   = 0;   $CPR1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Perbaikan RMP') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPR1401x2400++; break;
+                        case '1402x1200': $CPR1402x1200++; break;
+                        case '1103x1800': $CPR1103x1800++; break;
+                        case '1104x1200': $CPR1104x1200++; break;
+                        case '3505x750' : $CPR3505x750++; break;
+                        case '1406x2400': $CPR1406x2400++; break;
+                        case '1107x1800': $CPR1107x1800++; break;
+                        case '1108x1200': $CPR1108x1200++; break;
+                        case '4409x3200': $CPR4409x3200++; break;
+                        case '1410x1800': $CPR1410x1800++; break;
+                        case '4411x3200': $CPR4411x3200++; break;
+                        case '4412x2400': $CPR4412x2400++; break;
+                        case '4413x2400': $CPR4413x2400++; break;
+                        case '1414x1200': $CPR1414x1200++; break;
+                        case '1415x1200': $CPR1415x1200++; break;
+                        case '2616x100' : $CPR2616x100++; break;
+                        case '2617x100' : $CPR2617x100++; break;
+                        case '2618x50'  : $CPR2618x50++; break;
+                        case '2619x800' : $CPR2619x800++; break;
+                        case '2620x30'  : $CPR2620x30++; break;
+                        case '2621x800' : $CPR2621x800++; break;
+                        case '2222x200' : $CPR2222x200++; break;
+                        case '2223x800' : $CPR2223x800++; break;
+                        case '2224x400' : $CPR2224x400++; break;
+                        case '2225x400' : $CPR2225x400++; break;
+                        case '2626x600' : $CPR2626x600++; break;
+                        case '2627x600' : $CPR2627x600++; break;
+                        case '2628x800' : $CPR2628x800++; break;
+                        case '2629x50'  : $CPR2629x50++; break;
+                        case '2630x800' : $CPR2630x800++; break;
+                        case '2631x10'  : $CPR2631x10++; break;
+                        case '2632x20'  : $CPR2632x20++; break;
+                        case '2633x20'  : $CPR2633x20++; break;
+                        case '2634x20'  : $CPR2634x20++; break;
+                        case '2241x800' : $CPR2241x800++; break;
+                        case '2242x800' : $CPR2242x800++; break;
+                        case '2343x1200': $CPR2343x1200++; break;
+                        case '3444x600' : $CPR3444x600++; break;
+                        case '1445x600' : $CPR1445x600++; break;
+                        case '1446x600' : $CPR1446x600++; break;
+                        case '1447x600' : $CPR1447x600++; break;
+                        case '1448x600' : $CPR1448x600++; break;
+                        case '1149x600' : $CPR1149x600++; break;
+                        case '1450x900' : $CPR1450x600++; break;
+                        case '1451x150' : $CPR1451x600++; break;
+                        case '1452x150' : $CPR1452x600++; break;
+                        case '3453x300' : $CPR3453x300++; break;
+                        case '1154x300' : $CPR1154x300++; break;
+                        case '1455x300' : $CPR1455x300++; break;
+                        case '1456x300' : $CPR1456x300++; break;
+                        case '1457x300' : $CPR1457x300++; break;
+                        case '1458x300' : $CPR1458x300++; break;
+                        case '1459x100' : $CPR1459x100++; break;
+                        case '1460x100' : $CPR1460x100++; break;
+                        case '1461x100' : $CPR1461x100++; break;
+                        case '3462x100' : $CPR3462x100++; break;
+                        case '3463x100' : $CPR3463x100++; break;
+                        case '3464x100' : $CPR3464x100++; break;
+                        case '1465x50'  : $CPR1465x50++; break;
+                        case '1466x50'  : $CPR1466x50++; break;
+                        case '1467x50'  : $CPR1467x50++; break;
+                        case '3468x30'  : $CPR3468x30++; break;
+                        case '3469x30'  : $CPR3469x30++; break;
+                        case '3470x50'  : $CPR3470x50++; break;
+                        case '3471x50'  : $CPR3471x50++; break;
+                        case '3472x30'  : $CPR3472x30++; break;
+                        case '3473x30'  : $CPR3473x30++; break;
+                        case '3474x50'  : $CPR3474x50++; break;
+                        case '3475x50'  : $CPR3475x50++; break;
+                        case '3476x150' : $CPR3476x150++; break;
+                        case '1477x50'  : $CPR1477x50++; break;
+                        case '1478x50'  : $CPR1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Perbaikan Rmp
-    // Celup Proses Akw
-        $CPA1401x2400 = 0;
-        $CPA1402x1200 = 0;
-        $CPA1103x1800 = 0;
-        $CPA1104x1200 = 0;
-        $CPA3505x750 = 0;
-        $CPA1406x2400 = 0;
-        $CPA1107x1800 = 0;
-        $CPA1108x1200 = 0;
-        $CPA4409x3200 = 0;
-        $CPA1410x1800 = 0;
-        $CPA4411x3200 = 0;
-        $CPA4412x2400 = 0;
-        $CPA4413x2400 = 0;
-        $CPA1414x1200 = 0;
-        $CPA1415x1200 = 0;
-        $CPA2616x100 = 0;
-        $CPA2617x100 = 0;
-        $CPA2618x50 = 0;
-        $CPA2619x800 = 0;
-        $CPA2620x30 = 0;
-        $CPA2621x800 = 0;
-        $CPA2222x200 = 0;
-        $CPA2223x800 = 0;
-        $CPA2224x400 = 0;
-        $CPA2225x400 = 0;
-        $CPA2626x600 = 0;
-        $CPA2627x600 = 0;
-        $CPA2628x800 = 0;
-        $CPA2629x50 = 0;
-        $CPA2630x800 = 0;
-        $CPA2631x10 = 0;
-        $CPA2632x20 = 0;
-        $CPA2633x20 = 0;
-        $CPA2634x20 = 0;
-        $CPA2241x800 = 0;
-        $CPA2242x800 = 0;
-        $CPA2343x1200 = 0;
-        $CPA3444x600 = 0;
-        $CPA1445x600 = 0;
-        $CPA1446x600 = 0;
-        $CPA1447x600 = 0;
-        $CPA1448x600 = 0;
-        $CPA1449x600 = 0;
-        $CPA1450x600 = 0;
-        $CPA1451x600 = 0;
-        $CPA1452x600 = 0;
-        $CPA3453x300 = 0;
-        $CPA1154x300 = 0;
-        $CPA1455x300 = 0;
-        $CPA1456x300 = 0;
-        $CPA1457x300 = 0;
-        $CPA1458x300 = 0;
-        $CPA1459x100 = 0;
-        $CPA1460x100 = 0;
-        $CPA1461x100 = 0;
-        $CPA3462x100 = 0;
-        $CPA3463x100 = 0;
-        $CPA3464x100 = 0;
-        $CPA1465x50 = 0;
-        $CPA1466x50 = 0;
-        $CPA1467x50 = 0;
-        $CPA3468x30 = 0;
-        $CPA3469x30 = 0;
-        $CPA3470x50 = 0;
-        $CPA3471x50 = 0;
-        $CPA3472x30 = 0;
-        $CPA3473x30 = 0;
-        $CPA3474x50 = 0;
-        $CPA3475x50 = 0;
-        $CPA3476x150 = 0;
-        $CPA1477x50 = 0;
-        $CPA1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Proses AKW') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPA1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPA1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPA1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPA1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPA3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPA1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPA1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPA1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPA4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPA1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPA4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPA4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPA4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPA1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPA1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPA2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPA2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPA2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPA2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPA2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPA2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPA2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPA2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPA2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPA2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPA2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPA2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPA2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPA2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPA2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPA2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPA2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPA2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPA2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPA2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPA2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPA2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPA3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPA1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPA1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPA1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPA1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPA1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPA1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPA1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPA1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPA3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPA1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPA1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPA1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPA1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPA1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPA1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPA1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPA1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPA3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPA3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPA3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPA1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPA1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPA1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPA3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPA3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPA3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPA3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPA3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPA3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPA3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPA3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPA3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPA1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPA1478x50++;
-                        break;
+        // End Celup Perbaikan Rmp
+        // Celup Proses Akw
+            $CPA1401x2400 = 0;   $CPA1402x1200 = 0;   $CPA1103x1800 = 0;   $CPA1104x1200 = 0;
+            $CPA3505x750  = 0;   $CPA1406x2400 = 0;   $CPA1107x1800 = 0;   $CPA1108x1200 = 0;
+            $CPA4409x3200 = 0;   $CPA1410x1800 = 0;   $CPA4411x3200 = 0;   $CPA4412x2400 = 0;
+            $CPA4413x2400 = 0;   $CPA1414x1200 = 0;   $CPA1415x1200 = 0;   $CPA2616x100  = 0;
+            $CPA2617x100  = 0;   $CPA2618x50   = 0;   $CPA2619x800  = 0;   $CPA2620x30   = 0;
+            $CPA2621x800  = 0;   $CPA2222x200  = 0;   $CPA2223x800  = 0;   $CPA2224x400  = 0;
+            $CPA2225x400  = 0;   $CPA2626x600  = 0;   $CPA2627x600  = 0;   $CPA2628x800  = 0;
+            $CPA2629x50   = 0;   $CPA2630x800  = 0;   $CPA2631x10   = 0;   $CPA2632x20   = 0;
+            $CPA2633x20   = 0;   $CPA2634x20   = 0;   $CPA2241x800  = 0;   $CPA2242x800  = 0;
+            $CPA2343x1200 = 0;   $CPA3444x600  = 0;   $CPA1445x600  = 0;   $CPA1446x600  = 0;
+            $CPA1447x600  = 0;   $CPA1448x600  = 0;   $CPA1149x600  = 0;   $CPA1450x600  = 0;
+            $CPA1451x600  = 0;   $CPA1452x600  = 0;   $CPA3453x300  = 0;   $CPA1154x300  = 0;
+            $CPA1455x300  = 0;   $CPA1456x300  = 0;   $CPA1457x300  = 0;   $CPA1458x300  = 0;
+            $CPA1459x100  = 0;   $CPA1460x100  = 0;   $CPA1461x100  = 0;   $CPA3462x100  = 0;
+            $CPA3463x100  = 0;   $CPA3464x100  = 0;   $CPA1465x50   = 0;   $CPA1466x50   = 0;
+            $CPA1467x50   = 0;   $CPA3468x30   = 0;   $CPA3469x30   = 0;   $CPA3470x50   = 0;
+            $CPA3471x50   = 0;   $CPA3472x30   = 0;   $CPA3473x30   = 0;   $CPA3474x50   = 0;
+            $CPA3475x50   = 0;   $CPA3476x150  = 0;   $CPA1477x50   = 0;   $CPA1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Proses Akw') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPA1401x2400++; break;
+                        case '1402x1200': $CPA1402x1200++; break;
+                        case '1103x1800': $CPA1103x1800++; break;
+                        case '1104x1200': $CPA1104x1200++; break;
+                        case '3505x750' : $CPA3505x750++; break;
+                        case '1406x2400': $CPA1406x2400++; break;
+                        case '1107x1800': $CPA1107x1800++; break;
+                        case '1108x1200': $CPA1108x1200++; break;
+                        case '4409x3200': $CPA4409x3200++; break;
+                        case '1410x1800': $CPA1410x1800++; break;
+                        case '4411x3200': $CPA4411x3200++; break;
+                        case '4412x2400': $CPA4412x2400++; break;
+                        case '4413x2400': $CPA4413x2400++; break;
+                        case '1414x1200': $CPA1414x1200++; break;
+                        case '1415x1200': $CPA1415x1200++; break;
+                        case '2616x100' : $CPA2616x100++; break;
+                        case '2617x100' : $CPA2617x100++; break;
+                        case '2618x50'  : $CPA2618x50++; break;
+                        case '2619x800' : $CPA2619x800++; break;
+                        case '2620x30'  : $CPA2620x30++; break;
+                        case '2621x800' : $CPA2621x800++; break;
+                        case '2222x200' : $CPA2222x200++; break;
+                        case '2223x800' : $CPA2223x800++; break;
+                        case '2224x400' : $CPA2224x400++; break;
+                        case '2225x400' : $CPA2225x400++; break;
+                        case '2626x600' : $CPA2626x600++; break;
+                        case '2627x600' : $CPA2627x600++; break;
+                        case '2628x800' : $CPA2628x800++; break;
+                        case '2629x50'  : $CPA2629x50++; break;
+                        case '2630x800' : $CPA2630x800++; break;
+                        case '2631x10'  : $CPA2631x10++; break;
+                        case '2632x20'  : $CPA2632x20++; break;
+                        case '2633x20'  : $CPA2633x20++; break;
+                        case '2634x20'  : $CPA2634x20++; break;
+                        case '2241x800' : $CPA2241x800++; break;
+                        case '2242x800' : $CPA2242x800++; break;
+                        case '2343x1200': $CPA2343x1200++; break;
+                        case '3444x600' : $CPA3444x600++; break;
+                        case '1445x600' : $CPA1445x600++; break;
+                        case '1446x600' : $CPA1446x600++; break;
+                        case '1447x600' : $CPA1447x600++; break;
+                        case '1448x600' : $CPA1448x600++; break;
+                        case '1149x600' : $CPA1149x600++; break;
+                        case '1450x900' : $CPA1450x600++; break;
+                        case '1451x150' : $CPA1451x600++; break;
+                        case '1452x150' : $CPA1452x600++; break;
+                        case '3453x300' : $CPA3453x300++; break;
+                        case '1154x300' : $CPA1154x300++; break;
+                        case '1455x300' : $CPA1455x300++; break;
+                        case '1456x300' : $CPA1456x300++; break;
+                        case '1457x300' : $CPA1457x300++; break;
+                        case '1458x300' : $CPA1458x300++; break;
+                        case '1459x100' : $CPA1459x100++; break;
+                        case '1460x100' : $CPA1460x100++; break;
+                        case '1461x100' : $CPA1461x100++; break;
+                        case '3462x100' : $CPA3462x100++; break;
+                        case '3463x100' : $CPA3463x100++; break;
+                        case '3464x100' : $CPA3464x100++; break;
+                        case '1465x50'  : $CPA1465x50++; break;
+                        case '1466x50'  : $CPA1466x50++; break;
+                        case '1467x50'  : $CPA1467x50++; break;
+                        case '3468x30'  : $CPA3468x30++; break;
+                        case '3469x30'  : $CPA3469x30++; break;
+                        case '3470x50'  : $CPA3470x50++; break;
+                        case '3471x50'  : $CPA3471x50++; break;
+                        case '3472x30'  : $CPA3472x30++; break;
+                        case '3473x30'  : $CPA3473x30++; break;
+                        case '3474x50'  : $CPA3474x50++; break;
+                        case '3475x50'  : $CPA3475x50++; break;
+                        case '3476x150' : $CPA3476x150++; break;
+                        case '1477x50'  : $CPA1477x50++; break;
+                        case '1478x50'  : $CPA1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Proses Akw
-    // Celup Poly Dulu (T-Side)
-        $CPDT1401x2400 = 0;
-        $CPDT1402x1200 = 0;
-        $CPDT1103x1800 = 0;
-        $CPDT1104x1200 = 0;
-        $CPDT3505x750 = 0;
-        $CPDT1406x2400 = 0;
-        $CPDT1107x1800 = 0;
-        $CPDT1108x1200 = 0;
-        $CPDT4409x3200 = 0;
-        $CPDT1410x1800 = 0;
-        $CPDT4411x3200 = 0;
-        $CPDT4412x2400 = 0;
-        $CPDT4413x2400 = 0;
-        $CPDT1414x1200 = 0;
-        $CPDT1415x1200 = 0;
-        $CPDT2616x100 = 0;
-        $CPDT2617x100 = 0;
-        $CPDT2618x50 = 0;
-        $CPDT2619x800 = 0;
-        $CPDT2620x30 = 0;
-        $CPDT2621x800 = 0;
-        $CPDT2222x200 = 0;
-        $CPDT2223x800 = 0;
-        $CPDT2224x400 = 0;
-        $CPDT2225x400 = 0;
-        $CPDT2626x600 = 0;
-        $CPDT2627x600 = 0;
-        $CPDT2628x800 = 0;
-        $CPDT2629x50 = 0;
-        $CPDT2630x800 = 0;
-        $CPDT2631x10 = 0;
-        $CPDT2632x20 = 0;
-        $CPDT2633x20 = 0;
-        $CPDT2634x20 = 0;
-        $CPDT2241x800 = 0;
-        $CPDT2242x800 = 0;
-        $CPDT2343x1200 = 0;
-        $CPDT3444x600 = 0;
-        $CPDT1445x600 = 0;
-        $CPDT1446x600 = 0;
-        $CPDT1447x600 = 0;
-        $CPDT1448x600 = 0;
-        $CPDT1449x600 = 0;
-        $CPDT1450x600 = 0;
-        $CPDT1451x600 = 0;
-        $CPDT1452x600 = 0;
-        $CPDT3453x300 = 0;
-        $CPDT1154x300 = 0;
-        $CPDT1455x300 = 0;
-        $CPDT1456x300 = 0;
-        $CPDT1457x300 = 0;
-        $CPDT1458x300 = 0;
-        $CPDT1459x100 = 0;
-        $CPDT1460x100 = 0;
-        $CPDT1461x100 = 0;
-        $CPDT3462x100 = 0;
-        $CPDT3463x100 = 0;
-        $CPDT3464x100 = 0;
-        $CPDT1465x50 = 0;
-        $CPDT1466x50 = 0;
-        $CPDT1467x50 = 0;
-        $CPDT3468x30 = 0;
-        $CPDT3469x30 = 0;
-        $CPDT3470x50 = 0;
-        $CPDT3471x50 = 0;
-        $CPDT3472x30 = 0;
-        $CPDT3473x30 = 0;
-        $CPDT3474x50 = 0;
-        $CPDT3475x50 = 0;
-        $CPDT3476x150 = 0;
-        $CPDT1477x50 = 0;
-        $CPDT1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Celup Poly Dulu (T-Side)') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CPDT1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CPDT1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CPDT1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CPDT1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CPDT3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CPDT1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CPDT1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CPDT1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CPDT4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CPDT1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CPDT4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CPDT4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CPDT4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CPDT1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CPDT1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CPDT2616x100++;
-                        break;
-                    case '2617x100':
-                        $CPDT2617x100++;
-                        break;
-                    case '2618x50':
-                        $CPDT2618x50++;
-                        break;
-                    case '2619x800':
-                        $CPDT2619x800++;
-                        break;
-                    case '2620x30':
-                        $CPDT2620x30++;
-                        break;
-                    case '2621x800':
-                        $CPDT2621x800++;
-                        break;
-                    case '2222x200':
-                        $CPDT2222x200++;
-                        break;
-                    case '2223x800':
-                        $CPDT2223x800++;
-                        break;
-                    case '2224x400':
-                        $CPDT2224x400++;
-                        break;
-                    case '2225x400':
-                        $CPDT2225x400++;
-                        break;
-                    case '2626x600':
-                        $CPDT2626x600++;
-                        break;
-                    case '2627x600':
-                        $CPDT2627x600++;
-                        break;
-                    case '2628x800':
-                        $CPDT2628x800++;
-                        break;
-                    case '2629x50':
-                        $CPDT2629x50++;
-                        break;
-                    case '2630x800':
-                        $CPDT2630x800++;
-                        break;
-                    case '2631x10':
-                        $CPDT2631x10++;
-                        break;
-                    case '2632x20':
-                        $CPDT2632x20++;
-                        break;
-                    case '2633x20':
-                        $CPDT2633x20++;
-                        break;
-                    case '2634x20':
-                        $CPDT2634x20++;
-                        break;
-                    case '2241x800':
-                        $CPDT2241x800++;
-                        break;
-                    case '2242x800':
-                        $CPDT2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CPDT2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CPDT3444x600++;
-                        break;
-                    case '1445x600':
-                        $CPDT1445x600++;
-                        break;
-                    case '1446x600':
-                        $CPDT1446x600++;
-                        break;
-                    case '1447x600':
-                        $CPDT1447x600++;
-                        break;
-                    case '1448x600':
-                        $CPDT1448x600++;
-                        break;
-                    case '1449x600':
-                        $CPDT1449x600++;
-                        break;
-                    case '1450x900':
-                        $CPDT1450x600++;
-                        break;
-                    case '1451x150':
-                        $CPDT1451x600++;
-                        break;
-                    case '1452x150':
-                        $CPDT1452x600++;
-                        break;
-                    case '3453x300':
-                        $CPDT3453x300++;
-                        break;
-                    case '1154x300':
-                        $CPDT1154x300++;
-                        break;
-                    case '1455x300':
-                        $CPDT1455x300++;
-                        break;
-                    case '1456x300':
-                        $CPDT1456x300++;
-                        break;
-                    case '1457x300':
-                        $CPDT1457x300++;
-                        break;
-                    case '1458x300':
-                        $CPDT1458x300++;
-                        break;
-                    case '1459x100':
-                        $CPDT1459x100++;
-                        break;
-                    case '1460x100':
-                        $CPDT1460x100++;
-                        break;
-                    case '1461x100':
-                        $CPDT1461x100++;
-                        break;
-                    case '3462x100':
-                        $CPDT3462x100++;
-                        break;
-                    case '3463x100':
-                        $CPDT3463x100++;
-                        break;
-                    case '3464x100':
-                        $CPDT3464x100++;
-                        break;
-                    case '1465x50':
-                        $CPDT1465x50++;
-                        break;
-                    case '1466x50':
-                        $CPDT1466x50++;
-                        break;
-                    case '1467x50':
-                        $CPDT1467x50++;
-                        break;
-                    case '3468x30':
-                        $CPDT3468x30++;
-                        break;
-                    case '3469x30':
-                        $CPDT3469x30++;
-                        break;
-                    case '3470x50':
-                        $CPDT3470x50++;
-                        break;
-                    case '3471x50':
-                        $CPDT3471x50++;
-                        break;
-                    case '3472x30':
-                        $CPDT3472x30++;
-                        break;
-                    case '3473x30':
-                        $CPDT3473x30++;
-                        break;
-                    case '3474x50':
-                        $CPDT3474x50++;
-                        break;
-                    case '3475x50':
-                        $CPDT3475x50++;
-                        break;
-                    case '3476x150':
-                        $CPDT3476x150++;
-                        break;
-                    case '1477x50':
-                        $CPDT1477x50++;
-                        break;
-                    case '1478x50':
-                        $CPDT1478x50++;
-                        break;
+        // End Celup Proses Akw
+        // Celup Poly Dulu (T-Side)
+            $CPDT1401x2400 = 0;   $CPDT1402x1200 = 0;   $CPDT1103x1800 = 0;   $CPDT1104x1200 = 0;
+            $CPDT3505x750  = 0;   $CPDT1406x2400 = 0;   $CPDT1107x1800 = 0;   $CPDT1108x1200 = 0;
+            $CPDT4409x3200 = 0;   $CPDT1410x1800 = 0;   $CPDT4411x3200 = 0;   $CPDT4412x2400 = 0;
+            $CPDT4413x2400 = 0;   $CPDT1414x1200 = 0;   $CPDT1415x1200 = 0;   $CPDT2616x100  = 0;
+            $CPDT2617x100  = 0;   $CPDT2618x50   = 0;   $CPDT2619x800  = 0;   $CPDT2620x30   = 0;
+            $CPDT2621x800  = 0;   $CPDT2222x200  = 0;   $CPDT2223x800  = 0;   $CPDT2224x400  = 0;
+            $CPDT2225x400  = 0;   $CPDT2626x600  = 0;   $CPDT2627x600  = 0;   $CPDT2628x800  = 0;
+            $CPDT2629x50   = 0;   $CPDT2630x800  = 0;   $CPDT2631x10   = 0;   $CPDT2632x20   = 0;
+            $CPDT2633x20   = 0;   $CPDT2634x20   = 0;   $CPDT2241x800  = 0;   $CPDT2242x800  = 0;
+            $CPDT2343x1200 = 0;   $CPDT3444x600  = 0;   $CPDT1445x600  = 0;   $CPDT1446x600  = 0;
+            $CPDT1447x600  = 0;   $CPDT1448x600  = 0;   $CPDT1149x600  = 0;   $CPDT1450x600  = 0;
+            $CPDT1451x600  = 0;   $CPDT1452x600  = 0;   $CPDT3453x300  = 0;   $CPDT1154x300  = 0;
+            $CPDT1455x300  = 0;   $CPDT1456x300  = 0;   $CPDT1457x300  = 0;   $CPDT1458x300  = 0;
+            $CPDT1459x100  = 0;   $CPDT1460x100  = 0;   $CPDT1461x100  = 0;   $CPDT3462x100  = 0;
+            $CPDT3463x100  = 0;   $CPDT3464x100  = 0;   $CPDT1465x50   = 0;   $CPDT1466x50   = 0;
+            $CPDT1467x50   = 0;   $CPDT3468x30   = 0;   $CPDT3469x30   = 0;   $CPDT3470x50   = 0;
+            $CPDT3471x50   = 0;   $CPDT3472x30   = 0;   $CPDT3473x30   = 0;   $CPDT3474x50   = 0;
+            $CPDT3475x50   = 0;   $CPDT3476x150  = 0;   $CPDT1477x50   = 0;   $CPDT1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Celup Poly Dulu (T-Side)') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CPDT1401x2400++; break;
+                        case '1402x1200': $CPDT1402x1200++; break;
+                        case '1103x1800': $CPDT1103x1800++; break;
+                        case '1104x1200': $CPDT1104x1200++; break;
+                        case '3505x750' : $CPDT3505x750++; break;
+                        case '1406x2400': $CPDT1406x2400++; break;
+                        case '1107x1800': $CPDT1107x1800++; break;
+                        case '1108x1200': $CPDT1108x1200++; break;
+                        case '4409x3200': $CPDT4409x3200++; break;
+                        case '1410x1800': $CPDT1410x1800++; break;
+                        case '4411x3200': $CPDT4411x3200++; break;
+                        case '4412x2400': $CPDT4412x2400++; break;
+                        case '4413x2400': $CPDT4413x2400++; break;
+                        case '1414x1200': $CPDT1414x1200++; break;
+                        case '1415x1200': $CPDT1415x1200++; break;
+                        case '2616x100' : $CPDT2616x100++; break;
+                        case '2617x100' : $CPDT2617x100++; break;
+                        case '2618x50'  : $CPDT2618x50++; break;
+                        case '2619x800' : $CPDT2619x800++; break;
+                        case '2620x30'  : $CPDT2620x30++; break;
+                        case '2621x800' : $CPDT2621x800++; break;
+                        case '2222x200' : $CPDT2222x200++; break;
+                        case '2223x800' : $CPDT2223x800++; break;
+                        case '2224x400' : $CPDT2224x400++; break;
+                        case '2225x400' : $CPDT2225x400++; break;
+                        case '2626x600' : $CPDT2626x600++; break;
+                        case '2627x600' : $CPDT2627x600++; break;
+                        case '2628x800' : $CPDT2628x800++; break;
+                        case '2629x50'  : $CPDT2629x50++; break;
+                        case '2630x800' : $CPDT2630x800++; break;
+                        case '2631x10'  : $CPDT2631x10++; break;
+                        case '2632x20'  : $CPDT2632x20++; break;
+                        case '2633x20'  : $CPDT2633x20++; break;
+                        case '2634x20'  : $CPDT2634x20++; break;
+                        case '2241x800' : $CPDT2241x800++; break;
+                        case '2242x800' : $CPDT2242x800++; break;
+                        case '2343x1200': $CPDT2343x1200++; break;
+                        case '3444x600' : $CPDT3444x600++; break;
+                        case '1445x600' : $CPDT1445x600++; break;
+                        case '1446x600' : $CPDT1446x600++; break;
+                        case '1447x600' : $CPDT1447x600++; break;
+                        case '1448x600' : $CPDT1448x600++; break;
+                        case '1149x600' : $CPDT1149x600++; break;
+                        case '1450x900' : $CPDT1450x600++; break;
+                        case '1451x150' : $CPDT1451x600++; break;
+                        case '1452x150' : $CPDT1452x600++; break;
+                        case '3453x300' : $CPDT3453x300++; break;
+                        case '1154x300' : $CPDT1154x300++; break;
+                        case '1455x300' : $CPDT1455x300++; break;
+                        case '1456x300' : $CPDT1456x300++; break;
+                        case '1457x300' : $CPDT1457x300++; break;
+                        case '1458x300' : $CPDT1458x300++; break;
+                        case '1459x100' : $CPDT1459x100++; break;
+                        case '1460x100' : $CPDT1460x100++; break;
+                        case '1461x100' : $CPDT1461x100++; break;
+                        case '3462x100' : $CPDT3462x100++; break;
+                        case '3463x100' : $CPDT3463x100++; break;
+                        case '3464x100' : $CPDT3464x100++; break;
+                        case '1465x50'  : $CPDT1465x50++; break;
+                        case '1466x50'  : $CPDT1466x50++; break;
+                        case '1467x50'  : $CPDT1467x50++; break;
+                        case '3468x30'  : $CPDT3468x30++; break;
+                        case '3469x30'  : $CPDT3469x30++; break;
+                        case '3470x50'  : $CPDT3470x50++; break;
+                        case '3471x50'  : $CPDT3471x50++; break;
+                        case '3472x30'  : $CPDT3472x30++; break;
+                        case '3473x30'  : $CPDT3473x30++; break;
+                        case '3474x50'  : $CPDT3474x50++; break;
+                        case '3475x50'  : $CPDT3475x50++; break;
+                        case '3476x150' : $CPDT3476x150++; break;
+                        case '1477x50'  : $CPDT1477x50++; break;
+                        case '1478x50'  : $CPDT1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Celup Poly Dulu (T-Side)
-    // Cuci Misty
-        $CM1401x2400 = 0;
-        $CM1402x1200 = 0;
-        $CM1103x1800 = 0;
-        $CM1104x1200 = 0;
-        $CM3505x750 = 0;
-        $CM1406x2400 = 0;
-        $CM1107x1800 = 0;
-        $CM1108x1200 = 0;
-        $CM4409x3200 = 0;
-        $CM1410x1800 = 0;
-        $CM4411x3200 = 0;
-        $CM4412x2400 = 0;
-        $CM4413x2400 = 0;
-        $CM1414x1200 = 0;
-        $CM1415x1200 = 0;
-        $CM2616x100 = 0;
-        $CM2617x100 = 0;
-        $CM2618x50 = 0;
-        $CM2619x800 = 0;
-        $CM2620x30 = 0;
-        $CM2621x800 = 0;
-        $CM2222x200 = 0;
-        $CM2223x800 = 0;
-        $CM2224x400 = 0;
-        $CM2225x400 = 0;
-        $CM2626x600 = 0;
-        $CM2627x600 = 0;
-        $CM2628x800 = 0;
-        $CM2629x50 = 0;
-        $CM2630x800 = 0;
-        $CM2631x10 = 0;
-        $CM2632x20 = 0;
-        $CM2633x20 = 0;
-        $CM2634x20 = 0;
-        $CM2241x800 = 0;
-        $CM2242x800 = 0;
-        $CM2343x1200 = 0;
-        $CM3444x600 = 0;
-        $CM1445x600 = 0;
-        $CM1446x600 = 0;
-        $CM1447x600 = 0;
-        $CM1448x600 = 0;
-        $CM1449x600 = 0;
-        $CM1450x600 = 0;
-        $CM1451x600 = 0;
-        $CM1452x600 = 0;
-        $CM3453x300 = 0;
-        $CM1154x300 = 0;
-        $CM1455x300 = 0;
-        $CM1456x300 = 0;
-        $CM1457x300 = 0;
-        $CM1458x300 = 0;
-        $CM1459x100 = 0;
-        $CM1460x100 = 0;
-        $CM1461x100 = 0;
-        $CM3462x100 = 0;
-        $CM3463x100 = 0;
-        $CM3464x100 = 0;
-        $CM1465x50 = 0;
-        $CM1466x50 = 0;
-        $CM1467x50 = 0;
-        $CM3468x30 = 0;
-        $CM3469x30 = 0;
-        $CM3470x50 = 0;
-        $CM3471x50 = 0;
-        $CM3472x30 = 0;
-        $CM3473x30 = 0;
-        $CM3474x50 = 0;
-        $CM3475x50 = 0;
-        $CM3476x150 = 0;
-        $CM1477x50 = 0;
-        $CM1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Cuci Misty') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CM1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CM1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CM1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CM1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CM3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CM1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CM1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CM1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CM4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CM1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CM4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CM4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CM4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CM1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CM1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CM2616x100++;
-                        break;
-                    case '2617x100':
-                        $CM2617x100++;
-                        break;
-                    case '2618x50':
-                        $CM2618x50++;
-                        break;
-                    case '2619x800':
-                        $CM2619x800++;
-                        break;
-                    case '2620x30':
-                        $CM2620x30++;
-                        break;
-                    case '2621x800':
-                        $CM2621x800++;
-                        break;
-                    case '2222x200':
-                        $CM2222x200++;
-                        break;
-                    case '2223x800':
-                        $CM2223x800++;
-                        break;
-                    case '2224x400':
-                        $CM2224x400++;
-                        break;
-                    case '2225x400':
-                        $CM2225x400++;
-                        break;
-                    case '2626x600':
-                        $CM2626x600++;
-                        break;
-                    case '2627x600':
-                        $CM2627x600++;
-                        break;
-                    case '2628x800':
-                        $CM2628x800++;
-                        break;
-                    case '2629x50':
-                        $CM2629x50++;
-                        break;
-                    case '2630x800':
-                        $CM2630x800++;
-                        break;
-                    case '2631x10':
-                        $CM2631x10++;
-                        break;
-                    case '2632x20':
-                        $CM2632x20++;
-                        break;
-                    case '2633x20':
-                        $CM2633x20++;
-                        break;
-                    case '2634x20':
-                        $CM2634x20++;
-                        break;
-                    case '2241x800':
-                        $CM2241x800++;
-                        break;
-                    case '2242x800':
-                        $CM2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CM2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CM3444x600++;
-                        break;
-                    case '1445x600':
-                        $CM1445x600++;
-                        break;
-                    case '1446x600':
-                        $CM1446x600++;
-                        break;
-                    case '1447x600':
-                        $CM1447x600++;
-                        break;
-                    case '1448x600':
-                        $CM1448x600++;
-                        break;
-                    case '1449x600':
-                        $CM1449x600++;
-                        break;
-                    case '1450x900':
-                        $CM1450x600++;
-                        break;
-                    case '1451x150':
-                        $CM1451x600++;
-                        break;
-                    case '1452x150':
-                        $CM1452x600++;
-                        break;
-                    case '3453x300':
-                        $CM3453x300++;
-                        break;
-                    case '1154x300':
-                        $CM1154x300++;
-                        break;
-                    case '1455x300':
-                        $CM1455x300++;
-                        break;
-                    case '1456x300':
-                        $CM1456x300++;
-                        break;
-                    case '1457x300':
-                        $CM1457x300++;
-                        break;
-                    case '1458x300':
-                        $CM1458x300++;
-                        break;
-                    case '1459x100':
-                        $CM1459x100++;
-                        break;
-                    case '1460x100':
-                        $CM1460x100++;
-                        break;
-                    case '1461x100':
-                        $CM1461x100++;
-                        break;
-                    case '3462x100':
-                        $CM3462x100++;
-                        break;
-                    case '3463x100':
-                        $CM3463x100++;
-                        break;
-                    case '3464x100':
-                        $CM3464x100++;
-                        break;
-                    case '1465x50':
-                        $CM1465x50++;
-                        break;
-                    case '1466x50':
-                        $CM1466x50++;
-                        break;
-                    case '1467x50':
-                        $CM1467x50++;
-                        break;
-                    case '3468x30':
-                        $CM3468x30++;
-                        break;
-                    case '3469x30':
-                        $CM3469x30++;
-                        break;
-                    case '3470x50':
-                        $CM3470x50++;
-                        break;
-                    case '3471x50':
-                        $CM3471x50++;
-                        break;
-                    case '3472x30':
-                        $CM3472x30++;
-                        break;
-                    case '3473x30':
-                        $CM3473x30++;
-                        break;
-                    case '3474x50':
-                        $CM3474x50++;
-                        break;
-                    case '3475x50':
-                        $CM3475x50++;
-                        break;
-                    case '3476x150':
-                        $CM3476x150++;
-                        break;
-                    case '1477x50':
-                        $CM1477x50++;
-                        break;
-                    case '1478x50':
-                        $CM1478x50++;
-                        break;
+        // End Celup Poly Dulu (T-Side)
+        // Cuci Misty
+            $CM1401x2400 = 0;    $CM1402x1200 = 0;    $CM1103x1800 = 0;    $CM1104x1200 = 0;
+            $CM3505x750  = 0;    $CM1406x2400 = 0;    $CM1107x1800 = 0;    $CM1108x1200 = 0;
+            $CM4409x3200 = 0;    $CM1410x1800 = 0;    $CM4411x3200 = 0;    $CM4412x2400 = 0;
+            $CM4413x2400 = 0;    $CM1414x1200 = 0;    $CM1415x1200 = 0;    $CM2616x100  = 0;
+            $CM2617x100  = 0;    $CM2618x50   = 0;    $CM2619x800  = 0;    $CM2620x30   = 0;
+            $CM2621x800  = 0;    $CM2222x200  = 0;    $CM2223x800  = 0;    $CM2224x400  = 0;
+            $CM2225x400  = 0;    $CM2626x600  = 0;    $CM2627x600  = 0;    $CM2628x800  = 0;
+            $CM2629x50   = 0;    $CM2630x800  = 0;    $CM2631x10   = 0;    $CM2632x20   = 0;
+            $CM2633x20   = 0;    $CM2634x20   = 0;    $CM2241x800  = 0;    $CM2242x800  = 0;
+            $CM2343x1200 = 0;    $CM3444x600  = 0;    $CM1445x600  = 0;    $CM1446x600  = 0;
+            $CM1447x600  = 0;    $CM1448x600  = 0;    $CM1149x600  = 0;    $CM1450x600  = 0;
+            $CM1451x600  = 0;    $CM1452x600  = 0;    $CM3453x300  = 0;    $CM1154x300  = 0;
+            $CM1455x300  = 0;    $CM1456x300  = 0;    $CM1457x300  = 0;    $CM1458x300  = 0;
+            $CM1459x100  = 0;    $CM1460x100  = 0;    $CM1461x100  = 0;    $CM3462x100  = 0;
+            $CM3463x100  = 0;    $CM3464x100  = 0;    $CM1465x50   = 0;    $CM1466x50   = 0;
+            $CM1467x50   = 0;    $CM3468x30   = 0;    $CM3469x30   = 0;    $CM3470x50   = 0;
+            $CM3471x50   = 0;    $CM3472x30   = 0;    $CM3473x30   = 0;    $CM3474x50   = 0;
+            $CM3475x50   = 0;    $CM3476x150  = 0;    $CM1477x50   = 0;    $CM1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Cusi Misty') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CM1401x2400++; break;
+                        case '1402x1200': $CM1402x1200++; break;
+                        case '1103x1800': $CM1103x1800++; break;
+                        case '1104x1200': $CM1104x1200++; break;
+                        case '3505x750' : $CM3505x750++; break;
+                        case '1406x2400': $CM1406x2400++; break;
+                        case '1107x1800': $CM1107x1800++; break;
+                        case '1108x1200': $CM1108x1200++; break;
+                        case '4409x3200': $CM4409x3200++; break;
+                        case '1410x1800': $CM1410x1800++; break;
+                        case '4411x3200': $CM4411x3200++; break;
+                        case '4412x2400': $CM4412x2400++; break;
+                        case '4413x2400': $CM4413x2400++; break;
+                        case '1414x1200': $CM1414x1200++; break;
+                        case '1415x1200': $CM1415x1200++; break;
+                        case '2616x100' : $CM2616x100++; break;
+                        case '2617x100' : $CM2617x100++; break;
+                        case '2618x50'  : $CM2618x50++; break;
+                        case '2619x800' : $CM2619x800++; break;
+                        case '2620x30'  : $CM2620x30++; break;
+                        case '2621x800' : $CM2621x800++; break;
+                        case '2222x200' : $CM2222x200++; break;
+                        case '2223x800' : $CM2223x800++; break;
+                        case '2224x400' : $CM2224x400++; break;
+                        case '2225x400' : $CM2225x400++; break;
+                        case '2626x600' : $CM2626x600++; break;
+                        case '2627x600' : $CM2627x600++; break;
+                        case '2628x800' : $CM2628x800++; break;
+                        case '2629x50'  : $CM2629x50++; break;
+                        case '2630x800' : $CM2630x800++; break;
+                        case '2631x10'  : $CM2631x10++; break;
+                        case '2632x20'  : $CM2632x20++; break;
+                        case '2633x20'  : $CM2633x20++; break;
+                        case '2634x20'  : $CM2634x20++; break;
+                        case '2241x800' : $CM2241x800++; break;
+                        case '2242x800' : $CM2242x800++; break;
+                        case '2343x1200': $CM2343x1200++; break;
+                        case '3444x600' : $CM3444x600++; break;
+                        case '1445x600' : $CM1445x600++; break;
+                        case '1446x600' : $CM1446x600++; break;
+                        case '1447x600' : $CM1447x600++; break;
+                        case '1448x600' : $CM1448x600++; break;
+                        case '1149x600' : $CM1149x600++; break;
+                        case '1450x900' : $CM1450x600++; break;
+                        case '1451x150' : $CM1451x600++; break;
+                        case '1452x150' : $CM1452x600++; break;
+                        case '3453x300' : $CM3453x300++; break;
+                        case '1154x300' : $CM1154x300++; break;
+                        case '1455x300' : $CM1455x300++; break;
+                        case '1456x300' : $CM1456x300++; break;
+                        case '1457x300' : $CM1457x300++; break;
+                        case '1458x300' : $CM1458x300++; break;
+                        case '1459x100' : $CM1459x100++; break;
+                        case '1460x100' : $CM1460x100++; break;
+                        case '1461x100' : $CM1461x100++; break;
+                        case '3462x100' : $CM3462x100++; break;
+                        case '3463x100' : $CM3463x100++; break;
+                        case '3464x100' : $CM3464x100++; break;
+                        case '1465x50'  : $CM1465x50++; break;
+                        case '1466x50'  : $CM1466x50++; break;
+                        case '1467x50'  : $CM1467x50++; break;
+                        case '3468x30'  : $CM3468x30++; break;
+                        case '3469x30'  : $CM3469x30++; break;
+                        case '3470x50'  : $CM3470x50++; break;
+                        case '3471x50'  : $CM3471x50++; break;
+                        case '3472x30'  : $CM3472x30++; break;
+                        case '3473x30'  : $CM3473x30++; break;
+                        case '3474x50'  : $CM3474x50++; break;
+                        case '3475x50'  : $CM3475x50++; break;
+                        case '3476x150' : $CM3476x150++; break;
+                        case '1477x50'  : $CM1477x50++; break;
+                        case '1478x50'  : $CM1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Cuci Misty
-    // Cuci Yarn Dye (Y/D)
-        $CYD1401x2400 = 0;
-        $CYD1402x1200 = 0;
-        $CYD1103x1800 = 0;
-        $CYD1104x1200 = 0;
-        $CYD3505x750 = 0;
-        $CYD1406x2400 = 0;
-        $CYD1107x1800 = 0;
-        $CYD1108x1200 = 0;
-        $CYD4409x3200 = 0;
-        $CYD1410x1800 = 0;
-        $CYD4411x3200 = 0;
-        $CYD4412x2400 = 0;
-        $CYD4413x2400 = 0;
-        $CYD1414x1200 = 0;
-        $CYD1415x1200 = 0;
-        $CYD2616x100 = 0;
-        $CYD2617x100 = 0;
-        $CYD2618x50 = 0;
-        $CYD2619x800 = 0;
-        $CYD2620x30 = 0;
-        $CYD2621x800 = 0;
-        $CYD2222x200 = 0;
-        $CYD2223x800 = 0;
-        $CYD2224x400 = 0;
-        $CYD2225x400 = 0;
-        $CYD2626x600 = 0;
-        $CYD2627x600 = 0;
-        $CYD2628x800 = 0;
-        $CYD2629x50 = 0;
-        $CYD2630x800 = 0;
-        $CYD2631x10 = 0;
-        $CYD2632x20 = 0;
-        $CYD2633x20 = 0;
-        $CYD2634x20 = 0;
-        $CYD2241x800 = 0;
-        $CYD2242x800 = 0;
-        $CYD2343x1200 = 0;
-        $CYD3444x600 = 0;
-        $CYD1445x600 = 0;
-        $CYD1446x600 = 0;
-        $CYD1447x600 = 0;
-        $CYD1448x600 = 0;
-        $CYD1449x600 = 0;
-        $CYD1450x600 = 0;
-        $CYD1451x600 = 0;
-        $CYD1452x600 = 0;
-        $CYD3453x300 = 0;
-        $CYD1154x300 = 0;
-        $CYD1455x300 = 0;
-        $CYD1456x300 = 0;
-        $CYD1457x300 = 0;
-        $CYD1458x300 = 0;
-        $CYD1459x100 = 0;
-        $CYD1460x100 = 0;
-        $CYD1461x100 = 0;
-        $CYD3462x100 = 0;
-        $CYD3463x100 = 0;
-        $CYD3464x100 = 0;
-        $CYD1465x50 = 0;
-        $CYD1466x50 = 0;
-        $CYD1467x50 = 0;
-        $CYD3468x30 = 0;
-        $CYD3469x30 = 0;
-        $CYD3470x50 = 0;
-        $CYD3471x50 = 0;
-        $CYD3472x30 = 0;
-        $CYD3473x30 = 0;
-        $CYD3474x50 = 0;
-        $CYD3475x50 = 0;
-        $CYD3476x150 = 0;
-        $CYD1477x50 = 0;
-        $CYD1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Cuci Yarn Dye (Y/D)') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $CYD1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $CYD1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $CYD1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $CYD1104x1200++;
-                        break;
-                    case '3505x750':
-                        $CYD3505x750++;
-                        break;
-                    case '1406x2400':
-                        $CYD1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $CYD1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $CYD1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $CYD4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $CYD1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $CYD4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $CYD4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $CYD4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $CYD1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $CYD1415x1200++;
-                        break;
-                    case '2616x100':
-                        $CYD2616x100++;
-                        break;
-                    case '2617x100':
-                        $CYD2617x100++;
-                        break;
-                    case '2618x50':
-                        $CYD2618x50++;
-                        break;
-                    case '2619x800':
-                        $CYD2619x800++;
-                        break;
-                    case '2620x30':
-                        $CYD2620x30++;
-                        break;
-                    case '2621x800':
-                        $CYD2621x800++;
-                        break;
-                    case '2222x200':
-                        $CYD2222x200++;
-                        break;
-                    case '2223x800':
-                        $CYD2223x800++;
-                        break;
-                    case '2224x400':
-                        $CYD2224x400++;
-                        break;
-                    case '2225x400':
-                        $CYD2225x400++;
-                        break;
-                    case '2626x600':
-                        $CYD2626x600++;
-                        break;
-                    case '2627x600':
-                        $CYD2627x600++;
-                        break;
-                    case '2628x800':
-                        $CYD2628x800++;
-                        break;
-                    case '2629x50':
-                        $CYD2629x50++;
-                        break;
-                    case '2630x800':
-                        $CYD2630x800++;
-                        break;
-                    case '2631x10':
-                        $CYD2631x10++;
-                        break;
-                    case '2632x20':
-                        $CYD2632x20++;
-                        break;
-                    case '2633x20':
-                        $CYD2633x20++;
-                        break;
-                    case '2634x20':
-                        $CYD2634x20++;
-                        break;
-                    case '2241x800':
-                        $CYD2241x800++;
-                        break;
-                    case '2242x800':
-                        $CYD2242x800++;
-                        break;
-                    case '2343x1200':
-                        $CYD2343x1200++;
-                        break;
-                    case '3444x600':
-                        $CYD3444x600++;
-                        break;
-                    case '1445x600':
-                        $CYD1445x600++;
-                        break;
-                    case '1446x600':
-                        $CYD1446x600++;
-                        break;
-                    case '1447x600':
-                        $CYD1447x600++;
-                        break;
-                    case '1448x600':
-                        $CYD1448x600++;
-                        break;
-                    case '1449x600':
-                        $CYD1449x600++;
-                        break;
-                    case '1450x900':
-                        $CYD1450x600++;
-                        break;
-                    case '1451x150':
-                        $CYD1451x600++;
-                        break;
-                    case '1452x150':
-                        $CYD1452x600++;
-                        break;
-                    case '3453x300':
-                        $CYD3453x300++;
-                        break;
-                    case '1154x300':
-                        $CYD1154x300++;
-                        break;
-                    case '1455x300':
-                        $CYD1455x300++;
-                        break;
-                    case '1456x300':
-                        $CYD1456x300++;
-                        break;
-                    case '1457x300':
-                        $CYD1457x300++;
-                        break;
-                    case '1458x300':
-                        $CYD1458x300++;
-                        break;
-                    case '1459x100':
-                        $CYD1459x100++;
-                        break;
-                    case '1460x100':
-                        $CYD1460x100++;
-                        break;
-                    case '1461x100':
-                        $CYD1461x100++;
-                        break;
-                    case '3462x100':
-                        $CYD3462x100++;
-                        break;
-                    case '3463x100':
-                        $CYD3463x100++;
-                        break;
-                    case '3464x100':
-                        $CYD3464x100++;
-                        break;
-                    case '1465x50':
-                        $CYD1465x50++;
-                        break;
-                    case '1466x50':
-                        $CYD1466x50++;
-                        break;
-                    case '1467x50':
-                        $CYD1467x50++;
-                        break;
-                    case '3468x30':
-                        $CYD3468x30++;
-                        break;
-                    case '3469x30':
-                        $CYD3469x30++;
-                        break;
-                    case '3470x50':
-                        $CYD3470x50++;
-                        break;
-                    case '3471x50':
-                        $CYD3471x50++;
-                        break;
-                    case '3472x30':
-                        $CYD3472x30++;
-                        break;
-                    case '3473x30':
-                        $CYD3473x30++;
-                        break;
-                    case '3474x50':
-                        $CYD3474x50++;
-                        break;
-                    case '3475x50':
-                        $CYD3475x50++;
-                        break;
-                    case '3476x150':
-                        $CYD3476x150++;
-                        break;
-                    case '1477x50':
-                        $CYD1477x50++;
-                        break;
-                    case '1478x50':
-                        $CYD1478x50++;
-                        break;
+        // End Cuci Misty
+        // Cuci Yarn Dye (Y/D)
+            $CYD1401x2400 = 0;   $CYD1402x1200 = 0;   $CYD1103x1800 = 0;   $CYD1104x1200 = 0;
+            $CYD3505x750  = 0;   $CYD1406x2400 = 0;   $CYD1107x1800 = 0;   $CYD1108x1200 = 0;
+            $CYD4409x3200 = 0;   $CYD1410x1800 = 0;   $CYD4411x3200 = 0;   $CYD4412x2400 = 0;
+            $CYD4413x2400 = 0;   $CYD1414x1200 = 0;   $CYD1415x1200 = 0;   $CYD2616x100  = 0;
+            $CYD2617x100  = 0;   $CYD2618x50   = 0;   $CYD2619x800  = 0;   $CYD2620x30   = 0;
+            $CYD2621x800  = 0;   $CYD2222x200  = 0;   $CYD2223x800  = 0;   $CYD2224x400  = 0;
+            $CYD2225x400  = 0;   $CYD2626x600  = 0;   $CYD2627x600  = 0;   $CYD2628x800  = 0;
+            $CYD2629x50   = 0;   $CYD2630x800  = 0;   $CYD2631x10   = 0;   $CYD2632x20   = 0;
+            $CYD2633x20   = 0;   $CYD2634x20   = 0;   $CYD2241x800  = 0;   $CYD2242x800  = 0;
+            $CYD2343x1200 = 0;   $CYD3444x600  = 0;   $CYD1445x600  = 0;   $CYD1446x600  = 0;
+            $CYD1447x600  = 0;   $CYD1448x600  = 0;   $CYD1149x600  = 0;   $CYD1450x600  = 0;
+            $CYD1451x600  = 0;   $CYD1452x600  = 0;   $CYD3453x300  = 0;   $CYD1154x300  = 0;
+            $CYD1455x300  = 0;   $CYD1456x300  = 0;   $CYD1457x300  = 0;   $CYD1458x300  = 0;
+            $CYD1459x100  = 0;   $CYD1460x100  = 0;   $CYD1461x100  = 0;   $CYD3462x100  = 0;
+            $CYD3463x100  = 0;   $CYD3464x100  = 0;   $CYD1465x50   = 0;   $CYD1466x50   = 0;
+            $CYD1467x50   = 0;   $CYD3468x30   = 0;   $CYD3469x30   = 0;   $CYD3470x50   = 0;
+            $CYD3471x50   = 0;   $CYD3472x30   = 0;   $CYD3473x30   = 0;   $CYD3474x50   = 0;
+            $CYD3475x50   = 0;   $CYD3476x150  = 0;   $CYD1477x50   = 0;   $CYD1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Cuci Yarn Dye (Y/D)') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $CYD1401x2400++; break;
+                        case '1402x1200': $CYD1402x1200++; break;
+                        case '1103x1800': $CYD1103x1800++; break;
+                        case '1104x1200': $CYD1104x1200++; break;
+                        case '3505x750' : $CYD3505x750++; break;
+                        case '1406x2400': $CYD1406x2400++; break;
+                        case '1107x1800': $CYD1107x1800++; break;
+                        case '1108x1200': $CYD1108x1200++; break;
+                        case '4409x3200': $CYD4409x3200++; break;
+                        case '1410x1800': $CYD1410x1800++; break;
+                        case '4411x3200': $CYD4411x3200++; break;
+                        case '4412x2400': $CYD4412x2400++; break;
+                        case '4413x2400': $CYD4413x2400++; break;
+                        case '1414x1200': $CYD1414x1200++; break;
+                        case '1415x1200': $CYD1415x1200++; break;
+                        case '2616x100' : $CYD2616x100++; break;
+                        case '2617x100' : $CYD2617x100++; break;
+                        case '2618x50'  : $CYD2618x50++; break;
+                        case '2619x800' : $CYD2619x800++; break;
+                        case '2620x30'  : $CYD2620x30++; break;
+                        case '2621x800' : $CYD2621x800++; break;
+                        case '2222x200' : $CYD2222x200++; break;
+                        case '2223x800' : $CYD2223x800++; break;
+                        case '2224x400' : $CYD2224x400++; break;
+                        case '2225x400' : $CYD2225x400++; break;
+                        case '2626x600' : $CYD2626x600++; break;
+                        case '2627x600' : $CYD2627x600++; break;
+                        case '2628x800' : $CYD2628x800++; break;
+                        case '2629x50'  : $CYD2629x50++; break;
+                        case '2630x800' : $CYD2630x800++; break;
+                        case '2631x10'  : $CYD2631x10++; break;
+                        case '2632x20'  : $CYD2632x20++; break;
+                        case '2633x20'  : $CYD2633x20++; break;
+                        case '2634x20'  : $CYD2634x20++; break;
+                        case '2241x800' : $CYD2241x800++; break;
+                        case '2242x800' : $CYD2242x800++; break;
+                        case '2343x1200': $CYD2343x1200++; break;
+                        case '3444x600' : $CYD3444x600++; break;
+                        case '1445x600' : $CYD1445x600++; break;
+                        case '1446x600' : $CYD1446x600++; break;
+                        case '1447x600' : $CYD1447x600++; break;
+                        case '1448x600' : $CYD1448x600++; break;
+                        case '1149x600' : $CYD1149x600++; break;
+                        case '1450x900' : $CYD1450x600++; break;
+                        case '1451x150' : $CYD1451x600++; break;
+                        case '1452x150' : $CYD1452x600++; break;
+                        case '3453x300' : $CYD3453x300++; break;
+                        case '1154x300' : $CYD1154x300++; break;
+                        case '1455x300' : $CYD1455x300++; break;
+                        case '1456x300' : $CYD1456x300++; break;
+                        case '1457x300' : $CYD1457x300++; break;
+                        case '1458x300' : $CYD1458x300++; break;
+                        case '1459x100' : $CYD1459x100++; break;
+                        case '1460x100' : $CYD1460x100++; break;
+                        case '1461x100' : $CYD1461x100++; break;
+                        case '3462x100' : $CYD3462x100++; break;
+                        case '3463x100' : $CYD3463x100++; break;
+                        case '3464x100' : $CYD3464x100++; break;
+                        case '1465x50'  : $CYD1465x50++; break;
+                        case '1466x50'  : $CYD1466x50++; break;
+                        case '1467x50'  : $CYD1467x50++; break;
+                        case '3468x30'  : $CYD3468x30++; break;
+                        case '3469x30'  : $CYD3469x30++; break;
+                        case '3470x50'  : $CYD3470x50++; break;
+                        case '3471x50'  : $CYD3471x50++; break;
+                        case '3472x30'  : $CYD3472x30++; break;
+                        case '3473x30'  : $CYD3473x30++; break;
+                        case '3474x50'  : $CYD3474x50++; break;
+                        case '3475x50'  : $CYD3475x50++; break;
+                        case '3476x150' : $CYD3476x150++; break;
+                        case '1477x50'  : $CYD1477x50++; break;
+                        case '1478x50'  : $CYD1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Cuci Yarn Dye (Y/D)
-    // Scouring
-        $S1401x2400 = 0;
-        $S1402x1200 = 0;
-        $S1103x1800 = 0;
-        $S1104x1200 = 0;
-        $S3505x750 = 0;
-        $S1406x2400 = 0;
-        $S1107x1800 = 0;
-        $S1108x1200 = 0;
-        $S4409x3200 = 0;
-        $S1410x1800 = 0;
-        $S4411x3200 = 0;
-        $S4412x2400 = 0;
-        $S4413x2400 = 0;
-        $S1414x1200 = 0;
-        $S1415x1200 = 0;
-        $S2616x100 = 0;
-        $S2617x100 = 0;
-        $S2618x50 = 0;
-        $S2619x800 = 0;
-        $S2620x30 = 0;
-        $S2621x800 = 0;
-        $S2222x200 = 0;
-        $S2223x800 = 0;
-        $S2224x400 = 0;
-        $S2225x400 = 0;
-        $S2626x600 = 0;
-        $S2627x600 = 0;
-        $S2628x800 = 0;
-        $S2629x50 = 0;
-        $S2630x800 = 0;
-        $S2631x10 = 0;
-        $S2632x20 = 0;
-        $S2633x20 = 0;
-        $S2634x20 = 0;
-        $S2241x800 = 0;
-        $S2242x800 = 0;
-        $S2343x1200 = 0;
-        $S3444x600 = 0;
-        $S1445x600 = 0;
-        $S1446x600 = 0;
-        $S1447x600 = 0;
-        $S1448x600 = 0;
-        $S1449x600 = 0;
-        $S1450x600 = 0;
-        $S1451x600 = 0;
-        $S1452x600 = 0;
-        $S3453x300 = 0;
-        $S1154x300 = 0;
-        $S1455x300 = 0;
-        $S1456x300 = 0;
-        $S1457x300 = 0;
-        $S1458x300 = 0;
-        $S1459x100 = 0;
-        $S1460x100 = 0;
-        $S1461x100 = 0;
-        $S3462x100 = 0;
-        $S3463x100 = 0;
-        $S3464x100 = 0;
-        $S1465x50 = 0;
-        $S1466x50 = 0;
-        $S1467x50 = 0;
-        $S3468x30 = 0;
-        $S3469x30 = 0;
-        $S3470x50 = 0;
-        $S3471x50 = 0;
-        $S3472x30 = 0;
-        $S3473x30 = 0;
-        $S3474x50 = 0;
-        $S3475x50 = 0;
-        $S3476x150 = 0;
-        $S1477x50 = 0;
-        $S1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Scouring') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $S1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $S1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $S1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $S1104x1200++;
-                        break;
-                    case '3505x750':
-                        $S3505x750++;
-                        break;
-                    case '1406x2400':
-                        $S1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $S1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $S1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $S4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $S1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $S4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $S4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $S4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $S1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $S1415x1200++;
-                        break;
-                    case '2616x100':
-                        $S2616x100++;
-                        break;
-                    case '2617x100':
-                        $S2617x100++;
-                        break;
-                    case '2618x50':
-                        $S2618x50++;
-                        break;
-                    case '2619x800':
-                        $S2619x800++;
-                        break;
-                    case '2620x30':
-                        $S2620x30++;
-                        break;
-                    case '2621x800':
-                        $S2621x800++;
-                        break;
-                    case '2222x200':
-                        $S2222x200++;
-                        break;
-                    case '2223x800':
-                        $S2223x800++;
-                        break;
-                    case '2224x400':
-                        $S2224x400++;
-                        break;
-                    case '2225x400':
-                        $S2225x400++;
-                        break;
-                    case '2626x600':
-                        $S2626x600++;
-                        break;
-                    case '2627x600':
-                        $S2627x600++;
-                        break;
-                    case '2628x800':
-                        $S2628x800++;
-                        break;
-                    case '2629x50':
-                        $S2629x50++;
-                        break;
-                    case '2630x800':
-                        $S2630x800++;
-                        break;
-                    case '2631x10':
-                        $S2631x10++;
-                        break;
-                    case '2632x20':
-                        $S2632x20++;
-                        break;
-                    case '2633x20':
-                        $S2633x20++;
-                        break;
-                    case '2634x20':
-                        $S2634x20++;
-                        break;
-                    case '2241x800':
-                        $S2241x800++;
-                        break;
-                    case '2242x800':
-                        $S2242x800++;
-                        break;
-                    case '2343x1200':
-                        $S2343x1200++;
-                        break;
-                    case '3444x600':
-                        $S3444x600++;
-                        break;
-                    case '1445x600':
-                        $S1445x600++;
-                        break;
-                    case '1446x600':
-                        $S1446x600++;
-                        break;
-                    case '1447x600':
-                        $S1447x600++;
-                        break;
-                    case '1448x600':
-                        $S1448x600++;
-                        break;
-                    case '1449x600':
-                        $S1449x600++;
-                        break;
-                    case '1450x900':
-                        $S1450x600++;
-                        break;
-                    case '1451x150':
-                        $S1451x600++;
-                        break;
-                    case '1452x150':
-                        $S1452x600++;
-                        break;
-                    case '3453x300':
-                        $S3453x300++;
-                        break;
-                    case '1154x300':
-                        $S1154x300++;
-                        break;
-                    case '1455x300':
-                        $S1455x300++;
-                        break;
-                    case '1456x300':
-                        $S1456x300++;
-                        break;
-                    case '1457x300':
-                        $S1457x300++;
-                        break;
-                    case '1458x300':
-                        $S1458x300++;
-                        break;
-                    case '1459x100':
-                        $S1459x100++;
-                        break;
-                    case '1460x100':
-                        $S1460x100++;
-                        break;
-                    case '1461x100':
-                        $S1461x100++;
-                        break;
-                    case '3462x100':
-                        $S3462x100++;
-                        break;
-                    case '3463x100':
-                        $S3463x100++;
-                        break;
-                    case '3464x100':
-                        $S3464x100++;
-                        break;
-                    case '1465x50':
-                        $S1465x50++;
-                        break;
-                    case '1466x50':
-                        $S1466x50++;
-                        break;
-                    case '1467x50':
-                        $S1467x50++;
-                        break;
-                    case '3468x30':
-                        $S3468x30++;
-                        break;
-                    case '3469x30':
-                        $S3469x30++;
-                        break;
-                    case '3470x50':
-                        $S3470x50++;
-                        break;
-                    case '3471x50':
-                        $S3471x50++;
-                        break;
-                    case '3472x30':
-                        $S3472x30++;
-                        break;
-                    case '3473x30':
-                        $S3473x30++;
-                        break;
-                    case '3474x50':
-                        $S3474x50++;
-                        break;
-                    case '3475x50':
-                        $S3475x50++;
-                        break;
-                    case '3476x150':
-                        $S3476x150++;
-                        break;
-                    case '1477x50':
-                        $S1477x50++;
-                        break;
-                    case '1478x50':
-                        $S1478x50++;
-                        break;
+        // End Cuci Yarn Dye (Y/D)
+        // Scouring
+            $S1401x2400 = 0;   $S1402x1200 = 0;   $S1103x1800 = 0;   $S1104x1200 = 0;
+            $S3505x750  = 0;   $S1406x2400 = 0;   $S1107x1800 = 0;   $S1108x1200 = 0;
+            $S4409x3200 = 0;   $S1410x1800 = 0;   $S4411x3200 = 0;   $S4412x2400 = 0;
+            $S4413x2400 = 0;   $S1414x1200 = 0;   $S1415x1200 = 0;   $S2616x100  = 0;
+            $S2617x100  = 0;   $S2618x50   = 0;   $S2619x800  = 0;   $S2620x30   = 0;
+            $S2621x800  = 0;   $S2222x200  = 0;   $S2223x800  = 0;   $S2224x400  = 0;
+            $S2225x400  = 0;   $S2626x600  = 0;   $S2627x600  = 0;   $S2628x800  = 0;
+            $S2629x50   = 0;   $S2630x800  = 0;   $S2631x10   = 0;   $S2632x20   = 0;
+            $S2633x20   = 0;   $S2634x20   = 0;   $S2241x800  = 0;   $S2242x800  = 0;
+            $S2343x1200 = 0;   $S3444x600  = 0;   $S1445x600  = 0;   $S1446x600  = 0;
+            $S1447x600  = 0;   $S1448x600  = 0;   $S1149x600  = 0;   $S1450x600  = 0;
+            $S1451x600  = 0;   $S1452x600  = 0;   $S3453x300  = 0;   $S1154x300  = 0;
+            $S1455x300  = 0;   $S1456x300  = 0;   $S1457x300  = 0;   $S1458x300  = 0;
+            $S1459x100  = 0;   $S1460x100  = 0;   $S1461x100  = 0;   $S3462x100  = 0;
+            $S3463x100  = 0;   $S3464x100  = 0;   $S1465x50   = 0;   $S1466x50   = 0;
+            $S1467x50   = 0;   $S3468x30   = 0;   $S3469x30   = 0;   $S3470x50   = 0;
+            $S3471x50   = 0;   $S3472x30   = 0;   $S3473x30   = 0;   $S3474x50   = 0;
+            $S3475x50   = 0;   $S3476x150  = 0;   $S1477x50   = 0;   $S1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if (str_contains($proses, 'Scouring')) {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $S1401x2400++; break;
+                        case '1402x1200': $S1402x1200++; break;
+                        case '1103x1800': $S1103x1800++; break;
+                        case '1104x1200': $S1104x1200++; break;
+                        case '3505x750' : $S3505x750++; break;
+                        case '1406x2400': $S1406x2400++; break;
+                        case '1107x1800': $S1107x1800++; break;
+                        case '1108x1200': $S1108x1200++; break;
+                        case '4409x3200': $S4409x3200++; break;
+                        case '1410x1800': $S1410x1800++; break;
+                        case '4411x3200': $S4411x3200++; break;
+                        case '4412x2400': $S4412x2400++; break;
+                        case '4413x2400': $S4413x2400++; break;
+                        case '1414x1200': $S1414x1200++; break;
+                        case '1415x1200': $S1415x1200++; break;
+                        case '2616x100' : $S2616x100++; break;
+                        case '2617x100' : $S2617x100++; break;
+                        case '2618x50'  : $S2618x50++; break;
+                        case '2619x800' : $S2619x800++; break;
+                        case '2620x30'  : $S2620x30++; break;
+                        case '2621x800' : $S2621x800++; break;
+                        case '2222x200' : $S2222x200++; break;
+                        case '2223x800' : $S2223x800++; break;
+                        case '2224x400' : $S2224x400++; break;
+                        case '2225x400' : $S2225x400++; break;
+                        case '2626x600' : $S2626x600++; break;
+                        case '2627x600' : $S2627x600++; break;
+                        case '2628x800' : $S2628x800++; break;
+                        case '2629x50'  : $S2629x50++; break;
+                        case '2630x800' : $S2630x800++; break;
+                        case '2631x10'  : $S2631x10++; break;
+                        case '2632x20'  : $S2632x20++; break;
+                        case '2633x20'  : $S2633x20++; break;
+                        case '2634x20'  : $S2634x20++; break;
+                        case '2241x800' : $S2241x800++; break;
+                        case '2242x800' : $S2242x800++; break;
+                        case '2343x1200': $S2343x1200++; break;
+                        case '3444x600' : $S3444x600++; break;
+                        case '1445x600' : $S1445x600++; break;
+                        case '1446x600' : $S1446x600++; break;
+                        case '1447x600' : $S1447x600++; break;
+                        case '1448x600' : $S1448x600++; break;
+                        case '1149x600' : $S1149x600++; break;
+                        case '1450x900' : $S1450x600++; break;
+                        case '1451x150' : $S1451x600++; break;
+                        case '1452x150' : $S1452x600++; break;
+                        case '3453x300' : $S3453x300++; break;
+                        case '1154x300' : $S1154x300++; break;
+                        case '1455x300' : $S1455x300++; break;
+                        case '1456x300' : $S1456x300++; break;
+                        case '1457x300' : $S1457x300++; break;
+                        case '1458x300' : $S1458x300++; break;
+                        case '1459x100' : $S1459x100++; break;
+                        case '1460x100' : $S1460x100++; break;
+                        case '1461x100' : $S1461x100++; break;
+                        case '3462x100' : $S3462x100++; break;
+                        case '3463x100' : $S3463x100++; break;
+                        case '3464x100' : $S3464x100++; break;
+                        case '1465x50'  : $S1465x50++; break;
+                        case '1466x50'  : $S1466x50++; break;
+                        case '1467x50'  : $S1467x50++; break;
+                        case '3468x30'  : $S3468x30++; break;
+                        case '3469x30'  : $S3469x30++; break;
+                        case '3470x50'  : $S3470x50++; break;
+                        case '3471x50'  : $S3471x50++; break;
+                        case '3472x30'  : $S3472x30++; break;
+                        case '3473x30'  : $S3473x30++; break;
+                        case '3474x50'  : $S3474x50++; break;
+                        case '3475x50'  : $S3475x50++; break;
+                        case '3476x150' : $S3476x150++; break;
+                        case '1477x50'  : $S1477x50++; break;
+                        case '1478x50'  : $S1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Scouring
-    // Gagal Proses
-        $GP1401x2400 = 0;
-        $GP1402x1200 = 0;
-        $GP1103x1800 = 0;
-        $GP1104x1200 = 0;
-        $GP3505x750 = 0;
-        $GP1406x2400 = 0;
-        $GP1107x1800 = 0;
-        $GP1108x1200 = 0;
-        $GP4409x3200 = 0;
-        $GP1410x1800 = 0;
-        $GP4411x3200 = 0;
-        $GP4412x2400 = 0;
-        $GP4413x2400 = 0;
-        $GP1414x1200 = 0;
-        $GP1415x1200 = 0;
-        $GP2616x100 = 0;
-        $GP2617x100 = 0;
-        $GP2618x50 = 0;
-        $GP2619x800 = 0;
-        $GP2620x30 = 0;
-        $GP2621x800 = 0;
-        $GP2222x200 = 0;
-        $GP2223x800 = 0;
-        $GP2224x400 = 0;
-        $GP2225x400 = 0;
-        $GP2626x600 = 0;
-        $GP2627x600 = 0;
-        $GP2628x800 = 0;
-        $GP2629x50 = 0;
-        $GP2630x800 = 0;
-        $GP2631x10 = 0;
-        $GP2632x20 = 0;
-        $GP2633x20 = 0;
-        $GP2634x20 = 0;
-        $GP2241x800 = 0;
-        $GP2242x800 = 0;
-        $GP2343x1200 = 0;
-        $GP3444x600 = 0;
-        $GP1445x600 = 0;
-        $GP1446x600 = 0;
-        $GP1447x600 = 0;
-        $GP1448x600 = 0;
-        $GP1449x600 = 0;
-        $GP1450x600 = 0;
-        $GP1451x600 = 0;
-        $GP1452x600 = 0;
-        $GP3453x300 = 0;
-        $GP1154x300 = 0;
-        $GP1455x300 = 0;
-        $GP1456x300 = 0;
-        $GP1457x300 = 0;
-        $GP1458x300 = 0;
-        $GP1459x100 = 0;
-        $GP1460x100 = 0;
-        $GP1461x100 = 0;
-        $GP3462x100 = 0;
-        $GP3463x100 = 0;
-        $GP3464x100 = 0;
-        $GP1465x50 = 0;
-        $GP1466x50 = 0;
-        $GP1467x50 = 0;
-        $GP3468x30 = 0;
-        $GP3469x30 = 0;
-        $GP3470x50 = 0;
-        $GP3471x50 = 0;
-        $GP3472x30 = 0;
-        $GP3473x30 = 0;
-        $GP3474x50 = 0;
-        $GP3475x50 = 0;
-        $GP3476x150 = 0;
-        $GP1477x50 = 0;
-        $GP1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Gagal Proses') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $GP1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $GP1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $GP1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $GP1104x1200++;
-                        break;
-                    case '3505x750':
-                        $GP3505x750++;
-                        break;
-                    case '1406x2400':
-                        $GP1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $GP1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $GP1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $GP4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $GP1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $GP4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $GP4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $GP4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $GP1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $GP1415x1200++;
-                        break;
-                    case '2616x100':
-                        $GP2616x100++;
-                        break;
-                    case '2617x100':
-                        $GP2617x100++;
-                        break;
-                    case '2618x50':
-                        $GP2618x50++;
-                        break;
-                    case '2619x800':
-                        $GP2619x800++;
-                        break;
-                    case '2620x30':
-                        $GP2620x30++;
-                        break;
-                    case '2621x800':
-                        $GP2621x800++;
-                        break;
-                    case '2222x200':
-                        $GP2222x200++;
-                        break;
-                    case '2223x800':
-                        $GP2223x800++;
-                        break;
-                    case '2224x400':
-                        $GP2224x400++;
-                        break;
-                    case '2225x400':
-                        $GP2225x400++;
-                        break;
-                    case '2626x600':
-                        $GP2626x600++;
-                        break;
-                    case '2627x600':
-                        $GP2627x600++;
-                        break;
-                    case '2628x800':
-                        $GP2628x800++;
-                        break;
-                    case '2629x50':
-                        $GP2629x50++;
-                        break;
-                    case '2630x800':
-                        $GP2630x800++;
-                        break;
-                    case '2631x10':
-                        $GP2631x10++;
-                        break;
-                    case '2632x20':
-                        $GP2632x20++;
-                        break;
-                    case '2633x20':
-                        $GP2633x20++;
-                        break;
-                    case '2634x20':
-                        $GP2634x20++;
-                        break;
-                    case '2241x800':
-                        $GP2241x800++;
-                        break;
-                    case '2242x800':
-                        $GP2242x800++;
-                        break;
-                    case '2343x1200':
-                        $GP2343x1200++;
-                        break;
-                    case '3444x600':
-                        $GP3444x600++;
-                        break;
-                    case '1445x600':
-                        $GP1445x600++;
-                        break;
-                    case '1446x600':
-                        $GP1446x600++;
-                        break;
-                    case '1447x600':
-                        $GP1447x600++;
-                        break;
-                    case '1448x600':
-                        $GP1448x600++;
-                        break;
-                    case '1449x600':
-                        $GP1449x600++;
-                        break;
-                    case '1450x900':
-                        $GP1450x600++;
-                        break;
-                    case '1451x150':
-                        $GP1451x600++;
-                        break;
-                    case '1452x150':
-                        $GP1452x600++;
-                        break;
-                    case '3453x300':
-                        $GP3453x300++;
-                        break;
-                    case '1154x300':
-                        $GP1154x300++;
-                        break;
-                    case '1455x300':
-                        $GP1455x300++;
-                        break;
-                    case '1456x300':
-                        $GP1456x300++;
-                        break;
-                    case '1457x300':
-                        $GP1457x300++;
-                        break;
-                    case '1458x300':
-                        $GP1458x300++;
-                        break;
-                    case '1459x100':
-                        $GP1459x100++;
-                        break;
-                    case '1460x100':
-                        $GP1460x100++;
-                        break;
-                    case '1461x100':
-                        $GP1461x100++;
-                        break;
-                    case '3462x100':
-                        $GP3462x100++;
-                        break;
-                    case '3463x100':
-                        $GP3463x100++;
-                        break;
-                    case '3464x100':
-                        $GP3464x100++;
-                        break;
-                    case '1465x50':
-                        $GP1465x50++;
-                        break;
-                    case '1466x50':
-                        $GP1466x50++;
-                        break;
-                    case '1467x50':
-                        $GP1467x50++;
-                        break;
-                    case '3468x30':
-                        $GP3468x30++;
-                        break;
-                    case '3469x30':
-                        $GP3469x30++;
-                        break;
-                    case '3470x50':
-                        $GP3470x50++;
-                        break;
-                    case '3471x50':
-                        $GP3471x50++;
-                        break;
-                    case '3472x30':
-                        $GP3472x30++;
-                        break;
-                    case '3473x30':
-                        $GP3473x30++;
-                        break;
-                    case '3474x50':
-                        $GP3474x50++;
-                        break;
-                    case '3475x50':
-                        $GP3475x50++;
-                        break;
-                    case '3476x150':
-                        $GP3476x150++;
-                        break;
-                    case '1477x50':
-                        $GP1477x50++;
-                        break;
-                    case '1478x50':
-                        $GP1478x50++;
-                        break;
+        // End Scouring
+        // Gagal Proses
+            $GP1401x2400 = 0;   $GP1402x1200 = 0;   $GP1103x1800 = 0;   $GP1104x1200 = 0;
+            $GP3505x750  = 0;   $GP1406x2400 = 0;   $GP1107x1800 = 0;   $GP1108x1200 = 0;
+            $GP4409x3200 = 0;   $GP1410x1800 = 0;   $GP4411x3200 = 0;   $GP4412x2400 = 0;
+            $GP4413x2400 = 0;   $GP1414x1200 = 0;   $GP1415x1200 = 0;   $GP2616x100  = 0;
+            $GP2617x100  = 0;   $GP2618x50   = 0;   $GP2619x800  = 0;   $GP2620x30   = 0;
+            $GP2621x800  = 0;   $GP2222x200  = 0;   $GP2223x800  = 0;   $GP2224x400  = 0;
+            $GP2225x400  = 0;   $GP2626x600  = 0;   $GP2627x600  = 0;   $GP2628x800  = 0;
+            $GP2629x50   = 0;   $GP2630x800  = 0;   $GP2631x10   = 0;   $GP2632x20   = 0;
+            $GP2633x20   = 0;   $GP2634x20   = 0;   $GP2241x800  = 0;   $GP2242x800  = 0;
+            $GP2343x1200 = 0;   $GP3444x600  = 0;   $GP1445x600  = 0;   $GP1446x600  = 0;
+            $GP1447x600  = 0;   $GP1448x600  = 0;   $GP1149x600  = 0;   $GP1450x600  = 0;
+            $GP1451x600  = 0;   $GP1452x600  = 0;   $GP3453x300  = 0;   $GP1154x300  = 0;
+            $GP1455x300  = 0;   $GP1456x300  = 0;   $GP1457x300  = 0;   $GP1458x300  = 0;
+            $GP1459x100  = 0;   $GP1460x100  = 0;   $GP1461x100  = 0;   $GP3462x100  = 0;
+            $GP3463x100  = 0;   $GP3464x100  = 0;   $GP1465x50   = 0;   $GP1466x50   = 0;
+            $GP1467x50   = 0;   $GP3468x30   = 0;   $GP3469x30   = 0;   $GP3470x50   = 0;
+            $GP3471x50   = 0;   $GP3472x30   = 0;   $GP3473x30   = 0;   $GP3474x50   = 0;
+            $GP3475x50   = 0;   $GP3476x150  = 0;   $GP1477x50   = 0;   $GP1478x50   = 0;
+
+            foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if ($proses === 'Gagal Proses') {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $GP1401x2400++; break;
+                        case '1402x1200': $GP1402x1200++; break;
+                        case '1103x1800': $GP1103x1800++; break;
+                        case '1104x1200': $GP1104x1200++; break;
+                        case '3505x750' : $GP3505x750++; break;
+                        case '1406x2400': $GP1406x2400++; break;
+                        case '1107x1800': $GP1107x1800++; break;
+                        case '1108x1200': $GP1108x1200++; break;
+                        case '4409x3200': $GP4409x3200++; break;
+                        case '1410x1800': $GP1410x1800++; break;
+                        case '4411x3200': $GP4411x3200++; break;
+                        case '4412x2400': $GP4412x2400++; break;
+                        case '4413x2400': $GP4413x2400++; break;
+                        case '1414x1200': $GP1414x1200++; break;
+                        case '1415x1200': $GP1415x1200++; break;
+                        case '2616x100' : $GP2616x100++; break;
+                        case '2617x100' : $GP2617x100++; break;
+                        case '2618x50'  : $GP2618x50++; break;
+                        case '2619x800' : $GP2619x800++; break;
+                        case '2620x30'  : $GP2620x30++; break;
+                        case '2621x800' : $GP2621x800++; break;
+                        case '2222x200' : $GP2222x200++; break;
+                        case '2223x800' : $GP2223x800++; break;
+                        case '2224x400' : $GP2224x400++; break;
+                        case '2225x400' : $GP2225x400++; break;
+                        case '2626x600' : $GP2626x600++; break;
+                        case '2627x600' : $GP2627x600++; break;
+                        case '2628x800' : $GP2628x800++; break;
+                        case '2629x50'  : $GP2629x50++; break;
+                        case '2630x800' : $GP2630x800++; break;
+                        case '2631x10'  : $GP2631x10++; break;
+                        case '2632x20'  : $GP2632x20++; break;
+                        case '2633x20'  : $GP2633x20++; break;
+                        case '2634x20'  : $GP2634x20++; break;
+                        case '2241x800' : $GP2241x800++; break;
+                        case '2242x800' : $GP2242x800++; break;
+                        case '2343x1200': $GP2343x1200++; break;
+                        case '3444x600' : $GP3444x600++; break;
+                        case '1445x600' : $GP1445x600++; break;
+                        case '1446x600' : $GP1446x600++; break;
+                        case '1447x600' : $GP1447x600++; break;
+                        case '1448x600' : $GP1448x600++; break;
+                        case '1149x600' : $GP1149x600++; break;
+                        case '1450x900' : $GP1450x600++; break;
+                        case '1451x150' : $GP1451x600++; break;
+                        case '1452x150' : $GP1452x600++; break;
+                        case '3453x300' : $GP3453x300++; break;
+                        case '1154x300' : $GP1154x300++; break;
+                        case '1455x300' : $GP1455x300++; break;
+                        case '1456x300' : $GP1456x300++; break;
+                        case '1457x300' : $GP1457x300++; break;
+                        case '1458x300' : $GP1458x300++; break;
+                        case '1459x100' : $GP1459x100++; break;
+                        case '1460x100' : $GP1460x100++; break;
+                        case '1461x100' : $GP1461x100++; break;
+                        case '3462x100' : $GP3462x100++; break;
+                        case '3463x100' : $GP3463x100++; break;
+                        case '3464x100' : $GP3464x100++; break;
+                        case '1465x50'  : $GP1465x50++; break;
+                        case '1466x50'  : $GP1466x50++; break;
+                        case '1467x50'  : $GP1467x50++; break;
+                        case '3468x30'  : $GP3468x30++; break;
+                        case '3469x30'  : $GP3469x30++; break;
+                        case '3470x50'  : $GP3470x50++; break;
+                        case '3471x50'  : $GP3471x50++; break;
+                        case '3472x30'  : $GP3472x30++; break;
+                        case '3473x30'  : $GP3473x30++; break;
+                        case '3474x50'  : $GP3474x50++; break;
+                        case '3475x50'  : $GP3475x50++; break;
+                        case '3476x150' : $GP3476x150++; break;
+                        case '1477x50'  : $GP1477x50++; break;
+                        case '1478x50'  : $GP1478x50++; break;
+                    }
                 }
             }
-        }
-    // End Gagal Proses
-    // Tolak Basah
-        $TB1401x2400 = 0;
-        $TB1402x1200 = 0;
-        $TB1103x1800 = 0;
-        $TB1104x1200 = 0;
-        $TB3505x750 = 0;
-        $TB1406x2400 = 0;
-        $TB1107x1800 = 0;
-        $TB1108x1200 = 0;
-        $TB4409x3200 = 0;
-        $TB1410x1800 = 0;
-        $TB4411x3200 = 0;
-        $TB4412x2400 = 0;
-        $TB4413x2400 = 0;
-        $TB1414x1200 = 0;
-        $TB1415x1200 = 0;
-        $TB2616x100 = 0;
-        $TB2617x100 = 0;
-        $TB2618x50 = 0;
-        $TB2619x800 = 0;
-        $TB2620x30 = 0;
-        $TB2621x800 = 0;
-        $TB2222x200 = 0;
-        $TB2223x800 = 0;
-        $TB2224x400 = 0;
-        $TB2225x400 = 0;
-        $TB2626x600 = 0;
-        $TB2627x600 = 0;
-        $TB2628x800 = 0;
-        $TB2629x50 = 0;
-        $TB2630x800 = 0;
-        $TB2631x10 = 0;
-        $TB2632x20 = 0;
-        $TB2633x20 = 0;
-        $TB2634x20 = 0;
-        $TB2241x800 = 0;
-        $TB2242x800 = 0;
-        $TB2343x1200 = 0;
-        $TB3444x600 = 0;
-        $TB1445x600 = 0;
-        $TB1446x600 = 0;
-        $TB1447x600 = 0;
-        $TB1448x600 = 0;
-        $TB1449x600 = 0;
-        $TB1450x600 = 0;
-        $TB1451x600 = 0;
-        $TB1452x600 = 0;
-        $TB3453x300 = 0;
-        $TB1154x300 = 0;
-        $TB1455x300 = 0;
-        $TB1456x300 = 0;
-        $TB1457x300 = 0;
-        $TB1458x300 = 0;
-        $TB1459x100 = 0;
-        $TB1460x100 = 0;
-        $TB1461x100 = 0;
-        $TB3462x100 = 0;
-        $TB3463x100 = 0;
-        $TB3464x100 = 0;
-        $TB1465x50 = 0;
-        $TB1466x50 = 0;
-        $TB1467x50 = 0;
-        $TB3468x30 = 0;
-        $TB3469x30 = 0;
-        $TB3470x50 = 0;
-        $TB3471x50 = 0;
-        $TB3472x30 = 0;
-        $TB3473x30 = 0;
-        $TB3474x50 = 0;
-        $TB3475x50 = 0;
-        $TB3476x150 = 0;
-        $TB1477x50 = 0;
-        $TB1478x50 = 0;
-        
-        foreach ($data5 as $row5) {
-            $proses     = strtolower(trim($row5['proses']));
-            $no_mesin   = trim($row5['no_mesin']);
-            $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
-        
-            if ($proses === 'Tolak Basah') {
-                switch ("{$no_mesin}x{$kapasitas}") {
-                    case '1401x2400':
-                        $TB1401x2400++;
-                        break;
-                    case '1402x1200':
-                        $TB1402x1200++;
-                        break;
-                    case '1103x1800':
-                        $TB1103x1800++;
-                        break;
-                    case '1104x1200':
-                        $TB1104x1200++;
-                        break;
-                    case '3505x750':
-                        $TB3505x750++;
-                        break;
-                    case '1406x2400':
-                        $TB1406x2400++;
-                        break;
-                    case '1107x1800':
-                        $TB1107x1800++;
-                        break;
-                    case '1108x1200':
-                        $TB1108x1200++;
-                        break;
-                    case '4409x3200':
-                        $TB4409x3200++;
-                        break;
-                    case '1410x1800':
-                        $TB1410x1800++;
-                        break;
-                    case '4411x3200':
-                        $TB4411x3200++;
-                        break;
-                    case '4412x2400':
-                        $TB4412x2400++;
-                        break;
-                    case '4413x2400':
-                        $TB4413x2400++;
-                        break;
-                    case '1414x1200':
-                        $TB1414x1200++;
-                        break;
-                    case '1415x1200':
-                        $TB1415x1200++;
-                        break;
-                    case '2616x100':
-                        $TB2616x100++;
-                        break;
-                    case '2617x100':
-                        $TB2617x100++;
-                        break;
-                    case '2618x50':
-                        $TB2618x50++;
-                        break;
-                    case '2619x800':
-                        $TB2619x800++;
-                        break;
-                    case '2620x30':
-                        $TB2620x30++;
-                        break;
-                    case '2621x800':
-                        $TB2621x800++;
-                        break;
-                    case '2222x200':
-                        $TB2222x200++;
-                        break;
-                    case '2223x800':
-                        $TB2223x800++;
-                        break;
-                    case '2224x400':
-                        $TB2224x400++;
-                        break;
-                    case '2225x400':
-                        $TB2225x400++;
-                        break;
-                    case '2626x600':
-                        $TB2626x600++;
-                        break;
-                    case '2627x600':
-                        $TB2627x600++;
-                        break;
-                    case '2628x800':
-                        $TB2628x800++;
-                        break;
-                    case '2629x50':
-                        $TB2629x50++;
-                        break;
-                    case '2630x800':
-                        $TB2630x800++;
-                        break;
-                    case '2631x10':
-                        $TB2631x10++;
-                        break;
-                    case '2632x20':
-                        $TB2632x20++;
-                        break;
-                    case '2633x20':
-                        $TB2633x20++;
-                        break;
-                    case '2634x20':
-                        $TB2634x20++;
-                        break;
-                    case '2241x800':
-                        $TB2241x800++;
-                        break;
-                    case '2242x800':
-                        $TB2242x800++;
-                        break;
-                    case '2343x1200':
-                        $TB2343x1200++;
-                        break;
-                    case '3444x600':
-                        $TB3444x600++;
-                        break;
-                    case '1445x600':
-                        $TB1445x600++;
-                        break;
-                    case '1446x600':
-                        $TB1446x600++;
-                        break;
-                    case '1447x600':
-                        $TB1447x600++;
-                        break;
-                    case '1448x600':
-                        $TB1448x600++;
-                        break;
-                    case '1449x600':
-                        $TB1449x600++;
-                        break;
-                    case '1450x900':
-                        $TB1450x600++;
-                        break;
-                    case '1451x150':
-                        $TB1451x600++;
-                        break;
-                    case '1452x150':
-                        $TB1452x600++;
-                        break;
-                    case '3453x300':
-                        $TB3453x300++;
-                        break;
-                    case '1154x300':
-                        $TB1154x300++;
-                        break;
-                    case '1455x300':
-                        $TB1455x300++;
-                        break;
-                    case '1456x300':
-                        $TB1456x300++;
-                        break;
-                    case '1457x300':
-                        $TB1457x300++;
-                        break;
-                    case '1458x300':
-                        $TB1458x300++;
-                        break;
-                    case '1459x100':
-                        $TB1459x100++;
-                        break;
-                    case '1460x100':
-                        $TB1460x100++;
-                        break;
-                    case '1461x100':
-                        $TB1461x100++;
-                        break;
-                    case '3462x100':
-                        $TB3462x100++;
-                        break;
-                    case '3463x100':
-                        $TB3463x100++;
-                        break;
-                    case '3464x100':
-                        $TB3464x100++;
-                        break;
-                    case '1465x50':
-                        $TB1465x50++;
-                        break;
-                    case '1466x50':
-                        $TB1466x50++;
-                        break;
-                    case '1467x50':
-                        $TB1467x50++;
-                        break;
-                    case '3468x30':
-                        $TB3468x30++;
-                        break;
-                    case '3469x30':
-                        $TB3469x30++;
-                        break;
-                    case '3470x50':
-                        $TB3470x50++;
-                        break;
-                    case '3471x50':
-                        $TB3471x50++;
-                        break;
-                    case '3472x30':
-                        $TB3472x30++;
-                        break;
-                    case '3473x30':
-                        $TB3473x30++;
-                        break;
-                    case '3474x50':
-                        $TB3474x50++;
-                        break;
-                    case '3475x50':
-                        $TB3475x50++;
-                        break;
-                    case '3476x150':
-                        $TB3476x150++;
-                        break;
-                    case '1477x50':
-                        $TB1477x50++;
-                        break;
-                    case '1478x50':
-                        $TB1478x50++;
-                        break;
+        // End Gagal Proses
+        // Tolak Basah
+            $TB1401x2400 = 0;   $TB1402x1200 = 0;   $TB1103x1800 = 0;   $TB1104x1200 = 0;
+            $TB3505x750  = 0;   $TB1406x2400 = 0;   $TB1107x1800 = 0;   $TB1108x1200 = 0;
+            $TB4409x3200 = 0;   $TB1410x1800 = 0;   $TB4411x3200 = 0;   $TB4412x2400 = 0;
+            $TB4413x2400 = 0;   $TB1414x1200 = 0;   $TB1415x1200 = 0;   $TB2616x100  = 0;
+            $TB2617x100  = 0;   $TB2618x50   = 0;   $TB2619x800  = 0;   $TB2620x30   = 0;
+            $TB2621x800  = 0;   $TB2222x200  = 0;   $TB2223x800  = 0;   $TB2224x400  = 0;
+            $TB2225x400  = 0;   $TB2626x600  = 0;   $TB2627x600  = 0;   $TB2628x800  = 0;
+            $TB2629x50   = 0;   $TB2630x800  = 0;   $TB2631x10   = 0;   $TB2632x20   = 0;
+            $TB2633x20   = 0;   $TB2634x20   = 0;   $TB2241x800  = 0;   $TB2242x800  = 0;
+            $TB2343x1200 = 0;   $TB3444x600  = 0;   $TB1445x600  = 0;   $TB1446x600  = 0;
+            $TB1447x600  = 0;   $TB1448x600  = 0;   $TB1149x600  = 0;   $TB1450x600  = 0;
+            $TB1451x600  = 0;   $TB1452x600  = 0;   $TB3453x300  = 0;   $TB1154x300  = 0;
+            $TB1455x300  = 0;   $TB1456x300  = 0;   $TB1457x300  = 0;   $TB1458x300  = 0;
+            $TB1459x100  = 0;   $TB1460x100  = 0;   $TB1461x100  = 0;   $TB3462x100  = 0;
+            $TB3463x100  = 0;   $TB3464x100  = 0;   $TB1465x50   = 0;   $TB1466x50   = 0;
+            $TB1467x50   = 0;   $TB3468x30   = 0;   $TB3469x30   = 0;   $TB3470x50   = 0;
+            $TB3471x50   = 0;   $TB3472x30   = 0;   $TB3473x30   = 0;   $TB3474x50   = 0;
+            $TB3475x50   = 0;   $TB3476x150  = 0;   $TB1477x50   = 0;   $TB1478x50   = 0;
+
+             foreach ($dataNow as $row5) {
+                $proses     = strtolower(trim($row5['proses']));
+                $no_mesin   = trim($row5['mc']);
+                $kapasitas  = str_replace(',', '', trim($row5['kapasitas']));
+                
+                if (str_contains($proses, 'Tolak Basah')) {
+                    switch ("{$no_mesin}x{$kapasitas}") {
+                        case '1401x2400': $TB1401x2400++; break;
+                        case '1402x1200': $TB1402x1200++; break;
+                        case '1103x1800': $TB1103x1800++; break;
+                        case '1104x1200': $TB1104x1200++; break;
+                        case '3505x750' : $TB3505x750++; break;
+                        case '1406x2400': $TB1406x2400++; break;
+                        case '1107x1800': $TB1107x1800++; break;
+                        case '1108x1200': $TB1108x1200++; break;
+                        case '4409x3200': $TB4409x3200++; break;
+                        case '1410x1800': $TB1410x1800++; break;
+                        case '4411x3200': $TB4411x3200++; break;
+                        case '4412x2400': $TB4412x2400++; break;
+                        case '4413x2400': $TB4413x2400++; break;
+                        case '1414x1200': $TB1414x1200++; break;
+                        case '1415x1200': $TB1415x1200++; break;
+                        case '2616x100' : $TB2616x100++; break;
+                        case '2617x100' : $TB2617x100++; break;
+                        case '2618x50'  : $TB2618x50++; break;
+                        case '2619x800' : $TB2619x800++; break;
+                        case '2620x30'  : $TB2620x30++; break;
+                        case '2621x800' : $TB2621x800++; break;
+                        case '2222x200' : $TB2222x200++; break;
+                        case '2223x800' : $TB2223x800++; break;
+                        case '2224x400' : $TB2224x400++; break;
+                        case '2225x400' : $TB2225x400++; break;
+                        case '2626x600' : $TB2626x600++; break;
+                        case '2627x600' : $TB2627x600++; break;
+                        case '2628x800' : $TB2628x800++; break;
+                        case '2629x50'  : $TB2629x50++; break;
+                        case '2630x800' : $TB2630x800++; break;
+                        case '2631x10'  : $TB2631x10++; break;
+                        case '2632x20'  : $TB2632x20++; break;
+                        case '2633x20'  : $TB2633x20++; break;
+                        case '2634x20'  : $TB2634x20++; break;
+                        case '2241x800' : $TB2241x800++; break;
+                        case '2242x800' : $TB2242x800++; break;
+                        case '2343x1200': $TB2343x1200++; break;
+                        case '3444x600' : $TB3444x600++; break;
+                        case '1445x600' : $TB1445x600++; break;
+                        case '1446x600' : $TB1446x600++; break;
+                        case '1447x600' : $TB1447x600++; break;
+                        case '1448x600' : $TB1448x600++; break;
+                        case '1149x600' : $TB1149x600++; break;
+                        case '1450x900' : $TB1450x600++; break;
+                        case '1451x150' : $TB1451x600++; break;
+                        case '1452x150' : $TB1452x600++; break;
+                        case '3453x300' : $TB3453x300++; break;
+                        case '1154x300' : $TB1154x300++; break;
+                        case '1455x300' : $TB1455x300++; break;
+                        case '1456x300' : $TB1456x300++; break;
+                        case '1457x300' : $TB1457x300++; break;
+                        case '1458x300' : $TB1458x300++; break;
+                        case '1459x100' : $TB1459x100++; break;
+                        case '1460x100' : $TB1460x100++; break;
+                        case '1461x100' : $TB1461x100++; break;
+                        case '3462x100' : $TB3462x100++; break;
+                        case '3463x100' : $TB3463x100++; break;
+                        case '3464x100' : $TB3464x100++; break;
+                        case '1465x50'  : $TB1465x50++; break;
+                        case '1466x50'  : $TB1466x50++; break;
+                        case '1467x50'  : $TB1467x50++; break;
+                        case '3468x30'  : $TB3468x30++; break;
+                        case '3469x30'  : $TB3469x30++; break;
+                        case '3470x50'  : $TB3470x50++; break;
+                        case '3471x50'  : $TB3471x50++; break;
+                        case '3472x30'  : $TB3472x30++; break;
+                        case '3473x30'  : $TB3473x30++; break;
+                        case '3474x50'  : $TB3474x50++; break;
+                        case '3475x50'  : $TB3475x50++; break;
+                        case '3476x150' : $TB3476x150++; break;
+                        case '1477x50'  : $TB1477x50++; break;
+                        case '1478x50'  : $TB1478x50++; break;
+                    }
                 }
-            }
-        }
-    // End Tolak Basah
-//End Data Mesin
+            }   
+        // End Tolak Basah
+    //End Data Mesin
+
+// End of data list
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -6799,8 +2593,10 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
         'T7:T20', 'W7:W20', 'Z7:Z20', 'AE7:AE20', 
         'AW5:AW19', 'BG6:BG23', 
         'H27', 'K27', 'N27', 'Q27', 'T27', 'W27', 'Z27', 
-        'AC27', 'AF27', 'AI27', 'AI28', 'AF28', 'AC28', 
-        'Z28', 'W28', 'T28', 'Q28', 'N28', 'K28', 'H28'
+        'AC27', 'AF27', 'AI27', 'AL27', 'AL27', 'AO27', 'AI28', 'AF28', 'AC28', 'AL28', 'AO28',
+        'Z28', 'W28', 'T28', 'Q28', 'N28', 'K28', 'H28',
+        'AV28:AV34', 'BA28:BA34', 'BF28:BF34', 'BI28:BI34', 'BN28:BN34', 'BS28:BS34',
+        'H32:H33', 'K32:K33', 'N32:N33', 'Q32:Q33', 'T32:T33', 'W32:W33', 'Z32:Z33', 'AC32:AC33', 'AF32:AF33', 'AI32:AI33', 'AL32:AL33', 'AO32:AO33'
     ];
 
     foreach ($nominalCells as $cellRange) {
@@ -8689,7 +4485,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
         $sheet->getStyle('BB12')->getFont()->setBold(true);
         // DATA
             $sheet->mergeCells('BG12:BH12');
-            $sheet->setCellValue('BG12', '0');
+            $sheet->setCellValue('BG12', '=SUM(BG10:BH11)');
             $sheet->getStyle('BG12')->getAlignment()->setHorizontal('right')->setVertical('center');
             $sheet->getStyle('BG12:BH12')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
     
@@ -10332,7 +6128,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
                 $sheet->getStyle('BA33:BB33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BA34:BB34');
-                $sheet->setCellValue('BA34', 'QUANTITY');
+                $sheet->setCellValue('BA34', '0');
                 $sheet->getStyle('BA34')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BA34:BB34')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
                 
@@ -10470,27 +6266,27 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BH27')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH27')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             // DATA
-                $sheet->setCellValue('BH28', $Row0x);
+                $sheet->setCellValue('BH28', $Row0x2);
                 $sheet->getStyle('BH28')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH28')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BH29', $Row1x);
+                $sheet->setCellValue('BH29', $Row1x2);
                 $sheet->getStyle('BH29')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH29')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BH30', $Row2x);
+                $sheet->setCellValue('BH30', $Row2x2);
                 $sheet->getStyle('BH30')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH30')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BH31', $Row3x);
+                $sheet->setCellValue('BH31', $Row3x2);
                 $sheet->getStyle('BH31')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH31')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BH32', $Row4x);
+                $sheet->setCellValue('BH32', $Row4x2);
                 $sheet->getStyle('BH32')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH32')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BH33', '=SUM(AU28:AU32)');
+                $sheet->setCellValue('BH33', '=SUM(BH28:BH32)');
                 $sheet->getStyle('BH33')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BH33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10504,32 +6300,32 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BI27:BJ27')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             // DATA
                 $sheet->mergeCells('BI28:BJ28');
-                $sheet->setCellValue('BI28', $Qty0x);
+                $sheet->setCellValue('BI28', $Qty0x2);
                 $sheet->getStyle('BI28')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI28:BJ28')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BI29:BJ29');
-                $sheet->setCellValue('BI29', $Qty1x);
+                $sheet->setCellValue('BI29', $Qty1x2);
                 $sheet->getStyle('BI29')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI29:BJ29')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BI30:BJ30');
-                $sheet->setCellValue('BI30', $Qty2x);
+                $sheet->setCellValue('BI30', $Qty2x2);
                 $sheet->getStyle('BI30')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI30:BJ30')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BI31:BJ31');
-                $sheet->setCellValue('BI31', $Qty3x);
+                $sheet->setCellValue('BI31', $Qty3x2);
                 $sheet->getStyle('BI31')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI31:BJ31')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BI32:BJ32');
-                $sheet->setCellValue('BI32', $Qty3x);
+                $sheet->setCellValue('BI32', $Qty3x2);
                 $sheet->getStyle('BI32')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI32:BJ32')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BI33:BJ33');
-                $sheet->setCellValue('BI33', '=SUM(AV28:AV32)');
+                $sheet->setCellValue('BI33', '=SUM(BI28:BI32)');
                 $sheet->getStyle('BI33')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BI33:BJ33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10589,27 +6385,27 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BM27')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BM27')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             // DATA
-                $sheet->setCellValue('BM28', $Row0xUp);
+                $sheet->setCellValue('BM28', $Row0x2Up);
                 $sheet->getStyle('BM28')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM28')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BM29', $Row1xUp);
+                $sheet->setCellValue('BM29', $Row1x2Up);
                 $sheet->getStyle('BM29')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM29')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BM30', $Row2xUp);
+                $sheet->setCellValue('BM30', $Row2x2Up);
                 $sheet->getStyle('BM30')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM30')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BM31', $Row3xUp);
+                $sheet->setCellValue('BM31', $Row3x2Up);
                 $sheet->getStyle('BM31')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM31')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BM32', $Row4xUp);
+                $sheet->setCellValue('BM32', $Row4x2Up);
                 $sheet->getStyle('BM32')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM32')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BM33', '=SUM(AZ28:AZ32)');
+                $sheet->setCellValue('BM33', '=SUM(BM28:BM32)');
                 $sheet->getStyle('BM33')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BM33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10623,37 +6419,37 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BN27:BO27')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             // DATA
                 $sheet->mergeCells('BN28:BO28');
-                $sheet->setCellValue('BN28', $Qty0xUp);
+                $sheet->setCellValue('BN28', $Qty0x2Up);
                 $sheet->getStyle('BN28')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN28:BO28')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN29:BO29');
-                $sheet->setCellValue('BN29', $Qty1xUp);
+                $sheet->setCellValue('BN29', $Qty1x2Up);
                 $sheet->getStyle('BN29')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN29:BO29')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN30:BO30');
-                $sheet->setCellValue('BN30', $Qty2xUp);
+                $sheet->setCellValue('BN30', $Qty2x2Up);
                 $sheet->getStyle('BN30')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN30:B30')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN31:BO31');
-                $sheet->setCellValue('BN31', $Qty3xUp);
+                $sheet->setCellValue('BN31', $Qty3x2Up);
                 $sheet->getStyle('BN31')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN31:BO31')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN32:BO32');
-                $sheet->setCellValue('BN32', $Qty4xUp);
+                $sheet->setCellValue('BN32', $Qty4x2Up);
                 $sheet->getStyle('BN32')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN32:BO32')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN33:BO33');
-                $sheet->setCellValue('BN33', '=SUM(BA28:BB32)');
+                $sheet->setCellValue('BN33', '=SUM(BN28:BM32)');
                 $sheet->getStyle('BN33')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN33:BO33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->mergeCells('BN34:BO34');
-                $sheet->setCellValue('BN34', 'QUANTITY');
+                $sheet->setCellValue('BN34', '0');
                 $sheet->getStyle('BN34')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BN34:BO34')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
                 
@@ -10728,7 +6524,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
                 $sheet->getStyle('BR32')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BR32')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-                $sheet->setCellValue('BR33', '=SUM(BE28:BE32)');
+                $sheet->setCellValue('BR33', '=SUM(BR28:BS32)');
                 $sheet->getStyle('BR33')->getAlignment()->setHorizontal('center')->setVertical('center');
                 $sheet->getStyle('BR33')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -10946,7 +6742,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
         $sheet->getStyle('AS36')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('AS36')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        $sheet->setCellValue('AT36', '1148');
+        $sheet->setCellValue('AT36', '1448');
         $sheet->getStyle('AT36')->getAlignment()->setHorizontal('center')->setVertical('center');
         $sheet->getStyle('AT36')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -11558,7 +7354,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU38', $CG1449x600);
+            $sheet->setCellValue('AU38', $CG1149x600);
             $sheet->getStyle('AU38')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU38')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -11864,7 +7660,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU39', $CPD1449x600);
+            $sheet->setCellValue('AU39', $CPD1149x600);
             $sheet->getStyle('AU39')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU39')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -12170,7 +7966,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU40', $CPDL1449x600);
+            $sheet->setCellValue('AU40', $CPDL1149x600);
             $sheet->getStyle('AU40')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU40')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -12476,7 +8272,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU41', $CPB1449x600);
+            $sheet->setCellValue('AU41', $CPB1149x600);
             $sheet->getStyle('AU41')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU41')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -12782,7 +8578,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU42', $CPF1449x600);
+            $sheet->setCellValue('AU42', $CPF1149x600);
             $sheet->getStyle('AU42')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU42')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -13084,11 +8880,11 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AS43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT43', $CPL1443x600);
+            $sheet->setCellValue('AT43', $CPL1448x600);
             $sheet->getStyle('AT43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU43', $CPL1449x600);
+            $sheet->setCellValue('AU43', $CPL1149x600);
             $sheet->getStyle('AU43')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU43')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -13294,7 +9090,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('U44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('U44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('V44', $CPP2618x44);
+            $sheet->setCellValue('V44', $CPP2618x50);
             $sheet->getStyle('V44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('V44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -13394,7 +9190,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU44', $CPP1449x600);
+            $sheet->setCellValue('AU44', $CPP1149x600);
             $sheet->getStyle('AU44')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU44')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -13700,7 +9496,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU45', $CPT1449x600);
+            $sheet->setCellValue('AU45', $CPT1149x600);
             $sheet->getStyle('AU45')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU45')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14006,7 +9802,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU46', $CPR1449x600);
+            $sheet->setCellValue('AU46', $CPR1149x600);
             $sheet->getStyle('AU46')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU46')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14312,7 +10108,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU47', $CPA1449x600);
+            $sheet->setCellValue('AU47', $CPA1149x600);
             $sheet->getStyle('AU47')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU47')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14618,7 +10414,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU48', $CPDT1449x600);
+            $sheet->setCellValue('AU48', $CPDT1149x600);
             $sheet->getStyle('AU48')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU48')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14856,11 +10652,11 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AC49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD49', $CM2626x490);
+            $sheet->setCellValue('AD49', $CM2626x600);
             $sheet->getStyle('AD49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE49', $CM2627x490);
+            $sheet->setCellValue('AE49', $CM2627x600);
             $sheet->getStyle('AE49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14904,39 +10700,39 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AO49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AO49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AP49', $CM3444x490);
+            $sheet->setCellValue('AP49', $CM3444x600);
             $sheet->getStyle('AP49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AP49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AQ49', $CM1445x490);
+            $sheet->setCellValue('AQ49', $CM1445x600);
             $sheet->getStyle('AQ49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AQ49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AR49', $CM1446x490);
+            $sheet->setCellValue('AR49', $CM1446x600);
             $sheet->getStyle('AR49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AR49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AS49', $CM1447x490);
+            $sheet->setCellValue('AS49', $CM1447x600);
             $sheet->getStyle('AS49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AS49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AT49', $CM1448x490);
+            $sheet->setCellValue('AT49', $CM1448x600);
             $sheet->getStyle('AT49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU49', $CM1449x490);
+            $sheet->setCellValue('AU49', $CM1149x600);
             $sheet->getStyle('AU49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AV49', $CM1450x490);
+            $sheet->setCellValue('AV49', $CM1450x900);
             $sheet->getStyle('AV49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AV49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AW49', $CM1451x490);
+            $sheet->setCellValue('AW49', $CM1451x150);
             $sheet->getStyle('AW49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AW49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AX49', $CM1452x490);
+            $sheet->setCellValue('AX49', $CM1452x150);
             $sheet->getStyle('AX49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AX49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -14968,11 +10764,11 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BE49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BE49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BF49', $CM1449x100);
+            $sheet->setCellValue('BF49', $CM1149x100);
             $sheet->getStyle('BF49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BF49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BG49', $CM1461x100);
+            $sheet->setCellValue('BG49', $CM1460x100);
             $sheet->getStyle('BG49')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG49')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15138,7 +10934,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('W50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('W50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('X50', $CYD2500x30);
+            $sheet->setCellValue('X50', $CYD2620x30);
             $sheet->getStyle('X50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('X50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15162,19 +10958,19 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AC50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AC50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AD50', $CYD2506x600);
+            $sheet->setCellValue('AD50', $CYD2626x600);
             $sheet->getStyle('AD50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AD50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AE50', $CYD2507x600);
+            $sheet->setCellValue('AE50', $CYD2627x600);
             $sheet->getStyle('AE50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AE50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AF50', $CYD2508x800);
+            $sheet->setCellValue('AF50', $CYD2628x800);
             $sheet->getStyle('AF50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AF50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AG50', $CYD2509x50);
+            $sheet->setCellValue('AG50', $CYD2629x50);
             $sheet->getStyle('AG50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AG50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15230,7 +11026,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU50', $CYD1449x600);
+            $sheet->setCellValue('AU50', $CYD1149x600);
             $sheet->getStyle('AU50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15282,7 +11078,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('BG50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BG50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('BH50', $CYD3450x100);
+            $sheet->setCellValue('BH50', $CYD3462x100);
             $sheet->getStyle('BH50')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BH50')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15536,7 +11332,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU51', $S1449x600);
+            $sheet->setCellValue('AU51', $S1149x600);
             $sheet->getStyle('AU51')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU51')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -15843,7 +11639,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU52', $GP1449x600);
+            $sheet->setCellValue('AU52', $GP1149x600);
             $sheet->getStyle('AU52')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU52')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
@@ -16150,7 +11946,7 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->getStyle('AT53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AT53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $sheet->setCellValue('AU53', $TB1449x600);
+            $sheet->setCellValue('AU53', $TB1149x600);
             $sheet->getStyle('AU53')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('AU53')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 

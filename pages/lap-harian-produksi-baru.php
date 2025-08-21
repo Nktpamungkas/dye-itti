@@ -55,109 +55,51 @@
                                   FROM tbl_mesin a
                                       LEFT JOIN
                                       (SELECT
-                                      -- a.kd_stop,
-                                      -- a.mulai_stop,
-                                      -- a.selesai_stop,
                                       a.ket,	if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))) as lama_proses,
                                       a.status as sts,
                                       TIME_FORMAT(if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),'%H') as jam,
                                       TIME_FORMAT(if(ISNULL(TIMEDIFF(c.tgl_mulai,c.tgl_stop)),a.lama_proses,CONCAT(LPAD(FLOOR((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))/60),2,0),':',LPAD(((((HOUR(a.lama_proses)*60)+MINUTE(a.lama_proses))-((HOUR(TIMEDIFF(c.tgl_mulai,c.tgl_stop))*60)+MINUTE(TIMEDIFF(c.tgl_mulai,c.tgl_stop))))%60),2,0))),'%i') as menit,
-                                      -- a.point,
-                                      -- DATE_FORMAT(a.mulai_stop,'%Y-%m-%d') as t_mulai,
-                                      -- DATE_FORMAT(a.selesai_stop,'%Y-%m-%d') as t_selesai,
-                                      -- TIME_FORMAT(a.mulai_stop,'%H:%i') as j_mulai,
-                                      -- TIME_FORMAT(a.selesai_stop,'%H:%i') as j_selesai,
-                                      -- TIMESTAMPDIFF(MINUTE,a.mulai_stop,a.selesai_stop) as lama_stop_menit,
-                                      -- a.acc_keluar,
-                                      if(a.proses='' or ISNULL(a.proses),b.proses,a.proses) as proses,
+                                      a.proses as proses,
+                                      b.proses as schedule_proses,
                                       b.buyer,
                                       b.langganan,
                                       b.no_order,
-                                      -- b.jenis_kain,
                                       b.no_mesin,
-                                      -- b.warna,
-                                      -- b.lot,
-                                      -- b.energi,
+                                      b.warna,
                                       b.dyestuff,	
-                                      -- b.ket_status,
                                       b.kapasitas,
                                       b.loading,
-                                      b.resep,
-                                      -- CASE
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
-                                      --   WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
-                                      -- END AS kategori_warna,
-                                      b.kategori_warna,
-                                      -- b.target,
+                                      a.resep,
+                                      CASE
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'D' THEN 'Dark'
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'H' THEN 'Heater'
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'L' THEN 'Light'
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'M' THEN 'Medium'
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'S' THEN 'Dark'
+                                        WHEN SUBSTR(b.kategori_warna, 1,1) = 'W' THEN 'White'
+                                      END AS kategori_warna,
                                       c.l_r,
                                       c.rol,
-                                      -- c.bruto,
-                                      -- c.pakai_air,
-                                      -- c.no_program,
-                                      -- c.pjng_kain,
-                                      -- c.cycle_time,
-                                      -- c.rpm,
-                                      -- c.tekanan,
-                                      -- c.nozzle,
-                                      -- c.plaiter,
-                                      -- c.blower,
-                                      -- DATE_FORMAT(c.tgl_buat,'%Y-%m-%d') as tgl_in,
-                                      -- DATE_FORMAT(a.tgl_buat,'%Y-%m-%d') as tgl_out,
-                                      -- DATE_FORMAT(c.tgl_buat,'%H:%i') as jam_in,
-                                      -- DATE_FORMAT(a.tgl_buat,'%H:%i') as jam_out,
-                                      if(ISNULL(a.g_shift),c.g_shift,a.g_shift) as shft,
-                                      -- a.operator_keluar,
+                                      c.bruto,
+                                      a.g_shift as shft,
                                       a.k_resep,
                                       a.status,
-                                      -- a.proses_point,
-                                      -- a.analisa,
+                                      a.proses_point,
                                       b.nokk,
-                                      -- b.no_warna,
                                       b.lebar,
-                                      -- b.gramasi,
                                       c.carry_over,
-                                      -- b.no_hanger,
-                                      -- b.no_item,
                                       b.po,	
-                                      -- b.tgl_delivery,
                                       b.kk_kestabilan,
                                       b.kk_normal,
                                       c.air_awal,
                                       a.air_akhir,
-                                      -- c.nokk_legacy,
-                                      -- c.loterp,
                                       c.nodemand,
-                                      -- a.tambah_obat,
-                                      -- a.tambah_obat1,
-                                      -- a.tambah_obat2,
-                                      -- a.tambah_obat3,
-                                      -- a.tambah_obat4,
-                                      -- a.tambah_obat5,
-                                      -- a.tambah_obat6,
-                                      -- c.leader,
-                                      -- b.suffix,
-                                      -- b.suffix2,
-                                      -- c.l_r_2,
-                                      -- c.lebar_fin,
-                                      -- c.grm_fin,
-                                      -- c.lebar_a,
-                                      -- c.gramasi_a,
                                       c.operator,
                                       a.id as idhslclp,   
                                       b.id as idshedule,
                                       c.id as idmontemp,
-                                      -- a.tambah_dyestuff,
-                                      -- a.arah_warna,
-                                      -- a.status_warna,
 		                                  a.status_proses,
                                       COALESCE(a.point2, b.target) as point2
-                                      -- c.note_wt,
-                                      -- a.operatorpolyester,
-		                                  -- a.operatorcotton
                                     FROM
                                       tbl_schedule b
                                         LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -244,12 +186,22 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Laporan Harian Produksi (Baru)</title>
-  <Style>
+  <style>
     #editModal{
       overflow-x: hidden !important;
       overflow-y: auto !important;
     }
-  </Style>
+
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+    }
+
+    thead .sticky-col {
+      z-index: 3;
+    }
+  </style>
 </head>
 
 <body>
@@ -322,7 +274,6 @@
             <!-- <input type="text" class="form-control" name="rcode" value="<?= $Rcode; ?>" placeholder="Rcode"> -->
           </div>
         </div>
-
       </div>
       <!-- /.box-body -->
       <div class="box-footer">
@@ -339,6 +290,9 @@
       <div class="box">
         <div class="box-header with-border">
           <h3 class="box-title">Laporan Harian Produksi (Baru)</h3><br><br>
+          <div class="btn-group pull-right">
+            <a href="pages/cetak/NewCetakReportDyeing.php?&awal=<?php echo $start_date; ?>&akhir=<?php echo $stop_date; ?>&shft=<?php echo $GShift; ?>" class="btn bg-maroon" target="_blank" data-toggle="tooltip" data-html="true" title="New Format Harian Produksi Excel"><i class="fa fa-file-excel-o"></i> </a>
+          </div>
           <?php if ($_POST['awal'] != "") { ?><b>Periode: <?php echo $start_date . " to " . $stop_date; ?></b>
             <div class="btn-group pull-right">
              
@@ -353,7 +307,7 @@
           <table id="example1" class="table table-bordered table-hover" width="100%">
             <thead class="btn-danger">
               <tr>
-                <th width="38">
+                <th class="sticky-col" width="38">
                   <div >Aksi</div>
                 </th>
                 <th width="38">
@@ -379,13 +333,25 @@
                   <div align="center">KODE</div>
                 </th>
                 <th width="404">
+                  <div align="center">QTY</div>
+                </th>
+                <th width="404">
                   <div align="center">K.W</div>
+                </th>
+                <th width="404">
+                  <div align="center">WARNA</div>
                 </th>
                 <th width="404">
                   <div align="center">PROSES</div>
                 </th>
                 <th width="215">
                   <div align="center">LOADING</div>
+                </th>
+                <th width="215">
+                  <div align="center">POINT PROSES</div>
+                </th>
+                <th width="215">
+                  <div align="center">SCHEDULE PROSES</div>
                 </th>
                 <th width="215">
                   <div align="center">L:R</div>
@@ -414,18 +380,6 @@
                 <th width="215">
                   <div align="center">POINT</div>
                 </th>
-                <th width="215">
-                  <div align="center">Carry Over</div>
-                </th>
-                <th width="215">
-                  <div align="center">Air Awal</div>
-                </th>
-                <th width="215">
-                  <div align="center">Air Akhir</div>
-                </th>
-                <th width="215">
-                  <div align="center">Total Pemakaian Air</div>
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -434,7 +388,7 @@
                 foreach ($data as $rowd) {
                 ?>
                   <tr data-id="<?=$rowd['id']?>" class="table table-bordered table-hover table-striped">
-                    <td>
+                    <td class="sticky-col">
                       <button class="btn btn-primary btn-edit"
                               data-id="<?= $rowd['id'] ?>"
                               data-shift="<?= $rowd['shft'] ?>"
@@ -456,12 +410,6 @@
                               data-dyestuff="<?= $rowd['dyestuff'] ?>"
                               data-lama_proses="<?= $rowd['lama_proses'] ?>"
                               data-point2="<?= $rowd['point2'] ?>"
-                              data-carry_over="<?= $rowd['carry_over'] ?>"
-                              data-air_awal="<?= $rowd['air_awal'] ?>"
-                              data-air_akhir="<?= $rowd['air_akhir'] ?>"
-                              data-pake_air="<?= $rowd['air_awal'] != "" && $rowd['air_akhir'] != "" 
-                                              ? $rowd['air_akhir'] - $rowd['air_awal']
-                                              : ''; ?>"
                               data-nokk="<?= $rowd['nokk'] ?>"
                               data-idhslclp="<?= $rowd['idhslclp'] ?>"
                               data-idshedule="<?= $rowd['idshedule'] ?>"
@@ -478,9 +426,13 @@
                     <td><?=$rowd['no_order']?></td>
                     <td><?=$rowd['nodemand']?></td>
                     <td><?=$subcode_all[$rowd['nokk']]['SUBCODE01'] ?? ''?></td>
+                    <td><?= empty($rowd['lama_proses']) ? '-' : $rowd['bruto'] ?></td>
                     <td id="kategori_warna<?= $rowd['idhslclp'] ?>"><?=$rowd['kategori_warna']?></td>
+                    <td><?=$rowd['warna']?></td></td>
                     <td id="proses<?= $rowd['idhslclp'] ?>"><?=$rowd['proses']?></td>
                     <td><?=$rowd['loading']?> %</td>
+                    <td><?=$rowd['proses_point']?></td>
+                    <td><?=$rowd['schedule_proses']?></td>
                     <td><?=$rowd['l_r']?></td>
                     <td><?=$rowd['ket']?></td>
                     <td id="k_resep<?= $rowd['idhslclp'] ?>"><?=$rowd['k_resep']?></td>
@@ -490,14 +442,6 @@
                     <td><?=$rowd['dyestuff']?></td>
                     <td><?=$rowd['lama_proses']?></td>
                     <td><?=$rowd['point2']?></td>
-                    <td><?=$rowd['carry_over']?></td>
-                    <td id="air_awal<?= $rowd['idhslclp'] ?>"><?=$rowd['air_awal']?></td>
-                    <td id="air_akhir<?= $rowd['idhslclp'] ?>"><?=$rowd['air_akhir']?></td>
-                    <td >
-                      <?= $rowd['air_awal'] != "" && $rowd['air_akhir'] != "" 
-                        ? $rowd['air_akhir'] - $rowd['air_awal']
-                        : ''; ?>
-                    </td>
                   </tr>
                 <?php
                   $no++;
@@ -563,6 +507,10 @@
                         <label for="inputProses" class="form-label" style="display: block;">Proses</label>
                         <select class="form-control" id="inputProses" name="proses" style="display: inline;width: 85%;" required>
                             <option value="">-- Pilih Proses --</option>
+                            <!-- Tambahan manual -->
+                            <option value="Gagal Proses">Gagal Proses</option>
+                            <option value="Tolak Basah">Tolak Basah</option>
+                            <option value="Tolak Basah Luntur">Tolak Basah Luntur</option>
                             <?php foreach ($daftarProses as $proses): ?>
                               <option value="<?= htmlspecialchars($proses) ?>"><?= htmlspecialchars($proses) ?></option>
                             <?php endforeach; ?>
@@ -625,13 +573,13 @@
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputRemarks" class="form-label">Remarks</label>
-                        <!-- <input type="text" class="form-control" id="inputRemarks" autocomplete="off" readonly> -->
-                        <select class="form-control" id="inputRemarks" name="Remarks" disabled >
+                        <select class="form-control" id="inputRemarks" name="Remarks">
                           <option value=""></option>
                           <?php foreach ($statusProses as $sts): ?>
                             <option value="<?= htmlspecialchars($sts) ?>"><?= htmlspecialchars($sts) ?></option>
                           <?php endforeach; ?>
                         </select>
+                        <!-- <button href="#" data-toggle="modal" data-target="#DataStatusProses" class="btn btn-primary" style="display: inline;width: 13%;height: 28px;">...</button> -->
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputDyestuff" class="form-label">Dye Stuff</label>
@@ -649,18 +597,18 @@
                         <label for="inputCarryOver" class="form-label">Carry Over</label>
                         <input type="text" class="form-control readonly" id="inputCarryOver" autocomplete="off" readonly>
                       </div>
-                      <div class="col-xl-3 col-md-6 mb-3">
+                      <!-- <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputAirAwal" class="form-label">Air Awal</label>
-                        <input type="text" class="form-control readonly" id="inputAirAwal" autocomplete="off">
+                        <input type="text" class="form-control readonly" id="inputAirAwal" autocomplete="off" readonly>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputAirAkhir" class="form-label">Air Akhir</label>
-                        <input type="text" class="form-control readonly" id="inputAirAkhir" autocomplete="off">
+                        <input type="text" class="form-control readonly" id="inputAirAkhir" autocomplete="off" readonly>
                       </div>
                       <div class="col-xl-3 col-md-6 mb-3">
                         <label for="inputPakeAir" class="form-label">Total Pemakaian Air</label>
                         <input type="text" class="form-control readonly" id="inputPakeAir" autocomplete="off" readonly>
-                      </div>
+                      </div> -->
 
                       <input type="hidden" id="typeSave" name="typeSave" value="">
                     </div>
@@ -708,6 +656,63 @@
     </div>
   </div>
 
+  <div class="modal fade modal-super-scaled" id="DataStatusProses">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<form class="form-horizontal" name="modal_popup" data-toggle="validator" method="post" action="?p=simpan_status_proses" enctype="multipart/form-data">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Data Status Proses</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="nama" class="col-md-3 control-label">Input Status Proses</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="nama" name="nama" required>
+							<span class="help-block with-errors"></span>
+						</div>
+					</div>
+					<table id="example2" class="table table-bordered table-hover table-striped" width="100%">
+						<thead class="bg-green">
+							<tr>
+								<th width="144">
+									<div align="center">Status Proses</div>
+								</th>
+								<th width="144">
+									<div align="center">Action</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$c = 1;
+							$sqlAn1 = mysqli_query($con, "SELECT * FROM tbl_status_proses ORDER BY nama ASC");
+							while ($rAn1 = mysqli_fetch_array($sqlAn1)) {
+								$bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
+							?>
+								<tr bgcolor="<?php echo $bgcolor; ?>">
+									<td align="center">
+										<?php echo $rAn1['nama']; ?>
+									</td>
+									<td align="center">
+										<a href="#" class="btn btn-danger btn-xs" onClick="hapusStatusProses('<?php echo $rAn1['id']; ?>');" title="Hapus Status Proses"><i class="fa fa-trash"></i></a>
+									</td>
+								</tr>
+							<?php
+							} ?>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="text/javascript" src="dist/js/jquery.redirect.js"></script>
 
@@ -748,7 +753,6 @@
     let idhasilcelup = 0
     let idshedule = 0    
     let idmontemp = 0
-    //tabel a,b,b,a,a,b,a,c,a
     const editable=["shift","buyer","kategori_warna","proses","k_resep","resep","sts","air_awal","air_akhir"];   
     var btn=null;
 
@@ -833,13 +837,7 @@
           }
         });
 
-        let dataPostUpdate={
-          status:"update_laporan", 
-          id_dt : idhasilcelup,
-          idshedule : idshedule,
-          idmontemp : idmontemp,
-          nokk: no_kk
-        };
+        let dataPostUpdate={status:"update_laporan", id_dt : idhasilcelup, idshedule : idshedule, idmontemp : idmontemp, nokk: no_kk};
         for (let i = 0; i < editable.length; i++) {
           let key =editable[i];
           dataPostUpdate[key]= $('#input' + toCamelCase(key)).val();
@@ -913,7 +911,6 @@
         return changed;
       }
       function toCamelCase(str) {
-        // console.log(str);
         return str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); }).replace(/^([a-z])/,
           function (g) { return g.toUpperCase(); });
       }
