@@ -15573,7 +15573,1273 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
             $sheet->setCellValue('BK70', '');
             $sheet->getStyle('BK70')->getAlignment()->setHorizontal('center')->setVertical('center');
             $sheet->getStyle('BK70:CB70')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+// PERBAIKAN NCP
+    $sheet->setCellValue('CJ4', 'PERBAIKAN NCP :');
+// END PERBAIKAN NCP
+// DEPARTEMEN DYEING
+    $sheet->getColumnDimension('CJ')->setWidth(7.86);
+    $sheet->getColumnDimension('CK')->setWidth(7.86);
+    $sheet->getColumnDimension('CL')->setWidth(7.86);
+    $sheet->getColumnDimension('CM')->setWidth(7.86);
+    $sheet->getColumnDimension('CN')->setWidth(7.86);
+    $sheet->getColumnDimension('CO')->setWidth(7.86);
+    $sheet->getColumnDimension('CP')->setWidth(7.86);
+    $sheet->getColumnDimension('CQ')->setWidth(7.86);
+    $sheet->getColumnDimension('CR')->setWidth(7.86);
 
+    $sheet->mergeCells('CJ5:CR5');
+    $sheet->setCellValue('CJ5', 'DEPARTEMEN DYEING');
+    $sheet->getStyle('CJ5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('CJ6:CL7');
+            $sheet->setCellValue('CJ6', 'JENIS NCP');
+            $sheet->getStyle('CJ6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CJ6:CL7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'TOLAK BASAH',
+                        'BEDA WARNA',
+                        'GARIS LIPAT',
+                        'CAKAR AYAM',
+                        'KRISMARK / KUSUT / KERIPUT',
+                        'BELANG / SHADING',
+                        'KOTOR OBAT',
+                        'GESEKAN',
+                        'KAITAN / SNAGGING',
+                        'KOTOR ENZYME',
+                        'LUNTUR / CROCKING',
+                        'KOTOR ACAK / KARAT / OLI',
+                        'KENA WARNA / BINTIK WARNA',
+                        'BEDA ROLL',
+                        'GRAMASI (RINGAN/BERAT)',
+                        'KENA AIR',
+                        'GAGAL PROSES',
+                        'NYANGKUT',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'CJ';
+                    $HEADER_END_CELL_JENIS_NCP = 'CL';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('CM6:CO6');
+            $sheet->setCellValue('CM6', 'HARIAN');
+            $sheet->getStyle('CM6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CM6:CO6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("CM7", "LOT");
+                    $sheet->getStyle("CM7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CM7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "CM";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('CN7:CO7');
+                    $sheet->setCellValue("CN7", "QTY");
+                    $sheet->getStyle("CN7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CN7:CO7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "CN";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "CO";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('CP6:CR29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('CP6:CR29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('CP6:CR6');
+            $sheet->setCellValue('CP6', 'TOTAL');
+            $sheet->getStyle('CP6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CP6:CR6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("CP7", "LOT");
+                    $sheet->getStyle("CP7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CP7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "CP";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('CQ7:CR7');
+                    $sheet->setCellValue("CQ7", "QTY");
+                    $sheet->getStyle("CQ7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CQ7:CR7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "CQ";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "CR";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN DYEING
+// DEPARTEMEN LAIN
+    $sheet->getColumnDimension('CT')->setWidth(7.86);
+    $sheet->getColumnDimension('CU')->setWidth(7.86);
+    $sheet->getColumnDimension('CV')->setWidth(7.86);
+    $sheet->getColumnDimension('CW')->setWidth(7.86);
+    $sheet->getColumnDimension('CX')->setWidth(7.86);
+    $sheet->getColumnDimension('CY')->setWidth(7.86);
+    $sheet->getColumnDimension('CZ')->setWidth(7.86);
+    $sheet->getColumnDimension('DA')->setWidth(7.86);
+    $sheet->getColumnDimension('DB')->setWidth(7.86);
+
+    $sheet->mergeCells('CT5:DB5');
+    $sheet->setCellValue('CT5', 'DEPARTEMEN LAIN');
+    $sheet->getStyle('CT5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('CT6:CV7');
+            $sheet->setCellValue('CT6', 'JENIS NCP');
+            $sheet->getStyle('CT6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CT6:CV7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'CT';
+                    $HEADER_END_CELL_JENIS_NCP = 'CV';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('CW6:CY6');
+            $sheet->setCellValue('CW6', 'HARIAN');
+            $sheet->getStyle('CW6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CW6:CY6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("CW7", "LOT");
+                    $sheet->getStyle("CW7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CW7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "CW";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('CX7:CY7');
+                    $sheet->setCellValue("CX7", "QTY");
+                    $sheet->getStyle("CX7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CX7:CY7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "CX";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "CY";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('CZ6:DB29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('CZ6:DB29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('CZ6:DB6');
+            $sheet->setCellValue('CZ6', 'TOTAL');
+            $sheet->getStyle('CZ6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('CZ6:DB6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("CZ7", "LOT");
+                    $sheet->getStyle("CZ7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("CZ7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "CZ";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('DA7:DB7');
+                    $sheet->setCellValue("DA7", "QTY");
+                    $sheet->getStyle("DA7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DA7:DB7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "DA";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "DB";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN LAIN
+// DEPARTEMEN BRS
+    $sheet->getColumnDimension('DD')->setWidth(7.86);
+    $sheet->getColumnDimension('DE')->setWidth(7.86);
+    $sheet->getColumnDimension('DF')->setWidth(7.86);
+    $sheet->getColumnDimension('DG')->setWidth(7.86);
+    $sheet->getColumnDimension('DH')->setWidth(7.86);
+    $sheet->getColumnDimension('DI')->setWidth(7.86);
+    $sheet->getColumnDimension('DJ')->setWidth(7.86);
+    $sheet->getColumnDimension('DK')->setWidth(7.86);
+    $sheet->getColumnDimension('DL')->setWidth(7.86);
+
+    $sheet->mergeCells('DD5:DL5');
+    $sheet->setCellValue('DD5', 'DEPARTEMEN BRS');
+    $sheet->getStyle('DD5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('DD6:DF7');
+            $sheet->setCellValue('DD6', 'JENIS NCP');
+            $sheet->getStyle('DD6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DD6:DF7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'DD';
+                    $HEADER_END_CELL_JENIS_NCP = 'DF';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('DG6:DI6');
+            $sheet->setCellValue('DG6', 'HARIAN');
+            $sheet->getStyle('DG6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DG6:DI6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("DG7", "LOT");
+                    $sheet->getStyle("DG7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DG7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "DG";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('DH7:DI7');
+                    $sheet->setCellValue("DH7", "QTY");
+                    $sheet->getStyle("DH7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DH7:DI7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "DH";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "DI";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('DJ6:DL29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('DJ6:DL29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('DJ6:DL6');
+            $sheet->setCellValue('DJ6', 'TOTAL');
+            $sheet->getStyle('DJ6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DJ6:DL6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("DJ7", "LOT");
+                    $sheet->getStyle("DJ7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DJ7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "DJ";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('DK7:DL7');
+                    $sheet->setCellValue("DK7", "QTY");
+                    $sheet->getStyle("DK7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DK7:DL7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "DK";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "DL";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN BRS
+// DEPARTEMEN FIN
+    $sheet->getColumnDimension('DN')->setWidth(7.86);
+    $sheet->getColumnDimension('DO')->setWidth(7.86);
+    $sheet->getColumnDimension('DP')->setWidth(7.86);
+    $sheet->getColumnDimension('DQ')->setWidth(7.86);
+    $sheet->getColumnDimension('DR')->setWidth(7.86);
+    $sheet->getColumnDimension('DS')->setWidth(7.86);
+    $sheet->getColumnDimension('DT')->setWidth(7.86);
+    $sheet->getColumnDimension('DU')->setWidth(7.86);
+    $sheet->getColumnDimension('DV')->setWidth(7.86);
+
+    $sheet->mergeCells('DN5:DV5');
+    $sheet->setCellValue('DN5', 'DEPARTEMEN FIN');
+    $sheet->getStyle('DN5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('DN6:DP7');
+            $sheet->setCellValue('DN6', 'JENIS NCP');
+            $sheet->getStyle('DN6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DN6:DP7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'PILLING REJECT',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'BEDA ROLL',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'DN';
+                    $HEADER_END_CELL_JENIS_NCP = 'DP';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('DQ6:DS6');
+            $sheet->setCellValue('DQ6', 'HARIAN');
+            $sheet->getStyle('DQ6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DQ6:DS6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("DQ7", "LOT");
+                    $sheet->getStyle("DQ7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DQ7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "DQ";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('DR7:DS7');
+                    $sheet->setCellValue("DR7", "QTY");
+                    $sheet->getStyle("DR7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DR7:DS7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "DR";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "DS";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('DT6:DV29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('DT6:DV29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('DT6:DV6');
+            $sheet->setCellValue('DT6', 'TOTAL');
+            $sheet->getStyle('DT6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DT6:DV6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("DT7", "LOT");
+                    $sheet->getStyle("DT7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DT7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "DT";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('DU7:DV7');
+                    $sheet->setCellValue("DU7", "QTY");
+                    $sheet->getStyle("DU7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("DU7:DV7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "DU";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "DV";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN FIN
+// DEPARTEMEN LAB
+    $sheet->getColumnDimension('DX')->setWidth(7.86);
+    $sheet->getColumnDimension('DY')->setWidth(7.86);
+    $sheet->getColumnDimension('DZ')->setWidth(7.86);
+    $sheet->getColumnDimension('EA')->setWidth(7.86);
+    $sheet->getColumnDimension('EB')->setWidth(7.86);
+    $sheet->getColumnDimension('EC')->setWidth(7.86);
+    $sheet->getColumnDimension('ED')->setWidth(7.86);
+    $sheet->getColumnDimension('EE')->setWidth(7.86);
+    $sheet->getColumnDimension('EF')->setWidth(7.86);
+
+    $sheet->mergeCells('DX5:EF5');
+    $sheet->setCellValue('DX5', 'DEPARTEMEN LAB');
+    $sheet->getStyle('DX5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('DX6:DZ7');
+            $sheet->setCellValue('DX6', 'JENIS NCP');
+            $sheet->getStyle('DX6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('DX6:DZ7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'DX';
+                    $HEADER_END_CELL_JENIS_NCP = 'DZ';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('EA6:EC6');
+            $sheet->setCellValue('EA6', 'HARIAN');
+            $sheet->getStyle('EA6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EA6:EC6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("EA7", "LOT");
+                    $sheet->getStyle("EA7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EA7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "EA";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('EB7:EC7');
+                    $sheet->setCellValue("EB7", "QTY");
+                    $sheet->getStyle("EB7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EB7:EC7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EB";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EC";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('ED6:EF29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('ED6:EF29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('ED6:EF6');
+            $sheet->setCellValue('ED6', 'TOTAL');
+            $sheet->getStyle('ED6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('ED6:EF6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("ED7", "LOT");
+                    $sheet->getStyle("ED7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("ED7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "ED";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('EE7:EF7');
+                    $sheet->setCellValue("EE7", "QTY");
+                    $sheet->getStyle("EE7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EE7:EF7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EE";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EF";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN LAB
+// DEPARTEMEN PRT
+    $sheet->getColumnDimension('EH')->setWidth(7.86);
+    $sheet->getColumnDimension('EI')->setWidth(7.86);
+    $sheet->getColumnDimension('EJ')->setWidth(7.86);
+    $sheet->getColumnDimension('EK')->setWidth(7.86);
+    $sheet->getColumnDimension('EL')->setWidth(7.86);
+    $sheet->getColumnDimension('EM')->setWidth(7.86);
+    $sheet->getColumnDimension('EN')->setWidth(7.86);
+    $sheet->getColumnDimension('EO')->setWidth(7.86);
+    $sheet->getColumnDimension('EP')->setWidth(7.86);
+
+    $sheet->mergeCells('EH5:EP5');
+    $sheet->setCellValue('EH5', 'DEPARTEMEN PRT');
+    $sheet->getStyle('EH5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('EH6:EJ7');
+            $sheet->setCellValue('EH6', 'JENIS NCP');
+            $sheet->getStyle('EH6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EH6:EJ7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'EH';
+                    $HEADER_END_CELL_JENIS_NCP = 'EJ';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('EK6:EM6');
+            $sheet->setCellValue('EK6', 'HARIAN');
+            $sheet->getStyle('EK6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EK6:EM6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("EK7", "LOT");
+                    $sheet->getStyle("EK7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EK7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "EK";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('EL7:EM7');
+                    $sheet->setCellValue("EL7", "QTY");
+                    $sheet->getStyle("EL7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EL7:EM7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EL";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EM";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('EN6:EP29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('EN6:EP29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('EN6:EP6');
+            $sheet->setCellValue('EN6', 'TOTAL');
+            $sheet->getStyle('EN6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EN6:EP6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("EN7", "LOT");
+                    $sheet->getStyle("EN7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EN7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "EN";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('EO7:EP7');
+                    $sheet->setCellValue("EO7", "QTY");
+                    $sheet->getStyle("EO7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EO7:EP7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EO";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EP";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN PRT
+// DEPARTEMEN TAS
+    $sheet->getColumnDimension('ER')->setWidth(7.86);
+    $sheet->getColumnDimension('ES')->setWidth(7.86);
+    $sheet->getColumnDimension('ET')->setWidth(7.86);
+    $sheet->getColumnDimension('EU')->setWidth(7.86);
+    $sheet->getColumnDimension('EV')->setWidth(7.86);
+    $sheet->getColumnDimension('EW')->setWidth(7.86);
+    $sheet->getColumnDimension('EX')->setWidth(7.86);
+    $sheet->getColumnDimension('EY')->setWidth(7.86);
+    $sheet->getColumnDimension('EZ')->setWidth(7.86);
+
+    $sheet->mergeCells('ER5:EZ5');
+    $sheet->setCellValue('ER5', 'DEPARTEMEN TAS');
+    $sheet->getStyle('ER5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('ER6:ET7');
+            $sheet->setCellValue('ER6', 'JENIS NCP');
+            $sheet->getStyle('ER6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('ER6:ET7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GAGAL PROSES',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'GANTI KAIN INTERNAL',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'ER';
+                    $HEADER_END_CELL_JENIS_NCP = 'ET';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('EU6:EW6');
+            $sheet->setCellValue('EU6', 'HARIAN');
+            $sheet->getStyle('EU6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EU6:EW6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("EU7", "LOT");
+                    $sheet->getStyle("EU7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EU7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "EU";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('EV7:EW7');
+                    $sheet->setCellValue("EV7", "QTY");
+                    $sheet->getStyle("EV7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EV7:EW7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EV";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EW";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('EX6:EZ29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('EX6:EZ29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('EX6:EZ6');
+            $sheet->setCellValue('EX6', 'TOTAL');
+            $sheet->getStyle('EX6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('EX6:EZ6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("EX7", "LOT");
+                    $sheet->getStyle("EX7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EX7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "EX";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('EY7:EZ7');
+                    $sheet->setCellValue("EY7", "QTY");
+                    $sheet->getStyle("EY7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("EY7:EZ7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "EY";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "EZ";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN TAS
+// DEPARTEMEN RMP
+    $sheet->getColumnDimension('FB')->setWidth(7.86);
+    $sheet->getColumnDimension('FC')->setWidth(7.86);
+    $sheet->getColumnDimension('FD')->setWidth(7.86);
+    $sheet->getColumnDimension('FE')->setWidth(7.86);
+    $sheet->getColumnDimension('FF')->setWidth(7.86);
+    $sheet->getColumnDimension('FG')->setWidth(7.86);
+    $sheet->getColumnDimension('FH')->setWidth(7.86);
+    $sheet->getColumnDimension('FI')->setWidth(7.86);
+    $sheet->getColumnDimension('FJ')->setWidth(7.86);
+
+    $sheet->mergeCells('FB5:FJ5');
+    $sheet->setCellValue('FB5', 'DEPARTEMEN RMP');
+    $sheet->getStyle('FB5')->getAlignment()->setHorizontal('center')->setVertical('center');
+        // JENIS NCP
+            $sheet->mergeCells('FB6:FD7');
+            $sheet->setCellValue('FB6', 'JENIS NCP');
+            $sheet->getStyle('FB6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('FB6:FD7')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // DETAIL
+                    $HEADER_JENIS_NCP = [
+                        'BEDA ROLL',
+                        'LUNTUR / BLEEDING / ABSORBENCY',
+                        'KOTOR / TANAH / OLI / KARAT',
+                        'GRAMASI (RINGAN / BERAT)',
+                        'KENA ANGIN',
+                        'JARUM MINYAK',
+                        'GESEKAN',
+                        'BELANG / SHADING',
+                        'BEDA WARNA',
+                        'KAITAN / SNAGING',
+                        'KOTOR OBAT',
+                        'BERCAK PUTIH',
+                        'GOSONG',
+                        'HORIZON / GARIS DIAGONAL',
+                        'VERTIKAL',
+                        'KENA WARNA / BINTIK WARNA',
+                        'GANTI KAIN INTERNAL',
+                        'KENA / BINTIK / KOTOR MINYAK',
+                        'GANTI KAIN EKSTERNAL',
+                        'SHRINGKAGE REJECT',
+                        'LAIN - LAIN',
+                    ];
+                    $HEADER_START_CELL_JENIS_NCP = 'FB';
+                    $HEADER_END_CELL_JENIS_NCP = 'FD';
+                    $HEADER_ROW_JENIS_NCP = 8;
+
+                    foreach ($HEADER_JENIS_NCP as $label) {
+                        $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                        $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", $label);
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('left')->setVertical('center');
+                        $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+                        $HEADER_ROW_JENIS_NCP++;
+                    }
+                    $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}");
+                    $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}", "TOTAL");
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}:{$HEADER_END_CELL_JENIS_NCP}{$HEADER_ROW_JENIS_NCP}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    
+
+        // HARIAN
+            $sheet->mergeCells('FE6:FG6');
+            $sheet->setCellValue('FE6', 'HARIAN');
+            $sheet->getStyle('FE6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('FE6:FG6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // LOT
+                    $sheet->setCellValue("FE7", "LOT");
+                    $sheet->getStyle("FE7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("FE7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "FE";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // QTY
+                    $sheet->mergeCells('FF7:FG7');
+                    $sheet->setCellValue("FF7", "QTY");
+                    $sheet->getStyle("FF7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("FF7:FG7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "FF";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "FG";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        // TOTAL
+            $sheet->getStyle('FH6:FJ29')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('FF000000');
+            $sheet->getStyle('FH6:FJ29')->getFont()->getColor()->setARGB('FFFFFFFF');
+        
+            $sheet->mergeCells('FH6:FJ6');
+            $sheet->setCellValue('FH6', 'TOTAL');
+            $sheet->getStyle('FH6')->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('FH6:FJ6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // LOT
+                    $sheet->setCellValue("FH7", "LOT");
+                    $sheet->getStyle("FH7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("FH7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_LOT = "FH";
+                            $HEADER_ROW_JENIS_NCP_LOT = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_LOT++;
+                            }
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_LOT}{$HEADER_ROW_JENIS_NCP_LOT}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                // QTY
+                    $sheet->mergeCells('FI7:FJ7');
+                    $sheet->setCellValue("FI7", "QTY");
+                    $sheet->getStyle("FI7")->getAlignment()->setHorizontal('center')->setVertical('center');
+                    $sheet->getStyle("FI7:FJ7")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');
+                        // DETAIL
+                            $HEADER_START_CELL_JENIS_NCP_QTY = "FI";
+                            $HEADER_END_CELL_JENIS_NCP_QTY = "FJ";
+                            $HEADER_ROW_JENIS_NCP_QTY = 8;
+
+                            foreach ($HEADER_JENIS_NCP as $label) {
+                                $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                                $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                                $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+                            
+                                $HEADER_ROW_JENIS_NCP_QTY++;
+                            }
+                            $sheet->mergeCells("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}");
+                            $sheet->setCellValue("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}", 0);
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getAlignment()->setHorizontal('center')->setVertical('center');
+                            $sheet->getStyle("{$HEADER_START_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}:{$HEADER_END_CELL_JENIS_NCP_QTY}{$HEADER_ROW_JENIS_NCP_QTY}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setARGB('FFFFFFFF');;
+// END DEPARTEMEN RMP
 
 // END LAYOUT
 
