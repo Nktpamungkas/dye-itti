@@ -37372,6 +37372,109 @@ $sheet->getStyle('A5:G6')->getBorders()->getAllBorders()->setBorderStyle(\PhpOff
         // END DATA
     // END CYCLE TIME (BRUTO)
 // END PROSES PROSES TC/CVC/TR
+// KAPASITAS MESIN
+    $sheet->mergeCells('H163:O163');
+    $sheet->setCellValue('H163', 'Kapasitas Mesin 10 - 100 Kg');
+    $sheet->getStyle('H163')->getFont()->setBold(true);
+    $sheet->getStyle('H163')->getAlignment()->setHorizontal('center')->setVertical('center');
+    $sheet->getStyle('H163:O163')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+    $sheet->mergeCells('H164:L164');
+    $sheet->setCellValue('H164', 'RINCIAN PROSES');
+    $sheet->getStyle('H164')->getAlignment()->setHorizontal('center')->setVertical('center');
+    $sheet->getStyle('H164:L164')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+    // DATA
+        $values = [
+            'CELUP GREIGE', 'CUCI MISTY', 'CUCI YARN DYE (Y/D)', 'CELUP PERBAIKAN DYE', 'CELUP PERBAIKAN BRS', 'SCOURING', 'SCOURING', 
+            'GAGAL PROSES', 'Celup Poly Dulu (T-Side)', 'TOTAL KELUAR GREIGE', 'GAGAL PROSES', 'TOLAK BASAH', 'TOTAL KELUAR C. Y/D'
+        ];
+
+        $startColumn = 'H';
+        $endColumn = 'L';
+        $row = 165;
+
+        foreach ($values as $i => $value) {
+            $sheet->mergeCells("{$startColumn}{$row}:{$endColumn}{$row}");
+            $sheet->setCellValue("{$startColumn}{$row}", $value);
+            $sheet->getStyle("{$startColumn}{$row}")->getAlignment()->setHorizontal('left')->setVertical('center');
+            $sheet->getStyle("{$startColumn}{$row}:{$endColumn}{$row}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            
+            $row++;
+        }
+    // END DATA
+    $sheet->mergeCells('M164:N164');
+    $sheet->setCellValue('M164', 'QUANTITY');
+    $sheet->getStyle('M164')->getAlignment()->setHorizontal('center')->setVertical('center');
+    $sheet->getStyle('M164:N164')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+    // DATA
+        $val1 =  '';
+        $val2 =  '';
+        $val3 =  '';
+        $val4 =  '';
+        $val5 =  '';
+        $val6 =  '';
+        $val7 =  '';
+        $val8 =  '';
+        $val9 =  '';
+        $val10 = '';
+        $val11 = '';
+        $val12 = '';
+        $val13 = '';
+
+        $values = [
+            $val1, $val2, $val3, $val4, $val5, $val6, $val7, $val8, $val9, $val10,
+            $val11, $val12, $val13 
+        ];
+
+        $startColumn = 'M';
+        $endColumn = 'N';
+        $row = 165;
+
+        foreach ($values as $i => $value) {
+            $sheet->mergeCells("{$startColumn}{$row}:{$endColumn}{$row}");
+            $sheet->setCellValue("{$startColumn}{$row}", $value);
+            $sheet->getStyle("{$startColumn}{$row}")->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle("{$startColumn}{$row}:{$endColumn}{$row}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            
+            $row++;
+        }
+    // END DATA
+    $sheet->setCellValue('O164', 'LOT');
+    $sheet->getStyle('O164')->getAlignment()->setHorizontal('center')->setVertical('center');
+    $sheet->getStyle('O164')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+    // DATA
+        $val1 =  '';
+        $val2 =  '';
+        $val3 =  '';
+        $val4 =  '';
+        $val5 =  '';
+        $val6 =  '';
+        $val7 =  '';
+        $val8 =  '';
+        $val9 =  '';
+        $val10 = '';
+        $val11 = '';
+        $val12 = '';
+        $val13 = '';
+
+        $values = [
+            $val1, $val2, $val3, $val4, $val5, $val6, $val7, $val8, $val9, $val10,
+            $val11, $val12, $val13 
+        ];
+
+        $startColumn = 'O';
+        $row = 165;
+
+        foreach ($values as $i => $value) {
+            $sheet->setCellValue("{$startColumn}{$row}", $value);
+            $sheet->getStyle("{$startColumn}{$row}")->getAlignment()->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle("{$startColumn}{$row}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            
+            $row++;
+        }
+    // END DATA
+    
+// END KAPASITAS MESIN
 
 
 // END LAYOUT
