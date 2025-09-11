@@ -160,15 +160,99 @@
 		const noMcSelect = document.getElementById('no_mc');
 		const outToSelect = document.getElementById('out_to');
 
-		const selectedNoMc = noMcSelect.value.trim();
-
-		if (selectedNoMc === 'BB11') {
-			outToSelect.disabled = false;
-		} else {
-			outToSelect.disabled = true;
-		}
+		if (noMcSelect && outToSelect) {
+  	  const selectedNoMc = (noMcSelect.value || '').trim();
+  	  outToSelect.disabled = (selectedNoMc !== 'BB11');
+  	}
 	});
 </script>
+<script>
+  // Tambah baris baru
+  $(document).on('click', '#addAnalisa', function (e) {
+    e.preventDefault();
+    const idx = nextAnalisaIndex();
+    createAnalisaRow(idx);
+    renumberAnalisaLabels();
+    syncAnalisaDisabled();
+    updateAnalisaCombined();
+  });
+
+  $(document).on('click', '.remove-analisa', function () {
+    $(this).closest('.analisa-line').remove();
+    renumberAnalisaLabels();
+    updateAnalisaCombined();
+  });
+
+  $(document).on('change', '#analisa-wrapper .analisa-select', updateAnalisaCombined);
+
+  $(function () {
+    renumberAnalisaLabels();
+    syncAnalisaDisabled();   // ➜ set awal: ikut baris pertama
+    updateAnalisaCombined();
+  });
+
+  // ---------- Helpers ----------
+  function nextAnalisaIndex() {
+    return $('#analisa-wrapper .analisa-line').length + 1;
+  }
+
+  function renumberAnalisaLabels() {
+    $('#analisa-wrapper .analisa-line').each(function (i) {
+      $(this).find('.analisa-label').text('Analisa ' + (i + 1));
+    });
+  }
+
+  function updateAnalisaCombined() {
+    const vals = $('#analisa-wrapper .analisa-select')
+      .map(function(){ return $(this).val(); })
+      .get()
+      .filter(v => v && v.trim() !== '');
+    $('#analisaCombined').val(vals.join(' | '));
+  }
+
+  function syncAnalisaDisabled() {
+    const isDisabled = $('#analisa').is(':disabled');
+    $('#analisa-wrapper .analisa-select').prop('disabled', isDisabled);
+  }
+
+  function createAnalisaRow(idx) {
+    const optionsHtml = $('#analisa').html();
+    const isDisabled = $('#analisa').is(':disabled');  // ➜ copy status enable/disable
+
+    const rowHtml = [
+      '<div class="row analisa-line" data-index="'+idx+'">',
+        '<label class="col-sm-3 control-label analisa-label">Analisa '+idx+'</label>',
+        '<div class="col-sm-5">',
+          '<select name="analisa'+idx+'" class="form-control analisa-select" id="analisa'+idx+'" '+(isDisabled?'disabled':'')+' required>',
+            optionsHtml,
+          '</select>',
+        '</div>',
+        '<div class="col-sm-1 d-flex-center">',
+          '<button type="button" class="btn btn-danger remove-analisa" title="Hapus baris">-</button>',
+        '</div>',
+      '</div>'
+    ].join('');
+
+    $('#analisaCombined').before(rowHtml);
+  }
+</script>
+
+<style>
+  #analisa-wrapper .analisa-line { 
+    margin-bottom: 16px;              /* ➜ lebih renggang */
+  }
+  /* rapikan vertical align tombol */
+  #analisa-wrapper .d-flex-center {
+    display: flex; 
+    align-items: center;
+  }
+  /* samakan tinggi tombol */
+  #analisa-wrapper .btn { 
+    padding-top: 6px; 
+    padding-bottom: 6px; 
+  }
+</style>
+
 <?php
 ini_set("error_reporting", 1);
 session_start();
@@ -784,29 +868,6 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 							<option value="3" <?php if($row_hasilcelup['shift_celup'] == "3") { echo "Selected"; } ?>>3</option>
 						</select>
 					</div>
-					<div class="col-sm-5">
-						<select name="analisa" class="form-control" id="analisa" disabled="disabled" required>
-							<option value="">Pilih</option>
-							<?php
-							$sqlAn = mysqli_query($con, "SELECT * FROM tbl_analisa ORDER BY nama ASC");
-							while ($rAn = mysqli_fetch_array($sqlAn)) {
-							?>
-								<option value="<?php echo $rAn['nama']; ?>" <?php if ($rcek['analisa'] == $rAn['nama'] OR $row_hasilcelup['analisa'] == $rAn['nama']) {
-																				echo "SELECTED";
-																			} ?>><?php echo $rAn['nama']; ?></option>
-							<?php } ?>
-
-						</select>
-
-					</div>
-					<?php 
-						$allowed_users = ['andri', 'luqman', 'aris.miyanta', 'rohman','dit'];
-						if (isset($_SESSION['user_id10']) && in_array(strtolower($_SESSION['user_id10']), $allowed_users)) { ?>
-							<div class="col-sm-1">
-								<a href="#" data-toggle="modal" data-target="#DataAnalisa" class="btn btn-primary">...</a>
-							</div>
-					<?php } ?>
-
 				</div>
 				<div class="form-group">
 					<label for="g_shift" class="col-sm-3 control-label">Group Shift</label>
@@ -825,7 +886,38 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 																												echo $cktarget['sts'];
 																											} ?>" placeholder="" readonly>
 					</div>
+				</div>
+				<div class="form-group" id="analisa-wrapper">
+				  <label class="col-sm-3 control-label">Analisa</label>
 
+				  <div class="col-sm-5 analisa-row" data-index="1">
+				    <select name="analisa" class="form-control analisa-select" id="analisa" disabled="disabled" required>
+							<option value="">Pilih</option>
+							<?php
+							$sqlAn = mysqli_query($con, "SELECT * FROM tbl_analisa ORDER BY nama ASC");
+							while ($rAn = mysqli_fetch_array($sqlAn)) {
+							?>
+								<option value="<?php echo $rAn['nama']; ?>"
+									<?php if ($rcek['analisa'] == $rAn['nama'] || $row_hasilcelup['analisa'] == $rAn['nama']) echo "selected"; ?>>
+									<?php echo $rAn['nama']; ?>
+								</option>
+							<?php } ?>
+				    </select>
+				  </div>
+				  <div class="col-sm-1 text-center">
+				    <button type="button" id="addAnalisa" class="btn btn-success" title="Tambah analisa">+</button>
+				  </div>
+
+				  <?php 
+				    $allowed_users = ['andri','luqman','aris.miyanta','rohman','dit'];
+				    if (isset($_SESSION['user_id10']) && in_array(strtolower($_SESSION['user_id10']), $allowed_users)) { ?>
+				      <div class="col-sm-1">
+				        <a href="#" data-toggle="modal" data-target="#DataAnalisa" class="btn btn-primary">...</a>
+				      </div>
+				  <?php } ?>
+						
+				  <div class="col-sm-12" id="analisa-spacer" style="margin-top:10px;"></div>
+				  <input type="hidden" name="analisa_combined" id="analisaCombined">
 				</div>
 			</div>
 			<!-- col -->
@@ -1808,7 +1900,7 @@ if ($_POST['save'] == "save") {
 								status_proses='" . $_POST['status_proses'] . "',
 								k_resep='" . $_POST['k_resep'] . "',
 								jml_topping='" . $_POST['jml_topping'] . "',
-								analisa='$analisa',
+								analisa='" . $_POST['analisaCombined'] . "',
 								rcode='" . $_POST['rcode1'] . "',
 								operator_keluar='" . $_POST['operator'] . "',
 								operator_potong='" . $_POST['operator_potong'] . "',
