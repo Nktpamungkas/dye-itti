@@ -131,12 +131,16 @@
                         <label for="multi" class="col-sm-3 control-label">Keterangan Stop Mesin</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="form-control" name="ket_stopmesin">
-                                    <option value="" disabled selected>-</option>
-                                    <?php $q_ket_stopmesin      = mysqli_query($con, "SELECT * FROM tbl_ket_stopmesin ORDER BY id ASC"); ?>
-                                    <?php while ($row_ket_stopmesin  = mysqli_fetch_array($q_ket_stopmesin)) { ?>
-                                        <option value="<?= $row_ket_stopmesin['ket_stopmesin']; ?>" <?php if($r['ket_stopmesin'] == $row_ket_stopmesin['ket_stopmesin']) ?>><?= $row_ket_stopmesin['ket_stopmesin']; ?></option>
-                                    <?php } ?>
+                                <select class="form-control" name="ket_stopmesin" id="ket_stopmesin">
+                                  <option value="" disabled <?= empty($r['ket_stopmesin']) ? 'selected' : '' ?>>-</option>
+                                  <?php
+                                    $q_ket_stopmesin = mysqli_query($con, "SELECT * FROM tbl_ket_stopmesin ORDER BY id ASC");
+                                    while ($row_ket_stopmesin = mysqli_fetch_array($q_ket_stopmesin)) {
+                                      $val = htmlspecialchars($row_ket_stopmesin['ket_stopmesin'], ENT_QUOTES, 'UTF-8');
+                                      $sel = (!empty($r['ket_stopmesin']) && $r['ket_stopmesin'] == $row_ket_stopmesin['ket_stopmesin']) ? 'selected' : '';
+                                      echo "<option value=\"$val\" $sel>$val</option>";
+                                    }
+                                  ?>
                                 </select>
                                 <span class="input-group-btn"><a target="_blank" href="?p=tambah_ketstopmesin" class="btn btn-default">...</a></span>
                             </div>
@@ -189,12 +193,16 @@
                         <label for="multi" class="col-sm-3 control-label">Keterangan Stop Mesin</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="form-control" name="ket_stopmesin2">
-                                    <option value="" disabled selected>-</option>
-                                    <?php $q_ket_stopmesin      = mysqli_query($con, "SELECT * FROM tbl_ket_stopmesin ORDER BY id ASC"); ?>
-                                    <?php while ($row_ket_stopmesin  = mysqli_fetch_array($q_ket_stopmesin)) { ?>
-                                        <option value="<?= $row_ket_stopmesin['ket_stopmesin']; ?>" <?php if($r['ket_stopmesin2'] == $row_ket_stopmesin['ket_stopmesin']) ?>><?= $row_ket_stopmesin['ket_stopmesin']; ?></option>
-                                    <?php } ?>
+                                <select class="form-control" name="ket_stopmesin2" id="ket_stopmesin2">
+                                  <option value="" disabled <?= empty($r['ket_stopmesin2']) ? 'selected' : '' ?>>-</option>
+                                  <?php
+                                    $q_ket_stopmesin = mysqli_query($con, "SELECT * FROM tbl_ket_stopmesin ORDER BY id ASC");
+                                    while ($row_ket_stopmesin = mysqli_fetch_array($q_ket_stopmesin)) {
+                                      $val = htmlspecialchars($row_ket_stopmesin['ket_stopmesin'], ENT_QUOTES, 'UTF-8');
+                                      $sel = (!empty($r['ket_stopmesin2']) && $r['ket_stopmesin2'] == $row_ket_stopmesin['ket_stopmesin']) ? 'selected' : '';
+                                      echo "<option value=\"$val\" $sel>$val</option>";
+                                    }
+                                  ?>
                                 </select>
                                 <span class="input-group-btn"><a target="_blank" href="?p=tambah_ketstopmesin" class="btn btn-default">...</a></span>
                             </div>

@@ -722,7 +722,7 @@
       }else{
         baseUrl = host + basePath;
       }
-      $.redirect(baseUrl + "?p=lap-harian-produksi-baru", dataPost, "POST", "_blank");
+      $.redirect("?p=lap-harian-produksi-baru", dataPost, "POST", "_blank");
     }
   </script>
 
