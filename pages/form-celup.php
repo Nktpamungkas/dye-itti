@@ -917,7 +917,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 				  <?php } ?>
 						
 				  <div class="col-sm-12" id="analisa-spacer" style="margin-top:10px;"></div>
-				  <input type="hidden" name="analisa_combined" id="analisaCombined">
+				  <input type="hidden" name="analisaCombined" id="analisaCombined">
 				</div>
 			</div>
 			<!-- col -->
