@@ -312,17 +312,17 @@ $rowbg = mysqli_fetch_array($sqlbg);
           <font size="+1">FORM TEMPELAN SAMPLE CELUP</font>
         </strong></td>
       <td width="29%">
-        <pre>No. Form		: FW - 12 - DYE - 01</pre>
+        <pre>No. Form		: FW - 12 - CQA - 13</pre>
       </td>
     </tr>
     <tr>
       <td>
-        <pre>No. Revisi	: 11</pre>
+        <pre>No. Revisi	: 00</pre>
       </td>
     </tr>
     <tr>
       <td>
-        <pre>Tgl. Terbit	: 01 Oktober 2023</pre>
+        <pre>Tgl. Terbit	: 14 Oktober 2025</pre>
       </td>
     </tr>
   </table>
