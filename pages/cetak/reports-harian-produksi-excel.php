@@ -269,7 +269,8 @@ $shft = $_GET['shft'];
                                         COALESCE(a.point2, b.target) as point2,
                                         c.note_wt,
                                         a.operatorpolyester,
-		                                    a.operatorcotton
+		                                    a.operatorcotton,
+                                        a.penanggungjawabbuyer
                                       FROM
                                         tbl_schedule b
                                           LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -474,7 +475,7 @@ $shft = $_GET['shft'];
         <td><?php echo $rowd['po']; ?></td>
         <td><?php echo $rowd['tgl_delivery']; ?></td>
         <td><?php echo $rowd['proses_point']; ?></td>
-        <td><?php echo $rowd['penanggung_jawab']; ?></td>
+        <td><?php echo $rowd['penanggungjawabbuyer']; ?></td>
         <td><?php echo $rowd['analisa']; ?></td>
         <td><?php echo $rowd['no_program']; ?></td>
         <td><?php echo $rowd['pjng_kain']; ?></td>

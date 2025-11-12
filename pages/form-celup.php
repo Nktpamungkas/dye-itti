@@ -1164,7 +1164,6 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 					<div class="col-sm-2">
 						<select name="k_resep" class="form-control" id="k_resep" onChange="aktif5(); aktif6();" required <?php if(!empty($_GET['id'])){ echo "readonly"; } ?>>
 							<option value="">Pilih</option>
-							<option value="-" <?php if($row_hasilcelup['k_resep'] == '-') { echo "SELECTED"; } ?>>-</option>
 							<option value="0x" <?php if($row_hasilcelup['k_resep'] == '0x') { echo "SELECTED"; } ?>>0x</option>
 							<option value="1x" <?php if($row_hasilcelup['k_resep'] == '1x') { echo "SELECTED"; } ?>>1x</option>
 							<option value="2x" <?php if($row_hasilcelup['k_resep'] == '2x') { echo "SELECTED"; } ?>>2x</option>
