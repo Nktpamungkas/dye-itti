@@ -389,6 +389,23 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="kategori" class="col-sm-3 control-label">Kategori</label>
+					<div class="col-sm-2">
+						<select class="form-control select2" name="kategori">
+							<option value="">Pilih</option>
+							<option value="0" <?php if ($rcek['kategori'] == "0") {
+													echo "SELECTED";
+												} ?>>Internal</option>
+							<option value="1" <?php if ($rcek['kategori'] == "1") {
+													echo "SELECTED";
+												} ?>>External</option>
+							<option value="2" <?php if ($rcek['kategori'] == "2") {
+													echo "SELECTED";
+												} ?>>FOC</option>							
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="tangggung_jawab" class="col-sm-3 control-label">Tanggung Jawab 1</label>
 					<div class="col-sm-2">
 						<select class="form-control select2" name="t_jawab">
@@ -417,6 +434,9 @@
 							<option value="QCF" <?php if ($rcek['t_jawab'] == "QCF") {
 													echo "SELECTED";
 												} ?>>QCF</option>
+							<option value="CQA" <?php if ($rcek['t_jawab'] == "CQA") {
+													echo "SELECTED";
+												} ?>>CQA</option>					
 							<option value="GKG" <?php if ($rcek['t_jawab'] == "GKG") {
 													echo "SELECTED";
 												} ?>>GKG</option>
@@ -481,6 +501,9 @@
 							<option value="QCF" <?php if ($rcek['t_jawab1'] == "QCF") {
 													echo "SELECTED";
 												} ?>>QCF</option>
+							<option value="CQA" <?php if ($rcek['t_jawab1'] == "CQA") {
+													echo "SELECTED";
+												} ?>>CQA</option>					
 							<option value="GKG" <?php if ($rcek['t_jawab1'] == "GKG") {
 													echo "SELECTED";
 												} ?>>GKG</option>
@@ -545,6 +568,9 @@
 							<option value="QCF" <?php if ($rcek['t_jawab2'] == "QCF") {
 													echo "SELECTED";
 												} ?>>QCF</option>
+							<option value="CQA" <?php if ($rcek['t_jawab2'] == "CQA") {
+													echo "SELECTED";
+												} ?>>CQA</option>					
 							<option value="GKG" <?php if ($rcek['t_jawab2'] == "GKG") {
 													echo "SELECTED";
 												} ?>>GKG</option>
@@ -656,6 +682,8 @@ if ($_POST['save'] == "save") {
 		  penyebab='$_POST[penyebab]',
 		  sts='$sts',
 		  ket='$ket',
+		  kategori='$_POST[kategori]',
+		  dept='$_SESSION[dept10]',
 		  tgl_buat=now(),
 		  tgl_update=now()");
 

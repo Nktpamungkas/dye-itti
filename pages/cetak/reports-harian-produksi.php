@@ -194,7 +194,7 @@
 	b.lot,
 	c.rol,
 	c.bruto,
-  a.point,
+  COALESCE(a.point, b.target) as point,
 	b.ket_status,
 	b.resep,
 	c.tgl_buat as tgl_in,
