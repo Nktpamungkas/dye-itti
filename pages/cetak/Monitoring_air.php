@@ -268,7 +268,7 @@ $rowd = mysqli_fetch_array($data)
         <tr>
           <td class="field-label">No Mesin / Kapasitas</td>
           <td class="field-colon">:</td>
-          <td class="field-value"><?php echo $rowd['idm']; ?> / <?php echo $rowd['kapasitas']; ?></td>
+          <td class="field-value"><?php echo $rowd['no_mesin']; ?> / <?php echo $rowd['kapasitas']; ?></td>
         </tr>
         <tr>
           <td class="field-label">No. Demand</td>
