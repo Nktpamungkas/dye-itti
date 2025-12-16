@@ -645,12 +645,12 @@ if ($Awal != "") {
           <tr>
             <td>Nama</td>
             <td align="center">Bayu Nugraha</td>
-            <td align="center">NOVIA RISA</td>
+            <td align="center">Mucharom</td>
           </tr>
           <tr>
             <td>Jabatan</td>
             <td align="center">Supervisor</td>
-            <td align="center">Ast. Manager</td>
+            <td align="center">Dye Ast. Manager</td>
           </tr>
           <tr>
             <td>Tanggal</td>
