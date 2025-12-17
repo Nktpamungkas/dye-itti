@@ -1846,7 +1846,7 @@ $Langganan	= isset($_POST['langganan']) ? $_POST['langganan'] : '';
 	function hapusStatusProses(id) {
 		if (confirm('Yakin ingin menghapus Data Status Proses ini?')) {
 			$.ajax({
-				url: 'pages/hapus-celup.php',
+				url: 'pages/hapus-status-proses.php',
 				type: 'POST',
 				data: {
 					id: id
