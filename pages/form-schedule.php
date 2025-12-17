@@ -1285,16 +1285,39 @@
 														kk_normal='$kk_normal',
 														tgl_update=now()");
 			if ($sqlData) {
-				// echo "<script>alert('Data Tersimpan');</script>";
-				// echo "<script>window.location.href='?p=Input-Data-KJ;</script>";
+				$last_id_schedule = mysqli_insert_id($con); 
+				$nodemand   = $_POST['demand']; 
+				$nokk       = $kartu;           
+				$nomc       = $_POST['no_mc'];  
+				$urut       = $_POST['no_urut'];  
+				$user_id    = $_SESSION['nama10']; 
+				$getdate    = date('Y-m-d H:i:s'); 
+				$remote_add = $_SERVER['REMOTE_ADDR']; 
+
+				$sqlLog = mysqli_query($con, "INSERT INTO tbl_log_mc_schedule SET 
+					id_schedule = '$last_id_schedule',
+					nodemand    = '$nodemand',
+					nokk        = '$nokk',
+					no_mc       = '$nomc',
+					user_update = '$user_id',
+					user_insert = '$user_id',
+					date_insert = '$getdate',
+					date_update = '$getdate',
+					no_urut     = '$urut',
+					no_sch      = '$urut',
+					ip_update   = '$remote_add',
+					ip_insert   = '$remote_add',
+					col_update  = 'FIRST_INSERT_SCHEDULE'
+				");
+
 				echo "<script>swal({
-				title: 'Data Tersimpan',   
-				text: 'Klik Ok untuk input data kembali',
-				type: 'success',
-				}).then((result) => {
-				if (result.value) {
-					window.location.href='?p=Schedule'; 
-				}
+					title: 'Data Tersimpan',    
+					text: 'Klik Ok untuk input data kembali',
+					type: 'success',
+					}).then((result) => {
+					if (result.value) {
+						window.location.href='?p=Schedule'; 
+					}
 				});</script>";
 			}
 		}

@@ -14,6 +14,9 @@ function cekDesimal($angka){
 	return $waktu;
 }
 if($_POST){ 
+	$user_id            = $_SESSION['nama10']; 
+    $getdate            = date('Y-m-d H:i:s'); 
+    $remote_add         = $_SERVER['REMOTE_ADDR'];
 	extract($_POST);
 	$id = mysqli_real_escape_string($con,$_POST['id']);
 	$urut = mysqli_real_escape_string($con,$_POST['no_urut']);
@@ -33,6 +36,8 @@ if($_POST){
 	if($_POST['kk_normal']=="1"){$kk_normal="1";}else{ $kk_normal="0";}
 	$Qrycek=mysqli_query($con,"SELECT * FROM tbl_mesin WHERE no_mesin='$mesin' LIMIT 1");
 	$rCek=mysqli_fetch_array($Qrycek);
+	$q_old = mysqli_query($con, "SELECT * FROM tbl_schedule WHERE id = '$id'");
+    $d_old = mysqli_fetch_assoc($q_old);
 	$kapasitas=$rCek['kapasitas'];
 				$sqlupdate=mysqli_query($con,"UPDATE `tbl_schedule` SET 
 				`no_mesin`='$mesin',
@@ -54,6 +59,18 @@ if($_POST){
 				$sqlupdate1=mysqli_query($con,"UPDATE tbl_montemp SET 
 				tgl_target= ADDDATE(tgl_buat, INTERVAL '$target1' HOUR_MINUTE) 
 				WHERE id_schedule='$id' LIMIT 1");
+	$sqlLog = mysqli_query($con, "INSERT INTO tbl_log_mc_schedule SET 
+								id_schedule = '$id',
+								nodemand    = '{$d_old['nodemand']}',
+								nokk        = '{$d_old['nokk']}',
+								no_mc       = '$mesin', 
+								no_urut     = '$urut', 
+								no_sch      = '$urut', 
+								user_update = '$user_id',
+								date_update = '$getdate',
+								ip_update   = '$remote_add',
+								col_update  = 'UPDATE_SCHEDULE'
+							");
 				echo " <script>window.location='?p=Schedule';</script>";
 				
 		}
