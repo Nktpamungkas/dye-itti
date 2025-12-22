@@ -185,6 +185,7 @@ $no_prod = q('idkk');
                                             b.bruto,
                                             a.waktu_tunggu,
                                             a.tgl_buat, 
+                                            a.operator,
                                             b.loading,
                                             b.no_mesin,
                                             b.no_hanger,
@@ -214,7 +215,7 @@ $no_prod = q('idkk');
 
     $rowmt = mysqli_fetch_assoc($sqlsmp1);
   ?>
-    <h2 align="center">FORM PENGISIAN AIR PROSES DYEING</h2>  
+     <h2 align="center">FORM PENGISIAN AIR PROSES DYEING</h2>  
     <table width="100%" class="table-list1">
          <tr>           
             <td style=" border:none !important;" width="2%">
@@ -259,14 +260,18 @@ $no_prod = q('idkk');
                 <?php echo $rowmt['loading']; ?>
             </td>
         </tr>
-        <tr>           
+
+        <tr>
             <td style="border:none !important; vertical-align:top; white-space:nowrap;">
                 Item / Jenis Kain
-                </td>
-            <td style="border:none !important; vertical-align:top;">
-                : <span style="white-space:normal; word-break:break-word;">
-                    <?php echo $rowmt['no_item']; ?> / <?php echo $rowmt['jenis_kain']; ?>
-                </span>
+            </td>
+            <td style="border:none !important; vertical-align:top; padding:0;">
+                <div style="display:flex; gap:4px; align-items:flex-start;">
+                    <span>:</span>
+                    <span style="white-space:normal; word-break:break-word;">
+                        <?= $rowmt['no_item']; ?> / <?= $rowmt['jenis_kain']; ?>
+                    </span>
+                </div>
             </td>
             <td style="border:none !important;" width="2%">
                 <pre>LR Poly</pre>
@@ -344,7 +349,40 @@ $no_prod = q('idkk');
                 
             </td>
             
-        </tr>                
+        </tr>
+        <tr>           
+            <td style=" border:none !important;" width="2%">
+                <pre> </pre>
+            </td>
+            <td style="border:none !important;" width="10%">
+            </td>
+        
+        </tr>
+        <tr>           
+            <td style=" border:none !important;" width="2%">
+                <pre></pre>
+            </td>
+            <td style="border:none !important;" width="10%">
+            </td>
+        
+        </tr>
+        <tr>           
+            <td style=" border:none !important;" width="2%">
+                <pre></pre>
+            </td>
+            <td style="border:none !important;" width="10%">
+            </td>
+        
+        </tr>
+        <tr>           
+            <td style=" border:none !important;" width="2%">
+                <pre>Operator</pre>
+            </td>
+            <td style="border:none !important;" width="10%">:
+                <?php echo $rowmt['operator']; ?>
+            </td>
+            
+        </tr>                          
     </table>   
 
     <?php
@@ -357,3 +395,6 @@ $no_prod = q('idkk');
 </body>
 
 </html>
+
+
+
