@@ -233,7 +233,8 @@
                                             c.gramasi_a,
                                             c.operator,
                                             a.status_resep,
-                                            a.analisa_resep
+                                            a.analisa_resep,
+                                            a.penanggungjawabbuyer
                                             FROM
                                                 tbl_schedule b
                                                 LEFT JOIN  tbl_montemp c ON c.id_schedule = b.id
@@ -385,7 +386,7 @@
         <td><?php echo $rowd['po']; ?></td>
         <td><?php echo $rowd['tgl_delivery']; ?></td>
         <td><?php echo $rowd['proses_point']; ?></td>
-        <td><?php echo $rowd['penanggung_jawab']; ?></td>
+        <td><?php echo empty($rowd['penanggung_jawab']) ? $rowd['penanggungjawabbuyer'] : $rowd['penanggung_jawab']; ?></td>
         <td><?php echo $rowd['analisa']; ?></td>
         <td><?php echo $rowd['no_program']; ?></td>
         <td><?php echo $rowd['pjng_kain']; ?></td>
